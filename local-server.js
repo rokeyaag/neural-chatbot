@@ -2,7 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const PORT = 5500;
+const PORT = process.env.PORT || 5500;
 const MIME_TYPES = {
   '.html': 'text/html; charset=UTF-8',
   '.css': 'text/css; charset=UTF-8',
@@ -39,7 +39,7 @@ const server = http.createServer((req, res) => {
 
   fs.stat(filePath, (err, stats) => {
     if (err || !stats.isFile()) {
-      res.writeHead(404, { 'Content-Type': 'text/plain' });
+      res.writeHead(404, { 'Content-Type': 'text/plain; charset=UTF-8' });
       res.end('404 Not Found');
       return;
     }
@@ -73,8 +73,12 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Local NeuralBot Server running at:`);
-  console.log(`- http://127.0.0.1:${PORT}`);
-  console.log(`- http://localhost:${PORT}`);
-});
+if (require.main === module) {
+  server.listen(PORT, '0.0.0.0', () => {
+    console.log(`Local NeuralBot Server running at:`);
+    console.log(`- http://127.0.0.1:${PORT}`);
+    console.log(`- http://localhost:${PORT}`);
+  });
+}
+
+module.exports = server;
