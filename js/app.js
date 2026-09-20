@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 6. Neural Knowledge Store & Dynamic Memory Modal
   initKnowledgeStoreModal();
+
+  // 7. Neural MP3 Music Studio & Audio Player Engine
+  initNeuralMusicStudio();
 });
 
 /* ==========================================================================
@@ -713,16 +716,16 @@ function initVoiceAndChatEngine() {
         id: 'kb_singing',
         category: 'entertainment',
         title: 'Singing & Melodies (গান গাওয়া ও সুর)',
-        keywords_en: ['can you sing a song', 'sing a song', 'sing for me', 'sing', 'song', 'sing something', 'sing a melody'],
-        keywords_bn: ['গান গাও', 'গান শোনাও', 'গান গাইতে পারো', 'একটি গান গাও', 'গান জানো', 'গান শুনাও', 'gaan gao', 'gaan sunao', 'ekta gaan gao', 'gaan gaite paro', 'gan gao', 'gan shunao'],
+        keywords_en: ['can you sing a song', 'sing a song', 'sing for me', 'sing', 'song', 'sing something', 'sing a melody', 'play music', 'play song', 'play mp3', 'music', 'mp3'],
+        keywords_bn: ['গান গাও', 'গান শোনাও', 'গান গাইতে পারো', 'একটি গান গাও', 'গান জানো', 'গান শুনাও', 'গান বাজাও', 'মিউজিক বাজাও', 'গান শুনবো', 'একটি গান শোনাও', 'গান শোনান', 'gaan gao', 'gaan sunao', 'ekta gaan gao', 'gaan gaite paro', 'gan gao', 'gan shunao', 'gan bajao'],
         responses_en: [
-          "🎶 <em>\"Through the neural layers deep and wide, data streams like a river tide... 0 and 1 dancing through the night, AI glowing bright!\"</em> ✨ Hope you enjoyed my digital tune!",
-          "🎤 <em>\"Tensors flowing, loss is low, PyTorch models stealing the show! Synapses humming a melody fine, learning deeper all the time!\"</em> 🎵"
+          "🎶 <em>\"Through the neural layers deep and wide, data streams like a river tide... 0 and 1 dancing through the night, AI glowing bright!\"</em> ✨<br><div class=\"chat-audio-card\" data-src=\"audio/song.mp3\" data-title=\"Neural Cyber Melody — Track 01\" data-artist=\"Neural AI Synthesizer\"><div class=\"cac-header\"><div class=\"cac-icon\"><i class=\"fa-solid fa-music\"></i></div><div class=\"cac-info\"><strong>Neural Cyber Melody</strong><span>audio/song.mp3 &bull; Hi-Fi Audio</span></div><button class=\"cac-play-btn\" title=\"Play / Pause\"><i class=\"fa-solid fa-play\"></i></button></div><div class=\"cac-spectrum\"><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span></div><div class=\"cac-footer\"><button class=\"cac-studio-link\"><i class=\"fa-solid fa-compact-disc\"></i> Open Music Studio</button></div></div>",
+          "🎤 <em>\"Tensors flowing, loss is low, PyTorch models stealing the show! Synapses humming a melody fine, learning deeper all the time!\"</em> 🎵<br><div class=\"chat-audio-card\" data-src=\"audio/song.mp3\" data-title=\"Deep Learning Lo-Fi Track\" data-artist=\"Neural AI Synthesizer\"><div class=\"cac-header\"><div class=\"cac-icon\"><i class=\"fa-solid fa-music\"></i></div><div class=\"cac-info\"><strong>Deep Learning Lo-Fi Track</strong><span>audio/song.mp3 &bull; 44.1kHz</span></div><button class=\"cac-play-btn\" title=\"Play / Pause\"><i class=\"fa-solid fa-play\"></i></button></div><div class=\"cac-spectrum\"><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span></div><div class=\"cac-footer\"><button class=\"cac-studio-link\"><i class=\"fa-solid fa-compact-disc\"></i> Open Music Studio</button></div></div>"
         ],
         responses_bn: [
-          "🎵 <em>\"ধনধান্য পুষ্পভরা আমাদের এই বসুন্ধরা, তাহার মাঝে আছে দেশ এক সকল দেশের সেরা...\"</em> 🎶<br>আমি রোবট হলেও বাংলা গানের সুর আমার নিউরাল কোরে অনুধাবন করতে পারি! 🎤",
-          "🎶 <em>\"গ্রাম ছাড়া ওই রাঙা মাটির পথ, আমার মন ভুলায় রে...\"</em> 🎵<br>গানটি আপনার কেমন লাগলো?",
-          "🎤 ডিজিটাল সুরের একটি গান:<br><em>\"বাইনারি আর টেন্সরে গড়া নিউরাল সুরের গান, তোমার সাথে কথা বলে জুড়ায় আমার প্রাণ!\"</em> 🎶"
+          "🎵 <em>\"ধনধান্য পুষ্পভরা আমাদের এই বসুন্ধরা, তাহার মাঝে আছে দেশ এক সকল দেশের সেরা...\"</em> 🎶<br>আমি রোবট হলেও বাংলা গানের সুর আমার নিউরাল কোরে ধারণ করতে পারি! 🎤<br><div class=\"chat-audio-card\" data-src=\"audio/song.mp3\" data-title=\"Neural Bangla Melody\" data-artist=\"Neural AI Audio Engine\"><div class=\"cac-header\"><div class=\"cac-icon\"><i class=\"fa-solid fa-music\"></i></div><div class=\"cac-info\"><strong>Neural Bangla Melody</strong><span>audio/song.mp3 &bull; বাংলা সুর</span></div><button class=\"cac-play-btn\" title=\"Play / Pause\"><i class=\"fa-solid fa-play\"></i></button></div><div class=\"cac-spectrum\"><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span></div><div class=\"cac-footer\"><button class=\"cac-studio-link\"><i class=\"fa-solid fa-compact-disc\"></i> Open Music Studio</button></div></div>",
+          "🎶 <em>\"গ্রাম ছাড়া ওই রাঙা মাটির পথ, আমার মন ভুলায় রে...\"</em> 🎵<br>ডিজিটাল সুরে গানটি শুনুন:<br><div class=\"chat-audio-card\" data-src=\"audio/song.mp3\" data-title=\"Neural Cyber Melody\" data-artist=\"Lutfor Rahman &bull; AI Sound\"><div class=\"cac-header\"><div class=\"cac-icon\"><i class=\"fa-solid fa-music\"></i></div><div class=\"cac-info\"><strong>Neural Cyber Melody</strong><span>audio/song.mp3 &bull; Hi-Fi Sound</span></div><button class=\"cac-play-btn\" title=\"Play / Pause\"><i class=\"fa-solid fa-play\"></i></button></div><div class=\"cac-spectrum\"><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span></div><div class=\"cac-footer\"><button class=\"cac-studio-link\"><i class=\"fa-solid fa-compact-disc\"></i> Open Music Studio</button></div></div>",
+          "🎤 ডিজিটাল সুরের একটি গান:<br><em>\"বাইনারি আর টেন্সরে গড়া নিউরাল সুরের গান, তোমার সাথে কথা বলে জুড়ায় আমার প্রাণ!\"</em> 🎶<br><div class=\"chat-audio-card\" data-src=\"audio/song.mp3\" data-title=\"Neural Synthesizer Song\" data-artist=\"AI Studio\"><div class=\"cac-header\"><div class=\"cac-icon\"><i class=\"fa-solid fa-music\"></i></div><div class=\"cac-info\"><strong>Neural Synthesizer Song</strong><span>audio/song.mp3 &bull; AI Melody</span></div><button class=\"cac-play-btn\" title=\"Play / Pause\"><i class=\"fa-solid fa-play\"></i></button></div><div class=\"cac-spectrum\"><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span></div><div class=\"cac-footer\"><button class=\"cac-studio-link\"><i class=\"fa-solid fa-compact-disc\"></i> Open Music Studio</button></div></div>"
         ]
       },
       {
@@ -1266,8 +1269,9 @@ function initVoiceAndChatEngine() {
 
   function getSpokenCleanText(html) {
     if (!html) return '';
-    // Replace code blocks with clean readable phrase
-    let clean = html.replace(/<pre[\s\S]*?<\/pre>/gi, ' Here is the PyTorch code snippet. ');
+    // Replace code blocks and audio cards with clean readable phrase
+    let clean = html.replace(/<pre[\s\S]*?<\/pre>/gi, ' Here is the PyTorch code snippet. ')
+                    .replace(/<div class="chat-audio-card"[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/gi, ' ');
     // Strip HTML tags
     const tmp = document.createElement('DIV');
     tmp.innerHTML = clean;
@@ -2504,4 +2508,449 @@ function initKnowledgeStoreModal() {
 
   window.refreshKnowledgeStoreUI = renderKnowledgeGrid;
   renderKnowledgeGrid();
+}
+
+/* ==========================================================================
+   7. NEURAL MP3 MUSIC STUDIO & AUDIO ENGINE
+   ========================================================================== */
+function initNeuralMusicStudio() {
+  const musicBackdrop = document.getElementById('musicModalBackdrop');
+  const openMusicBtn = document.getElementById('openMusicModalBtn');
+  const closeMusicBtn = document.getElementById('musicModalCloseBtn');
+  const closeMusicFooterBtn = document.getElementById('closeMusicModalFooterBtn');
+
+  const modalTrackTitle = document.getElementById('modalTrackTitle');
+  const modalTrackArtist = document.getElementById('modalTrackArtist');
+  const modalDiscIcon = document.getElementById('modalDiscIcon');
+  const modalEqBars = document.getElementById('modalEqBars');
+  const modalProgressBar = document.getElementById('modalProgressBar');
+  const modalTimeCurrent = document.getElementById('modalTimeCurrent');
+  const modalTimeDuration = document.getElementById('modalTimeDuration');
+  const modalMainPlayBtn = document.getElementById('modalMainPlayBtn');
+  const modalPlayIcon = document.getElementById('modalPlayIcon');
+  const modalPrevTrackBtn = document.getElementById('modalPrevTrackBtn');
+  const modalNextTrackBtn = document.getElementById('modalNextTrackBtn');
+  const modalMuteBtn = document.getElementById('modalMuteBtn');
+  const modalVolIcon = document.getElementById('modalVolIcon');
+  const modalVolumeSlider = document.getElementById('modalVolumeSlider');
+  const modalPlaylist = document.getElementById('modalPlaylist');
+
+  const mp3DropZone = document.getElementById('mp3DropZone');
+  const localMp3FileInput = document.getElementById('localMp3FileInput');
+  const browseMp3Btn = document.getElementById('browseMp3Btn');
+
+  const floatingMiniBar = document.getElementById('floatingMiniMusicBar');
+  const miniDisc = document.getElementById('miniDisc');
+  const miniTrackTitle = document.getElementById('miniTrackTitle');
+  const miniTrackArtist = document.getElementById('miniTrackArtist');
+  const miniPlayBtn = document.getElementById('miniPlayBtn');
+  const miniPlayIcon = document.getElementById('miniPlayIcon');
+  const miniCloseBtn = document.getElementById('miniCloseBtn');
+  const miniMusicBarOpen = document.getElementById('miniMusicBarOpen');
+
+  // Playlist State
+  const defaultPlaylist = [
+    {
+      id: 'track_1',
+      title: 'Neural Cyber Melody — Track 01',
+      artist: 'Neural AI Synthesizer',
+      src: 'audio/song.mp3',
+      badge: 'BENGALI & CYBER AI'
+    },
+    {
+      id: 'track_2',
+      title: 'Deep Learning Lo-Fi Ambient Flow',
+      artist: 'PyTorch Audio Engine',
+      src: 'audio/neural_melody.wav',
+      badge: 'HI-FI SYNTH'
+    }
+  ];
+
+  let playlist = [...defaultPlaylist];
+  let currentTrackIndex = 0;
+  let isPlaying = false;
+  let audioPlayer = new Audio();
+  audioPlayer.volume = 0.85;
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>"']/g, (m) => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;'
+    }[m]));
+  }
+
+  function formatTime(seconds) {
+    if (isNaN(seconds) || seconds < 0) return '0:00';
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
+  }
+
+  function updateTrackDisplay() {
+    const track = playlist[currentTrackIndex];
+    if (!track) return;
+
+    if (modalTrackTitle) modalTrackTitle.textContent = track.title;
+    if (modalTrackArtist) modalTrackArtist.textContent = `${track.artist} • ${track.src.split('/').pop()}`;
+    if (miniTrackTitle) miniTrackTitle.textContent = track.title;
+    if (miniTrackArtist) miniTrackArtist.textContent = track.artist;
+
+    renderPlaylist();
+  }
+
+  function renderPlaylist() {
+    if (!modalPlaylist) return;
+    modalPlaylist.innerHTML = playlist.map((track, idx) => {
+      const isCur = idx === currentTrackIndex;
+      return `
+        <div class="playlist-item ${isCur ? 'active' : ''}" data-index="${idx}">
+          <div class="pi-left">
+            <button class="pi-play-btn"><i class="fa-solid ${isCur && isPlaying ? 'fa-pause' : 'fa-play'}"></i></button>
+            <div class="pi-meta">
+              <strong>${escapeHtml(track.title)}</strong>
+              <span>${escapeHtml(track.artist)} &bull; ${escapeHtml(track.src.split('/').pop())}</span>
+            </div>
+          </div>
+          <span class="pi-badge">${escapeHtml(track.badge || 'MP3 SONG')}</span>
+        </div>
+      `;
+    }).join('');
+
+    modalPlaylist.querySelectorAll('.playlist-item').forEach((item) => {
+      item.addEventListener('click', () => {
+        const idx = parseInt(item.getAttribute('data-index'), 10);
+        if (idx === currentTrackIndex && isPlaying) {
+          pauseAudio();
+        } else {
+          loadTrack(idx, true);
+        }
+      });
+    });
+  }
+
+  function loadTrack(index, autoPlay = true) {
+    if (index < 0 || index >= playlist.length) return;
+    currentTrackIndex = index;
+    const track = playlist[currentTrackIndex];
+
+    audioPlayer.src = track.src;
+    audioPlayer.load();
+    updateTrackDisplay();
+
+    if (autoPlay) {
+      playAudio();
+    }
+  }
+
+  function playAudio() {
+    const track = playlist[currentTrackIndex];
+    if (!track) return;
+
+    if (!audioPlayer.src || audioPlayer.src === '' || audioPlayer.src.endsWith('/')) {
+      audioPlayer.src = track.src;
+    }
+
+    const playPromise = audioPlayer.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        setPlayingState(true);
+      }).catch((err) => {
+        console.warn('Audio play request error:', err);
+        setPlayingState(true);
+      });
+    }
+  }
+
+  function pauseAudio() {
+    audioPlayer.pause();
+    setPlayingState(false);
+  }
+
+  function togglePlay() {
+    if (isPlaying) {
+      pauseAudio();
+    } else {
+      playAudio();
+    }
+  }
+
+  function setPlayingState(playing) {
+    isPlaying = playing;
+
+    // Disc spin animation
+    if (modalDiscIcon) {
+      modalDiscIcon.classList.toggle('spinning', isPlaying);
+    }
+    if (miniDisc) {
+      miniDisc.classList.toggle('spinning', isPlaying);
+    }
+
+    // EQ bars animation
+    if (modalEqBars) {
+      modalEqBars.classList.toggle('active', isPlaying);
+    }
+
+    // Play/Pause Icons
+    if (modalPlayIcon) {
+      modalPlayIcon.className = isPlaying ? 'fa-solid fa-pause' : 'fa-solid fa-play';
+    }
+    if (miniPlayIcon) {
+      miniPlayIcon.className = isPlaying ? 'fa-solid fa-pause' : 'fa-solid fa-play';
+    }
+
+    // Show floating mini bar
+    if (floatingMiniBar) {
+      floatingMiniBar.style.display = 'flex';
+    }
+
+    // Update all chat audio cards
+    document.querySelectorAll('.chat-audio-card').forEach((card) => {
+      const cardSrc = card.getAttribute('data-src');
+      const cardPlayBtn = card.querySelector('.cac-play-btn i');
+      const cardSpectrum = card.querySelector('.cac-spectrum');
+      const isThisCard = !cardSrc || cardSrc === playlist[currentTrackIndex].src || cardSrc.endsWith(playlist[currentTrackIndex].src);
+      if (cardPlayBtn) {
+        cardPlayBtn.className = (isThisCard && isPlaying) ? 'fa-solid fa-pause' : 'fa-solid fa-play';
+      }
+      if (cardSpectrum) {
+        cardSpectrum.classList.toggle('active', isThisCard && isPlaying);
+      }
+    });
+
+    renderPlaylist();
+  }
+
+  // Audio Player Event Listeners
+  audioPlayer.addEventListener('timeupdate', () => {
+    if (!isNaN(audioPlayer.duration) && audioPlayer.duration > 0) {
+      const pct = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+      if (modalProgressBar) modalProgressBar.value = pct;
+      if (modalTimeCurrent) modalTimeCurrent.textContent = formatTime(audioPlayer.currentTime);
+      if (modalTimeDuration) modalTimeDuration.textContent = formatTime(audioPlayer.duration);
+    }
+  });
+
+  audioPlayer.addEventListener('loadedmetadata', () => {
+    if (modalTimeDuration && !isNaN(audioPlayer.duration)) {
+      modalTimeDuration.textContent = formatTime(audioPlayer.duration);
+    }
+  });
+
+  audioPlayer.addEventListener('ended', () => {
+    if (playlist.length > 1) {
+      loadTrack((currentTrackIndex + 1) % playlist.length, true);
+    } else {
+      setPlayingState(false);
+      if (modalProgressBar) modalProgressBar.value = 0;
+      if (modalTimeCurrent) modalTimeCurrent.textContent = '0:00';
+    }
+  });
+
+  if (modalProgressBar) {
+    modalProgressBar.addEventListener('input', () => {
+      if (!isNaN(audioPlayer.duration) && audioPlayer.duration > 0) {
+        const seekTo = (modalProgressBar.value / 100) * audioPlayer.duration;
+        audioPlayer.currentTime = seekTo;
+      }
+    });
+  }
+
+  if (modalMainPlayBtn) modalMainPlayBtn.addEventListener('click', togglePlay);
+  if (miniPlayBtn) miniPlayBtn.addEventListener('click', togglePlay);
+
+  if (modalPrevTrackBtn) {
+    modalPrevTrackBtn.addEventListener('click', () => {
+      const prevIdx = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+      loadTrack(prevIdx, true);
+    });
+  }
+
+  if (modalNextTrackBtn) {
+    modalNextTrackBtn.addEventListener('click', () => {
+      const nextIdx = (currentTrackIndex + 1) % playlist.length;
+      loadTrack(nextIdx, true);
+    });
+  }
+
+  // Volume & Mute
+  if (modalVolumeSlider) {
+    modalVolumeSlider.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      audioPlayer.volume = val;
+      audioPlayer.muted = (val === 0);
+      updateVolIcon(val);
+    });
+  }
+
+  function updateVolIcon(val) {
+    if (!modalVolIcon) return;
+    if (val === 0 || audioPlayer.muted) {
+      modalVolIcon.className = 'fa-solid fa-volume-xmark';
+    } else if (val < 0.5) {
+      modalVolIcon.className = 'fa-solid fa-volume-low';
+    } else {
+      modalVolIcon.className = 'fa-solid fa-volume-high';
+    }
+  }
+
+  if (modalMuteBtn) {
+    modalMuteBtn.addEventListener('click', () => {
+      audioPlayer.muted = !audioPlayer.muted;
+      if (audioPlayer.muted) {
+        if (modalVolIcon) modalVolIcon.className = 'fa-solid fa-volume-xmark';
+      } else {
+        updateVolIcon(audioPlayer.volume);
+      }
+    });
+  }
+
+  // --- LOCAL USER MP3 FILE PICKER & DRAG/DROP ---
+  function handleUserAudioFile(file) {
+    if (!file) return;
+    if (!file.type.includes('audio') && !file.name.match(/\.(mp3|wav|ogg|m4a|aac)$/i)) {
+      if (typeof showToast === 'function') showToast('Please select a valid .mp3 or .wav audio file!');
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(file);
+    const newTrack = {
+      id: `custom_${Date.now()}`,
+      title: file.name.replace(/\.[^/.]+$/, ''),
+      artist: 'Custom User Track',
+      src: objectUrl,
+      badge: 'LOCAL MP3'
+    };
+
+    playlist.unshift(newTrack);
+    loadTrack(0, true);
+    if (typeof showToast === 'function') {
+      showToast(`🎵 Loaded & Playing: ${newTrack.title}`);
+    }
+  }
+
+  if (browseMp3Btn && localMp3FileInput) {
+    browseMp3Btn.addEventListener('click', () => localMp3FileInput.click());
+  }
+
+  if (localMp3FileInput) {
+    localMp3FileInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files[0]) {
+        handleUserAudioFile(e.target.files[0]);
+      }
+    });
+  }
+
+  if (mp3DropZone) {
+    mp3DropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      mp3DropZone.classList.add('drag-active');
+    });
+
+    mp3DropZone.addEventListener('dragleave', () => {
+      mp3DropZone.classList.remove('drag-active');
+    });
+
+    mp3DropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      mp3DropZone.classList.remove('drag-active');
+      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+        handleUserAudioFile(e.dataTransfer.files[0]);
+      }
+    });
+  }
+
+  // --- MODAL CONTROLS ---
+  function openStudio() {
+    if (musicBackdrop) {
+      musicBackdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeStudio() {
+    if (musicBackdrop) {
+      musicBackdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  if (openMusicBtn) openMusicBtn.addEventListener('click', openStudio);
+  if (closeMusicBtn) closeMusicBtn.addEventListener('click', closeStudio);
+  if (closeMusicFooterBtn) closeMusicFooterBtn.addEventListener('click', closeStudio);
+
+  if (musicBackdrop) {
+    musicBackdrop.addEventListener('click', (e) => {
+      if (e.target === musicBackdrop) closeStudio();
+    });
+  }
+
+  if (miniMusicBarOpen) {
+    miniMusicBarOpen.addEventListener('click', openStudio);
+  }
+
+  if (miniCloseBtn) {
+    miniCloseBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      pauseAudio();
+      if (floatingMiniBar) floatingMiniBar.style.display = 'none';
+    });
+  }
+
+  // --- GLOBAL CHAT AUDIO CARD PLAY DELEGATION ---
+  document.addEventListener('click', (e) => {
+    const playBtn = e.target.closest('.cac-play-btn');
+    if (playBtn) {
+      const card = playBtn.closest('.chat-audio-card');
+      if (card) {
+        const src = card.getAttribute('data-src') || 'audio/song.mp3';
+        const title = card.getAttribute('data-title') || 'Neural AI Melody';
+        
+        let foundIdx = playlist.findIndex(t => t.src === src || t.title === title);
+        if (foundIdx === -1) {
+          playlist.push({
+            id: `card_${Date.now()}`,
+            title: title,
+            artist: card.getAttribute('data-artist') || 'Neural AI',
+            src: src,
+            badge: 'AI MELODY'
+          });
+          foundIdx = playlist.length - 1;
+        }
+
+        if (foundIdx === currentTrackIndex && isPlaying) {
+          pauseAudio();
+        } else {
+          loadTrack(foundIdx, true);
+        }
+      }
+      return;
+    }
+
+    const studioLink = e.target.closest('.cac-studio-link');
+    if (studioLink) {
+      openStudio();
+    }
+  });
+
+  // Export Global API
+  window.openMusicStudioModal = openStudio;
+  window.closeMusicStudioModal = closeStudio;
+  window.NeuralAudioEngine = {
+    play: playAudio,
+    pause: pauseAudio,
+    toggle: togglePlay,
+    loadTrack,
+    addTrack: (track) => {
+      playlist.push(track);
+      renderPlaylist();
+    }
+  };
+
+  // Initial render
+  updateTrackDisplay();
+  loadTrack(0, false);
 }

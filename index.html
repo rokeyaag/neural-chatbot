@@ -55,6 +55,9 @@
 
       <!-- Action Buttons -->
       <div class="nav-actions">
+        <button id="openMusicModalBtn" class="btn btn-secondary btn-sm nav-music-btn" title="Open Neural MP3 Music Player">
+          <i class="fa-solid fa-music gradient-text"></i> <span>MP3 Player</span>
+        </button>
         <button id="openKnowledgeModalBtn" class="btn btn-secondary btn-sm nav-kb-btn" title="Open Neural Knowledge Store & Memory">
           <i class="fa-solid fa-brain-circuit gradient-text"></i> <span>Knowledge Store</span>
         </button>
@@ -789,6 +792,123 @@
 
   <!-- Toast Notification Container -->
   <div class="kb-toast-container" id="kbToastContainer"></div>
+
+  <!-- ================= NEURAL MP3 MUSIC STUDIO MODAL ================= -->
+  <div class="music-modal-backdrop" id="musicModalBackdrop">
+    <div class="music-modal-card" id="musicModalCard">
+      
+      <!-- Modal Header -->
+      <div class="music-modal-header">
+        <div class="music-header-title">
+          <div class="music-icon-glow">
+            <i class="fa-solid fa-music"></i>
+          </div>
+          <div>
+            <h3>Neural MP3 Music Studio</h3>
+            <p>High-Fidelity AI Audio, Bengali Melodies &amp; Custom MP3 Playback</p>
+          </div>
+        </div>
+        <button class="music-modal-close" id="musicModalCloseBtn" aria-label="Close Music Studio">&times;</button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="music-modal-body">
+        
+        <!-- Current Track Showcase Hero Card -->
+        <div class="current-track-card">
+          <div class="track-artwork">
+            <i class="fa-solid fa-compact-disc spin-disc" id="modalDiscIcon"></i>
+            <div class="artwork-glow"></div>
+          </div>
+          <div class="track-details">
+            <span class="track-badge"><i class="fa-solid fa-waveform-lines"></i> NOW PLAYING</span>
+            <h4 class="track-title" id="modalTrackTitle">Neural Cyber Melody — Track 01</h4>
+            <p class="track-artist" id="modalTrackArtist">Neural AI Synthesizer &bull; audio/song.mp3</p>
+            
+            <!-- EQ Spectrum Visualizer -->
+            <div class="modal-eq-bars" id="modalEqBars">
+              <span class="m-eq-bar"></span>
+              <span class="m-eq-bar"></span>
+              <span class="m-eq-bar"></span>
+              <span class="m-eq-bar"></span>
+              <span class="m-eq-bar"></span>
+              <span class="m-eq-bar"></span>
+              <span class="m-eq-bar"></span>
+              <span class="m-eq-bar"></span>
+              <span class="m-eq-bar"></span>
+              <span class="m-eq-bar"></span>
+              <span class="m-eq-bar"></span>
+              <span class="m-eq-bar"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress Timeline -->
+        <div class="music-timeline-container">
+          <span class="time-label" id="modalTimeCurrent">0:00</span>
+          <input type="range" class="music-progress-bar" id="modalProgressBar" min="0" max="100" value="0" step="0.1">
+          <span class="time-label" id="modalTimeDuration">0:00</span>
+        </div>
+
+        <!-- Main Playback Controls -->
+        <div class="music-controls-row">
+          <button class="m-ctrl-btn" id="modalPrevTrackBtn" title="Previous Track"><i class="fa-solid fa-backward-step"></i></button>
+          <button class="m-ctrl-btn m-play-btn" id="modalMainPlayBtn" title="Play / Pause"><i class="fa-solid fa-play" id="modalPlayIcon"></i></button>
+          <button class="m-ctrl-btn" id="modalNextTrackBtn" title="Next Track"><i class="fa-solid fa-forward-step"></i></button>
+          
+          <div class="m-volume-wrapper">
+            <button class="m-vol-btn" id="modalMuteBtn" title="Mute/Unmute"><i class="fa-solid fa-volume-high" id="modalVolIcon"></i></button>
+            <input type="range" class="music-volume-slider" id="modalVolumeSlider" min="0" max="1" step="0.05" value="0.85">
+          </div>
+        </div>
+
+        <!-- Custom User MP3 File Upload Area -->
+        <div class="custom-mp3-uploader">
+          <div class="uploader-header">
+            <h4><i class="fa-solid fa-cloud-arrow-up gradient-text"></i> Load Custom MP3 / Song</h4>
+            <span class="uploader-hint">Drop your favorite `.mp3` song here to play anytime!</span>
+          </div>
+          <div class="file-drop-area" id="mp3DropZone">
+            <i class="fa-solid fa-file-audio file-icon"></i>
+            <p>Click to browse or drag &amp; drop an <strong>.mp3 / .wav</strong> song from your PC</p>
+            <input type="file" id="localMp3FileInput" accept="audio/mp3,audio/wav,audio/mpeg,audio/ogg" style="display: none;">
+            <button type="button" class="btn btn-secondary btn-sm" id="browseMp3Btn"><i class="fa-solid fa-folder-open"></i> Browse MP3</button>
+          </div>
+        </div>
+
+        <!-- Preset Track Playlist -->
+        <div class="music-playlist-section">
+          <h4><i class="fa-solid fa-list-music gradient-text"></i> Available Tracks</h4>
+          <div class="playlist-list" id="modalPlaylist">
+            <!-- Dynamically populated in app.js -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="music-modal-footer">
+        <span class="hud-mono-val"><i class="fa-solid fa-sliders"></i> 44.1kHz Hi-Fi Audio Engine Active</span>
+        <button class="btn btn-secondary btn-sm" id="closeMusicModalFooterBtn">Close Studio</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= FLOATING MINI MUSIC BAR ================= -->
+  <div class="floating-mini-music-bar" id="floatingMiniMusicBar" style="display: none;">
+    <div class="mini-disc-wrap">
+      <i class="fa-solid fa-compact-disc spin-disc mini-disc" id="miniDisc"></i>
+    </div>
+    <div class="mini-info" id="miniMusicBarOpen">
+      <h5 id="miniTrackTitle">Neural Cyber Melody</h5>
+      <p id="miniTrackArtist">audio/song.mp3</p>
+    </div>
+    <div class="mini-actions">
+      <button class="mini-btn" id="miniPlayBtn" title="Play / Pause"><i class="fa-solid fa-play" id="miniPlayIcon"></i></button>
+      <button class="mini-btn" id="miniCloseBtn" title="Close player">&times;</button>
+    </div>
+  </div>
 
   <!-- ================= LIGHTBOX MODAL ================= -->
   <div class="lightbox-modal" id="lightboxModal">

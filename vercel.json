@@ -12,7 +12,7 @@
       ]
     },
     {
-      "source": "/(.*)\\.(mp4|avif|jpg|jpeg|png|svg|webp)",
+      "source": "/(.*)\\.(mp4|mp3|wav|ogg|m4a|avif|jpg|jpeg|png|svg|webp)",
       "headers": [
         {
           "key": "Cache-Control",
