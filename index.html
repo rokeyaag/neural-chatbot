@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neural Chat Bot — Voice & Text AI Intelligence</title>
+  <meta name="description" content="Next-Generation Neural AI Assistant with real-time Voice & Text interaction and Deep Learning showcase by Lutfor Rahman.">
+  <meta name="keywords" content="Neural Chatbot, Voice AI, Speech to Text, Bengali AI, PyTorch, Lutfor Rahman">
+  
+  <!-- Open Graph / Meta -->
+  <meta property="og:title" content="Neural Chat Bot — Voice & Text AI">
+  <meta property="og:description" content="Talk to Neural AI with voice and text, watch the demo video, and explore deep learning capabilities.">
+  <meta property="og:type" content="website">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎙️</text></svg>">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Ambient Glow Effects & Dynamic Canvas Background -->
+  <canvas id="bg-canvas"></canvas>
+  <div class="ambient-glow ambient-glow-1"></div>
+  <div class="ambient-glow ambient-glow-2"></div>
+  <div class="ambient-glow ambient-glow-3"></div>
+
+  <!-- ================= HEADER / NAVBAR ================= -->
+  <header class="header" id="navbar">
+    <div class="container nav-container">
+      <a href="#hero" class="logo-wrapper">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">Neural<span class="gradient-text">Bot</span></span>
+          <span class="logo-subtitle">Voice &amp; Neural Intelligence</span>
+        </div>
+      </a>
+
+      <!-- Navigation Links -->
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#hero" class="nav-link active">Home &amp; Video</a></li>
+        <li><a href="#features" class="nav-link">AI Features</a></li>
+        <li><a href="#gallery" class="nav-link">Asset Gallery</a></li>
+        <li><a href="#playground" class="nav-link">Neural Console</a></li>
+        <li><a href="#about" class="nav-link">About Dev</a></li>
+      </ul>
+
+      <!-- Action Buttons -->
+      <div class="nav-actions">
+        <button id="openKnowledgeModalBtn" class="btn btn-secondary btn-sm nav-kb-btn" title="Open Neural Knowledge Store & Memory">
+          <i class="fa-solid fa-brain-circuit gradient-text"></i> <span>Knowledge Store</span>
+        </button>
+        <button id="globalVoiceToggle" class="voice-toggle-btn active" title="Toggle AI Voice Response">
+          <i class="fa-solid fa-volume-high"></i> <span>Voice ON</span>
+        </button>
+        <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Toggle navigation">
+          <i class="fa-solid fa-bars-staggered"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= TOP HERO SECTION: VIDEO + VOICE/TEXT CHAT ================= -->
+  <section class="hero-top-section" id="hero">
+    <div class="container">
+      
+      <!-- Top Headline & Status Banner (Compact & Streamlined) -->
+      <div class="hero-header-banner">
+        <div class="badge-tag">
+          <span class="pulse-dot"></span>
+          <span>LIVE NEURAL AI &bull; VOICE &amp; TEXT</span>
+        </div>
+        <h1 class="hero-main-title">
+          Talk, Type &amp; Experience <span class="gradient-text">Neural Bot</span>
+        </h1>
+        <p class="hero-subtitle">
+          Next-Generation Neural AI Assistant with Real-Time Voice &amp; Text Intelligence.
+        </p>
+      </div>
+
+      <!-- Main Dual Grid: Left = Video Player | Right = Voice & Text Interactive Box -->
+      <div class="hero-primary-grid">
+        
+        <!-- LEFT: Interactive Neural Talking Avatar & Video Stage Card -->
+        <div class="hero-video-card neural-stage-card" id="neuralStageCard">
+          <div class="video-card-header stage-header">
+            <!-- Mode Switcher Tabs -->
+            <div class="stage-tabs">
+              <button class="stage-tab-btn" id="tabAvatarBtn" data-target="avatar" title="Switch to Live Neural Talking Avatar">
+                <i class="fa-solid fa-robot gradient-text"></i>
+                <span>Neural Avatar</span>
+                <span class="live-pulse-dot"></span>
+              </button>
+              <button class="stage-tab-btn active" id="tabVideoBtn" data-target="video" title="Switch to Demo Walkthrough Video">
+                <i class="fa-solid fa-circle-play"></i>
+                <span>Demo Video</span>
+              </button>
+            </div>
+            
+            <!-- Dynamic Avatar Status Pill -->
+            <div class="avatar-status-pill" id="avatarStatusPill">
+              <span class="status-indicator-dot"></span>
+              <span id="avatarStatusLabel">Demo Video Ready</span>
+            </div>
+          </div>
+          
+          <!-- VIEW 1: Interactive Neural Talking Avatar Stage (Hidden initially until user chats) -->
+          <div class="avatar-stage-container" id="avatarStageView" style="display: none;">
+            <div class="avatar-visual-box" id="avatarVisualBox">
+              <!-- Layered Avatar Face Elements for Seamless Talking Transitions -->
+              <img src="avatar_face.jpg" alt="Neural AI Avatar Idle" class="avatar-face-layer avatar-idle-layer active" id="avatarImgIdle">
+              <img src="avatar_thinking.jpg" alt="Neural AI Avatar Thinking" class="avatar-face-layer avatar-thinking-layer" id="avatarImgThinking">
+              <img src="avatar_speaking.jpg" alt="Neural AI Avatar Speaking" class="avatar-face-layer avatar-speaking-layer" id="avatarImgSpeaking">
+
+              <!-- HUD Cyber Overlay Badges -->
+              <div class="avatar-hud-top-left">
+                <span class="hud-mono-tag"><i class="fa-solid fa-microchip"></i> TENSOR CORE</span>
+                <span class="hud-mono-val" id="avatarConfidenceTag">CONF: 99.4%</span>
+              </div>
+
+              <!-- Real-Time Voice Audio EQ Spectrum Bars -->
+              <div class="avatar-audio-eq" id="avatarAudioEq">
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+              </div>
+
+              <!-- Live Synchronized Subtitles / Spoken Response Bar -->
+              <div class="avatar-subtitles-bar" id="avatarSubtitlesBar">
+                <div class="subtitles-badge">
+                  <i class="fa-solid fa-waveform-lines"></i>
+                  <span>NEURAL VOICE</span>
+                </div>
+                <p class="subtitles-text" id="avatarSubtitlesText">
+                  Neural AI Online &bull; Type a message or speak through the microphone.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- VIEW 2: Project Video Player Container (Auto-Plays on Home Page Open) -->
+          <div class="video-frame-container" id="videoContainer" style="display: flex;">
+            <video id="heroMainVideo" preload="auto" playsinline autoplay muted loop controls>
+              <source src="ami_ekta_Neural_Chat_Boot_Bana.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            
+            <!-- Sleek Unmute / Audio Toggle Badge -->
+            <button class="video-unmute-badge" id="videoUnmuteBadge" title="Click to Unmute / Mute Video Sound">
+              <i class="fa-solid fa-volume-xmark"></i> <span>Unmute Sound</span>
+            </button>
+
+            <!-- Custom Sleek Play Button Overlay -->
+            <div class="video-play-overlay" id="videoPlayOverlay">
+              <button class="custom-play-btn" id="customPlayBtn" aria-label="Play Demo Video">
+                <i class="fa-solid fa-play"></i>
+              </button>
+              <span class="play-label">Click to Play Video</span>
+            </div>
+          </div>
+
+          <!-- Stage Card Footer -->
+          <div class="video-card-footer stage-footer">
+            <div class="video-file-info avatar-footer-info">
+              <h4 id="stageFooterTitle"><i class="fa-solid fa-video"></i> ami_ekta_Neural_Chat_Boot_Bana.mp4</h4>
+              <p id="stageFooterSubtitle">Neural Network Architecture &amp; Training Demo</p>
+            </div>
+            <div class="stage-footer-actions">
+              <button id="avatarRepeatBtn" class="btn btn-secondary btn-sm" style="padding: 4px 10px; font-size: 0.75rem; display: none;" title="Re-speak last answer">
+                <i class="fa-solid fa-volume-high"></i> Replay Voice
+              </button>
+              <button id="videoReplayBtn" class="btn btn-secondary btn-sm" style="padding: 4px 10px; font-size: 0.75rem; display: inline-flex;" title="Replay Video">
+                <i class="fa-solid fa-rotate-left"></i> Replay Video
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Voice & Text Interactive AI Chat Box -->
+        <div class="hero-chat-container">
+          <div class="chat-simulator-card voice-chat-card">
+            
+            <!-- Chat Header -->
+            <div class="chat-header">
+              <div class="chat-header-info">
+                <div class="chat-avatar">
+                  <i class="fa-solid fa-microphone-lines"></i>
+                </div>
+                <div class="chat-user-details">
+                  <h4>Neural Voice &amp; Text Assistant</h4>
+                  <span id="voiceStatusText"><i class="fa-solid fa-circle-dot"></i> Ready &bull; Mic Active</span>
+                </div>
+              </div>
+              <div class="voice-controls-header">
+                <button class="lang-switch-btn" id="voiceLangToggleBtn" title="Switch Voice Language (English / বাংলা)">
+                  <i class="fa-solid fa-language"></i> <span id="voiceLangLabel">EN</span>
+                </button>
+                <button class="speaker-switch-btn" id="speakerToggleBtn" title="Mute/Unmute Bot Voice">
+                  <i class="fa-solid fa-volume-high"></i>
+                </button>
+                <div class="chat-controls">
+                  <span class="control-dot red"></span>
+                  <span class="control-dot yellow"></span>
+                  <span class="control-dot green"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chat Message Thread -->
+            <div class="chat-body" id="heroChatBody">
+              <div class="chat-message bot">
+                <div class="chat-bubble">
+                  Welcome! 👋 I am <strong>NeuralBot</strong>. You can type your question in the box or click the <strong>Microphone</strong> to talk in English or Bengali. How can I assist you today?
+                </div>
+              </div>
+            </div>
+
+            <!-- Animated Voice Equalizer Bar (Visible when recording) -->
+            <div class="voice-wave-indicator" id="voiceWaveBar" style="display: none;">
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="voice-wave-text">Listening to your voice... Speak now</span>
+            </div>
+
+            <!-- Chat Quick Prompt Chips -->
+            <div class="chat-input-area">
+              <div class="quick-prompts">
+                <button class="quick-chip" data-prompt="How are you today?">How are you? 😊</button>
+                <button class="quick-chip" data-prompt="কেমন আছো তুমি?">কেমন আছো? 🇧🇩</button>
+                <button class="quick-chip" data-prompt="Can you sing a song?">Sing a song 🎵</button>
+                <button class="quick-chip" data-prompt="Tell me a joke">Tell a joke 😄</button>
+                <button class="quick-chip" data-prompt="PyTorch Neural Network architecture">Architecture ⚡</button>
+                <button class="quick-chip open-kb-chip" id="openKbChipHero" data-action="open-kb">Knowledge Base 🧠</button>
+              </div>
+
+              <!-- Main Input Box with Send Button & Mic Button -->
+              <div class="chat-form" id="heroChatForm">
+                <button type="button" class="voice-mic-btn" id="voiceMicBtn" title="Click to Speak (Voice Record)">
+                  <i class="fa-solid fa-microphone"></i>
+                </button>
+                
+                <input type="text" class="chat-input" id="heroChatInput" placeholder="Type your message or click Mic to speak (English / Bangla)..." autocomplete="off">
+                
+                <button type="button" class="chat-send-btn" id="heroSendBtn" title="Send Message">
+                  <i class="fa-solid fa-paper-plane"></i>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Scroll Down Indicator -->
+      <div class="scroll-down-wrapper">
+        <a href="#features" class="scroll-down-link">
+          <span>Scroll to explore more</span>
+          <i class="fa-solid fa-chevron-down"></i>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= SECTION 2: BENTO FEATURES ================= -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Deep Learning Capabilities</span>
+        <h2 class="section-title">State-Of-The-Art Neural Engine</h2>
+        <p class="section-desc">
+          High-precision bilingual NLP, speech synthesis, sub-millisecond tensor processing, and enterprise privacy.
+        </p>
+      </div>
+
+      <div class="bento-grid">
+        
+        <!-- Highlight Bento Card -->
+        <div class="bento-card span-2 highlight">
+          <div class="card-icon">
+            <i class="fa-solid fa-brain-circuit"></i>
+          </div>
+          <div>
+            <h3 class="card-title">Dual Voice &amp; Text Processing Core</h3>
+            <p class="card-desc">
+              Integrated with real-time Speech-to-Text and Text-to-Speech synthesis pipelines. Understands colloquial Bengali syntax and technical English prompts with multi-layer intent classification.
+            </p>
+            <div class="card-badge">
+              <i class="fa-solid fa-waveform-lines"></i> Speech NLP &bull; PyTorch Neural Intent &bull; Bilingual
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento Card 2 -->
+        <div class="bento-card">
+          <div class="card-icon">
+            <i class="fa-solid fa-language"></i>
+          </div>
+          <div>
+            <h3 class="card-title">Bangla NLP Mastery</h3>
+            <p class="card-desc">
+              Custom Bangla lemmatization and token filtering for natural grammatical understanding.
+            </p>
+            <div class="card-badge">
+              <i class="fa-solid fa-globe"></i> 100% Native Bengali
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento Card 3 -->
+        <div class="bento-card">
+          <div class="card-icon">
+            <i class="fa-solid fa-bolt-lightning"></i>
+          </div>
+          <div>
+            <h3 class="card-title">&lt; 35ms Inference Latency</h3>
+            <p class="card-desc">
+              Optimized linear layers and tensor transformations for blazing instant voice &amp; text replies.
+            </p>
+            <div class="card-badge">
+              <i class="fa-solid fa-microchip"></i> GPU CUDA Ready
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento Card 4 -->
+        <div class="bento-card">
+          <div class="card-icon">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div>
+            <h3 class="card-title">Client-Side Voice Privacy</h3>
+            <p class="card-desc">
+              Zero audio transmission leakage. Realtime local speech audio pipeline with maximum data privacy.
+            </p>
+            <div class="card-badge">
+              <i class="fa-solid fa-lock"></i> Zero Data Logging
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento Card 5 -->
+        <div class="bento-card">
+          <div class="card-icon">
+            <i class="fa-solid fa-network-wired"></i>
+          </div>
+          <div>
+            <h3 class="card-title">REST &amp; WebSocket Endpoints</h3>
+            <p class="card-desc">
+              Deployable as standalone API microservice for mobile apps, web dashboards, and IoT robotics.
+            </p>
+            <div class="card-badge">
+              <i class="fa-solid fa-plug"></i> FastAPI Protocol
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION 3: PROJECT GALLERY ================= -->
+  <section class="section" id="gallery">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Visual Assets</span>
+        <h2 class="section-title">Project &amp; Architecture Gallery</h2>
+        <p class="section-desc">
+          Click on any visual blueprint or dataset loss chart to preview in full-resolution lightbox.
+        </p>
+      </div>
+
+      <!-- Category Filter -->
+      <div class="gallery-filter">
+        <button class="filter-btn active" data-filter="all">All Assets</button>
+        <button class="filter-btn" data-filter="models">Neural Models</button>
+        <button class="filter-btn" data-filter="interface">Interface &amp; UI</button>
+        <button class="filter-btn" data-filter="training">Training</button>
+      </div>
+
+      <!-- Gallery Grid -->
+      <div class="gallery-grid" id="galleryGrid">
+        
+        <div class="gallery-item" data-category="models" data-src="01.avif" data-title="Neural Network Weight Optimization" data-desc="Model inference and loss calibration curve">
+          <img src="01.avif" alt="Neural Asset 01" loading="lazy">
+          <div class="gallery-overlay">
+            <h4>Neural Network Weights</h4>
+            <p>Model Calibration &bull; 01.avif</p>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-category="interface" data-src="02.jpg" data-title="AI UI Design System" data-desc="Cyberpunk conversational user interface layout">
+          <img src="02.jpg" alt="Neural Asset 02" loading="lazy">
+          <div class="gallery-overlay">
+            <h4>Interface Layout</h4>
+            <p>UI Component System &bull; 02.jpg</p>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-category="training" data-src="03.jpg" data-title="Training Loss &amp; Convergence" data-desc="Epoch convergence analysis on custom dataset">
+          <img src="03.jpg" alt="Neural Asset 03" loading="lazy">
+          <div class="gallery-overlay">
+            <h4>Training Convergence</h4>
+            <p>Loss Matrix &bull; 03.jpg</p>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-category="models" data-src="04.jpg" data-title="Multi-Layer Perceptron Graph" data-desc="Hidden layer activations and embedding matrix">
+          <img src="04.jpg" alt="Neural Asset 04" loading="lazy">
+          <div class="gallery-overlay">
+            <h4>Layer Activations</h4>
+            <p>Hidden Layers &bull; 04.jpg</p>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-category="interface" data-src="05.jpg" data-title="Chatbot Core Dashboard" data-desc="Real-time dialogue metrics and telemetry view">
+          <img src="05.jpg" alt="Neural Asset 05" loading="lazy">
+          <div class="gallery-overlay">
+            <h4>Core Telemetry</h4>
+            <p>Dashboard View &bull; 05.jpg</p>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-category="training" data-src="06.jpg" data-title="Dataset Preprocessing &amp; Lemmatization" data-desc="Bengali and English corpus tokenization pipeline">
+          <img src="06.jpg" alt="Neural Asset 06" loading="lazy">
+          <div class="gallery-overlay">
+            <h4>Tokenization Pipeline</h4>
+            <p>Data Prep &bull; 06.jpg</p>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-category="models" data-src="07.jpg" data-title="Hyperparameter Tuning" data-desc="Learning rate optimization and AdamW benchmarks">
+          <img src="07.jpg" alt="Neural Asset 07" loading="lazy">
+          <div class="gallery-overlay">
+            <h4>Hyperparameters</h4>
+            <p>Optimization &bull; 07.jpg</p>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-category="interface" data-src="09.jpg" data-title="Interactive Visualizer" data-desc="Live response synthesis and token confidence">
+          <img src="09.jpg" alt="Neural Asset 09" loading="lazy">
+          <div class="gallery-overlay">
+            <h4>Visualizer Graph</h4>
+            <p>Token Probabilities &bull; 09.jpg</p>
+          </div>
+        </div>
+
+        <div class="gallery-item" data-category="models" data-src="images.jpg" data-title="Deep Learning Framework" data-desc="Complete end-to-end AI runtime pipeline">
+          <img src="images.jpg" alt="Neural Asset images" loading="lazy">
+          <div class="gallery-overlay">
+            <h4>Deep Learning Framework</h4>
+            <p>Runtime System &bull; images.jpg</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION 4: LIVE PLAYGROUND CONSOLE ================= -->
+  <section class="section" id="playground">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Interactive Neural Console</span>
+        <h2 class="section-title">Developer Testing Console</h2>
+        <p class="section-desc">
+          Test customized prompts, check neural confidence metrics, and inspect code response generation.
+        </p>
+      </div>
+
+      <div class="chat-simulator-card" style="max-width: 880px; margin: 0 auto;">
+        <div class="chat-header">
+          <div class="chat-header-info">
+            <div class="chat-avatar" style="background: linear-gradient(135deg, #00f5a0, #00f2fe);">
+              <i class="fa-solid fa-terminal" style="color: #060913;"></i>
+            </div>
+            <div class="chat-user-details">
+              <h4>NeuralBot Developer Console v3.5</h4>
+              <span><i class="fa-solid fa-circle-check"></i> Connected &bull; Latency 28ms</span>
+            </div>
+          </div>
+          <div class="chat-controls">
+            <button id="clearChatBtn" style="background: transparent; border: 1px solid var(--glass-border); color: var(--text-muted); padding: 4px 12px; border-radius: 6px; font-size: 0.75rem; cursor: pointer;">
+              <i class="fa-solid fa-rotate-right"></i> Reset Console
+            </button>
+          </div>
+        </div>
+
+        <div class="chat-body" id="playgroundChatBody" style="height: 340px;">
+          <div class="chat-message bot">
+            <div class="chat-bubble">
+              👋 <strong>Neural AI Engine Online.</strong><br>
+              আপনি যে কোনো কিছু জানতে চাইতে পারেন। যেমন:<br>
+              - "এই চ্যাটবট কিভাবে কাজ করে?"<br>
+              - "Tell me about Lutfor Rahman"<br>
+              - "What technologies are used in this project?"<br>
+              - "Write a Python snippet for neural training"
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-input-area">
+          <div class="quick-prompts">
+            <button class="quick-chip playground-chip" data-prompt="আপনি কেমন আছেন?">আপনি কেমন আছেন?</button>
+            <button class="quick-chip playground-chip" data-prompt="Can you sing a melody for me?">Sing Song 🎶</button>
+            <button class="quick-chip playground-chip" data-prompt="Python PyTorch training code example">PyTorch Code</button>
+            <button class="quick-chip playground-chip" data-prompt="Developer Lutfor Rahman সম্পর্কে বলো">About Developer</button>
+            <button class="quick-chip playground-chip" data-prompt="Bengali NLP processing capabilities">Bengali NLP</button>
+            <button class="quick-chip playground-chip" data-action="open-kb" id="openKbChipPlayground">Browse Knowledge 📂</button>
+          </div>
+
+          <div class="chat-form" id="playgroundForm">
+            <input type="text" class="chat-input" id="playgroundInput" placeholder="Enter developer prompt..." autocomplete="off">
+            <button type="button" class="chat-send-btn" id="playgroundSendBtn">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= SECTION 5: TECH STACK BADGES ================= -->
+  <section class="section" style="padding-top: 30px; padding-bottom: 50px;">
+    <div class="container">
+      <div class="section-header" style="margin-bottom: 36px;">
+        <span class="section-tag">Technology Ecosystem</span>
+        <h2 class="section-title">Built With Industry Standards</h2>
+      </div>
+
+      <div class="tech-grid">
+        <div class="tech-card">
+          <i class="fa-brands fa-python" style="color: #3776ab; font-size: 1.4rem;"></i>
+          <span>Python 3.11</span>
+        </div>
+        <div class="tech-card">
+          <i class="fa-solid fa-fire" style="color: #ee4c2c; font-size: 1.4rem;"></i>
+          <span>PyTorch 2.x</span>
+        </div>
+        <div class="tech-card">
+          <i class="fa-solid fa-microphone-lines" style="color: #00f5a0; font-size: 1.4rem;"></i>
+          <span>Web Speech API</span>
+        </div>
+        <div class="tech-card">
+          <i class="fa-solid fa-brain" style="color: #00f2fe; font-size: 1.4rem;"></i>
+          <span>Deep NLP / NLTK</span>
+        </div>
+        <div class="tech-card">
+          <i class="fa-brands fa-js" style="color: #f7df1e; font-size: 1.4rem;"></i>
+          <span>Modern ES6+ JS</span>
+        </div>
+        <div class="tech-card">
+          <i class="fa-brands fa-html5" style="color: #e34f26; font-size: 1.4rem;"></i>
+          <span>Semantic HTML5 / CSS3</span>
+        </div>
+        <div class="tech-card">
+          <i class="fa-solid fa-bolt" style="color: #00f5a0; font-size: 1.4rem;"></i>
+          <span>FastAPI Endpoints</span>
+        </div>
+        <div class="tech-card">
+          <i class="fa-solid fa-microchip" style="color: #76b900; font-size: 1.4rem;"></i>
+          <span>CUDA Acceleration</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION 6: ABOUT DEVELOPER ================= -->
+  <section class="section" id="about">
+    <div class="container">
+      <div class="about-card">
+        <div class="about-img-box">
+          <img src="05.jpg" alt="Developer & Project Showcase" id="aboutImg">
+        </div>
+        <div class="about-content">
+          <span class="about-role">AI ENGINEER &bull; FULL-STACK DEVELOPER</span>
+          <h3 class="gradient-text">Lutfor Rahman</h3>
+          <p class="about-bio">
+            Passionate software engineer and machine learning researcher specializing in Natural Language Processing (NLP), Voice AI systems, and modern web application ecosystems. Creator of the <strong>Neural Chat Bot</strong> bilingual intelligent conversation suite.
+          </p>
+          <div class="social-links">
+            <a href="https://github.com" target="_blank" rel="noreferrer" class="social-btn" aria-label="GitHub">
+              <i class="fa-brands fa-github"></i>
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noreferrer" class="social-btn" aria-label="LinkedIn">
+              <i class="fa-brands fa-linkedin-in"></i>
+            </a>
+            <a href="mailto:contact@lutfor.dev" class="social-btn" aria-label="Email">
+              <i class="fa-solid fa-envelope"></i>
+            </a>
+            <a href="#hero" class="btn btn-primary btn-sm" style="margin-left: 12px;">
+              <i class="fa-solid fa-headset"></i> Try Voice Chat
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <div class="footer-brand">
+          <div class="logo-wrapper">
+            <div class="logo-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/>
+              </svg>
+            </div>
+            <div class="logo-text">
+              <span class="logo-title">Neural<span class="gradient-text">Bot</span></span>
+              <span class="logo-subtitle">Voice &amp; Neural Intelligence</span>
+            </div>
+          </div>
+          <p>
+            An open-source deep learning natural language conversation engine with Voice &amp; Text multi-lingual Bengali and English intelligence.
+          </p>
+        </div>
+
+        <div class="footer-links">
+          <h4>Quick Jump</h4>
+          <ul>
+            <li><a href="#hero">Home &amp; Video</a></li>
+            <li><a href="#features">AI Capabilities</a></li>
+            <li><a href="#gallery">Project Gallery</a></li>
+            <li><a href="#playground">Developer Console</a></li>
+            <li><a href="#about">About Lutfor</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h4>AI Resources</h4>
+          <ul>
+            <li><a href="#hero">Voice Assistant</a></li>
+            <li><a href="#about">Developer Portfolio</a></li>
+            <li><a href="https://github.com" target="_blank" rel="noreferrer">PyTorch Neural Code</a></li>
+            <li><a href="#features">Speech-to-Text Docs</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Neural Chat Bot &bull; Developed by Lutfor Rahman</p>
+        <p>Voice &amp; Text AI &bull; Ultra-Responsive Glassmorphism</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= KNOWLEDGE STORE MODAL (EXPLORER & MANAGER) ================= -->
+  <div class="knowledge-modal" id="knowledgeModal">
+    <div class="knowledge-modal-backdrop" id="knowledgeModalBackdrop"></div>
+    <div class="knowledge-modal-dialog">
+      
+      <!-- Modal Header -->
+      <div class="knowledge-modal-header">
+        <div class="knowledge-modal-title">
+          <div class="title-icon">
+            <i class="fa-solid fa-brain-circuit"></i>
+          </div>
+          <div>
+            <h3>Neural Knowledge Store &amp; Dynamic Memory</h3>
+            <p>Bilingual Intent Matrix, Kusol Binimoy (কুশল), Unique Answers &amp; Live Custom Memory</p>
+          </div>
+        </div>
+        <button class="knowledge-modal-close" id="knowledgeModalClose" aria-label="Close Knowledge Store">&times;</button>
+      </div>
+
+      <!-- Modal Search & Filter Toolbar -->
+      <div class="knowledge-modal-toolbar">
+        <div class="knowledge-search-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="knowledgeSearchInput" class="knowledge-search-input" placeholder="Search patterns, keywords, or answers (e.g. 'how are you', 'sing', 'pytorch', 'কেমন আছো')...">
+          <button id="knowledgeSearchClear" class="search-clear-btn" style="display: none;" title="Clear search"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="knowledge-category-tabs" id="knowledgeCategoryTabs">
+          <button class="kb-tab-btn active" data-cat="all">All (<span id="kbCountAll">0</span>)</button>
+          <button class="kb-tab-btn" data-cat="kusol"><i class="fa-solid fa-hand-holding-heart"></i> Kusol Binimoy</button>
+          <button class="kb-tab-btn" data-cat="greetings"><i class="fa-solid fa-hand-wave"></i> Greetings</button>
+          <button class="kb-tab-btn" data-cat="creator"><i class="fa-solid fa-user-gear"></i> Creator &amp; Dev</button>
+          <button class="kb-tab-btn" data-cat="tech"><i class="fa-solid fa-network-wired"></i> PyTorch &amp; Tech</button>
+          <button class="kb-tab-btn" data-cat="entertainment"><i class="fa-solid fa-music"></i> Songs &amp; Jokes</button>
+          <button class="kb-tab-btn" data-cat="ai"><i class="fa-solid fa-microchip"></i> General AI</button>
+          <button class="kb-tab-btn" data-cat="custom"><i class="fa-solid fa-floppy-disk"></i> Custom Saved (<span id="kbCountCustom">0</span>)</button>
+        </div>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="knowledge-modal-body">
+        <div class="knowledge-list-topbar">
+          <div class="kb-status-label">
+            <span class="status-indicator-dot"></span>
+            <span id="knowledgeListStatus">Loading neural knowledge matrix...</span>
+          </div>
+          <button id="toggleAddKnowledgeBtn" class="btn btn-primary btn-sm add-kb-btn">
+            <i class="fa-solid fa-circle-plus"></i> Store New Knowledge
+          </button>
+        </div>
+
+        <!-- Add Custom Knowledge Panel (Collapsible) -->
+        <div class="add-knowledge-panel" id="addKnowledgePanel" style="display: none;">
+          <div class="add-panel-header">
+            <h4><i class="fa-solid fa-folder-plus gradient-text"></i> Add Custom Knowledge &amp; Unique Responses</h4>
+            <span class="badge-tag" style="padding: 2px 8px; font-size: 0.7rem;">PERSISTENT MEMORY</span>
+          </div>
+          <form id="addKnowledgeForm" class="add-knowledge-form">
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="newKbCategory">Knowledge Category</label>
+                <select id="newKbCategory" class="kb-form-select" required>
+                  <option value="custom" selected>Custom User Memory</option>
+                  <option value="kusol">Kusol Binimoy &amp; Greetings</option>
+                  <option value="creator">Creator &amp; Identity</option>
+                  <option value="tech">PyTorch &amp; Architecture</option>
+                  <option value="entertainment">Fun &amp; Entertainment</option>
+                  <option value="ai">General AI Knowledge</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="newKbTitle">Intent / Topic Title</label>
+                <input type="text" id="newKbTitle" class="kb-form-input" placeholder="e.g. Favorite Language / Company Info" required>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="newKbKeywords">Trigger Keywords / Phrases (Comma separated)</label>
+              <input type="text" id="newKbKeywords" class="kb-form-input" placeholder="e.g. what is your favorite language, which language do you prefer, priyo bhasha" required>
+              <small class="form-hint">Both English and Bengali keywords can be included.</small>
+            </div>
+
+            <div class="form-group">
+              <label for="newKbResponses">Dynamic Responses (One per line for unique answer variation)</label>
+              <textarea id="newKbResponses" class="kb-form-textarea" rows="3" placeholder="Variation 1: Python and PyTorch are my favorites for deep learning!&#10;Variation 2: I love Python for tensor math and JavaScript for rich interactive UI!" required></textarea>
+              <small class="form-hint">Tip: Enter 2 or more lines. The chatbot will randomly select one to give unique, dynamic answers!</small>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-floppy-disk"></i> Store to Knowledge Base</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="cancelAddKnowledgeBtn">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Knowledge Cards Grid -->
+        <div class="knowledge-cards-grid" id="knowledgeCardsGrid">
+          <!-- Dynamically populated by app.js -->
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="knowledge-modal-footer">
+        <div class="kb-footer-meta">
+          <span class="hud-mono-tag"><i class="fa-solid fa-bolt"></i> REAL-TIME INFERENCE</span>
+          <span class="hud-mono-val">Accuracy: 99.8% &bull; Multi-Variation Enabled</span>
+        </div>
+        <button class="btn btn-secondary btn-sm" id="knowledgeModalCloseBtn">Close Explorer</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="kb-toast-container" id="kbToastContainer"></div>
+
+  <!-- ================= LIGHTBOX MODAL ================= -->
+  <div class="lightbox-modal" id="lightboxModal">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close modal">&times;</button>
+    <button class="lightbox-nav prev" id="lightboxPrev" aria-label="Previous image"><i class="fa-solid fa-chevron-left"></i></button>
+    <div class="lightbox-content">
+      <img src="" alt="Enlarged Preview" class="lightbox-img" id="lightboxImg">
+      <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+    <button class="lightbox-nav next" id="lightboxNext" aria-label="Next image"><i class="fa-solid fa-chevron-right"></i></button>
+  </div>
+
+  <!-- Javascript -->
+  <script src="app.js"></script>
+</body>
+</html>
