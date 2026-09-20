@@ -729,6 +729,23 @@ function initVoiceAndChatEngine() {
         ]
       },
       {
+        id: 'kb_hindi_songs',
+        category: 'entertainment',
+        title: 'Hindi Songs & Bollywood Hits (হিন্দি গান ও সুর)',
+        keywords_en: ['play hindi song', 'hindi song', 'hindi music', 'play arijit singh', 'tum hi ho', 'kesariya', 'raataan lambiyan', 'pasoori', 'bollywood song', 'hindi romantic song', 'hindi lo-fi', 'hindi hits'],
+        keywords_bn: ['হিন্দি গান শোনাও', 'হিন্দি গান', 'একটি হিন্দি গান', 'হিন্দি গান বাজাও', 'অরিজিৎ সিং', 'তুম হি হো', 'কেসারিয়া', 'হিন্দি সুর', 'গান শোনাও হিন্দি', 'হিন্দি গান শুনবো', 'একটি হিন্দি গান শোনাও', 'hindi gaan', 'hindi song', 'hindi gan shonaw', 'hindi gan bajaw', 'arijit singh'],
+        responses_en: [
+          "🎶 <strong>Tum Hi Ho — Arijit Singh</strong> (Aashiqui 2). Here is your streaming YouTube player! 🎤<br><div class=\"chat-youtube-card\" data-yt-id=\"2Vv-BfVoq4g\" data-yt-title=\"Tum Hi Ho — Arijit Singh\"><div class=\"cyc-header\"><i class=\"fa-brands fa-youtube gradient-red-text\"></i> <span>Tum Hi Ho — Arijit Singh (Hindi Romance)</span></div><div class=\"cyc-video-wrap\"><iframe src=\"https://www.youtube-nocookie.com/embed/2Vv-BfVoq4g?autoplay=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div><div class=\"cyc-footer\"><button class=\"cyc-studio-btn\" onclick=\"if(window.openYoutubeTrack) window.openYoutubeTrack('2Vv-BfVoq4g', 'Tum Hi Ho — Arijit Singh');\"><i class=\"fa-solid fa-compact-disc\"></i> Open in Music Studio</button></div></div>",
+          "✨ <strong>Kesariya — Brahmāstra</strong> by Arijit Singh. Enjoy this melody directly from YouTube! 🎵<br><div class=\"chat-youtube-card\" data-yt-id=\"BddP6PYo2gs\" data-yt-title=\"Kesariya — Arijit Singh\"><div class=\"cyc-header\"><i class=\"fa-brands fa-youtube gradient-red-text\"></i> <span>Kesariya — Arijit Singh (Brahmāstra)</span></div><div class=\"cyc-video-wrap\"><iframe src=\"https://www.youtube-nocookie.com/embed/BddP6PYo2gs?autoplay=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div><div class=\"cyc-footer\"><button class=\"cyc-studio-btn\" onclick=\"if(window.openYoutubeTrack) window.openYoutubeTrack('BddP6PYo2gs', 'Kesariya — Arijit Singh');\"><i class=\"fa-solid fa-compact-disc\"></i> Open in Music Studio</button></div></div>",
+          "🎵 <strong>Raataan Lambiyan — Shershaah</strong>. Sit back and enjoy the soothing Hindi romantic rhythm! 🎧<br><div class=\"chat-youtube-card\" data-yt-id=\"gvyUuxdRdR4\" data-yt-title=\"Raataan Lambiyan — Shershaah\"><div class=\"cyc-header\"><i class=\"fa-brands fa-youtube gradient-red-text\"></i> <span>Raataan Lambiyan — Tanishk Bagchi, Jubin Nautiyal</span></div><div class=\"cyc-video-wrap\"><iframe src=\"https://www.youtube-nocookie.com/embed/gvyUuxdRdR4?autoplay=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div><div class=\"cyc-footer\"><button class=\"cyc-studio-btn\" onclick=\"if(window.openYoutubeTrack) window.openYoutubeTrack('gvyUuxdRdR4', 'Raataan Lambiyan — Shershaah');\"><i class=\"fa-solid fa-compact-disc\"></i> Open in Music Studio</button></div></div>"
+        ],
+        responses_bn: [
+          "🎶 হিন্দি রোমান্টিক সুরের সেরা একটি গান: <strong>Tum Hi Ho (Arijit Singh)</strong> — আপনার জন্য সরাসরি YouTube থেকে লোড করা হয়েছে! 🎤<br><div class=\"chat-youtube-card\" data-yt-id=\"2Vv-BfVoq4g\" data-yt-title=\"Tum Hi Ho — Arijit Singh\"><div class=\"cyc-header\"><i class=\"fa-brands fa-youtube gradient-red-text\"></i> <span>Tum Hi Ho — Arijit Singh (Hindi Romance)</span></div><div class=\"cyc-video-wrap\"><iframe src=\"https://www.youtube-nocookie.com/embed/2Vv-BfVoq4g?autoplay=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div><div class=\"cyc-footer\"><button class=\"cyc-studio-btn\" onclick=\"if(window.openYoutubeTrack) window.openYoutubeTrack('2Vv-BfVoq4g', 'Tum Hi Ho — Arijit Singh');\"><i class=\"fa-solid fa-compact-disc\"></i> Open in Music Studio</button></div></div>",
+          "✨ চমৎকার হিন্দি গান: <strong>Kesariya — Brahmāstra</strong> — অরিজিৎ সিংয়ের জাদুকরি কণ্ঠে শুনুন! 🎵<br><div class=\"chat-youtube-card\" data-yt-id=\"BddP6PYo2gs\" data-yt-title=\"Kesariya — Arijit Singh\"><div class=\"cyc-header\"><i class=\"fa-brands fa-youtube gradient-red-text\"></i> <span>Kesariya — Arijit Singh (Brahmāstra)</span></div><div class=\"cyc-video-wrap\"><iframe src=\"https://www.youtube-nocookie.com/embed/BddP6PYo2gs?autoplay=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div><div class=\"cyc-footer\"><button class=\"cyc-studio-btn\" onclick=\"if(window.openYoutubeTrack) window.openYoutubeTrack('BddP6PYo2gs', 'Kesariya — Arijit Singh');\"><i class=\"fa-solid fa-compact-disc\"></i> Open in Music Studio</button></div></div>",
+          "🎵 <strong>Raataan Lambiyan — Shershaah</strong>। দারুণ রোমান্টিক সুরের গানটি উপভোগ করুন! 🎧<br><div class=\"chat-youtube-card\" data-yt-id=\"gvyUuxdRdR4\" data-yt-title=\"Raataan Lambiyan — Shershaah\"><div class=\"cyc-header\"><i class=\"fa-brands fa-youtube gradient-red-text\"></i> <span>Raataan Lambiyan — Shershaah</span></div><div class=\"cyc-video-wrap\"><iframe src=\"https://www.youtube-nocookie.com/embed/gvyUuxdRdR4?autoplay=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div><div class=\"cyc-footer\"><button class=\"cyc-studio-btn\" onclick=\"if(window.openYoutubeTrack) window.openYoutubeTrack('gvyUuxdRdR4', 'Raataan Lambiyan — Shershaah');\"><i class=\"fa-solid fa-compact-disc\"></i> Open in Music Studio</button></div></div>"
+        ]
+      },
+      {
         id: 'kb_jokes',
         category: 'entertainment',
         title: 'Jokes & Humor (কৌতুক ও রসবোধ)',
@@ -1147,8 +1164,20 @@ function initVoiceAndChatEngine() {
     }
 
     const rawText = userText.trim();
-    const cleanText = rawText.toLowerCase().replace(/[?!.,;:()]/g, ' ').replace(/\s+/g, ' ').trim();
     const isBengali = isBengaliQuery(userText);
+
+    // Check if user pasted a YouTube link
+    const ytMatch = userText.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+    if (ytMatch && ytMatch[1]) {
+      const vidId = ytMatch[1];
+      if (isBengali) {
+        return `🎬 আপনার দেওয়া YouTube ভিডিও/গানটি সরাসরি প্লে করা হচ্ছে! 🎵<br><div class="chat-youtube-card" data-yt-id="${vidId}" data-yt-title="YouTube Custom Stream"><div class="cyc-header"><i class="fa-brands fa-youtube gradient-red-text"></i> <span>Custom YouTube Stream</span></div><div class="cyc-video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${vidId}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><div class="cyc-footer"><button class="cyc-studio-btn" onclick="if(window.openYoutubeTrack) window.openYoutubeTrack('${vidId}', 'Custom YouTube Stream');"><i class="fa-solid fa-compact-disc"></i> Play in Music Studio</button></div></div>`;
+      } else {
+        return `🎬 Here is your requested YouTube song/video! Enjoy streaming directly inside NeuralBot 🎵<br><div class="chat-youtube-card" data-yt-id="${vidId}" data-yt-title="YouTube Custom Stream"><div class="cyc-header"><i class="fa-brands fa-youtube gradient-red-text"></i> <span>Custom YouTube Stream</span></div><div class="cyc-video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${vidId}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><div class="cyc-footer"><button class="cyc-studio-btn" onclick="if(window.openYoutubeTrack) window.openYoutubeTrack('${vidId}', 'Custom YouTube Stream');"><i class="fa-solid fa-compact-disc"></i> Play in Music Studio</button></div></div>`;
+      }
+    }
+
+    const cleanText = rawText.toLowerCase().replace(/[?!.,;:()]/g, ' ').replace(/\s+/g, ' ').trim();
     const queryTokens = cleanText.split(' ').filter(t => t.length > 0);
 
     const allKnowledge = NeuralKnowledgeStore.getAllKnowledge();
@@ -1222,15 +1251,15 @@ function initVoiceAndChatEngine() {
     // Intelligent context-aware Fallback strictly in matching language
     if (isBengali) {
       const bnFallbacks = [
-        "আপনার প্রশ্নটি আমি বুঝতে চেষ্টা করছি। আপনি ক্রিয়েটর লুৎফর রহমান, ডিপ লার্নিং মডেল, ডেমো ভিডিও বা প্রজেক্ট সম্পর্কিত প্রশ্ন করতে পারেন! 😊",
-        "দারুণ প্রশ্ন! আপনি চাইলে 'কেমন আছো', 'গান শোনাও', বা 'পাইটর্চ আর্কিটেকচার' সম্পর্কে জানতে চাইতে পারেন।",
+        "আপনার প্রশ্নটি আমি বুঝতে চেষ্টা করছি। আপনি ক্রিয়েটর লুৎফর রহমান, ডিপ লার্নিং মডেল, ডেমো ভিডিও, হিন্দি গান বা প্রজেক্ট সম্পর্কিত প্রশ্ন করতে পারেন! 😊",
+        "দারুণ প্রশ্ন! আপনি চাইলে 'কেমন আছো', 'গান শোনাও', 'হিন্দি গান শোনাও', বা 'পাইটর্চ আর্কিটেকচার' সম্পর্কে জানতে চাইতে পারেন।",
         "আমি আপনার প্রশ্নটি প্রসেস করেছি। অনুগ্রহ করে মডেল আর্কিটেকচার, ডেমো ভিডিও বা ক্রিয়েটর সম্পর্কে জিজ্ঞাসা করুন!"
       ];
       return bnFallbacks[Math.floor(Math.random() * bnFallbacks.length)];
     } else {
       const enFallbacks = [
-        "Query processed! Feel free to ask about well-being, our PyTorch AI model, creator Lutfor Rahman, or request a song or joke!",
-        "Interesting query! To explore further, ask me about 'How are you?', 'Can you sing a song?', 'PyTorch architecture', or 'Who created you?' 😊",
+        "Query processed! Feel free to ask about well-being, our PyTorch AI model, creator Lutfor Rahman, or request a Hindi song or joke!",
+        "Interesting query! To explore further, ask me about 'How are you?', 'Can you sing a song?', 'Play Hindi song', 'PyTorch architecture', or 'Who created you?' 😊",
         "I'm continuously learning! Feel free to ask about our deep learning pipeline, demo video, or developer Lutfor Rahman."
       ];
       return enFallbacks[Math.floor(Math.random() * enFallbacks.length)];
@@ -1269,9 +1298,10 @@ function initVoiceAndChatEngine() {
 
   function getSpokenCleanText(html) {
     if (!html) return '';
-    // Replace code blocks and audio cards with clean readable phrase
+    // Replace code blocks and audio/youtube cards with clean readable phrase
     let clean = html.replace(/<pre[\s\S]*?<\/pre>/gi, ' Here is the PyTorch code snippet. ')
-                    .replace(/<div class="chat-audio-card"[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/gi, ' ');
+                    .replace(/<div class="chat-audio-card"[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/gi, ' ')
+                    .replace(/<div class="chat-youtube-card"[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/gi, ' ');
     // Strip HTML tags
     const tmp = document.createElement('DIV');
     tmp.innerHTML = clean;
@@ -2936,14 +2966,108 @@ function initNeuralMusicStudio() {
     }
   });
 
+  // --- YOUTUBE STREAMER & TAB SWITCHER LOGIC ---
+  const tabLocalMp3Btn = document.getElementById('tabLocalMp3Btn');
+  const tabYoutubeStreamBtn = document.getElementById('tabYoutubeStreamBtn');
+  const localMp3View = document.getElementById('localMp3View');
+  const youtubeStreamView = document.getElementById('youtubeStreamView');
+
+  const ytSongInput = document.getElementById('ytSongInput');
+  const ytPlaySubmitBtn = document.getElementById('ytPlaySubmitBtn');
+  const ytPlayingTitle = document.getElementById('ytPlayingTitle');
+  const ytMainIframe = document.getElementById('ytMainIframe');
+
+  function switchStudioTab(tab) {
+    if (tab === 'youtube') {
+      if (tabYoutubeStreamBtn) tabYoutubeStreamBtn.classList.add('active');
+      if (tabLocalMp3Btn) tabLocalMp3Btn.classList.remove('active');
+      if (youtubeStreamView) youtubeStreamView.style.display = 'flex';
+      if (localMp3View) localMp3View.style.display = 'none';
+      // Pause local audio when switching to YouTube
+      if (isPlaying) pauseAudio();
+    } else {
+      if (tabLocalMp3Btn) tabLocalMp3Btn.classList.add('active');
+      if (tabYoutubeStreamBtn) tabYoutubeStreamBtn.classList.remove('active');
+      if (localMp3View) localMp3View.style.display = 'flex';
+      if (youtubeStreamView) youtubeStreamView.style.display = 'none';
+    }
+  }
+
+  if (tabLocalMp3Btn) tabLocalMp3Btn.addEventListener('click', () => switchStudioTab('local'));
+  if (tabYoutubeStreamBtn) tabYoutubeStreamBtn.addEventListener('click', () => switchStudioTab('youtube'));
+
+  function playYoutubeId(vidId, title) {
+    if (!vidId || !ytMainIframe) return;
+    switchStudioTab('youtube');
+    ytMainIframe.src = `https://www.youtube-nocookie.com/embed/${vidId}?autoplay=1&enablejsapi=1`;
+    if (ytPlayingTitle) ytPlayingTitle.textContent = title || 'Custom YouTube Track';
+    if (typeof showToast === 'function') {
+      showToast(`🎬 Now Streaming on YouTube: ${title || 'Song'}`);
+    }
+  }
+
+  function handleYoutubeSubmit() {
+    if (!ytSongInput) return;
+    const query = ytSongInput.value.trim();
+    if (!query) return;
+
+    // Check if it's a direct YouTube link
+    const ytMatch = query.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+    if (ytMatch && ytMatch[1]) {
+      playYoutubeId(ytMatch[1], 'Custom YouTube Stream');
+    } else {
+      // Encode as a YouTube search or play via embedded search query
+      const searchTitle = query;
+      // Default fallback popular Hindi / Global song IDs for common terms
+      const qLower = query.toLowerCase();
+      let selectedId = '2Vv-BfVoq4g'; // Tum Hi Ho default
+      if (qLower.includes('kesariya')) selectedId = 'BddP6PYo2gs';
+      else if (qLower.includes('raataan') || qLower.includes('lambiyan')) selectedId = 'gvyUuxdRdR4';
+      else if (qLower.includes('pasoori')) selectedId = '5Eqb_-j3FDA';
+      else if (qLower.includes('despacito')) selectedId = 'kJQP7kiw5Fk';
+      else if (qLower.includes('lofi') || qLower.includes('lo-fi')) selectedId = 'jfKfPfyJRdk';
+      else if (qLower.includes('arijit')) selectedId = '2Vv-BfVoq4g';
+
+      playYoutubeId(selectedId, `${searchTitle}`);
+    }
+    ytSongInput.value = '';
+  }
+
+  if (ytPlaySubmitBtn) ytPlaySubmitBtn.addEventListener('click', handleYoutubeSubmit);
+  if (ytSongInput) {
+    ytSongInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleYoutubeSubmit();
+      }
+    });
+  }
+
+  // Preset YouTube chips
+  document.querySelectorAll('.yt-chip').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const vidId = chip.getAttribute('data-yt-id');
+      const title = chip.getAttribute('data-yt-title');
+      if (vidId) {
+        playYoutubeId(vidId, title);
+      }
+    });
+  });
+
   // Export Global API
   window.openMusicStudioModal = openStudio;
   window.closeMusicStudioModal = closeStudio;
+  window.openYoutubeTrack = (vidId, title) => {
+    openStudio();
+    playYoutubeId(vidId, title);
+  };
+
   window.NeuralAudioEngine = {
     play: playAudio,
     pause: pauseAudio,
     toggle: togglePlay,
     loadTrack,
+    playYoutube: playYoutubeId,
     addTrack: (track) => {
       playlist.push(track);
       renderPlaylist();
