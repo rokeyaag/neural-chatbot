@@ -1,5 +1,4 @@
 {
-  "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
@@ -9,24 +8,6 @@
         {
           "key": "Access-Control-Allow-Origin",
           "value": "*"
-        }
-      ]
-    },
-    {
-      "source": "/style.css",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
-        }
-      ]
-    },
-    {
-      "source": "/app.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
         }
       ]
     }
