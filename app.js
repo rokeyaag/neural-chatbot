@@ -572,16 +572,21 @@ function initNeuralAvatarController(switchToAvatarCallback) {
    5. VOICE & TEXT AI INTELLIGENCE ENGINE
    ========================================================================== */
 function initVoiceAndChatEngine() {
-  // Global Voice Output State
+  // Global Voice & Audio State
   let isVoiceOutputEnabled = true;
   let activeUtterance = null;
   let speechFallbackTimer = null;
+  let currentAudioPlayer = null;
 
   // --- Voice Synthesis Voices Cache & Selection (Loud & Clear Audio) ---
   let availableVoices = [];
   function loadVoices() {
     if ('speechSynthesis' in window) {
-      availableVoices = window.speechSynthesis.getVoices() || [];
+      try {
+        availableVoices = window.speechSynthesis.getVoices() || [];
+      } catch (e) {
+        availableVoices = [];
+      }
     }
   }
   loadVoices();
@@ -595,16 +600,16 @@ function initVoiceAndChatEngine() {
     }
     if (isBengali) {
       const bn = availableVoices.find(
-        (v) => (v.lang && (v.lang.startsWith('bn') || v.lang.includes('Bengali') || v.lang.includes('Bangla'))) ||
-               (v.name && (v.name.includes('Bangla') || v.name.includes('Bengali') || v.name.includes('bn-')))
+        (v) => (v.lang && (v.lang.toLowerCase().startsWith('bn') || v.lang.toLowerCase().includes('bengali') || v.lang.toLowerCase().includes('bangla'))) ||
+               (v.name && (v.name.toLowerCase().includes('bangla') || v.name.toLowerCase().includes('bengali') || v.name.toLowerCase().includes('bn-') || v.name.toLowerCase().includes('bn_') || v.name.toLowerCase().includes('bangladesh') || v.name.toLowerCase().includes('india')))
       );
       if (bn) return bn;
     } else {
       // Find high-definition, clear English voice (Natural, Google US/UK, Microsoft Jenny/Guy/Zira/David)
       const en = availableVoices.find(
-        (v) => v.lang && (v.lang === 'en-US' || v.lang === 'en-GB' || v.lang.startsWith('en')) &&
-               (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Jenny') || v.name.includes('Guy') || v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Samantha'))
-      ) || availableVoices.find((v) => v.lang && (v.lang === 'en-US' || v.lang === 'en-GB' || v.lang.startsWith('en')));
+        (v) => v.lang && (v.lang === 'en-US' || v.lang === 'en-GB' || v.lang.toLowerCase().startsWith('en')) &&
+               (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Jenny') || v.name.includes('Guy') || v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Samantha') || v.name.includes('Online'))
+      ) || availableVoices.find((v) => v.lang && (v.lang === 'en-US' || v.lang === 'en-GB' || v.lang.toLowerCase().startsWith('en')));
       if (en) return en;
     }
     return null;
@@ -809,6 +814,205 @@ function initVoiceAndChatEngine() {
           "<strong>কৃত্রিম বুদ্ধিমত্তা (AI)</strong> হলো এমন প্রযুক্তি যা মানব মেধার মতো বিশ্লেষণ ও সিদ্ধান্ত নিতে পারে। ডিপ লার্নিং এর মধ্যে বহুস্তরের নিউরাল নেটওয়ার্ক ব্যবহৃত হয়।",
           "ডিপ লার্নিং-এ <strong>টেন্সর (Tensor)</strong> হলো বহুমাত্রিক গাণিতিক ম্যাট্রিক্স যা নিউরাল লেয়ারের মধ্য দিয়ে প্রবাহিত হয়ে ওয়েট (Weights) অ্যাডজাস্ট করে।"
         ]
+      },
+      {
+        id: 'kb_origin',
+        category: 'creator',
+        title: 'Origin & Location (বাসস্থান ও পরিচয়)',
+        keywords_en: ['where are you from', 'where do you live', 'where are you based', 'your location', 'country'],
+        keywords_bn: ['কোথায় থাকো', 'কোথায় থাকিস', 'বাড়ি কোথায়', 'কোথা থেকে আসছো', 'তোমার বাড়ি কোথায়', 'তোমার দেশ কোথায়', 'বাড়ি কই', 'thako kothay', 'kothay thako', 'bari koi', 'bari kothay'],
+        responses_en: [
+          "I reside in the digital cloud and in your neural web interface, crafted with passion by <strong>Lutfor Rahman</strong> in Bangladesh! 🇧🇩",
+          "My home is the neural cyberspace! I am powered by deep learning models designed in Bangladesh."
+        ],
+        responses_bn: [
+          "আমি একটি ডিজিটাল নিউরাল ক্লাউড প্ল্যাটফর্মে এবং আপনার ব্রাউজারে বাস করি। আমাকে তৈরি করেছেন বাংলাদেশের এআই ইঞ্জিনিয়ার <strong>লুৎফর রহমান</strong>! 🇧🇩",
+          "আমার নিবাস ডিজিটাল স্পেসে! তবে আমার কোডিং এবং প্রশিক্ষণ হয়েছে বাংলাদেশে।"
+        ]
+      },
+      {
+        id: 'kb_voice_help',
+        category: 'tech',
+        title: 'Voice & Bangla Speech (বাংলা ভয়েস ও কথা)',
+        keywords_en: ['can you speak bangla', 'speak in bengali', 'bengali voice', 'bangla voice', 'talk in bangla'],
+        keywords_bn: ['বাংলা কথা বলো', 'বাংলা বলো', 'বাংলা কথা বল', 'কথা বলো', 'কথা বল', 'ভয়েস বলো', 'বাংলা বলো না কেন', 'বাংলা বলিস না কেন', 'বাংলায় কথা বলো', 'বাংলা কথা বলতে পারো', 'bangla kotha bolo', 'bangla bolo', 'bangla kotha bole na kno'],
+        responses_en: [
+          "I have full bilingual voice intelligence! I can speak and listen in both Bengali and English in real-time.",
+          "Yes! You can toggle the microphone to Bangla or type in Bengali, and my talking avatar will speak with synchronized lip movements!"
+        ],
+        responses_bn: [
+          "আমি বাংলায় খুব সুন্দর ও স্পষ্টভাবে কথা বলতে পারি! 😊 আপনি মাইক্রোফোনে কথা বলুন বা টেক্সট লিখুন, আমি বাংলায় উত্তর দেব এবং আমার অবতার মুখে লিপ-সিঙ্ক করে কথা বলবে।",
+          "হ্যাঁ, আমার নিউরাল ভয়েস ইঞ্জিন বাংলা ও ইংরেজি উভয় ভাষায় উচ্চ মানের কণ্ঠস্বরে কথা বলতে সক্ষম!"
+        ]
+      },
+      {
+        id: 'kb_github_all',
+        category: 'github',
+        title: 'GitHub Repositories & Projects (সকল গিটহাব প্রজেক্ট)',
+        keywords_en: ['github projects', 'github repositories', 'all projects', 'show all repos', 'github portfolio', 'rokeyaag repos', 'what projects do you have', 'project list', 'github data', 'github repos', 'show projects', 'list of projects'],
+        keywords_bn: ['সব প্রজেক্ট দেখাও', 'প্রজেক্টগুলো কি কি', 'তোমার প্রজেক্ট কি', 'কি কি প্রজেক্ট বানিয়েছ', 'গিটহাব রিপোজিটরি', 'গিটহাব ডাটা', 'প্রজেক্ট লিস্ট', 'সবগুলো প্রজেক্ট', 'গিটহাবে কি কি আছে', 'github e ki ache', 'sobgulo project', 'project list dekhao', 'github project', 'project gulo ki'],
+        responses_en: [
+          "Lutfor Rahman (<strong>rokeyaag</strong>) has built <strong>20 active projects</strong> on GitHub across AI, SaaS, Python Desktop, and Security:<br><br>• <strong>EduGenius AI</strong> — Smart AI learning assistant (<a href=\"https://edugenius-ai-omega.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">Live Demo</a>)<br>• <strong>Neural Chatbot</strong> — Deep Learning NLP Voice & Avatar AI<br>• <strong>Lutfor Portfolio</strong> — AI Engineer portfolio (<a href=\"https://lutfor-portfolio.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">Live Demo</a>)<br>• <strong>IMX Daily Expense App</strong> — Financial analytics (<a href=\"https://imx-daily-expense-app.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">Live Demo</a>)<br>• <strong>Grand Aurelia</strong> — Luxury digital web app (<a href=\"https://grand-aurelia-five.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">Live Demo</a>)<br>• <strong>School Management AI</strong> — Academic ERP system (<a href=\"https://school-management-ai-system.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">Live Demo</a>)<br>• <strong>Banking Desktop</strong> — Python financial software (<a href=\"https://rokeyaag.github.io/banking-desktop/\" target=\"_blank\" style=\"color:#00f2fe;\">Live Demo</a>)<br>• <strong>SecureLock</strong> — Cryptographic vault & file security<br>• <strong>AdCraft AI & AI Solutions</strong> — Marketing & automation systems<br>• <strong>E-Commerce Suite</strong> — IMX E-Shop, REST API, & Frontend<br><br>Explore all repositories at: <a href=\"https://github.com/rokeyaag\" target=\"_blank\" style=\"color:#00f2fe; text-decoration:underline;\">github.com/rokeyaag</a>"
+        ],
+        responses_bn: [
+          "এআই ইঞ্জিনিয়ার লুৎফর রহমানের (rokeyaag) গিটহাবে রয়েছে <strong>২০টি চমৎকার প্রজেক্ট ও রিপোজিটরি</strong>:<br><br>১. <strong>EduGenius AI:</strong> স্মার্ট এডুকেশনাল এআই অ্যাসিস্ট্যান্ট (<a href=\"https://edugenius-ai-omega.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">লাইভ ডেমো</a>)<br>২. <strong>Neural Chatbot:</strong> রিয়েল-টাইম লিপ-সিঙ্ক ও ভয়েস চ্যাটবট<br>৩. <strong>Lutfor Portfolio:</strong> এআই ডেভেলপার পোর্টফোলিও (<a href=\"https://lutfor-portfolio.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">লাইভ ডেমো</a>)<br>৪. <strong>IMX Daily Expense App:</strong> আয়-ব্যয় ট্র্যাকিং সিস্টেম (<a href=\"https://imx-daily-expense-app.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">লাইভ ডেমো</a>)<br>৫. <strong>Grand Aurelia:</strong> লাক্সারি ডিজিটাল ওয়েব প্ল্যাটফর্ম (<a href=\"https://grand-aurelia-five.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">লাইভ ডেমো</a>)<br>৬. <strong>School Management AI:</strong> স্কুল ও একাডেমি ইআরপি (<a href=\"https://school-management-ai-system.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">লাইভ ডেমো</a>)<br>৭. <strong>Banking Desktop:</strong> পাইথন ব্যাংকিং ডেস্কটপ সফটওয়্যার (<a href=\"https://rokeyaag.github.io/banking-desktop/\" target=\"_blank\" style=\"color:#00f2fe;\">লাইভ ডেমো</a>)<br>৮. <strong>SecureLock:</strong> ফাইল এনক্রিপশন ও সাইবার সিকিউরিটি ভল্ট<br>৯. <strong>AdCraft AI &amp; AI Solutions:</strong> এডভার্টাইজমেন্ট ও বিজনেস অটোমেশন<br>১০. <strong>E-Commerce System:</strong> ফুল-স্ট্যাক ইশপ ও রেস্ট এপিআই<br><br>সবগুলো প্রজেক্টের কোড দেখতে ভিজিট করুন: <a href=\"https://github.com/rokeyaag\" target=\"_blank\" style=\"color:#00f2fe; text-decoration:underline;\">github.com/rokeyaag</a>"
+        ]
+      },
+      {
+        id: 'kb_repo_edugenius',
+        category: 'github',
+        title: 'EduGenius AI (এডুজেনিয়াস এআই)',
+        keywords_en: ['edugenius', 'edugenius ai', 'edugenius-ai', 'educational ai', 'education assistant', 'learning ai'],
+        keywords_bn: ['এডুজেনিয়াস', 'এডুজেনিয়াস এআই', 'শিক্ষা এআই', 'edugenius ki', 'edugenius ai ki', 'edugenius project'],
+        responses_en: [
+          "<strong>EduGenius AI</strong> is an intelligent educational and interactive learning assistant platform built by Lutfor Rahman.<br>• <strong>Live Demo:</strong> <a href=\"https://edugenius-ai-omega.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">edugenius-ai-omega.vercel.app</a><br>• <strong>GitHub Repo:</strong> <a href=\"https://github.com/rokeyaag/edugenius-ai\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/edugenius-ai</a>"
+        ],
+        responses_bn: [
+          "<strong>EduGenius AI</strong> হলো লুৎফর রহমানের তৈরি একটি আধুনিক কৃত্রিম বুদ্ধিমত্তাসম্পন্ন শিক্ষা প্ল্যাটফর্ম যা শিক্ষার্থীদের তাৎক্ষণিক পড়াশোনার সাহায্য ও প্রশ্নের উত্তর দেয়।<br>• <strong>লাইভ ডেমো:</strong> <a href=\"https://edugenius-ai-omega.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">edugenius-ai-omega.vercel.app</a><br>• <strong>গিটহাব:</strong> <a href=\"https://github.com/rokeyaag/edugenius-ai\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/edugenius-ai</a>"
+        ]
+      },
+      {
+        id: 'kb_repo_portfolio',
+        category: 'github',
+        title: 'Lutfor Portfolio (লুৎফর পোর্টফোলিও)',
+        keywords_en: ['lutfor portfolio', 'portfolio website', 'developer portfolio', 'lutfor-portfolio', 'portfolio', 'portfolio site'],
+        keywords_bn: ['পোর্টফোলিও', 'লুৎফরের পোর্টফোলিও', 'পোর্টফোলিও ওয়েবসাইট', 'portfolio link', 'portfolio dekhao'],
+        responses_en: [
+          "<strong>Lutfor Rahman's Official AI Portfolio</strong> showcases his machine learning models, full-stack web applications, and interactive UI engineering.<br>• <strong>Live Demo:</strong> <a href=\"https://lutfor-portfolio.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">lutfor-portfolio.vercel.app</a><br>• <strong>GitHub:</strong> <a href=\"https://github.com/rokeyaag/lutfor-portfolio\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/lutfor-portfolio</a>"
+        ],
+        responses_bn: [
+          "<strong>লুৎফর রহমানের অফিসিয়াল এআই ও ফুল-স্ট্যাক পোর্টফোলিও:</strong> এখানে তাঁর সকল ডিপ লার্নিং মডেল, সফটওয়্যার আর্কিটেকচার এবং লাইভ প্রজেক্ট প্রদর্শিত হয়েছে।<br>• <strong>লাইভ সাইট:</strong> <a href=\"https://lutfor-portfolio.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">lutfor-portfolio.vercel.app</a><br>• <strong>গিটহাব:</strong> <a href=\"https://github.com/rokeyaag/lutfor-portfolio\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/lutfor-portfolio</a>"
+        ]
+      },
+      {
+        id: 'kb_repo_dailyexpense',
+        category: 'github',
+        title: 'IMX Daily Expense App (ডেইলি এক্সপেন্স ট্র্যাকার)',
+        keywords_en: ['daily expense', 'expense tracker', 'imx daily expense', 'imxdailyexpenseapp', 'imx-daily-expense-backend', 'expense app'],
+        keywords_bn: ['ডেইলি এক্সপেন্স', 'খরচ ট্র্যাকার', 'হিসাব অ্যাপ', 'আয় ব্যয় অ্যাপ', 'daily expense ki', 'expense tracker ki'],
+        responses_en: [
+          "<strong>IMX Daily Expense App</strong> is a full-stack financial tracking suite with Python backend & JavaScript frontend for real-time expense calculations and budget reports.<br>• <strong>Live Demo:</strong> <a href=\"https://imx-daily-expense-app.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">imx-daily-expense-app.vercel.app</a><br>• <strong>GitHub:</strong> <a href=\"https://github.com/rokeyaag/IMXDailyExpenseApp\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/IMXDailyExpenseApp</a>"
+        ],
+        responses_bn: [
+          "<strong>IMX Daily Expense App:</strong> এটি দৈনন্দিন খরচ ও আর্থিক লেনদেন ট্র্যাক এবং বিশ্লেষণ করার একটি ফুল-স্ট্যাক অ্যাপ (পাইথন ব্যাকএন্ড ও জাভাস্ক্রিপ্ট ফ্রন্টএন্ড)।<br>• <strong>লাইভ ডেমো:</strong> <a href=\"https://imx-daily-expense-app.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">imx-daily-expense-app.vercel.app</a><br>• <strong>গিটহাব:</strong> <a href=\"https://github.com/rokeyaag/IMXDailyExpenseApp\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/IMXDailyExpenseApp</a>"
+        ]
+      },
+      {
+        id: 'kb_repo_grandaurelia',
+        category: 'github',
+        title: 'Grand Aurelia (গ্র্যান্ড অরেলিয়া)',
+        keywords_en: ['grand aurelia', 'grand-aurelia', 'luxury website', 'hotel website', 'grand aurelia web'],
+        keywords_bn: ['গ্র্যান্ড অরেলিয়া', 'গ্র্যান্ড অরেলিয়া', 'grand aurelia ki', 'grand aurelia project'],
+        responses_en: [
+          "<strong>Grand Aurelia</strong> is an ultra-premium, high-end digital web application with glassmorphic visuals and fluid animations.<br>• <strong>Live Demo:</strong> <a href=\"https://grand-aurelia-five.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">grand-aurelia-five.vercel.app</a><br>• <strong>GitHub:</strong> <a href=\"https://github.com/rokeyaag/grand-aurelia\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/grand-aurelia</a>"
+        ],
+        responses_bn: [
+          "<strong>Grand Aurelia:</strong> এটি একটি আধুনিক লাক্সারি ডিজিটাল ওয়েব অ্যাপ্লিকেশন, যাতে রয়েছে ডায়নামিক ইউজার এক্সপেরিয়েন্স ও আকর্ষণীয় সাইবার ইন্টারফেস।<br>• <strong>লাইভ ডেমো:</strong> <a href=\"https://grand-aurelia-five.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">grand-aurelia-five.vercel.app</a><br>• <strong>গিটহাব:</strong> <a href=\"https://github.com/rokeyaag/grand-aurelia\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/grand-aurelia</a>"
+        ]
+      },
+      {
+        id: 'kb_repo_school',
+        category: 'github',
+        title: 'School Management AI System (স্কুল ম্যানেজমেন্ট সিস্টেম)',
+        keywords_en: ['school management', 'school management ai', 'school-management-ai-system', 'school-management-web', 'academic erp'],
+        keywords_bn: ['স্কুল ম্যানেজমেন্ট', 'স্কুল সফটওয়্যার', 'শিক্ষা প্রতিষ্ঠান সফটওয়্যার', 'school management ki', 'school erp'],
+        responses_en: [
+          "<strong>School Management AI System</strong> is a Python-powered academic management platform handling student records, attendance, grades, and automated administrative operations.<br>• <strong>Live Demo:</strong> <a href=\"https://school-management-ai-system.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">school-management-ai-system.vercel.app</a><br>• <strong>GitHub:</strong> <a href=\"https://github.com/rokeyaag/school-management-ai-system\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/school-management-ai-system</a>"
+        ],
+        responses_bn: [
+          "<strong>School Management AI System:</strong> পাইথনে তৈরি একাডেমিক ইআরপি সিস্টেম, যা শিক্ষার্থী ভর্তি, হাজিরা, পরীক্ষার ফলাফল এবং অটোমেটেড রিপোর্ট তৈরি করে।<br>• <strong>লাইভ ডেমো:</strong> <a href=\"https://school-management-ai-system.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">school-management-ai-system.vercel.app</a><br>• <strong>গিটহাব:</strong> <a href=\"https://github.com/rokeyaag/school-management-ai-system\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/school-management-ai-system</a>"
+        ]
+      },
+      {
+        id: 'kb_repo_banking',
+        category: 'github',
+        title: 'Banking Desktop Application (ব্যাংকিং ডেস্কটপ সফটওয়্যার)',
+        keywords_en: ['banking desktop', 'banking-desktop', 'banking app', 'python banking', 'desktop banking'],
+        keywords_bn: ['ব্যাংকিং ডেস্কটপ', 'ব্যাংক সফটওয়্যার', 'ব্যাংকিং অ্যাপ', 'banking software', 'banking app ki'],
+        responses_en: [
+          "<strong>Banking Desktop</strong> is a Python desktop software for banking operations, secure account authentication, deposit/withdrawal calculations, and customer transaction logs.<br>• <strong>Live Demo:</strong> <a href=\"https://rokeyaag.github.io/banking-desktop/\" target=\"_blank\" style=\"color:#00f2fe;\">rokeyaag.github.io/banking-desktop</a><br>• <strong>GitHub:</strong> <a href=\"https://github.com/rokeyaag/banking-desktop\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/banking-desktop</a>"
+        ],
+        responses_bn: [
+          "<strong>Banking Desktop App:</strong> পাইথনে তৈরি নিরাপদ ব্যাংকিং ডেস্কটপ সফটওয়্যার যা গ্রাহক একাউন্ট, ব্যালেন্স, জমা/উত্তোলন এবং ট্রানজেকশন হিস্ট্রি পরিচালনা করে।<br>• <strong>লাইভ ভিউ:</strong> <a href=\"https://rokeyaag.github.io/banking-desktop/\" target=\"_blank\" style=\"color:#00f2fe;\">rokeyaag.github.io/banking-desktop</a><br>• <strong>গিটহাব:</strong> <a href=\"https://github.com/rokeyaag/banking-desktop\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/banking-desktop</a>"
+        ]
+      },
+      {
+        id: 'kb_repo_securelock',
+        category: 'github',
+        title: 'SecureLock (সিকিউর লক — ফাইল ভল্ট)',
+        keywords_en: ['securelock', 'secure lock', 'encryption', 'vault', 'file locker', 'security', 'cyber security'],
+        keywords_bn: ['সিকিউর লক', 'এনক্রিপশন', 'ফাইল ভল্ট', 'পাসওয়ার্ড সিকিউরিটি', 'securelock ki', 'file lock'],
+        responses_en: [
+          "<strong>SecureLock</strong> is a Python cybersecurity and cryptographic vault application that encrypts sensitive files and protects credentials with military-grade algorithms.<br>• <strong>GitHub Repo:</strong> <a href=\"https://github.com/rokeyaag/SecureLock\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/SecureLock</a>"
+        ],
+        responses_bn: [
+          "<strong>SecureLock:</strong> পাইথনে তৈরি একটি শক্তিশালী সাইবার সিকিউরিটি ও এনক্রিপশন ভল্ট সফটওয়্যার, যা গুরুত্বপূর্ণ ফাইল ও ডেটা সুরক্ষিত লক করে রাখে।<br>• <strong>গিটহাব রিপোজিটরি:</strong> <a href=\"https://github.com/rokeyaag/SecureLock\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/SecureLock</a>"
+        ]
+      },
+      {
+        id: 'kb_repo_adcraft',
+        category: 'github',
+        title: 'AdCraft AI (অ্যাডক্রাফট এআই)',
+        keywords_en: ['adcraft', 'adcraft ai', 'adcraft-ai', 'ai ad generator', 'ad creation', 'marketing ai'],
+        keywords_bn: ['অ্যাডক্রাফট', 'বিজ্ঞাপন এআই', 'অ্যাড জেনারেটর', 'adcraft ki', 'marketing bot'],
+        responses_en: [
+          "<strong>AdCraft AI</strong> is an automated marketing AI engine built with TypeScript to generate persuasive ad copies, campaign copy, and marketing assets.<br>• <strong>GitHub Repo:</strong> <a href=\"https://github.com/rokeyaag/adcraft-ai\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/adcraft-ai</a>"
+        ],
+        responses_bn: [
+          "<strong>AdCraft AI:</strong> টাইপস্ক্রিপ্টে তৈরি কৃত্রিম বুদ্ধিমত্তাসম্পন্ন অ্যাডভার্টাইজমেন্ট ও কনটেন্ট ক্রিয়েটর টুল যা ডিজিটাল মার্কেটিং কপি দ্রুত তৈরি করে।<br>• <strong>গিটহাব:</strong> <a href=\"https://github.com/rokeyaag/adcraft-ai\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/adcraft-ai</a>"
+        ]
+      },
+      {
+        id: 'kb_repo_aisolutions',
+        category: 'github',
+        title: 'AI Solutions (এআই সলিউশন)',
+        keywords_en: ['ai solutions', 'ai-solutions', 'enterprise ai', 'automation services', 'ai service'],
+        keywords_bn: ['এআই সলিউশন', 'এআই সার্ভিস', 'ai solutions ki', 'automation ki'],
+        responses_en: [
+          "<strong>AI Solutions</strong> is a modern web platform providing client-ready AI automation workflows and integration services.<br>• <strong>Live Demo:</strong> <a href=\"https://ai-solutions-roan.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">ai-solutions-roan.vercel.app</a><br>• <strong>GitHub:</strong> <a href=\"https://github.com/rokeyaag/ai-solutions\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/ai-solutions</a>"
+        ],
+        responses_bn: [
+          "<strong>AI Solutions:</strong> আধুনিক ক্লায়েন্ট ও ব্যবসায়িক এআই অটোমেশন এবং ডিজিটাল ইন্টিগ্রেশনের সমাধান প্ল্যাটফর্ম।<br>• <strong>লাইভ ডেমো:</strong> <a href=\"https://ai-solutions-roan.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">ai-solutions-roan.vercel.app</a><br>• <strong>গিটহাব:</strong> <a href=\"https://github.com/rokeyaag/ai-solutions\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/ai-solutions</a>"
+        ]
+      },
+      {
+        id: 'kb_repo_ecommerce',
+        category: 'github',
+        title: 'IMX E-Shop & E-Commerce API (ই-কমার্স প্ল্যাটফর্ম)',
+        keywords_en: ['ecommerce', 'e-commerce', 'imx-eshop', '-ecommerce-frontend', 'ecommerce-api', 'eshop', 'online store'],
+        keywords_bn: ['ই-কমার্স', 'ইকমার্স', 'ইশপ', 'অনলাইন শপ', 'ecommerce ki', 'eshop ki'],
+        responses_en: [
+          "<strong>IMX E-Shop & E-Commerce API</strong> is a comprehensive shopping solution with product catalogs, shopping cart, REST API backend, and responsive frontend UI.<br>• <strong>Live Frontend:</strong> <a href=\"https://ecommerce-frontend-tawny-two.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">ecommerce-frontend-tawny-two.vercel.app</a><br>• <strong>Backend API:</strong> <a href=\"https://github.com/rokeyaag/ecommerce-api\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/ecommerce-api</a>"
+        ],
+        responses_bn: [
+          "<strong>IMX E-Shop &amp; E-Commerce API:</strong> পূর্ণাঙ্গ ই-কমার্স ইকোসিস্টেম যাতে রয়েছে পণ্য ক্যাটালগ, কার্ট ও অর্ডার ম্যানেজমেন্ট এবং নিরাপদ REST API।<br>• <strong>লাইভ সাইট:</strong> <a href=\"https://ecommerce-frontend-tawny-two.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">ecommerce-frontend-tawny-two.vercel.app</a><br>• <strong>এপিআই রিপো:</strong> <a href=\"https://github.com/rokeyaag/ecommerce-api\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/ecommerce-api</a>"
+        ]
+      },
+      {
+        id: 'kb_repo_socialautomation',
+        category: 'github',
+        title: 'Social Automation Hub (সোশ্যাল অটোমেশন হাব)',
+        keywords_en: ['social automation', 'social-automation-hub', 'social media automation', 'auto posting', 'social bot'],
+        keywords_bn: ['সোশ্যাল অটোমেশন', 'সোশ্যাল মিডিয়া অটোমেশন', 'social automation ki', 'auto post bot'],
+        responses_en: [
+          "<strong>Social Automation Hub</strong> streamlines multi-channel social media scheduling, content distribution, and analytics.<br>• <strong>GitHub Repo:</strong> <a href=\"https://github.com/rokeyaag/social-automation-hub\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/social-automation-hub</a>"
+        ],
+        responses_bn: [
+          "<strong>Social Automation Hub:</strong> একাধিক সোশ্যাল মিডিয়া প্ল্যাটফর্মে স্বয়ংক্রিয় কনটেন্ট পোস্টিং এবং শিডিউলিং ম্যানেজমেন্ট হাব।<br>• <strong>গিটহাব:</strong> <a href=\"https://github.com/rokeyaag/social-automation-hub\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/social-automation-hub</a>"
+        ]
+      },
+      {
+        id: 'kb_repo_microservices_trading',
+        category: 'github',
+        title: 'Microservices & IMX Trading (মাইক্রোসার্ভিস ও ট্রেডিং)',
+        keywords_en: ['microservices', 'microservices-api-system', 'imx-trading', 'trading', 'info-bangla'],
+        keywords_bn: ['মাইক্রোসার্ভিস', 'ট্রেডিং', 'ট্রেডিং সিস্টেম', 'ইনফো বাংলা', 'microservices ki'],
+        responses_en: [
+          "<strong>Microservices API & IMX Trading</strong> explore scalable backend service clustering, real-time market data visualizers, and Bengali informational portals.<br>• <strong>Microservices:</strong> <a href=\"https://github.com/rokeyaag/microservices-api-system\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/microservices-api-system</a><br>• <strong>Trading:</strong> <a href=\"https://github.com/rokeyaag/imx-trading\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/imx-trading</a>"
+        ],
+        responses_bn: [
+          "<strong>Microservices API &amp; IMX Trading:</strong> হাই-স্কেলেবল মাইক্রোসার্ভিস আর্কিটেকচার এবং ফিনান্সিয়াল মার্কেট ট্রেডিং অ্যানালিটিক্স প্রজেক্ট।<br>• <strong>মাইক্রোসার্ভিস:</strong> <a href=\"https://github.com/rokeyaag/microservices-api-system\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/microservices-api-system</a><br>• <strong>ট্রেডিং:</strong> <a href=\"https://github.com/rokeyaag/imx-trading\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/imx-trading</a>"
+        ]
       }
     ],
 
@@ -821,6 +1025,54 @@ function initVoiceAndChatEngine() {
         const stored = localStorage.getItem('neural_bot_custom_kb');
         return stored ? JSON.parse(stored) : [];
       } catch (e) {
+        return [];
+      }
+    },
+
+    // Dynamic GitHub Repos Memory stored in localStorage
+    getGitHubKnowledge() {
+      try {
+        const stored = localStorage.getItem('neural_bot_github_kb');
+        return stored ? JSON.parse(stored) : [];
+      } catch (e) {
+        return [];
+      }
+    },
+
+    async syncFromGitHub() {
+      try {
+        const res = await fetch('https://api.github.com/users/rokeyaag/repos?sort=updated&per_page=100');
+        if (!res.ok) return [];
+        const repos = await res.json();
+        if (!Array.isArray(repos)) return [];
+        
+        const githubItems = repos.map(repo => {
+          const hasHomepage = repo.homepage && repo.homepage.startsWith('http');
+          const langText = repo.language ? ` [${repo.language}]` : '';
+          return {
+            id: 'gh_' + repo.name.replace(/[^a-zA-Z0-9_]/g, '_'),
+            category: 'github',
+            title: `${repo.name}${langText}`,
+            repoUrl: repo.html_url,
+            homepageUrl: hasHomepage ? repo.homepage : null,
+            stars: repo.stargazers_count || 0,
+            language: repo.language,
+            keywords_en: [repo.name.toLowerCase(), repo.name.replace(/[-_]/g, ' ').toLowerCase(), `${repo.name.toLowerCase()} project`, `${repo.name.toLowerCase()} repo`],
+            keywords_bn: [repo.name.toLowerCase(), repo.name.replace(/[-_]/g, ' ').toLowerCase(), `${repo.name.toLowerCase()} প্রজেক্ট`, `${repo.name.toLowerCase()} রিপোজিটরি`],
+            responses_en: [
+              `<strong>${repo.name}</strong>${langText}: ${repo.description || 'Public GitHub repository by Lutfor Rahman.'}<br>• <strong>Repository:</strong> <a href="${repo.html_url}" target="_blank" style="color:#00f2fe;">${repo.html_url}</a>${hasHomepage ? `<br>• <strong>Live Demo:</strong> <a href="${repo.homepage}" target="_blank" style="color:#00f2fe;">${repo.homepage}</a>` : ''}`
+            ],
+            responses_bn: [
+              `<strong>${repo.name}</strong>${langText}: এটি লুৎফর রহমানের তৈরি একটি গিটহাব প্রজেক্ট।${repo.description ? ` (${repo.description})` : ''}<br>• <strong>গিটহাব লিঙ্ক:</strong> <a href="${repo.html_url}" target="_blank" style="color:#00f2fe;">${repo.html_url}</a>${hasHomepage ? `<br>• <strong>লাইভ ডেমো:</strong> <a href="${repo.homepage}" target="_blank" style="color:#00f2fe;">${repo.homepage}</a>` : ''}`
+            ],
+            isGitHub: true
+          };
+        });
+
+        localStorage.setItem('neural_bot_github_kb', JSON.stringify(githubItems));
+        return githubItems;
+      } catch (e) {
+        console.warn('GitHub sync error:', e);
         return [];
       }
     },
@@ -841,7 +1093,8 @@ function initVoiceAndChatEngine() {
 
     getAllKnowledge() {
       const custom = this.getCustomKnowledge();
-      return [...custom, ...this.defaultStore];
+      const github = this.getGitHubKnowledge();
+      return [...custom, ...github, ...this.defaultStore];
     },
 
     // Dynamic non-repeating selector strictly filtered by language
@@ -875,6 +1128,15 @@ function initVoiceAndChatEngine() {
   // Expose knowledge store globally
   window.NeuralKnowledgeStore = NeuralKnowledgeStore;
 
+  // Auto-sync GitHub repositories on launch
+  setTimeout(() => {
+    NeuralKnowledgeStore.syncFromGitHub().then(() => {
+      if (typeof window.refreshKnowledgeStoreUI === 'function') {
+        window.refreshKnowledgeStoreUI();
+      }
+    });
+  }, 1000);
+
   // --- SMART INTENT & TOKEN MATCHER WITH STRICT BILINGUAL ACCURACY ---
   function getSmartResponse(userText) {
     if (!userText || !userText.trim()) {
@@ -890,6 +1152,9 @@ function initVoiceAndChatEngine() {
     let bestMatch = null;
     let highestScore = 0;
 
+    // Check for general project/portfolio intent boost
+    const isProjectQuery = /project|github|repo|গিটহাব|প্রজেক্ট|রিপো|রিপোজিটরি|কাজ|portfolio|পোর্টফোলিও/i.test(cleanText);
+
     for (const item of allKnowledge) {
       let score = 0;
       
@@ -898,19 +1163,27 @@ function initVoiceAndChatEngine() {
         ? [...(item.keywords_bn || []), ...(item.keywords || []), ...(item.keywords_en || [])]
         : [...(item.keywords_en || []), ...(item.keywords || []), ...(item.keywords_bn || [])];
 
+      // Match item title directly
+      const cleanTitle = (item.title || '').toLowerCase().replace(/[?!.,;:()]/g, ' ').trim();
+      if (cleanText.includes(cleanTitle) || cleanTitle.includes(cleanText)) {
+        score += 80;
+      }
+
       for (const kw of keywords) {
         const cleanKw = kw.toLowerCase().trim();
         const isBnKw = (item.keywords_bn || []).includes(kw) || /[\u0980-\u09FF]/.test(kw);
 
         // Exact match
         if (cleanText === cleanKw) {
-          score += ((isBengali && isBnKw) || (!isBengali && !isBnKw)) ? 140 : 70;
+          score += ((isBengali && isBnKw) || (!isBengali && !isBnKw)) ? 150 : 80;
           break;
         }
 
         // Substring / Phrase match
         if (cleanText.includes(cleanKw)) {
-          score += (cleanKw.length * 3) + ((isBengali && isBnKw) ? 35 : 15);
+          score += (cleanKw.length * 3.5) + ((isBengali && isBnKw) ? 40 : 20);
+        } else if (cleanKw.includes(cleanText) && cleanText.length >= 3) {
+          score += (cleanText.length * 2.5) + 15;
         } else {
           // Token overlap matching
           const kwTokens = cleanKw.split(' ').filter(t => t.length > 0);
@@ -921,10 +1194,15 @@ function initVoiceAndChatEngine() {
             }
           }
           if (tokenMatches > 0) {
-            const overlap = (tokenMatches / kwTokens.length) * ((isBengali && isBnKw) ? 30 : 15);
+            const overlap = (tokenMatches / kwTokens.length) * ((isBengali && isBnKw) ? 35 : 20);
             score = Math.max(score, overlap);
           }
         }
+      }
+
+      // Boost specific GitHub projects if user asks for projects
+      if (isProjectQuery && item.id === 'kb_github_all') {
+        score += 30;
       }
 
       if (score > highestScore) {
@@ -934,7 +1212,7 @@ function initVoiceAndChatEngine() {
     }
 
     // Match found with confident score
-    if (bestMatch && highestScore >= 10) {
+    if (bestMatch && highestScore >= 8) {
       return NeuralKnowledgeStore.getRandomResponse(bestMatch, isBengali);
     }
 
@@ -966,92 +1244,356 @@ function initVoiceAndChatEngine() {
     }[m]));
   }
 
+  function stopAllSpeechAndAudio() {
+    if (speechFallbackTimer) {
+      clearTimeout(speechFallbackTimer);
+      speechFallbackTimer = null;
+    }
+    if (currentAudioPlayer) {
+      try {
+        currentAudioPlayer.pause();
+        currentAudioPlayer.currentTime = 0;
+      } catch (e) {}
+      currentAudioPlayer = null;
+    }
+    if ('speechSynthesis' in window) {
+      try {
+        window.speechSynthesis.cancel();
+      } catch (e) {}
+    }
+    activeUtterance = null;
+  }
+
   function getSpokenCleanText(html) {
-    // Replace code blocks with a clean voice phrase so it speaks fluently
+    if (!html) return '';
+    // Replace code blocks with clean readable phrase
     let clean = html.replace(/<pre[\s\S]*?<\/pre>/gi, ' Here is the PyTorch code snippet. ');
+    // Strip HTML tags
     const tmp = document.createElement('DIV');
     tmp.innerHTML = clean;
     let text = tmp.textContent || tmp.innerText || '';
+    // Strip emojis so TTS does not fail or read out emoji codes
+    text = text.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1FA70}-\u{1FAFF}\u{FE00}-\u{FE0F}]/gu, '');
+    // Clean unwanted characters and symbols
+    text = text.replace(/[*#_~`|•]/g, ' ');
     return text.replace(/\s+/g, ' ').trim();
   }
 
-  // --- Text to Speech (TTS) & Talking Avatar Sync (Loud & Clear Voice) ---
-  function speakText(text) {
-    if (speechFallbackTimer) clearTimeout(speechFallbackTimer);
+  function splitTextIntoSentenceChunks(text, maxLen = 140) {
+    if (!text) return [];
+    // Split on punctuation while preserving meaningful boundaries
+    const rawSegments = text.split(/([।!?\n;]+)/);
+    const sentences = [];
+    let cur = '';
 
-    const spokenText = getSpokenCleanText(text);
+    for (let i = 0; i < rawSegments.length; i++) {
+      const seg = rawSegments[i];
+      if (!seg) continue;
+      if (/[।!?\n;]+/.test(seg)) {
+        cur += seg;
+        if (cur.trim()) {
+          sentences.push(cur.trim());
+          cur = '';
+        }
+      } else {
+        if (cur.trim()) {
+          sentences.push(cur.trim());
+          cur = '';
+        }
+        cur = seg;
+      }
+    }
+    if (cur.trim()) {
+      sentences.push(cur.trim());
+    }
 
-    // If voice output is disabled or speech synthesis not supported, still animate avatar for reading duration
-    if (!isVoiceOutputEnabled || !('speechSynthesis' in window)) {
+    const chunks = [];
+    let buf = '';
+    for (const s of sentences) {
+      if (!buf) {
+        buf = s;
+      } else if ((buf + ' ' + s).length <= maxLen) {
+        buf += ' ' + s;
+      } else {
+        chunks.push(buf);
+        buf = s;
+      }
+    }
+    if (buf) chunks.push(buf);
+
+    // If any chunk is still larger than maxLen, split by commas or words
+    const result = [];
+    for (const c of chunks) {
+      if (c.length <= maxLen) {
+        result.push(c);
+      } else {
+        const words = c.split(' ');
+        let wBuf = '';
+        for (const w of words) {
+          if (!wBuf) {
+            wBuf = w;
+          } else if ((wBuf + ' ' + w).length <= maxLen) {
+            wBuf += ' ' + w;
+          } else {
+            result.push(wBuf);
+            wBuf = w;
+          }
+        }
+        if (wBuf) result.push(wBuf);
+      }
+    }
+    return result.filter(c => c.trim().length > 0);
+  }
+
+  // --- High-Fidelity Bengali Audio TTS Stream Player ---
+  function playBengaliAudioStream(spokenText, onComplete) {
+    const chunks = splitTextIntoSentenceChunks(spokenText, 140);
+    if (!chunks || chunks.length === 0) {
+      if (onComplete) onComplete();
+      return;
+    }
+
+    let chunkIdx = 0;
+    let isAborted = false;
+
+    function startVisualSpeaking() {
       if (globalAvatarController) {
         globalAvatarController.startSpeaking(spokenText);
-        const duration = Math.min(Math.max(spokenText.length * 60, 1800), 7000);
-        setTimeout(() => {
+      }
+    }
+
+    function stopVisualSpeaking() {
+      if (globalAvatarController) {
+        globalAvatarController.stopSpeaking();
+      }
+      if (onComplete) onComplete();
+    }
+
+    function playNext() {
+      if (isAborted) return;
+      if (chunkIdx >= chunks.length) {
+        stopVisualSpeaking();
+        return;
+      }
+
+      const chunk = chunks[chunkIdx];
+      chunkIdx++;
+
+      // Google Translate TTS endpoint with natural Bengali pronunciation
+      const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=bn&q=${encodeURIComponent(chunk)}`;
+      const audio = new Audio(audioUrl);
+      audio.volume = 1.0;
+      currentAudioPlayer = audio;
+
+      let hasStarted = false;
+      audio.onplay = () => {
+        hasStarted = true;
+        if (chunkIdx === 1) {
+          startVisualSpeaking();
+        }
+      };
+
+      audio.onended = () => {
+        currentAudioPlayer = null;
+        playNext();
+      };
+
+      audio.onerror = (err) => {
+        console.warn('Bangla Audio chunk load error:', err);
+        currentAudioPlayer = null;
+        // If first chunk fails, fallback to visual animation
+        if (chunkIdx === 1 && !hasStarted) {
+          startVisualSpeaking();
+          const fallbackDur = Math.min(Math.max(spokenText.length * 75, 2200), 8000);
+          speechFallbackTimer = setTimeout(() => {
+            stopVisualSpeaking();
+          }, fallbackDur);
+        } else {
+          playNext();
+        }
+      };
+
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          console.warn('Bangla Audio play prevented/error:', err);
+          if (chunkIdx === 1 && !hasStarted) {
+            startVisualSpeaking();
+            const fallbackDur = Math.min(Math.max(spokenText.length * 75, 2200), 8000);
+            speechFallbackTimer = setTimeout(() => {
+              stopVisualSpeaking();
+            }, fallbackDur);
+          } else {
+            playNext();
+          }
+        });
+      }
+    }
+
+    // Start playing first chunk
+    playNext();
+  }
+
+  // --- Main Unified Speak Engine ---
+  function speakText(text) {
+    stopAllSpeechAndAudio();
+
+    const spokenText = getSpokenCleanText(text);
+    if (!spokenText) return;
+
+    // If voice output is toggled OFF, still show visual subtitles and mouth animation
+    if (!isVoiceOutputEnabled) {
+      if (globalAvatarController) {
+        globalAvatarController.startSpeaking(spokenText);
+        const duration = Math.min(Math.max(spokenText.length * 65, 1800), 7000);
+        speechFallbackTimer = setTimeout(() => {
           if (globalAvatarController) globalAvatarController.stopSpeaking();
         }, duration);
       }
       return;
     }
 
-    window.speechSynthesis.cancel(); // Cancel any previous speech
-
-    const utterance = new SpeechSynthesisUtterance(spokenText);
-    activeUtterance = utterance;
-
-    // Loud & Clear Audio Tuning
-    utterance.volume = 1.0; // Maximum 100% volume
-    utterance.rate = 1.0;   // Clear natural cadence
-    utterance.pitch = 1.0;  // Natural crisp pitch
-
-    // Detect Bengali vs English for accurate pronunciation
     const hasBengali = /[\u0980-\u09FF]/.test(spokenText);
+
+    // --- BENGALI VOICE PIPELINE ---
     if (hasBengali) {
-      utterance.lang = 'bn-BD';
-    } else {
-      utterance.lang = 'en-US';
+      const bnVoice = getBestVoice(true);
+
+      // If browser has a dedicated Bengali native voice installed (e.g. Google বাংলা on Chrome):
+      if (bnVoice && 'speechSynthesis' in window) {
+        try {
+          if (window.speechSynthesis.resume) window.speechSynthesis.resume();
+          const utterance = new SpeechSynthesisUtterance(spokenText);
+          activeUtterance = utterance;
+          utterance.voice = bnVoice;
+          utterance.lang = bnVoice.lang || 'bn-BD';
+          utterance.volume = 1.0;
+          utterance.rate = 1.0;
+          utterance.pitch = 1.0;
+
+          let didStart = false;
+
+          utterance.onboundary = () => {
+            if (globalAvatarController && typeof globalAvatarController.triggerWordSyllable === 'function') {
+              globalAvatarController.triggerWordSyllable();
+            }
+          };
+
+          utterance.onend = () => {
+            if (globalAvatarController) {
+              globalAvatarController.stopSpeaking();
+            }
+            activeUtterance = null;
+          };
+
+          utterance.onerror = (e) => {
+            console.warn('Native Bengali TTS failed, falling back to Audio Stream:', e);
+            activeUtterance = null;
+            // Immediate seamless fallback to high-definition Bengali Audio Stream!
+            playBengaliAudioStream(spokenText);
+          };
+
+          // Timeout check: if native speech synthesis doesn't start in 400ms, fallback to audio stream
+          const startCheckTimer = setTimeout(() => {
+            if (!didStart) {
+              try { window.speechSynthesis.cancel(); } catch(e) {}
+              activeUtterance = null;
+              playBengaliAudioStream(spokenText);
+            }
+          }, 400);
+
+          utterance.onstart = () => {
+            clearTimeout(startCheckTimer);
+            didStart = true;
+            if (globalAvatarController) {
+              globalAvatarController.startSpeaking(spokenText);
+            }
+          };
+
+          window.speechSynthesis.speak(utterance);
+          return;
+        } catch (err) {
+          console.warn('SpeechSynthesis invocation error:', err);
+        }
+      }
+
+      // If NO native Bengali voice is installed in Windows/Browser (very common on Windows PCs):
+      // Use the high-definition Bengali Audio stream directly!
+      playBengaliAudioStream(spokenText);
+      return;
     }
 
-    const selectedVoice = getBestVoice(hasBengali);
-    if (selectedVoice) {
-      utterance.voice = selectedVoice;
-    }
-
-    utterance.onstart = () => {
+    // --- ENGLISH / UNIVERSAL VOICE PIPELINE ---
+    if (!('speechSynthesis' in window)) {
       if (globalAvatarController) {
         globalAvatarController.startSpeaking(spokenText);
+        const duration = Math.min(Math.max(spokenText.length * 65, 1800), 7000);
+        speechFallbackTimer = setTimeout(() => {
+          if (globalAvatarController) globalAvatarController.stopSpeaking();
+        }, duration);
       }
-    };
+      return;
+    }
 
-    utterance.onboundary = () => {
-      if (globalAvatarController && typeof globalAvatarController.triggerWordSyllable === 'function') {
-        globalAvatarController.triggerWordSyllable();
+    try {
+      if (window.speechSynthesis.resume) window.speechSynthesis.resume();
+      const utterance = new SpeechSynthesisUtterance(spokenText);
+      activeUtterance = utterance;
+
+      utterance.volume = 1.0;
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      utterance.lang = 'en-US';
+
+      const selectedVoice = getBestVoice(false);
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
       }
-    };
 
-    utterance.onend = () => {
+      utterance.onstart = () => {
+        if (globalAvatarController) {
+          globalAvatarController.startSpeaking(spokenText);
+        }
+      };
+
+      utterance.onboundary = () => {
+        if (globalAvatarController && typeof globalAvatarController.triggerWordSyllable === 'function') {
+          globalAvatarController.triggerWordSyllable();
+        }
+      };
+
+      utterance.onend = () => {
+        if (globalAvatarController) {
+          globalAvatarController.stopSpeaking();
+        }
+        activeUtterance = null;
+      };
+
+      utterance.onerror = (e) => {
+        console.warn('SpeechSynthesis error:', e);
+        if (globalAvatarController) {
+          globalAvatarController.stopSpeaking();
+        }
+        activeUtterance = null;
+      };
+
+      const estimatedDuration = Math.min(Math.max(spokenText.length * 85, 2000), 14000);
+      speechFallbackTimer = setTimeout(() => {
+        if (globalAvatarController && (!window.speechSynthesis.speaking || !activeUtterance)) {
+          globalAvatarController.stopSpeaking();
+        }
+      }, estimatedDuration);
+
+      window.speechSynthesis.speak(utterance);
+    } catch (err) {
+      console.warn('English TTS speak error:', err);
       if (globalAvatarController) {
-        globalAvatarController.stopSpeaking();
+        globalAvatarController.startSpeaking(spokenText);
+        setTimeout(() => {
+          if (globalAvatarController) globalAvatarController.stopSpeaking();
+        }, 3000);
       }
-      activeUtterance = null;
-    };
-
-    utterance.onerror = (e) => {
-      console.warn('SpeechSynthesis error:', e);
-      if (globalAvatarController) {
-        globalAvatarController.stopSpeaking();
-      }
-      activeUtterance = null;
-    };
-
-    // Calculate approximate duration as safety fallback
-    const estimatedDuration = Math.min(Math.max(spokenText.length * 85, 2000), 14000);
-    speechFallbackTimer = setTimeout(() => {
-      if (globalAvatarController && (!window.speechSynthesis.speaking || !activeUtterance)) {
-        globalAvatarController.stopSpeaking();
-      }
-    }, estimatedDuration);
-
-    window.speechSynthesis.speak(utterance);
+    }
   }
 
   // Global handle for replay
@@ -1074,7 +1616,7 @@ function initVoiceAndChatEngine() {
         globalVoiceToggle.classList.remove('active');
         globalVoiceToggle.classList.add('muted');
         globalVoiceToggle.innerHTML = '<i class="fa-solid fa-volume-xmark"></i> <span>Voice OFF</span>';
-        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        stopAllSpeechAndAudio();
         if (globalAvatarController) globalAvatarController.stopSpeaking();
       }
     }
@@ -1777,6 +2319,26 @@ function initKnowledgeStoreModal() {
     });
   }
 
+  const countGithub = document.getElementById('kbCountGithub');
+  const syncGithubBtn = document.getElementById('syncGithubKbBtn');
+
+  if (syncGithubBtn) {
+    syncGithubBtn.addEventListener('click', async () => {
+      syncGithubBtn.disabled = true;
+      syncGithubBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Syncing...';
+      showToast('Fetching latest repositories from GitHub (rokeyaag)...');
+      
+      if (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.syncFromGitHub === 'function') {
+        const synced = await window.NeuralKnowledgeStore.syncFromGitHub();
+        showToast(`Successfully synced ${synced.length} GitHub repositories to Neural Memory!`);
+      }
+      
+      syncGithubBtn.disabled = false;
+      syncGithubBtn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> Sync GitHub';
+      renderKnowledgeGrid();
+    });
+  }
+
   function renderKnowledgeGrid() {
     if (!cardsGrid) return;
     
@@ -1786,16 +2348,28 @@ function initKnowledgeStoreModal() {
       if (stored) customItems.push(...JSON.parse(stored));
     } catch(e) {}
 
+    const githubItems = [];
+    try {
+      const storedGh = localStorage.getItem('neural_bot_github_kb');
+      if (storedGh) githubItems.push(...JSON.parse(storedGh));
+    } catch(e) {}
+
     const allItems = (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.getAllKnowledge === 'function')
       ? window.NeuralKnowledgeStore.getAllKnowledge()
-      : [...customItems];
+      : [...customItems, ...githubItems];
+
+    const githubCount = allItems.filter(i => i.category === 'github' || i.isGitHub).length;
+    const customCount = allItems.filter(i => i.isCustom || i.category === 'custom').length;
 
     if (countAll) countAll.textContent = String(allItems.length);
-    if (countCustom) countCustom.textContent = String(customItems.length);
+    if (countCustom) countCustom.textContent = String(customCount);
+    if (countGithub) countGithub.textContent = String(githubCount);
 
     let filtered = allItems;
     if (activeCategory === 'custom') {
       filtered = filtered.filter((i) => i.isCustom || i.category === 'custom' || customItems.some(c => c.id === i.id));
+    } else if (activeCategory === 'github') {
+      filtered = filtered.filter((i) => i.category === 'github' || i.isGitHub || githubItems.some(g => g.id === i.id));
     } else if (activeCategory !== 'all') {
       filtered = filtered.filter((i) => i.category === activeCategory);
     }
@@ -1830,6 +2404,7 @@ function initKnowledgeStoreModal() {
 
     cardsGrid.innerHTML = filtered.map((item) => {
       const isCustomItem = item.isCustom || customItems.some(c => c.id === item.id);
+      const isGhItem = item.category === 'github' || item.isGitHub;
       const catBadgeText = (item.category || 'GENERAL').toUpperCase();
       
       const allKws = [...(item.keywords_bn || []), ...(item.keywords_en || []), ...(item.keywords || [])];
@@ -1844,8 +2419,8 @@ function initKnowledgeStoreModal() {
         <div class="kb-card" data-cat="${item.category}">
           <div class="kb-card-header">
             <h4 class="kb-card-title">${item.title}</h4>
-            <span class="kb-card-cat-badge ${isCustomItem ? 'custom' : ''}">
-              ${isCustomItem ? '<i class="fa-solid fa-database"></i> CUSTOM' : catBadgeText}
+            <span class="kb-card-cat-badge ${isCustomItem ? 'custom' : (isGhItem ? 'github' : '')}">
+              ${isCustomItem ? '<i class="fa-solid fa-database"></i> CUSTOM' : (isGhItem ? '<i class="fa-brands fa-github"></i> GITHUB' : catBadgeText)}
             </span>
           </div>
 
@@ -1861,11 +2436,21 @@ function initKnowledgeStoreModal() {
           </div>
 
           <div class="kb-card-footer">
-            <span class="kb-variation-count"><i class="fa-solid fa-shuffle"></i> ${totalCount} Unique Variation${totalCount > 1 ? 's' : ''}</span>
+            <span class="kb-variation-count"><i class="fa-solid fa-shuffle"></i> ${totalCount} Variation${totalCount > 1 ? 's' : ''}</span>
             <div class="kb-card-actions">
               <button class="kb-action-btn try-prompt-btn" data-prompt="${firstKeyword}" title="Test this prompt in Chat">
                 <i class="fa-solid fa-play"></i> Try Prompt
               </button>
+              ${item.homepageUrl ? `
+                <a href="${item.homepageUrl}" target="_blank" class="kb-action-btn" title="Open Live Demo">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i> Demo
+                </a>
+              ` : ''}
+              ${item.repoUrl ? `
+                <a href="${item.repoUrl}" target="_blank" class="kb-action-btn" title="View GitHub Code">
+                  <i class="fa-brands fa-github"></i>
+                </a>
+              ` : ''}
               ${isCustomItem ? `
                 <button class="kb-action-btn delete delete-kb-btn" data-id="${item.id}" title="Delete custom memory">
                   <i class="fa-solid fa-trash-can"></i>
@@ -1917,5 +2502,6 @@ function initKnowledgeStoreModal() {
     });
   }
 
+  window.refreshKnowledgeStoreUI = renderKnowledgeGrid;
   renderKnowledgeGrid();
 }

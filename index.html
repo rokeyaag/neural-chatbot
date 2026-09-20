@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2.0">
 </head>
 <body>
 
@@ -244,6 +244,7 @@
               <div class="quick-prompts">
                 <button class="quick-chip" data-prompt="How are you today?">How are you? 😊</button>
                 <button class="quick-chip" data-prompt="কেমন আছো তুমি?">কেমন আছো? 🇧🇩</button>
+                <button class="quick-chip" data-prompt="তোমার সব GitHub প্রজেক্টের লিস্ট দাও">GitHub Projects 🚀</button>
                 <button class="quick-chip" data-prompt="Can you sing a song?">Sing a song 🎵</button>
                 <button class="quick-chip" data-prompt="Tell me a joke">Tell a joke 😄</button>
                 <button class="quick-chip" data-prompt="PyTorch Neural Network architecture">Architecture ⚡</button>
@@ -696,6 +697,7 @@
         </div>
         <div class="knowledge-category-tabs" id="knowledgeCategoryTabs">
           <button class="kb-tab-btn active" data-cat="all">All (<span id="kbCountAll">0</span>)</button>
+          <button class="kb-tab-btn" data-cat="github"><i class="fa-brands fa-github"></i> GitHub Repos (<span id="kbCountGithub">0</span>)</button>
           <button class="kb-tab-btn" data-cat="kusol"><i class="fa-solid fa-hand-holding-heart"></i> Kusol Binimoy</button>
           <button class="kb-tab-btn" data-cat="greetings"><i class="fa-solid fa-hand-wave"></i> Greetings</button>
           <button class="kb-tab-btn" data-cat="creator"><i class="fa-solid fa-user-gear"></i> Creator &amp; Dev</button>
@@ -713,9 +715,14 @@
             <span class="status-indicator-dot"></span>
             <span id="knowledgeListStatus">Loading neural knowledge matrix...</span>
           </div>
-          <button id="toggleAddKnowledgeBtn" class="btn btn-primary btn-sm add-kb-btn">
-            <i class="fa-solid fa-circle-plus"></i> Store New Knowledge
-          </button>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button id="syncGithubKbBtn" class="btn btn-secondary btn-sm" title="Sync live repositories from GitHub">
+              <i class="fa-solid fa-arrows-rotate"></i> Sync GitHub
+            </button>
+            <button id="toggleAddKnowledgeBtn" class="btn btn-primary btn-sm add-kb-btn">
+              <i class="fa-solid fa-circle-plus"></i> Store New Knowledge
+            </button>
+          </div>
         </div>
 
         <!-- Add Custom Knowledge Panel (Collapsible) -->
@@ -795,6 +802,6 @@
   </div>
 
   <!-- Javascript -->
-  <script src="app.js"></script>
+  <script src="app.js?v=2.0"></script>
 </body>
 </html>
