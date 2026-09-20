@@ -1,0 +1,6 @@
+local-server.js
+package.json
+node_modules/
+.idea/
+.vscode/
+.DS_Store
