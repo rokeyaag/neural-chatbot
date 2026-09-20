@@ -1,8 +1,6 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "buildCommand": "echo 'Static deployment ready'",
-  "outputDirectory": ".",
   "headers": [
     {
       "source": "/(.*)",
