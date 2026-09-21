@@ -829,6 +829,9 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     if (mouthInterval) clearInterval(mouthInterval);
     mouthInterval = null;
 
+    const headMotionWrap = document.getElementById('avatarHeadMotionWrap');
+    if (headMotionWrap) headMotionWrap.classList.remove('syllable-accent');
+
     if (stageContainer) {
       stageContainer.classList.remove('talking', 'thinking', 'listening');
     }
@@ -996,6 +999,8 @@ function initNeuralAvatarController(switchToAvatarCallback) {
 
     const cadencePattern = generateSpeechPattern(text);
     let cadenceIndex = 0;
+    const headMotionWrap = document.getElementById('avatarHeadMotionWrap');
+    let lastNodTime = 0;
 
     mouthInterval = setInterval(() => {
       if (!isSpeaking) {
@@ -1004,12 +1009,26 @@ function initNeuralAvatarController(switchToAvatarCallback) {
         if (imgSpeaking) {
           imgSpeaking.style.opacity = '0';
         }
+        if (headMotionWrap) headMotionWrap.classList.remove('syllable-accent');
         return;
       }
       cadenceIndex = (cadenceIndex + 1) % cadencePattern.length;
       const opacityVal = cadencePattern[cadenceIndex];
       if (imgSpeaking) {
         imgSpeaking.style.opacity = String(opacityVal);
+      }
+
+      // Natural conversational micro-nod on emphasized vowels/words
+      if (opacityVal >= 0.85 && (Date.now() - lastNodTime > 1300)) {
+        lastNodTime = Date.now();
+        if (headMotionWrap) {
+          headMotionWrap.classList.remove('syllable-accent');
+          void headMotionWrap.offsetWidth; // Force reflow
+          headMotionWrap.classList.add('syllable-accent');
+          setTimeout(() => {
+            if (headMotionWrap) headMotionWrap.classList.remove('syllable-accent');
+          }, 320);
+        }
       }
     }, 115);
 
