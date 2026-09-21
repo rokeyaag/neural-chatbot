@@ -90,6 +90,10 @@
                 <i class="fa-solid fa-circle-play"></i>
                 <span>Demo Video</span>
               </button>
+              <button class="stage-tab-btn" id="tabYoutubeBtn" data-target="youtube" title="Switch to Live YouTube Player & Cinema Hub">
+                <i class="fa-brands fa-youtube gradient-red-text"></i>
+                <span>YouTube Player</span>
+              </button>
             </div>
             
             <!-- Dynamic Avatar Status & Header Action Controls -->
@@ -165,6 +169,44 @@
               <span class="play-label">Click to Play Video</span>
             </div>
           </div>
+
+          <!-- VIEW 3: Interactive YouTube Cinema & Player Stage View -->
+          <div class="stage-youtube-container" id="stageYoutubeView" style="display: none;">
+            <!-- Top Search & Quick Action Bar -->
+            <div class="stage-yt-bar">
+              <div class="stage-yt-search-wrap">
+                <i class="fa-brands fa-youtube stage-yt-icon"></i>
+                <input type="text" id="stageYtInput" placeholder="ইউটিউব গান বা ভিডিও সার্চ করুন / URL দিন (যেমন: Tum Hi Ho, Kesariya, Lo-Fi)" />
+                <button type="button" class="btn btn-primary btn-sm stage-yt-play-btn" id="stageYtPlayBtn">
+                  <i class="fa-solid fa-play"></i> Play
+                </button>
+              </div>
+              <button class="stage-action-btn" id="stageYtBackAvatarBtn" title="Return back to Talking Avatar">
+                <i class="fa-solid fa-robot"></i> <span>Back to Avatar</span>
+              </button>
+            </div>
+
+            <!-- Quick Recommended Song / Stream Chips -->
+            <div class="stage-yt-chips-row">
+              <button class="stage-yt-chip" data-yt-id="2Vv-BfVoq4g" data-yt-title="Tum Hi Ho — Arijit Singh"><i class="fa-solid fa-music"></i> Tum Hi Ho</button>
+              <button class="stage-yt-chip" data-yt-id="BddP6PYo2gs" data-yt-title="Kesariya — Arijit Singh"><i class="fa-solid fa-music"></i> Kesariya</button>
+              <button class="stage-yt-chip" data-yt-id="5Eqb_-j3FDA" data-yt-title="Pasoori — Ali Sethi x Shae Gill"><i class="fa-solid fa-music"></i> Pasoori</button>
+              <button class="stage-yt-chip" data-yt-id="jfKfPfyJRdk" data-yt-title="Lo-Fi Chill Beats"><i class="fa-solid fa-headphones"></i> Lo-Fi Chill</button>
+              <button class="stage-yt-chip" data-yt-id="gvyUuxdRdR4" data-yt-title="Raataan Lambiyan — Shershaah"><i class="fa-solid fa-music"></i> Raataan Lambiyan</button>
+              <button class="stage-yt-chip" data-yt-id="kJQP7kiw5Fk" data-yt-title="Despacito — Luis Fonsi"><i class="fa-solid fa-music"></i> Despacito</button>
+            </div>
+
+            <!-- YouTube Embedded Player Display Card -->
+            <div class="stage-yt-player-box">
+              <div class="stage-yt-now-playing">
+                <span class="hud-mono-tag"><i class="fa-brands fa-youtube"></i> LIVE STAGE CINEMA</span>
+                <strong id="stageYtCurrentTitle">Tum Hi Ho — Arijit Singh</strong>
+              </div>
+              <div class="stage-yt-iframe-wrap">
+                <iframe id="stageYtIframe" src="https://www.youtube-nocookie.com/embed/2Vv-BfVoq4g?enablejsapi=1" title="YouTube Stage Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- BOTTOM: Voice & Text Interactive AI Chat Box -->
@@ -194,6 +236,7 @@
             <!-- Chat Quick Prompt Chips -->
             <div class="chat-input-area">
               <div class="quick-prompts">
+                <button class="quick-chip" data-prompt="YouTube ওপেন করো">YouTube 🎬</button>
                 <button class="quick-chip" data-prompt="How are you today?">How are you? 😊</button>
                 <button class="quick-chip" data-prompt="কেমন আছো তুমি?">কেমন আছো? 🇧🇩</button>
                 <button class="quick-chip" data-prompt="আমার সম্পর্কে কি জানো?">About Me 🧠</button>

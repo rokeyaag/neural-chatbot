@@ -995,6 +995,170 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* ==========================================================================
+   HERO STAGE YOUTUBE PLAYER VIEW (CINEMA HUB)
+   ========================================================================== */
+.stage-youtube-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 16px;
+  width: 100%;
+  flex: 1 1 0;
+  min-height: 480px;
+  background: radial-gradient(circle at 50% 10%, rgba(255, 71, 87, 0.08) 0%, #040814 85%);
+  overflow-y: auto;
+  box-sizing: border-box;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.stage-yt-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.stage-yt-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 260px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 71, 87, 0.35);
+  border-radius: var(--radius-full);
+  padding: 4px 6px 4px 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  transition: var(--transition-fast);
+}
+
+.stage-yt-search-wrap:focus-within {
+  border-color: #ff4757;
+  box-shadow: 0 0 18px rgba(255, 71, 87, 0.4);
+}
+
+.stage-yt-icon {
+  color: #ff4757;
+  font-size: 1.15rem;
+  filter: drop-shadow(0 0 6px rgba(255, 71, 87, 0.5));
+}
+
+.stage-yt-search-wrap input {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  width: 100%;
+  outline: none;
+}
+
+.stage-yt-search-wrap input::placeholder {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.stage-yt-play-btn {
+  background: linear-gradient(135deg, #ff4757, #ff6b81) !important;
+  border: none !important;
+  color: #fff !important;
+  border-radius: var(--radius-full) !important;
+  padding: 6px 16px !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.stage-yt-play-btn:hover {
+  box-shadow: 0 0 16px rgba(255, 71, 87, 0.6) !important;
+  transform: translateY(-1px);
+}
+
+.stage-yt-chips-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+}
+
+.stage-yt-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-full);
+  color: var(--text-muted);
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.stage-yt-chip i {
+  color: #ff4757;
+  font-size: 0.75rem;
+}
+
+.stage-yt-chip:hover {
+  background: rgba(255, 71, 87, 0.18);
+  border-color: #ff4757;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(255, 71, 87, 0.35);
+  transform: translateY(-1px);
+}
+
+.stage-yt-player-box {
+  background: rgba(4, 7, 16, 0.85);
+  border: 1px solid rgba(255, 71, 87, 0.3);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7);
+}
+
+.stage-yt-now-playing {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 4px;
+}
+
+.stage-yt-now-playing strong {
+  font-size: 0.88rem;
+  color: #fff;
+}
+
+.stage-yt-iframe-wrap {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+  height: 0;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stage-yt-iframe-wrap iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
 /* Animations for Avatar */
 @keyframes avatar-breathe {
   0% { transform: scale(1) translateY(0); }
