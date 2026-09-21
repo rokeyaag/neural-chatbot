@@ -727,11 +727,12 @@ h1, h2, h3, h4, h5, h6 {
   user-select: none;
 }
 
-/* Base Idle Head: Permanently 100% visible — guarantees NO background/interface flicker */
+/* Base Idle Head: Permanently 100% visible & completely stationary — ZERO background movement */
 .avatar-idle-layer {
   opacity: 1 !important;
   z-index: 1;
-  animation: avatar-breathe 6s ease-in-out infinite alternate;
+  transform: none !important;
+  animation: none !important;
 }
 
 /* Thinking Face Overlay */
@@ -740,6 +741,7 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 2;
   transition: opacity 0.3s ease;
   pointer-events: none;
+  transform: none !important;
 }
 
 .avatar-thinking-layer.active {
@@ -760,6 +762,7 @@ h1, h2, h3, h4, h5, h6 {
   pointer-events: none;
   user-select: none;
   will-change: opacity;
+  transform: none !important;
 }
 
 /* Natural Eye Blinking & Expression Layer */
@@ -776,6 +779,7 @@ h1, h2, h3, h4, h5, h6 {
   pointer-events: none;
   user-select: none;
   will-change: opacity;
+  transform: none !important;
 }
 
 .avatar-eyes-layer.blinking {
@@ -786,119 +790,14 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 0.65;
 }
 
-/* --- Dynamic Head Motion & Pivot Dynamics --- */
+/* Head Layer Wrapper: Fixed in place so background NEVER moves */
 .avatar-head-motion-wrap {
   position: relative;
   width: 100%;
   height: 100%;
-  transform-origin: 50% 86%; /* Natural pivot at the base of the neck */
-  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.4, 1);
-  will-change: transform;
-}
-
-/* Idle State: Natural Smooth Breathing & Subtle Conversational Micro-Sway */
-.avatar-stage-container:not(.talking):not(.thinking):not(.listening) .avatar-head-motion-wrap {
-  animation: avatar-natural-idle 7.5s ease-in-out infinite;
-}
-
-@keyframes avatar-natural-idle {
-  0% {
-    transform: translateY(0) rotate(0deg) scale(1);
-  }
-  28% {
-    transform: translateY(-2.2px) rotate(0.4deg) scale(1.004);
-  }
-  52% {
-    transform: translateY(-4px) rotate(0deg) scale(1.008);
-  }
-  76% {
-    transform: translateY(-1.8px) rotate(-0.45deg) scale(1.003);
-  }
-  100% {
-    transform: translateY(0) rotate(0deg) scale(1);
-  }
-}
-
-/* Listening Mode: Attentive Forward Lean with subtle inquisitive head tilt */
-.avatar-stage-container.listening .avatar-head-motion-wrap {
-  transform: translateY(-4px) rotate(1.2deg) scale(1.018);
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Thinking Mode: Contemplative Head Tilt with High Neural Synaptic Firing */
-.avatar-stage-container.thinking .avatar-head-motion-wrap {
-  animation: avatar-thinking-head 3.2s ease-in-out infinite;
-}
-
-@keyframes avatar-thinking-head {
-  0% {
-    transform: translateY(-3px) rotate(-1.5deg) scale(1.012);
-  }
-  50% {
-    transform: translateY(-6px) rotate(-2.4deg) scale(1.02);
-  }
-  100% {
-    transform: translateY(-3px) rotate(-1.5deg) scale(1.012);
-  }
-}
-
-/* Talking / Answering Mode: Natural Conversational Head Nods, Tilts & Cadence */
-.avatar-stage-container.talking .avatar-head-motion-wrap {
-  animation: avatar-natural-talking-head 4.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
-}
-
-@keyframes avatar-natural-talking-head {
-  0% {
-    transform: translateY(0px) rotate(0deg) scale(1);
-  }
-  12% {
-    /* Conversational head nod forward on initial speech */
-    transform: translateY(5px) rotate(1deg) scale(1.012);
-  }
-  25% {
-    /* Natural gentle rise & posture lift */
-    transform: translateY(-2px) rotate(-0.7deg) scale(1.006);
-  }
-  38% {
-    /* Conversational tilt to the other side */
-    transform: translateY(2.5px) rotate(-1.5deg) scale(1.011);
-  }
-  52% {
-    /* Syllable emphasis nodding */
-    transform: translateY(5.5px) rotate(0.5deg) scale(1.015);
-  }
-  66% {
-    /* Smooth transition */
-    transform: translateY(-2px) rotate(1.2deg) scale(1.008);
-  }
-  80% {
-    /* Secondary conversational nod */
-    transform: translateY(4px) rotate(-0.4deg) scale(1.012);
-  }
-  92% {
-    /* Soft phrase-ending settling */
-    transform: translateY(1px) rotate(0.2deg) scale(1.004);
-  }
-  100% {
-    transform: translateY(0px) rotate(0deg) scale(1);
-  }
-}
-
-/* Micro-nod accent triggered on spoken syllable peaks */
-.avatar-head-motion-wrap.syllable-accent {
-  animation: head-syllable-nod 0.3s ease-out;
-}
-
-@keyframes head-syllable-nod {
-  0% {
-    transform: translateY(0) scale(1);
-  }
-  45% {
-    transform: translateY(4px) scale(1.007);
-  }
-  100% {
-    transform: translateY(0) scale(1);
-  }
+  transform: none !important;
+  animation: none !important;
+  will-change: auto;
 }
 
 /* --- Neural Brain Synaptic Energy & Cranial Wave Aura --- */
@@ -1050,6 +949,14 @@ h1, h2, h3, h4, h5, h6 {
 
 .avatar-stage-container.talking .brain-synapse-ring.ring-outer {
   animation-duration: 6.5s;
+}
+
+/* Electric Surge on Spoken Syllable Peaks */
+.avatar-brain-aura.brain-surge {
+  opacity: 1 !important;
+  transform: translate(-50%, -20%) scale(1.18) !important;
+  filter: drop-shadow(0 0 28px rgba(0, 245, 160, 0.95)) brightness(1.3) !important;
+  transition: transform 0.15s ease-out, filter 0.15s ease-out, opacity 0.15s ease-out;
 }
 
 /* Top Left HUD Badges */

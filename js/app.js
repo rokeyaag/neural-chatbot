@@ -1018,16 +1018,17 @@ function initNeuralAvatarController(switchToAvatarCallback) {
         imgSpeaking.style.opacity = String(opacityVal);
       }
 
-      // Natural conversational micro-nod on emphasized vowels/words
-      if (opacityVal >= 0.85 && (Date.now() - lastNodTime > 1300)) {
+      // Dynamic neural brain electric surge on emphasized speech syllables
+      if (opacityVal >= 0.85 && (Date.now() - lastNodTime > 900)) {
         lastNodTime = Date.now();
-        if (headMotionWrap) {
-          headMotionWrap.classList.remove('syllable-accent');
-          void headMotionWrap.offsetWidth; // Force reflow
-          headMotionWrap.classList.add('syllable-accent');
+        const brainAura = document.getElementById('avatarBrainAura');
+        if (brainAura) {
+          brainAura.classList.remove('brain-surge');
+          void brainAura.offsetWidth;
+          brainAura.classList.add('brain-surge');
           setTimeout(() => {
-            if (headMotionWrap) headMotionWrap.classList.remove('syllable-accent');
-          }, 320);
+            if (brainAura) brainAura.classList.remove('brain-surge');
+          }, 350);
         }
       }
     }, 115);
