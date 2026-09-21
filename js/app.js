@@ -4732,6 +4732,9 @@ function initUserAuthSystem() {
     authModal.classList.remove('active');
   }
 
+  window.openUserAuthModal = openAuthModal;
+  window.closeUserAuthModal = closeAuthModal;
+
   function syncModalState() {
     const loggedIn = window.NeuralDialogueMemory ? window.NeuralDialogueMemory.getLoggedInUser() : null;
     if (loggedIn && loggedIn.name) {

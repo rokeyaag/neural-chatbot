@@ -427,6 +427,10 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 50;
 }
 
 .badge-tag {
@@ -3670,15 +3674,17 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 99999;
+  z-index: 999999;
   display: none;
   align-items: center;
   justify-content: center;
   padding: 16px;
+  pointer-events: none;
 }
 
 .user-auth-modal.active {
-  display: flex;
+  display: flex !important;
+  pointer-events: auto !important;
   animation: fadeIn 0.25s ease-out;
 }
 

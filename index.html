@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="css/style.css?v=3.8">
+  <link rel="stylesheet" href="css/style.css?v=4.0">
 </head>
 <body>
 
@@ -62,7 +62,7 @@
 
         <!-- Right Side: User Login Auth & Live Neural AI Badge -->
         <div class="hero-header-right">
-          <button class="user-auth-btn" id="userAuthHeaderBtn" title="Site User Login / Profile" aria-label="User Login and Profile">
+          <button class="user-auth-btn" id="userAuthHeaderBtn" onclick="if(window.openUserAuthModal) window.openUserAuthModal();" title="Site User Login / Profile" aria-label="User Login and Profile">
             <span class="user-auth-avatar-dot" id="userAuthAvatarDot"><i class="fa-solid fa-user"></i></span>
             <span class="user-auth-name-text" id="userAuthHeaderName">Guest (Login)</span>
           </button>
@@ -977,6 +977,6 @@
   </div>
 
   <!-- Javascript -->
-  <script src="js/app.js?v=3.8"></script>
+  <script src="js/app.js?v=4.0"></script>
 </body>
 </html>
