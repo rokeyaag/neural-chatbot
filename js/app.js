@@ -751,18 +751,32 @@ function initVoiceAndChatEngine() {
       loadVoices();
     }
     if (isBengali) {
+      // Prioritize Sweet, Natural Female Bengali Voices (Tanisha, Nabami, Paulami, Swara, Google বাংলা, Female, etc.)
+      const bnFemale = availableVoices.find(
+        (v) => (v.lang && (v.lang.toLowerCase().startsWith('bn') || v.lang.toLowerCase().includes('bengali') || v.lang.toLowerCase().includes('bangla'))) &&
+               (v.name.toLowerCase().includes('tanisha') || v.name.toLowerCase().includes('nabami') || v.name.toLowerCase().includes('paulami') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('swara') || v.name.toLowerCase().includes('google বাংলা') || v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('woman') || v.name.toLowerCase().includes('girl'))
+      );
+      if (bnFemale) return bnFemale;
+
       const bn = availableVoices.find(
         (v) => (v.lang && (v.lang.toLowerCase().startsWith('bn') || v.lang.toLowerCase().includes('bengali') || v.lang.toLowerCase().includes('bangla'))) ||
                (v.name && (v.name.toLowerCase().includes('bangla') || v.name.toLowerCase().includes('bengali') || v.name.toLowerCase().includes('bn-') || v.name.toLowerCase().includes('bn_') || v.name.toLowerCase().includes('bangladesh') || v.name.toLowerCase().includes('india')))
       );
       if (bn) return bn;
     } else {
-      // Find high-definition, clear English voice (Natural, Google US/UK, Microsoft Jenny/Guy/Zira/David)
-      const en = availableVoices.find(
+      // Strictly prioritize clear, articulate, natural FEMALE English voices (Jenny, Aria, Zira, Sonia, Samantha, Victoria, Natural Female)
+      // Exclude male voices (David, Guy, Mark, George, Male, etc.)
+      const enFemale = availableVoices.find(
         (v) => v.lang && (v.lang === 'en-US' || v.lang === 'en-GB' || v.lang.toLowerCase().startsWith('en')) &&
-               (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Jenny') || v.name.includes('Guy') || v.name.includes('Zira') || v.name.includes('David') || v.name.includes('Samantha') || v.name.includes('Online'))
-      ) || availableVoices.find((v) => v.lang && (v.lang === 'en-US' || v.lang === 'en-GB' || v.lang.toLowerCase().startsWith('en')));
-      if (en) return en;
+               (v.name.includes('Jenny') || v.name.includes('Aria') || v.name.includes('Zira') || v.name.includes('Sonia') || v.name.includes('Samantha') || v.name.includes('Victoria') || v.name.includes('Karen') || v.name.includes('Fiona') || v.name.includes('Female') || v.name.includes('Google US English') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('woman') || v.name.toLowerCase().includes('girl'))
+      ) || availableVoices.find(
+        (v) => v.lang && (v.lang === 'en-US' || v.lang === 'en-GB' || v.lang.toLowerCase().startsWith('en')) &&
+               !v.name.toLowerCase().includes('david') && !v.name.toLowerCase().includes('guy') && !v.name.toLowerCase().includes('mark') && !v.name.toLowerCase().includes('george') && !v.name.toLowerCase().includes('male') && !v.name.toLowerCase().includes('man')
+      );
+      if (enFemale) return enFemale;
+
+      const enFallback = availableVoices.find((v) => v.lang && (v.lang === 'en-US' || v.lang === 'en-GB' || v.lang.toLowerCase().startsWith('en')));
+      if (enFallback) return enFallback;
     }
     return null;
   }
@@ -1856,193 +1870,169 @@ function initVoiceAndChatEngine() {
         }
       }
 
-      // 4. Direct User Inquiries for Memorized Profile & Daily Work Fields
+      // 4. Direct User Inquiries for Memorized Profile & Daily Work Fields (Exact, concise answers)
       if (/আমার নাম (?:কি|কী|বলো|জানিস|জানেন)|আমার নামটা কি|what is my name|do you remember my name|who am i/i.test(cleanText)) {
         if (profile.name) {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'name');
           return isBengali 
-            ? `আপনার নাম হলো <strong>${escapeHtml(profile.name)}</strong>! ❤️ আমি আপনাকে ভালোভাবেই মনে রেখেছি।${nextQ}`
-            : `Your name is <strong>${escapeHtml(profile.name)}</strong>! ❤️ I remember you perfectly.${nextQ}`;
+            ? `আপনার নাম হলো <strong>${escapeHtml(profile.name)}</strong>! ❤️`
+            : `Your name is <strong>${escapeHtml(profile.name)}</strong>! ❤️`;
         }
       }
 
       if (/আমার বাড়ি (?:কোথায়|কই|বলো)|আমি কোথায় থাকি|where do i live|what is my hometown/i.test(cleanText)) {
         if (profile.hometown) {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'hometown');
           return isBengali
-            ? `আপনার বাড়ি তো <strong>${escapeHtml(profile.hometown)}</strong>! 🏙️${nextQ}`
-            : `Your hometown is <strong>${escapeHtml(profile.hometown)}</strong>! 🏙️${nextQ}`;
+            ? `আপনার বাড়ি তো <strong>${escapeHtml(profile.hometown)}</strong>! 🏙️`
+            : `Your hometown is <strong>${escapeHtml(profile.hometown)}</strong>! 🏙️`;
         }
       }
 
       if (/আমার পেশা (?:কি|কী)|আমি কি কাজ করি|what is my profession|what is my job/i.test(cleanText)) {
         if (profile.profession) {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'profession');
           return isBengali
-            ? `আপনার পেশা হলো <strong>${escapeHtml(profile.profession)}</strong>! 💼${nextQ}`
-            : `Your profession is <strong>${escapeHtml(profile.profession)}</strong>! 💼${nextQ}`;
+            ? `আপনার পেশা হলো <strong>${escapeHtml(profile.profession)}</strong>! 💼`
+            : `Your profession is <strong>${escapeHtml(profile.profession)}</strong>! 💼`;
         }
       }
 
       if (/আমার (?:প্রিয় )?শখ (?:কি|কী)|what is my hobby/i.test(cleanText)) {
         if (profile.hobby) {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'hobby');
           return isBengali
-            ? `আপনার প্রিয় শখ তো <strong>${escapeHtml(profile.hobby)}</strong>! 🎨${nextQ}`
-            : `Your favorite hobby is <strong>${escapeHtml(profile.hobby)}</strong>! 🎨${nextQ}`;
+            ? `আপনার প্রিয় শখ তো <strong>${escapeHtml(profile.hobby)}</strong>! 🎨`
+            : `Your favorite hobby is <strong>${escapeHtml(profile.hobby)}</strong>! 🎨`;
         }
       }
 
       if (/আমার প্রিয় (?:প্রোগ্রামিং )?ভাষা (?:কি|কী)|what is my favorite (?:programming )?language/i.test(cleanText)) {
         if (profile.fav_language) {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'fav_language');
           return isBengali
-            ? `আপনার প্রিয় প্রোগ্রামিং ভাষা হলো <strong>${escapeHtml(profile.fav_language)}</strong>! 💻${nextQ}`
-            : `Your favorite language is <strong>${escapeHtml(profile.fav_language)}</strong>! 💻${nextQ}`;
+            ? `আপনার প্রিয় প্রোগ্রামিং ভাষা হলো <strong>${escapeHtml(profile.fav_language)}</strong>! 💻`
+            : `Your favorite language is <strong>${escapeHtml(profile.fav_language)}</strong>! 💻`;
         }
       }
 
       if (/আমার প্রিয় খাবার (?:কি|কী)|my favorite food/i.test(cleanText) && (cleanText.includes('কি') || cleanText.includes('কী') || cleanText.includes('what'))) {
         if (profile.fav_food) {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'fav_food');
           return isBengali
-            ? `আপনার পছন্দের প্রিয় খাবার হলো <strong>${escapeHtml(profile.fav_food)}</strong>! 🍲${nextQ}`
-            : `Your favorite food is <strong>${escapeHtml(profile.fav_food)}</strong>! 🍲${nextQ}`;
+            ? `আপনার পছন্দের প্রিয় খাবার হলো <strong>${escapeHtml(profile.fav_food)}</strong>! 🍲`
+            : `Your favorite food is <strong>${escapeHtml(profile.fav_food)}</strong>! 🍲`;
         }
       }
 
       if (/আমার প্রিয় গান (?:কি|কী)|আমার প্রিয় সঙ্গীত (?:কি|কী)|what is my favorite music|what is my favorite song/i.test(cleanText)) {
         if (profile.fav_music) {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'fav_music');
           return isBengali
-            ? `আপনার পছন্দের প্রিয় সঙ্গীত/গান হলো <strong>${escapeHtml(profile.fav_music)}</strong>! 🎵${nextQ}`
-            : `Your favorite music is <strong>${escapeHtml(profile.fav_music)}</strong>! 🎵${nextQ}`;
+            ? `আপনার পছন্দের প্রিয় সঙ্গীত হলো <strong>${escapeHtml(profile.fav_music)}</strong>! 🎵`
+            : `Your favorite music is <strong>${escapeHtml(profile.fav_music)}</strong>! 🎵`;
         }
       }
 
       if (/আমার স্বপ্ন (?:কি|কী)|আমার লক্ষ্য (?:কি|কী)|what is my dream|what is my goal/i.test(cleanText)) {
         if (profile.dream) {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'dream');
           return isBengali
-            ? `আপনার জীবনের লক্ষ্য ও স্বপ্ন হলো: <strong>${escapeHtml(profile.dream)}</strong>! 🌟${nextQ}`
-            : `Your dream & goal is: <strong>${escapeHtml(profile.dream)}</strong>! 🌟${nextQ}`;
+            ? `আপনার জীবনের লক্ষ্য ও স্বপ্ন হলো: <strong>${escapeHtml(profile.dream)}</strong>! 🌟`
+            : `Your dream & goal is: <strong>${escapeHtml(profile.dream)}</strong>! 🌟`;
         }
       }
 
       // Inquiries for Daily Work & Routine fields (require question intent)
       if (/(?:আজকের কাজের (?:লক্ষ্য|টার্গেট|প্ল্যান)|আমার কাজের (?:লক্ষ্য|টার্গেট))\s*(?:কি|কী|বলো|জানাও|\?)|আজকে কি কি কাজ|what is my (?:work )?(?:goal|target)|what is my daily task/i.test(rawText) || (/আজকের কাজের (?:লক্ষ্য|টার্গেট)|daily task/i.test(cleanText) && isQuestionQuery)) {
         if (profile.daily_task) {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'daily_task');
           return isBengali
-            ? `আজ আপনার প্রধান কাজের টার্গেট হলো: <strong>${escapeHtml(profile.daily_task)}</strong>! 📝 শুভকামনা রইলো।${nextQ}`
-            : `Your main work target today is: <strong>${escapeHtml(profile.daily_task)}</strong>! 📝 Wishing you productivity.${nextQ}`;
+            ? `আজ আপনার প্রধান কাজের টার্গেট হলো: <strong>${escapeHtml(profile.daily_task)}</strong>! 📝`
+            : `Your main work target today is: <strong>${escapeHtml(profile.daily_task)}</strong>! 📝`;
         } else {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'daily_task');
           return isBengali
-            ? `আজকের কাজের লক্ষ্য এখনও জানা হয়নি! আজ আপনি কী কী কাজ সম্পন্ন করতে চান? 📝${nextQ}`
-            : `Your daily work target hasn't been recorded yet! What are your goals for today? 📝${nextQ}`;
+            ? `আজকের কাজের লক্ষ্য এখনও সেট করা হয়নি!`
+            : `Your daily work target is not set yet!`;
         }
       }
 
       if (/আমার বর্তমান প্রজেক্ট\s*(?:কি|কী|বলো|জানাও|\?)|আমি কোন প্রজেক্টে কাজ করছি|what is my current project/i.test(rawText) || (/বর্তমান প্রজেক্ট|current project/i.test(cleanText) && isQuestionQuery)) {
         if (profile.current_project) {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'current_project');
           return isBengali
-            ? `আপনি বর্তমানে <strong>${escapeHtml(profile.current_project)}</strong> প্রজেক্টের ওপর কাজ করছেন! 🚀${nextQ}`
-            : `You are currently working on <strong>${escapeHtml(profile.current_project)}</strong>! 🚀${nextQ}`;
+            ? `আপনি বর্তমানে <strong>${escapeHtml(profile.current_project)}</strong> প্রজেক্টের ওপর কাজ করছেন! 🚀`
+            : `You are currently working on <strong>${escapeHtml(profile.current_project)}</strong>! 🚀`;
         } else {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'current_project');
           return isBengali
-            ? `আপনার বর্তমান প্রজেক্টের নাম এখনও আমার জানা নেই! বর্তমানে কোন আকর্ষণীয় প্রজেক্ট নিয়ে কাজ করছেন? 🚀${nextQ}`
-            : `I don't know your current project yet! What exciting project are you working on? 🚀${nextQ}`;
+            ? `আপনার বর্তমান প্রজেক্টের নাম এখনও আমার জানা নেই।`
+            : `I don't know your current project yet.`;
         }
       }
 
       if (/আমার (?:কোডিং )?টুল\s*(?:কি|কী|বলো|\?)|আমার টেক স্ট্যাক\s*(?:কি|কী|বলো|\?)|what are my (?:tech|coding) tools/i.test(rawText) || (/(?:কোডিং টুল|টেক স্ট্যাক|tech stack|coding tools)/i.test(cleanText) && isQuestionQuery)) {
         if (profile.coding_tech_stack) {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'coding_tech_stack');
           return isBengali
-            ? `আপনার পছন্দের প্রধান কোডিং টুল ও টেক স্ট্যাক হলো <strong>${escapeHtml(profile.coding_tech_stack)}</strong>! 💻${nextQ}`
-            : `Your primary development tools are <strong>${escapeHtml(profile.coding_tech_stack)}</strong>! 💻${nextQ}`;
+            ? `আপনার পছন্দের প্রধান কোডিং টুল ও টেক স্ট্যাক হলো <strong>${escapeHtml(profile.coding_tech_stack)}</strong>! 💻`
+            : `Your primary development tools are <strong>${escapeHtml(profile.coding_tech_stack)}</strong>! 💻`;
         } else {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'coding_tech_stack');
           return isBengali
-            ? `আপনার পছন্দের কোডিং টুল বা টেক স্ট্যাক সম্পর্কে এখনও জানা হয়নি! আপনি কোডিংয়ে কোন কোন টুল বা প্রযুক্তি বেশি ব্যবহার করেন? 💻${nextQ}`
-            : `I haven't recorded your tech stack yet! Which tools or technologies do you code with? 💻${nextQ}`;
+            ? `আপনার পছন্দের কোডিং টুল বা টেক স্ট্যাক সম্পর্কে এখনও জানা হয়নি।`
+            : `I haven't recorded your tech stack yet.`;
         }
       }
 
       if (/আমার সকালের রুটিন\s*(?:কি|কী|বলো|\?)|আমি সকালে (?:কখন|কয়টায়) উঠি|what is my morning routine|what time do i wake up/i.test(rawText) || (/সকালের রুটিন|morning routine/i.test(cleanText) && isQuestionQuery)) {
         if (profile.wake_routine) {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'wake_routine');
           return isBengali
-            ? `আপনার সকালের রুটিন ও ওঠার সময়: <strong>${escapeHtml(profile.wake_routine)}</strong>! 🌅${nextQ}`
-            : `Your morning routine is: <strong>${escapeHtml(profile.wake_routine)}</strong>! 🌅${nextQ}`;
+            ? `আপনার সকালের রুটিন ও ওঠার সময়: <strong>${escapeHtml(profile.wake_routine)}</strong>! 🌅`
+            : `Your morning routine is: <strong>${escapeHtml(profile.wake_routine)}</strong>! 🌅`;
         } else {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'wake_routine');
           return isBengali
-            ? `আপনার সকালের রুটিন এখনও আমার মেমোরিতে নেই! আপনি সকালে সাধারণত কখন ঘুম থেকে ওঠেন? 🌅${nextQ}`
-            : `I haven't learned your morning routine yet! What time do you usually wake up? 🌅${nextQ}`;
+            ? `আপনার সকালের রুটিন এখনও জানা নেই।`
+            : `I haven't learned your morning routine yet.`;
         }
       }
 
       if (/আমার চা কফির অভ্যাস\s*(?:কি|কী|বলো|\?)|আমি কি চা পছন্দ করি না কফি|চা কফির অভ্যাস\s*(?:কি|কী|\?)|what is my (?:tea|coffee) habit|do i prefer tea or coffee/i.test(rawText) || (/চা কফির অভ্যাস|coffee tea habit/i.test(cleanText) && isQuestionQuery)) {
         if (profile.coffee_tea) {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'coffee_tea');
           return isBengali
-            ? `আপনার চা/কফি খাওয়ার অভ্যাস হলো: <strong>${escapeHtml(profile.coffee_tea)}</strong>! ☕${nextQ}`
-            : `Your tea/coffee preference is: <strong>${escapeHtml(profile.coffee_tea)}</strong>! ☕${nextQ}`;
+            ? `আপনার চা/কফি খাওয়ার অভ্যাস হলো: <strong>${escapeHtml(profile.coffee_tea)}</strong>! ☕`
+            : `Your tea/coffee preference is: <strong>${escapeHtml(profile.coffee_tea)}</strong>! ☕`;
         } else {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'coffee_tea');
           return isBengali
-            ? `আপনার চা বা কফির পছন্দ এখনও মেমোরিতে নেই! আপনি চা নাকি কফি বেশি পছন্দ করেন? ☕${nextQ}`
-            : `I haven't recorded your tea/coffee preference yet! Do you prefer tea or coffee? ☕${nextQ}`;
+            ? `আপনার চা বা কফির পছন্দ এখনও মেমোরিতে নেই।`
+            : `I haven't recorded your tea/coffee preference yet.`;
         }
       }
 
       if (/কাজ শেষে (?:আমি )?কি করি|আমার রিল্যাক্স করার উপায়\s*(?:কি|কী|বলো|\?)|what is my evening routine|how do i relax after work/i.test(rawText) || (/রিল্যাক্স করার উপায়|evening unwind/i.test(cleanText) && isQuestionQuery)) {
         if (profile.evening_unwind) {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'evening_unwind');
           return isBengali
-            ? `কাজ শেষে আপনার রিল্যাক্স করার মাধ্যম হলো: <strong>${escapeHtml(profile.evening_unwind)}</strong>! 🌙${nextQ}`
-            : `Your evening relaxation habit is: <strong>${escapeHtml(profile.evening_unwind)}</strong>! 🌙${nextQ}`;
+            ? `কাজ শেষে আপনার রিল্যাক্স করার মাধ্যম হলো: <strong>${escapeHtml(profile.evening_unwind)}</strong>! 🌙`
+            : `Your evening relaxation habit is: <strong>${escapeHtml(profile.evening_unwind)}</strong>! 🌙`;
         } else {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'evening_unwind');
           return isBengali
-            ? `কাজ শেষে আপনার রিল্যাক্স করার উপায় এখনও জানা নেই! সারাদিনের ব্যস্ততা শেষে আপনি কীভাবে সময় কাটান? 🌙${nextQ}`
-            : `I haven't learned your evening routine yet! How do you like to unwind after a busy day? 🌙${nextQ}`;
+            ? `কাজ শেষে আপনার রিল্যাক্স করার উপায় এখনও জানা নেই।`
+            : `I haven't learned your evening routine yet.`;
         }
       }
 
       if (/আমার উইকএন্ডের প্ল্যান\s*(?:কি|কী|বলো|\?)|ছুটির পরিকল্পনা\s*(?:কি|কী|বলো|\?)|what is my weekend plan/i.test(rawText) || (/উইকএন্ডের প্ল্যান|ছুটির পরিকল্পনা|weekend plan/i.test(cleanText) && isQuestionQuery)) {
         if (profile.weekend_plan) {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'weekend_plan');
           return isBengali
-            ? `আপনার উইকএন্ড বা ছুটির পরিকল্পনা: <strong>${escapeHtml(profile.weekend_plan)}</strong>! 🏖️${nextQ}`
-            : `Your weekend plan is: <strong>${escapeHtml(profile.weekend_plan)}</strong>! 🏖️${nextQ}`;
+            ? `আপনার উইকএন্ড বা ছুটির পরিকল্পনা: <strong>${escapeHtml(profile.weekend_plan)}</strong>! 🏖️`
+            : `Your weekend plan is: <strong>${escapeHtml(profile.weekend_plan)}</strong>! 🏖️`;
         } else {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'weekend_plan');
           return isBengali
-            ? `আপনার ছুটির পরিকল্পনা এখনও জানা নেই! সামনের উইকএন্ডে আপনার কী করার ইচ্ছা আছে? 🏖️${nextQ}`
-            : `I don't know your weekend plans yet! What do you plan to do this weekend? 🏖️${nextQ}`;
+            ? `আপনার ছুটির পরিকল্পনা এখনও জানা নেই।`
+            : `I don't know your weekend plans yet.`;
         }
       }
 
       if (/আমার প্রিয় অ্যাপ\s*(?:কি|কী|বলো|\?)|আমার প্রিয় সফটওয়্যার\s*(?:কি|কী|বলো|\?)|what is my favorite app/i.test(rawText) || (/প্রিয় অ্যাপ|প্রিয় সফটওয়্যার|favorite app/i.test(cleanText) && isQuestionQuery)) {
         if (profile.favorite_app_tool) {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'favorite_app_tool');
           return isBengali
-            ? `আপনার সবচেয়ে প্রয়োজনীয় প্রিয় অ্যাপ/সফটওয়্যার হলো: <strong>${escapeHtml(profile.favorite_app_tool)}</strong>! 📱${nextQ}`
-            : `Your favorite essential app/tool is: <strong>${escapeHtml(profile.favorite_app_tool)}</strong>! 📱${nextQ}`;
+            ? `আপনার সবচেয়ে প্রয়োজনীয় প্রিয় অ্যাপ/সফটওয়্যার হলো: <strong>${escapeHtml(profile.favorite_app_tool)}</strong>! 📱`
+            : `Your favorite essential app/tool is: <strong>${escapeHtml(profile.favorite_app_tool)}</strong>! 📱`;
         } else {
-          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'favorite_app_tool');
           return isBengali
-            ? `আপনার প্রয়োজনীয় বা প্রিয় অ্যাপ/টুলের নাম এখনও জানা নেই! আপনার সবচেয়ে প্রিয় সফটওয়্যার বা মোবাইল অ্যাপ কোনটি? 📱${nextQ}`
-            : `I haven't recorded your favorite apps yet! What is your most essential software or app? 📱${nextQ}`;
+            ? `আপনার প্রয়োজনীয় বা প্রিয় অ্যাপের নাম এখনও জানা নেই।`
+            : `I haven't recorded your favorite apps yet.`;
         }
       }
 
-      // Check if query matches any dynamically learned custom Q&A item
+      // Check if query matches any dynamically learned custom Q&A item (exact concise answer)
       for (const item of learned) {
         const kws = isBengali
           ? [...(item.keywords_bn || []), ...(item.keywords || []), ...(item.keywords_en || [])]
@@ -2051,9 +2041,7 @@ function initVoiceAndChatEngine() {
         for (const kw of kws) {
           const cleanKw = kw.toLowerCase().trim();
           if (cleanText === cleanKw || (cleanText.includes(cleanKw) && cleanKw.length >= 4)) {
-            const resp = (isBengali ? (item.responses_bn && item.responses_bn[0]) : (item.responses_en && item.responses_en[0])) || (item.responses && item.responses[0]) || item.answerText;
-            const nextQ = this.generateReciprocalQuestion(profile, isBengali);
-            return `${resp}${nextQ}`;
+            return (isBengali ? (item.responses_bn && item.responses_bn[0]) : (item.responses_en && item.responses_en[0])) || (item.responses && item.responses[0]) || item.answerText;
           }
         }
       }
@@ -2734,32 +2722,24 @@ function initVoiceAndChatEngine() {
 
     // Match found with confident score
     if (bestMatch && highestScore >= 8) {
-      let answer = NeuralKnowledgeStore.getRandomResponse(bestMatch, isBengali);
-      if (!answer.includes('chat-youtube-card') && !answer.includes('chat-audio-card') && !answer.includes('💡 <strong>')) {
-        const reciprocalQ = NeuralDialogueMemory.generateReciprocalQuestion(currentProfile, isBengali, bestMatch.id);
-        answer += reciprocalQ;
-      }
-      return answer;
+      return NeuralKnowledgeStore.getRandomResponse(bestMatch, isBengali);
     }
 
-    // Intelligent context-aware Fallback strictly in matching language with reciprocal follow-up question
-    const reciprocalQ = NeuralDialogueMemory.generateReciprocalQuestion(currentProfile, isBengali);
+    // Intelligent context-aware Fallback strictly in matching language
     if (isBengali) {
       const bnFallbacks = [
-        "আপনার প্রশ্নটি আমি বুঝতে চেষ্টা করছি। আপনি ক্রিয়েটর লুৎফর রহমান, ডিপ লার্নিং মডেল, ডেমো ভিডিও, গান বা প্রজেক্ট সম্পর্কিত প্রশ্ন করতে পারেন! 😊",
-        "দারুণ প্রশ্ন! আপনি চাইলে 'কেমন আছো', 'গান শোনাও', 'হিন্দি গান শোনাও', বা 'পাইটর্চ আর্কিটেকচার' সম্পর্কে জানতে চাইতে পারেন।",
-        "আমি আপনার প্রশ্নটি প্রসেস করেছি। অনুগ্রহ করে মডেল আর্কিটেকচার, ডেমো ভিডিও বা ক্রিয়েটর সম্পর্কে জিজ্ঞাসা করুন!"
+        "আপনার প্রশ্নটি আমি বুঝতে পারছি। আপনি কেমন আছেন, ক্রিয়েটর লুৎফর রহমান, এআই মডেল বা প্রজেক্ট সম্পর্কিত প্রশ্ন করতে পারেন! 😊",
+        "দারুণ বিষয়! আপনি চাইলে 'কেমন আছো', 'গান শোনাও', বা 'পাইটর্চ আর্কিটেকচার' সম্পর্কে জানতে চাইতে পারেন।",
+        "আমি আপনার কথাটি শুনেছি। ক্রিয়েটর, ডেমো ভিডিও বা যে কোনো প্রশ্ন আমাকে করতে পারেন!"
       ];
-      const base = bnFallbacks[Math.floor(Math.random() * bnFallbacks.length)];
-      return base + reciprocalQ;
+      return bnFallbacks[Math.floor(Math.random() * bnFallbacks.length)];
     } else {
       const enFallbacks = [
-        "Query processed! Feel free to ask about well-being, our PyTorch AI model, creator Lutfor Rahman, or request a Hindi song or joke!",
-        "Interesting query! To explore further, ask me about 'How are you?', 'Can you sing a song?', 'Play Hindi song', 'PyTorch architecture', or 'Who created you?' 😊",
-        "I'm continuously learning! Feel free to ask about our deep learning pipeline, demo video, or developer Lutfor Rahman."
+        "I'm listening! Feel free to ask about well-being, our PyTorch AI model, creator Lutfor Rahman, or request a song or joke!",
+        "Feel free to ask me questions like 'How are you?', 'Who created you?', or 'Tell me about your AI architecture' 😊",
+        "I am ready to assist! Ask me about deep learning, projects, or developer Lutfor Rahman."
       ];
-      const base = enFallbacks[Math.floor(Math.random() * enFallbacks.length)];
-      return base + reciprocalQ;
+      return enFallbacks[Math.floor(Math.random() * enFallbacks.length)];
     }
   }
 
@@ -2922,6 +2902,7 @@ function initVoiceAndChatEngine() {
       const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=bn&q=${encodeURIComponent(chunk)}`;
       const audio = new Audio(audioUrl);
       audio.volume = 1.0;
+      audio.playbackRate = 0.94; // Calibrated for clear, distinct and articulate pronunciation
       currentAudioPlayer = audio;
 
       let hasStarted = false;
@@ -3027,8 +3008,8 @@ function initVoiceAndChatEngine() {
           utterance.voice = bnVoice;
           utterance.lang = bnVoice.lang || 'bn-BD';
           utterance.volume = 1.0;
-          utterance.rate = 1.0;
-          utterance.pitch = 1.0;
+          utterance.rate = 0.92; // Clear, articulate, distinct Bengali pronunciation
+          utterance.pitch = 1.15; // Natural sweet female tone
 
           let didStart = false;
 
@@ -3100,8 +3081,8 @@ function initVoiceAndChatEngine() {
       activeUtterance = utterance;
 
       utterance.volume = 1.0;
-      utterance.rate = 1.0;
-      utterance.pitch = 1.0;
+      utterance.rate = 0.95; // Crisp, clear articulation
+      utterance.pitch = 1.12; // Natural female pitch
       utterance.lang = 'en-US';
 
       const selectedVoice = getBestVoice(false);
