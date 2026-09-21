@@ -90,6 +90,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 7. Neural MP3 Music Studio & Audio Player Engine
   initNeuralMusicStudio();
+
+  // 8. User Auth & Site Login Profile Controller
+  initUserAuthSystem();
 });
 
 /* ==========================================================================
@@ -1524,11 +1527,100 @@ function initVoiceAndChatEngine() {
     DIALOGUE_HISTORY_KEY: 'neural_bot_qa_dialogue_history',
     LEARNED_QA_KEY: 'neural_bot_learned_qa_items',
     PENDING_STATE_KEY: 'neural_bot_pending_dialogue_state',
+    LOGGED_IN_USER_KEY: 'neural_bot_logged_in_user',
+
+    getLoggedInUser() {
+      try {
+        const authData = localStorage.getItem(this.LOGGED_IN_USER_KEY) || sessionStorage.getItem(this.LOGGED_IN_USER_KEY);
+        if (authData) {
+          try {
+            const parsed = JSON.parse(authData);
+            if (parsed && (parsed.name || parsed.username)) return parsed;
+          } catch(e) {
+            if (typeof authData === 'string' && authData.trim()) return { name: authData.trim() };
+          }
+        }
+        // Fallback check standard web login storage keys
+        const altKeys = ['username', 'user_name', 'current_user', 'auth_user', 'user'];
+        for (const k of altKeys) {
+          const val = localStorage.getItem(k) || sessionStorage.getItem(k);
+          if (val) {
+            try {
+              const p = JSON.parse(val);
+              if (p && (p.name || p.username)) return { name: p.name || p.username, city: p.city || null };
+            } catch(e) {
+              if (typeof val === 'string' && val.trim()) return { name: val.trim() };
+            }
+          }
+        }
+        // Fallback to profile name if set
+        const profileRaw = localStorage.getItem(this.PROFILE_KEY);
+        if (profileRaw) {
+          const prof = JSON.parse(profileRaw);
+          if (prof && prof.name) return { name: prof.name, city: prof.hometown || null };
+        }
+        return null;
+      } catch (e) {
+        return null;
+      }
+    },
+
+    setLoggedInUser(name, city = null) {
+      if (!name || !name.trim()) return null;
+      const userObj = {
+        name: name.trim(),
+        city: city && city.trim() ? city.trim() : null,
+        loggedInAt: new Date().toISOString()
+      };
+      try {
+        localStorage.setItem(this.LOGGED_IN_USER_KEY, JSON.stringify(userObj));
+        this.setProfileField('name', userObj.name);
+        if (userObj.city) {
+          this.setProfileField('hometown', userObj.city);
+        }
+        this.saveLearnedQA({
+          id: 'qa_name',
+          topic: 'name',
+          category: 'qa_memory',
+          title: `ব্যবহারকারীর নাম (User Name)`,
+          questionText: 'আমার নাম কি?',
+          answerText: userObj.name,
+          keywords_bn: ['আমার নাম কি', 'আমার নাম কী', 'আমার নামটা কি', 'আমার নাম বলো', 'amar nam ki', 'who am i'],
+          keywords_en: ['what is my name', 'who am i'],
+          responses_bn: [`আপনার নাম হলো <strong>${escapeHtml(userObj.name)}</strong>! ❤️`],
+          responses_en: [`Your name is <strong>${escapeHtml(userObj.name)}</strong>! ❤️`],
+          isLearnedQA: true
+        });
+        if (typeof window.syncUserAuthUI === 'function') {
+          window.syncUserAuthUI();
+        }
+      } catch (e) {}
+      return userObj;
+    },
+
+    logoutUser() {
+      try {
+        localStorage.removeItem(this.LOGGED_IN_USER_KEY);
+        sessionStorage.removeItem(this.LOGGED_IN_USER_KEY);
+        const p = this.getProfile();
+        delete p.name;
+        this.saveProfile(p);
+        this.deleteLearnedQA('qa_name');
+        if (typeof window.syncUserAuthUI === 'function') {
+          window.syncUserAuthUI();
+        }
+      } catch (e) {}
+    },
 
     getProfile() {
       try {
         const data = localStorage.getItem(this.PROFILE_KEY);
-        return data ? JSON.parse(data) : {};
+        const profile = data ? JSON.parse(data) : {};
+        const loggedIn = this.getLoggedInUser();
+        if (loggedIn && loggedIn.name && !profile.name) {
+          profile.name = loggedIn.name;
+        }
+        return profile;
       } catch (e) {
         return {};
       }
@@ -1872,10 +1964,16 @@ function initVoiceAndChatEngine() {
 
       // 4. Direct User Inquiries for Memorized Profile & Daily Work Fields (Exact, concise answers)
       if (/আমার নাম (?:কি|কী|বলো|জানিস|জানেন)|আমার নামটা কি|what is my name|do you remember my name|who am i/i.test(cleanText)) {
-        if (profile.name) {
+        const loggedIn = this.getLoggedInUser();
+        const activeName = (loggedIn && loggedIn.name) || profile.name;
+        if (activeName) {
           return isBengali 
-            ? `আপনার নাম হলো <strong>${escapeHtml(profile.name)}</strong>! ❤️`
-            : `Your name is <strong>${escapeHtml(profile.name)}</strong>! ❤️`;
+            ? `আপনার নাম হলো <strong>${escapeHtml(activeName)}</strong>! ❤️`
+            : `Your name is <strong>${escapeHtml(activeName)}</strong>! ❤️`;
+        } else {
+          return isBengali
+            ? `আপনি এখনও সাইটে কোনো নামে লগইন করেননি বা নাম জানাননি! উপরে ডানপাশের <strong>Login</strong> বাটনে ক্লিক করে নাম সেট করতে পারেন, অথবা আমাকে বলুন আপনার নাম কি! 😊`
+            : `You haven't logged in with a name or told me your name yet! Click the <strong>Login</strong> button at the top right or simply tell me your name! 😊`;
         }
       }
 
@@ -2054,45 +2152,19 @@ function initVoiceAndChatEngine() {
         if (bnNameMatch) {
           const cand = bnNameMatch[1].trim();
           if (cand && !['ভালো', 'খারাপ', 'সুস্থ', 'রোবট', 'এআই'].includes(cand)) {
-            this.setProfileField('name', cand);
-            this.saveLearnedQA({
-              id: 'qa_name',
-              topic: 'name',
-              category: 'qa_memory',
-              title: `ব্যবহারকারীর নাম (User Name)`,
-              questionText: 'আমার নাম কি?',
-              answerText: cand,
-              keywords_bn: ['আমার নাম কি', 'আমার নাম কী', 'আমার নামটা কি', 'আমার নাম বলো', 'amar nam ki', 'who am i'],
-              keywords_en: ['what is my name', 'who am i'],
-              responses_bn: [`আপনার নাম হলো <strong>${escapeHtml(cand)}</strong>! ❤️`],
-              responses_en: [`Your name is <strong>${escapeHtml(cand)}</strong>! ❤️`],
-              isLearnedQA: true
-            });
+            this.setLoggedInUser(cand);
             const updatedProfile = this.getProfile();
             const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'name');
-            return `বাহ! খুব সুন্দর নাম, <strong>${escapeHtml(cand)}</strong>! 😊 আমি আপনার নাম এবং এই প্রশ্নোত্তর মেমোরিতে সেভ করে রাখলাম।${nextQ}`;
+            return `বাহ! খুব সুন্দর নাম, <strong>${escapeHtml(cand)}</strong>! 😊 আমি আপনার প্রোফাইল কানেক্ট করলাম এবং মেমোরিতে সেভ করে রাখলাম।${nextQ}`;
           }
         }
         if (enNameMatch) {
           const cand = enNameMatch[1].trim();
           if (cand && !['fine', 'good', 'happy', 'robot', 'bot'].includes(cand.toLowerCase())) {
-            this.setProfileField('name', cand);
-            this.saveLearnedQA({
-              id: 'qa_name',
-              topic: 'name',
-              category: 'qa_memory',
-              title: `User Name`,
-              questionText: 'What is my name?',
-              answerText: cand,
-              keywords_bn: ['আমার নাম কি', 'amar nam ki'],
-              keywords_en: ['what is my name', 'who am i', 'my name'],
-              responses_bn: [`আপনার নাম হলো <strong>${escapeHtml(cand)}</strong>! ❤️`],
-              responses_en: [`Your name is <strong>${escapeHtml(cand)}</strong>! ❤️`],
-              isLearnedQA: true
-            });
+            this.setLoggedInUser(cand);
             const updatedProfile = this.getProfile();
             const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'name');
-            return `Nice to meet you, <strong>${escapeHtml(cand)}</strong>! 😊 I have saved your name and this Q&A into memory.${nextQ}`;
+            return `Nice to meet you, <strong>${escapeHtml(cand)}</strong>! 😊 I have connected your profile and saved your name to memory.${nextQ}`;
           }
         }
 
@@ -4628,3 +4700,115 @@ function initNeuralMusicStudio() {
   updateTrackDisplay();
   loadTrack(0, false);
 }
+
+/* ==========================================================================
+   8. USER AUTH & SITE LOGIN PROFILE SYSTEM
+   ========================================================================== */
+function initUserAuthSystem() {
+  const authBtn = document.getElementById('userAuthHeaderBtn');
+  const authModal = document.getElementById('userAuthModal');
+  const authBackdrop = document.getElementById('userAuthModalBackdrop');
+  const authCloseBtn = document.getElementById('userAuthCloseBtn');
+  const authSaveBtn = document.getElementById('userAuthSaveBtn');
+  const authLogoutBtn = document.getElementById('userAuthLogoutBtn');
+  const inputName = document.getElementById('userAuthInputName');
+  const inputCity = document.getElementById('userAuthInputCity');
+  const headerName = document.getElementById('userAuthHeaderName');
+  const statusTag = document.getElementById('userAuthStatusTag');
+  const displayName = document.getElementById('userAuthDisplayName');
+  const displayInfo = document.getElementById('userAuthDisplayInfo');
+
+  function openAuthModal() {
+    if (!authModal) return;
+    authModal.classList.add('active');
+    syncModalState();
+    if (inputName) {
+      setTimeout(() => inputName.focus(), 100);
+    }
+  }
+
+  function closeAuthModal() {
+    if (!authModal) return;
+    authModal.classList.remove('active');
+  }
+
+  function syncModalState() {
+    const loggedIn = window.NeuralDialogueMemory ? window.NeuralDialogueMemory.getLoggedInUser() : null;
+    if (loggedIn && loggedIn.name) {
+      if (authBtn) authBtn.classList.add('logged-in');
+      if (headerName) headerName.textContent = loggedIn.name;
+      if (statusTag) {
+        statusTag.textContent = 'Active & Logged In';
+        statusTag.classList.add('active');
+      }
+      if (displayName) displayName.textContent = loggedIn.name;
+      if (displayInfo) {
+        displayInfo.textContent = loggedIn.city
+          ? `শহর: ${loggedIn.city} • নিউরাল এআই আপনাকে এই নামে চিনবে ও উত্তর দেবে।`
+          : `নিউরাল এআই আপনাকে এই নামে চিনবে ও উত্তর দেবে।`;
+      }
+      if (inputName) inputName.value = loggedIn.name;
+      if (inputCity) inputCity.value = loggedIn.city || '';
+      if (authLogoutBtn) authLogoutBtn.style.display = 'inline-flex';
+      if (authSaveBtn) authSaveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Update Profile';
+    } else {
+      if (authBtn) authBtn.classList.remove('logged-in');
+      if (headerName) headerName.textContent = 'Guest (Login)';
+      if (statusTag) {
+        statusTag.textContent = 'Not Logged In';
+        statusTag.classList.remove('active');
+      }
+      if (displayName) displayName.textContent = 'Guest User';
+      if (displayInfo) displayInfo.textContent = 'লগইন করলে বা নাম দিলে চ্যাটবট আপনার নাম মনে রাখবে ও উত্তর দেবে।';
+      if (inputName) inputName.value = '';
+      if (inputCity) inputCity.value = '';
+      if (authLogoutBtn) authLogoutBtn.style.display = 'none';
+      if (authSaveBtn) authSaveBtn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> Save & Login';
+    }
+  }
+
+  window.syncUserAuthUI = syncModalState;
+  window.openUserAuthModal = openAuthModal;
+  window.closeUserAuthModal = closeAuthModal;
+
+  if (authBtn) authBtn.addEventListener('click', openAuthModal);
+  if (authCloseBtn) authCloseBtn.addEventListener('click', closeAuthModal);
+  if (authBackdrop) authBackdrop.addEventListener('click', closeAuthModal);
+
+  if (authSaveBtn) {
+    authSaveBtn.addEventListener('click', () => {
+      const nameVal = inputName ? inputName.value.trim() : '';
+      const cityVal = inputCity ? inputCity.value.trim() : '';
+      if (!nameVal) {
+        alert('দয়া করে আপনার নাম বা ইউজারনেম লিখুন (Please enter your name)');
+        if (inputName) inputName.focus();
+        return;
+      }
+      if (window.NeuralDialogueMemory) {
+        window.NeuralDialogueMemory.setLoggedInUser(nameVal, cityVal);
+      }
+      syncModalState();
+      closeAuthModal();
+
+      // Greeting voice feedback
+      if (window.globalSpeakResponse) {
+        const greetText = `স্বাগতম ${nameVal}! আপনার প্রোফাইল কানেক্ট হয়েছে।`;
+        window.globalSpeakResponse(greetText);
+      }
+    });
+  }
+
+  if (authLogoutBtn) {
+    authLogoutBtn.addEventListener('click', () => {
+      if (window.NeuralDialogueMemory) {
+        window.NeuralDialogueMemory.logoutUser();
+      }
+      syncModalState();
+      closeAuthModal();
+    });
+  }
+
+  // Initial Sync
+  syncModalState();
+}
+

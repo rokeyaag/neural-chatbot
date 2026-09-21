@@ -60,8 +60,12 @@
           </p>
         </div>
 
-        <!-- Right Side: Live Neural AI Badge -->
+        <!-- Right Side: User Login Auth & Live Neural AI Badge -->
         <div class="hero-header-right">
+          <button class="user-auth-btn" id="userAuthHeaderBtn" title="Site User Login / Profile" aria-label="User Login and Profile">
+            <span class="user-auth-avatar-dot" id="userAuthAvatarDot"><i class="fa-solid fa-user"></i></span>
+            <span class="user-auth-name-text" id="userAuthHeaderName">Guest (Login)</span>
+          </button>
           <div class="badge-tag">
             <span class="pulse-dot"></span>
             <span>LIVE NEURAL AI &bull; VOICE &amp; TEXT</span>
@@ -911,6 +915,55 @@
     </div>
   </div>
 
+
+  <!-- ================= USER LOGIN & PROFILE MODAL ================= -->
+  <div class="user-auth-modal" id="userAuthModal">
+    <div class="user-auth-modal-backdrop" id="userAuthModalBackdrop"></div>
+    <div class="user-auth-modal-card">
+      <div class="user-auth-header">
+        <div class="user-auth-title-wrap">
+          <div class="user-auth-icon-badge"><i class="fa-solid fa-id-badge"></i></div>
+          <div>
+            <h3 class="user-auth-title">User Profile &amp; Login</h3>
+            <p class="user-auth-subtitle">আপনার নাম দিলে নিউরাল এআই স্বয়ংক্রিয়ভাবে আপনাকে চিনে নেবে</p>
+          </div>
+        </div>
+        <button class="user-auth-close" id="userAuthCloseBtn" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="user-auth-body">
+        <div class="user-auth-current-card" id="userAuthCurrentCard">
+          <div class="user-auth-current-header">
+            <span class="user-auth-status-tag" id="userAuthStatusTag">Not Logged In</span>
+            <span class="hud-mono-tag"><i class="fa-solid fa-database"></i> NEURAL PROFILE</span>
+          </div>
+          <h4 id="userAuthDisplayName" class="gradient-text">Guest User</h4>
+          <p id="userAuthDisplayInfo">লগইন করলে চ্যাটবট আপনার নাম মনে রাখবে ও নাম ধরে সম্বোধন করবে।</p>
+        </div>
+
+        <form id="userAuthForm" onsubmit="event.preventDefault();">
+          <div class="user-auth-input-group">
+            <label for="userAuthInputName"><i class="fa-solid fa-user-tag"></i> আপনার নাম / ইউজারনেম (Your Name):</label>
+            <input type="text" id="userAuthInputName" placeholder="যেমন: লুৎফর রহমান / Lutfor Rahman" autocomplete="name" required />
+          </div>
+
+          <div class="user-auth-input-group">
+            <label for="userAuthInputCity"><i class="fa-solid fa-location-dot"></i> আপনার শহর / বাড়ি (Optional City):</label>
+            <input type="text" id="userAuthInputCity" placeholder="যেমন: ঢাকা, বাংলাদেশ" />
+          </div>
+
+          <div class="user-auth-actions">
+            <button type="button" class="btn btn-primary" id="userAuthSaveBtn">
+              <i class="fa-solid fa-arrow-right-to-bracket"></i> Save &amp; Login
+            </button>
+            <button type="button" class="btn btn-secondary" id="userAuthLogoutBtn" style="display:none;">
+              <i class="fa-solid fa-right-from-bracket"></i> Logout / Clear Name
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <!-- ================= LIGHTBOX MODAL ================= -->
   <div class="lightbox-modal" id="lightboxModal">
