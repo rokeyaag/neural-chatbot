@@ -1633,8 +1633,8 @@ function initVoiceAndChatEngine() {
       if (!profile.name && currentTopic !== 'name') {
         this.setPendingQuestion('name', isBengali ? 'আপনার সুন্দর নাম কী? আমাকে বলুন যাতে মনে রাখতে পারি!' : 'What is your name? Please tell me so I can remember you!', 'name');
         return isBengali
-          ? "<br><br>💡 <strong>প্রশ্ন:</strong> আপনার সুন্দর নাম কী? আমাকে বলুন, যাতে সবসময় মনে রাখতে পারি! 😊"
-          : "<br><br>💡 <strong>Question:</strong> What is your name? Tell me so I can keep you in memory! 😊";
+          ? "<br><br>আপনার সুন্দর নাম কী? আমাকে বলুন, যাতে সবসময় মনে রাখতে পারি! 😊"
+          : "<br><br>What is your name? Please tell me so I can remember you! 😊";
       }
 
       if (!profile.hometown && currentTopic !== 'hometown') {
@@ -1642,15 +1642,17 @@ function initVoiceAndChatEngine() {
         const nameGreetingEn = profile.name ? `By the way <strong>${escapeHtml(profile.name)}</strong>, ` : 'By the way, ';
         this.setPendingQuestion('hometown', isBengali ? 'আপনি কোন শহরে বা জেলায় থাকেন?' : 'Which city or hometown do you live in?', 'hometown');
         return isBengali
-          ? `<br><br>💡 <strong>প্রশ্ন:</strong> ${nameGreeting}আপনি কোন শহরে বা জেলায় থাকেন? আপনার বাড়ি কোথায়? 🏙️`
-          : `<br><br>💡 <strong>Question:</strong> ${nameGreetingEn}which city or country do you live in? 🏙️`;
+          ? `<br><br>${nameGreeting}আপনি কোন শহরে বা জেলায় থাকেন? আপনার বাড়ি কোথায়? 🏙️`
+          : `<br><br>${nameGreetingEn}which city or country do you live in? 🏙️`;
       }
 
       if (!profile.profession && currentTopic !== 'profession') {
+        const nameGreeting = profile.name ? `আচ্ছা <strong>${escapeHtml(profile.name)}</strong>, ` : '';
+        const nameGreetingEn = profile.name ? `By the way <strong>${escapeHtml(profile.name)}</strong>, ` : '';
         this.setPendingQuestion('profession', isBengali ? 'আপনার পেশা কী বা কী নিয়ে পড়াশোনা করছেন?' : 'What is your profession or field of study?', 'profession');
         return isBengali
-          ? "<br><br>💡 <strong>প্রশ্ন:</strong> আপনি কী নিয়ে পড়াশোনা করছেন বা আপনার পেশা কী? 💼"
-          : "<br><br>💡 <strong>Question:</strong> What is your profession or field of study? 💼";
+          ? `<br><br>${nameGreeting}আপনি কী নিয়ে পড়াশোনা করছেন বা আপনার পেশা কী? 💼`
+          : `<br><br>${nameGreetingEn}what is your profession or field of study? 💼`;
       }
 
       // 2. Rich, Dynamic Daily Life, Routine & Work Questions Pool
@@ -1726,9 +1728,7 @@ function initVoiceAndChatEngine() {
 
       this.setPendingQuestion(chosen.topic, chosen.q, chosen.topic);
 
-      return isBengali
-        ? `<br><br>💡 <strong>প্রশ্ন:</strong> ${chosen.label}`
-        : `<br><br>💡 <strong>Question:</strong> ${chosen.label}`;
+      return `<br><br>${chosen.label}`;
     },
 
     // Main turn handler for Q&A learning, reciprocal answering, and memory retrieval
@@ -1772,16 +1772,16 @@ function initVoiceAndChatEngine() {
 
         let learnedHtml = '';
         if (learned.length > 0) {
-          learnedHtml = `<br><br><strong>🧠 মেমোরিতে সংরক্ষিত প্রশ্ন ও উত্তর (${learned.length}টি):</strong><br>` + 
-            learned.map((item, idx) => `<div style="margin-top:6px; padding:6px 10px; background:rgba(0,242,254,0.06); border-left:3px solid #00f2fe; border-radius:4px; font-size:0.85rem;"><strong>Q${idx+1}:</strong> ${escapeHtml(item.questionText || item.title)}<br><strong>A:</strong> ${escapeHtml(item.answerText || (item.responses_bn && item.responses_bn[0]) || (item.responses && item.responses[0]))}</div>`).join('');
+          learnedHtml = `<br><br><strong>🧠 মেমোরিতে সংরক্ষিত কথোপকথন ও বিষয় (${learned.length}টি):</strong><br>` + 
+            learned.map((item) => `<div style="margin-top:6px; padding:6px 10px; background:rgba(0,242,254,0.06); border-left:3px solid #00f2fe; border-radius:4px; font-size:0.85rem;"><span style="color:#00f2fe; font-weight:600;">✨ ${escapeHtml(item.questionText || item.title)}</span><br><span style="color:#e2e8f0; margin-left:4px;">${escapeHtml(item.answerText || (item.responses_bn && item.responses_bn[0]) || (item.responses && item.responses[0]))}</span></div>`).join('');
         }
 
         const nextQ = this.generateReciprocalQuestion(profile, isBengali);
 
         if (basicDetails.length > 0 || dailyDetails.length > 0 || learned.length > 0) {
           let out = isBengali
-            ? `হ্যাঁ, আপনার সাথে প্রতিটি প্রশ্নোত্তর ও কাজের বিষয় আমি মনে রাখি! ❤️<br><br><strong>👤 আপনার ব্যক্তিগত পরিচিতি:</strong><br>${basicDetails.length > 0 ? basicDetails.join('<br>') : '<em>(সাধারণ তথ্য খালি)</em>'}`
-            : `Yes, I remember our conversations, work details, and Q&A! ❤️<br><br><strong>👤 Personal Profile:</strong><br>${basicDetails.length > 0 ? basicDetails.join('<br>') : '<em>(No basic profile)</em>'}`;
+            ? `হ্যাঁ, আপনার সাথে প্রতিটি কথোপকথন ও কাজের বিষয় আমি মনে রেখেছি! ❤️<br><br><strong>👤 আপনার ব্যক্তিগত পরিচিতি:</strong><br>${basicDetails.length > 0 ? basicDetails.join('<br>') : '<em>(সাধারণ তথ্য খালি)</em>'}`
+            : `Yes, I remember our conversations, daily work, and details! ❤️<br><br><strong>👤 Personal Profile:</strong><br>${basicDetails.length > 0 ? basicDetails.join('<br>') : '<em>(No basic profile)</em>'}`;
 
           if (dailyDetails.length > 0) {
             out += isBengali
@@ -1793,7 +1793,7 @@ function initVoiceAndChatEngine() {
           return out;
         } else {
           return isBengali
-            ? `অবশ্যই আপনাকে মনে আছে! তবে নির্দিষ্ট কোনো তথ্য বা প্রশ্ন-উত্তর এখনো মেমোরিতে জমা হয়নি।${nextQ}`
+            ? `অবশ্যই আপনাকে মনে আছে! তবে নির্দিষ্ট কোনো তথ্য বা বিষয় এখনো মেমোরিতে জমা হয়নি।${nextQ}`
             : `I remember you! Tell me about your name, daily work or favorite things and I will keep them stored!${nextQ}`;
         }
       }
@@ -1809,7 +1809,7 @@ function initVoiceAndChatEngine() {
           const newItem = {
             id: 'qa_' + Date.now(),
             category: 'qa_memory',
-            title: `প্রশ্নোত্তর: ${qText}`,
+            title: `${qText}`,
             questionText: qText,
             answerText: aText,
             keywords_bn: [cleanQ, qText.toLowerCase().trim()],
@@ -1823,8 +1823,8 @@ function initVoiceAndChatEngine() {
           this.addDialogueTurn({ userQuestionOrAnswer: qText, botQuestionOrAnswer: aText, topic: 'custom_qa', learnedFact: `${qText} -> ${aText}`, isBengali });
           const nextQ = this.generateReciprocalQuestion(profile, isBengali);
           return isBengali
-            ? `চমৎকার! আমি এই প্রশ্ন ও উত্তর নিউরাল মেমোরিতে সেভ করে নিয়েছি:<br>• <strong>প্রশ্ন:</strong> ${escapeHtml(qText)}<br>• <strong>উত্তর:</strong> ${escapeHtml(aText)} 🧠✨${nextQ}`
-            : `Awesome! I have stored this Question & Answer into my neural memory:<br>• <strong>Question:</strong> ${escapeHtml(qText)}<br>• <strong>Answer:</strong> ${escapeHtml(aText)} 🧠✨${nextQ}`;
+            ? `চমৎকার! আমি এই বিষয়টি মেমোরিতে লিখে রাখলাম:<br>• <strong>"${escapeHtml(qText)}"</strong> ➡️ <strong>"${escapeHtml(aText)}"</strong> 🧠✨${nextQ}`
+            : `Awesome! I have saved this knowledge to memory:<br>• <strong>"${escapeHtml(qText)}"</strong> ➡️ <strong>"${escapeHtml(aText)}"</strong> 🧠✨${nextQ}`;
         }
       }
 
@@ -2807,10 +2807,14 @@ function initVoiceAndChatEngine() {
     const tmp = document.createElement('DIV');
     tmp.innerHTML = clean;
     let text = tmp.textContent || tmp.innerText || '';
+    
+    // Remove robotic prefixes like "প্রশ্ন:", "উত্তর:", "Question:", "Answer:", "Q1:", "A1:", "Q:", "A:"
+    text = text.replace(/(?:^|\s)(?:💡|❓|💬|🔍|📝|✨)?\s*(?:প্রশ্ন|question|উত্তর|answer|q\d*|a\d*)\s*[:：\-]\s*/gi, ' ');
+    
     // Strip emojis so TTS does not fail or read out emoji codes
     text = text.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1FA70}-\u{1FAFF}\u{FE00}-\u{FE0F}]/gu, '');
-    // Clean unwanted characters and symbols
-    text = text.replace(/[*#_~`|•]/g, ' ');
+    // Clean unwanted characters, list bullets, arrows and symbols
+    text = text.replace(/[*#_~`|•→➡️]/g, ' ');
     return text.replace(/\s+/g, ' ').trim();
   }
 
