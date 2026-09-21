@@ -1759,6 +1759,35 @@ function initVoiceAndChatEngine() {
         ]
       },
       {
+        id: 'kb_portfolio_showcase',
+        category: 'creator',
+        title: 'Portfolio Showcase & Featured Works (পোর্টফোলিও শোকেস)',
+        keywords_en: ['portfolio', 'portfolio showcase', 'show portfolio', 'view portfolio', 'my portfolio', 'lutfor portfolio', 'featured projects', 'what projects did you build', 'show projects', 'portfolio link'],
+        keywords_bn: ['পোর্টফোলিও', 'পোর্টফোলিও দেখাও', 'প্রজেক্ট দেখাও', 'তোমার প্রজেক্ট কি কি', 'লুৎফরের পোর্টফোলিও', 'পোর্টফোলিও শোকেস', 'কি কি কাজ করেছ', 'প্রজেক্টগুলো দেখাও', 'তোমার কাজ দেখাও', 'portfolio dekhao', 'project dekhao', 'portfolio link'],
+        responses_en: [
+          "Here is <strong>Lutfor Rahman's</strong> Featured Engineering Portfolio Showcase:<br><br>" +
+          "🚀 <strong>EduGenius AI:</strong> Interactive deep learning educational assistant (<a href=\"https://edugenius-ai-omega.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">Live Demo</a>)<br>" +
+          "🏨 <strong>Grand Aurelia:</strong> 5-Star Hotel Management Suite & POS (<a href=\"https://grand-aurelia-five.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">Live Demo</a>)<br>" +
+          "💳 <strong>IMX Daily Expense App:</strong> FinTech spending analytics & budget tracker (<a href=\"https://imx-daily-expense-app.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">Live Demo</a>)<br>" +
+          "🌐 <strong>SocialPulse Hub:</strong> Social Media Automation & AI Studio (<a href=\"https://lutfor-portfolio.vercel.app/socialpulse.html\" target=\"_blank\" style=\"color:#00f2fe;\">Live Demo</a>)<br>" +
+          "🔒 <strong>SecureLock Vault:</strong> AES-256 military-grade file encryption (<a href=\"https://rokeyaag.github.io/SecureLock/\" target=\"_blank\" style=\"color:#00f2fe;\">Live Demo</a>)<br>" +
+          "🏫 <strong>School Management AI:</strong> Comprehensive academic ERP system (<a href=\"https://school-management-ai-system.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">Live Demo</a>)<br>" +
+          "💼 <strong>Lutfor Official Portfolio:</strong> Full developer showcase (<a href=\"https://lutfor-portfolio.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">Visit Portfolio</a>)<br><br>" +
+          "💡 <em>You can also scroll down to the <strong>Portfolio Showcase</strong> section on this page to explore all project cards!</em>"
+        ],
+        responses_bn: [
+          "এআই ও ফুল-স্ট্যাক ডেভেলপার <strong>লুৎফর রহমানের</strong> পোর্টফোলিও শোকেসের সেরা প্রজেক্টসমূহ:<br><br>" +
+          "🎓 ১. <strong>EduGenius AI:</strong> স্মার্ট এডুকেশনাল এআই অ্যাসিস্ট্যান্ট (<a href=\"https://edugenius-ai-omega.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">লাইভ ডেমো</a>)<br>" +
+          "🏨 ২. <strong>Grand Aurelia:</strong> লাক্সারি ৫-স্টার হোটেল ইআরপি ও পিওএস (<a href=\"https://grand-aurelia-five.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">লাইভ ডেমো</a>)<br>" +
+          "💰 ৩. <strong>IMX Daily Expense App:</strong> আয়-ব্যয় ও বাজেট ট্র্যাকার (<a href=\"https://imx-daily-expense-app.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">লাইভ ডেমো</a>)<br>" +
+          "📡 ৪. <strong>SocialPulse Hub:</strong> সোশ্যাল মিডিয়া অটো-পোস্টিং ও এআই ফটো স্টুডিও (<a href=\"https://lutfor-portfolio.vercel.app/socialpulse.html\" target=\"_blank\" style=\"color:#00f2fe;\">লাইভ ডেমো</a>)<br>" +
+          "🔐 ৫. <strong>SecureLock Vault:</strong> AES-256 ফাইল সিকিউরিটি ভল্ট (<a href=\"https://rokeyaag.github.io/SecureLock/\" target=\"_blank\" style=\"color:#00f2fe;\">লাইভ ডেমো</a>)<br>" +
+          "🏫 ৬. <strong>School Management AI:</strong> একাডেমি ও স্কুল ইআরপি প্ল্যাটফর্ম (<a href=\"https://school-management-ai-system.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">লাইভ ডেমো</a>)<br>" +
+          "🌐 ৭. <strong>Lutfor Portfolio:</strong> লুৎফর রহমানের অফিসিয়াল পোর্টফোলিও (<a href=\"https://lutfor-portfolio.vercel.app\" target=\"_blank\" style=\"color:#00f2fe;\">পোর্টফোলিও লিংক</a>)<br><br>" +
+          "💡 <em>আপনি এই পেজের নিচের দিকে স্ক্রোল করে <strong>Portfolio Showcase</strong> সেকশনে সকল প্রজেক্ট কার্ড সরাসরি দেখতে পারেন!</em>"
+        ]
+      },
+      {
         id: 'kb_github_all',
         category: 'github',
         title: 'GitHub Repositories & Projects (সকল গিটহাব প্রজেক্ট)',
