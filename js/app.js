@@ -5,6 +5,46 @@
 
 var globalAvatarController = null;
 
+// --- Bulletproof Global Helpers for Login Modal & YouTube Launch ---
+function openUserAuthModal() {
+  const modal = document.getElementById('userAuthModal');
+  if (modal) {
+    modal.classList.add('active');
+    modal.style.display = 'flex';
+    modal.style.pointerEvents = 'auto';
+    const input = document.getElementById('userAuthInputName');
+    if (input) setTimeout(() => input.focus(), 120);
+  }
+  if (typeof window.syncUserAuthUI === 'function') {
+    window.syncUserAuthUI();
+  }
+}
+window.openUserAuthModal = openUserAuthModal;
+
+function closeUserAuthModal() {
+  const modal = document.getElementById('userAuthModal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+  }
+}
+window.closeUserAuthModal = closeUserAuthModal;
+
+function launchYouTubeDirectly(targetUrl) {
+  if (!targetUrl) targetUrl = 'https://www.youtube.com';
+  let win = null;
+  try {
+    win = window.open(targetUrl, '_blank');
+  } catch (e) {
+    win = null;
+  }
+  if (!win || win.closed || typeof win.closed === 'undefined') {
+    // Automatically navigate current page directly if popup blocker interfered!
+    window.location.href = targetUrl;
+  }
+}
+window.launchYouTubeDirectly = launchYouTubeDirectly;
+
 // ==========================================================================
 // UNIFIED GLOBAL MEDIA & AUDIO COORDINATOR
 // Ensures MP3 Player, YouTube Streams/Cards, Demo Video, and AI Voice TTS
@@ -3673,6 +3713,36 @@ function initVoiceAndChatEngine() {
     }
 
     appendMessageToHero(escapeHtml(userText), false);
+
+    // Instant YouTube Command Check & Immediate Launch during user interaction!
+    const cleanForYt = userText.toLowerCase().replace(/[?!.,;:()]/g, ' ').trim();
+    const isYtDirect = /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|play|search|chalao|dekhao)\s*(?:on\s*)?(?:youtube|toutube|youtub|yt)|(?:youtube|toutube|youtub|yt)\s*(?:player|cinema|interface|video|open|chalao|dekhaw|dekhao|kholo|jao|chalu|play|stream)?)|(?:ইউটিউব|ইউটিউবে\s*(?:যাও|চলো|চলাও|চালাও|খোলো|দেখাও|প্লে|ওপেন|সার্চ)|গান\s*(?:চালাও|দেখাও|শোনাও|শুনবো)|ভিডিও\s*(?:চালাও|দেখাও))/i.test(cleanForYt);
+
+    if (isYtDirect) {
+      let query = '';
+      if (cleanForYt.includes('hindi') || cleanForYt.includes('হিন্দি')) {
+        query = 'Hindi Top Hit Songs';
+      } else if (cleanForYt.includes('bangla') || cleanForYt.includes('বাংলা')) {
+        query = 'Bangla Popular Hit Songs';
+      } else if (cleanForYt.includes('arijit') || cleanForYt.includes('অরিজিৎ')) {
+        query = 'Arijit Singh Best Songs';
+      } else if (cleanForYt.includes('kesariya')) {
+        query = 'Kesariya Arijit Singh';
+      } else if (cleanForYt.includes('pasoori')) {
+        query = 'Pasoori Ali Sethi';
+      } else if (cleanForYt.includes('despacito')) {
+        query = 'Despacito Luis Fonsi';
+      } else if (cleanForYt.includes('lofi') || cleanForYt.includes('chill')) {
+        query = 'Lofi Hip Hop Chill Beats Live';
+      }
+
+      const ytUrl = query 
+        ? `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`
+        : 'https://www.youtube.com';
+
+      // Launch YouTube directly!
+      launchYouTubeDirectly(ytUrl);
+    }
 
     // Switch avatar to thinking state with synaptic firing
     if (globalAvatarController) {
