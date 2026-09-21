@@ -1629,6 +1629,7 @@ function initVoiceAndChatEngine() {
 
     // Generates a reciprocal follow-up question to ask the user
     generateReciprocalQuestion(profile, isBengali, currentTopic = null) {
+      // 1. Core Profile Fields Check First
       if (!profile.name && currentTopic !== 'name') {
         this.setPendingQuestion('name', isBengali ? 'আপনার সুন্দর নাম কী? আমাকে বলুন যাতে মনে রাখতে পারি!' : 'What is your name? Please tell me so I can remember you!', 'name');
         return isBengali
@@ -1652,60 +1653,77 @@ function initVoiceAndChatEngine() {
           : "<br><br>💡 <strong>Question:</strong> What is your profession or field of study? 💼";
       }
 
-      if (!profile.hobby && currentTopic !== 'hobby') {
-        this.setPendingQuestion('hobby', isBengali ? 'অবসর সময়ে আপনার সবচেয়ে প্রিয় শখ কী?' : 'What is your favorite hobby in your free time?', 'hobby');
-        return isBengali
-          ? "<br><br>💡 <strong>প্রশ্ন:</strong> অবসরে আপনার সবচেয়ে প্রিয় শখ কী? অবসর সময়ে কী করতে ভালো লাগে? 🎨"
-          : "<br><br>💡 <strong>Question:</strong> What is your favorite hobby or thing to do in your free time? 🎨";
-      }
+      // 2. Rich, Dynamic Daily Life, Routine & Work Questions Pool
+      const namePrefix = profile.name ? `আচ্ছা <strong>${escapeHtml(profile.name)}</strong>, ` : '';
+      const namePrefixEn = profile.name ? `By the way <strong>${escapeHtml(profile.name)}</strong>, ` : '';
 
-      if (!profile.fav_language && currentTopic !== 'fav_language') {
-        this.setPendingQuestion('fav_language', isBengali ? 'আপনার সবচেয়ে প্রিয় প্রোগ্রামিং ভাষা বা পছন্দের প্রযুক্তি কোনটি?' : 'What is your favorite programming language or technology?', 'fav_language');
-        return isBengali
-          ? "<br><br>💡 <strong>প্রশ্ন:</strong> আপনার সবচেয়ে পছন্দের প্রোগ্রামিং ভাষা বা প্রযুক্তি কোনটি? 💻"
-          : "<br><br>💡 <strong>Question:</strong> What is your favorite programming language or technology? 💻";
-      }
-
-      if (!profile.fav_food && currentTopic !== 'fav_food') {
-        this.setPendingQuestion('fav_food', isBengali ? 'আপনার সবসময়ের প্রিয় খাবার কোনটি?' : 'What is your favorite food or dish?', 'fav_food');
-        return isBengali
-          ? "<br><br>💡 <strong>প্রশ্ন:</strong> আপনার সবসময়ের পছন্দের প্রিয় খাবার কোনটি বলুন তো? 🍲"
-          : "<br><br>💡 <strong>Question:</strong> What is your all-time favorite food or dish? 🍲";
-      }
-
-      if (!profile.fav_music && currentTopic !== 'fav_music') {
-        this.setPendingQuestion('fav_music', isBengali ? 'কোন ধরনের সঙ্গীত বা কোন শিল্পীর গান আপনার বেশি পছন্দ?' : 'What genre of music or singer is your favorite?', 'fav_music');
-        return isBengali
-          ? "<br><br>💡 <strong>প্রশ্ন:</strong> আপনি কোন ধরনের সঙ্গীত বা কোন শিল্পীর গান সবচেয়ে বেশি ভালোবাসেন? 🎵"
-          : "<br><br>💡 <strong>Question:</strong> What genre of music or singer is your favorite? 🎵";
-      }
-
-      if (!profile.dream && currentTopic !== 'dream') {
-        this.setPendingQuestion('dream', isBengali ? 'আপনার জীবনের সবচেয়ে বড় স্বপ্ন বা ভবিষ্যৎ লক্ষ্য কী?' : 'What is your biggest life dream or goal?', 'dream');
-        return isBengali
-          ? "<br><br>💡 <strong>প্রশ্ন:</strong> আপনার জীবনের সবচেয়ে বড় স্বপ্ন বা ভবিষ্যৎ লক্ষ্য কী? 🌟"
-          : "<br><br>💡 <strong>Question:</strong> What is your biggest life dream or goal? 🌟";
-      }
-
-      // Dynamic engaging pool of reciprocal curiosity questions
-      const dynamicQuestionsBn = [
-        { topic: 'daily_reflection', q: "আজ সারাদিনে নতুন কী শিখলেন বা বিশেষ কোনো অভিজ্ঞতা হলো?", label: "আজ সারাদিনে নতুন কী শিখলেন বা বিশেষ কী কাজ করলেন? 📖" },
-        { topic: 'ai_vision', q: "ভবিষ্যতে এআই ও রোবট প্রযুক্তি মানুষের জীবনকে কেমন করবে বলে আপনার ধারণা?", label: "ভবিষ্যতে এআই প্রযুক্তি মানুষের জীবনকে কীভাবে বদলে দেবে বলে আপনার ধারণা? 🤖" },
-        { topic: 'refreshment', q: "ক্লান্ত লাগলে মন ভালো করার জন্য আপনি সাধারণত কী করেন?", label: "কাজের ফাঁকে রিফ্রেশমেন্টের জন্য আপনি কী করতে ভালোবাসেন? ☕" },
-        { topic: 'favorite_place', q: "আপনার প্রিয় কোনো ভ্রমণ বা সুন্দর জায়গার স্মৃতি আছে কি?", label: "আপনার দেখা সবচেয়ে প্রিয় বা সুন্দর ভ্রমণস্থান কোনটি? 🏖️" },
-        { topic: 'book_movie', q: "আপনার দেখা সেরা কোনো মুভি বা পড়া সেরা বইয়ের নাম কী?", label: "আপনার পছন্দের সেরা কোনো সিনেমা বা বইয়ের নাম কী? 🎬📚" }
+      const dailyQuestionsBn = [
+        // Daily Tasks & Goals
+        { topic: 'daily_task', q: "আজ আপনার প্রধান কাজের টার্গেট বা টু-ডু লিস্ট কী?", label: `${namePrefix}আজ আপনার প্রধান কাজের টার্গেট বা টু-ডু লিস্ট কী? কোন কাজটি আজ সবচেয়ে গুরুত্বপূর্ণ? 📝` },
+        { topic: 'current_project', q: "বর্তমানে আপনি কোন বিশেষ প্রজেক্ট বা কাজের ওপর সময় দিচ্ছেন?", label: `${namePrefix}বর্তমানে আপনি কোন বিশেষ প্রজেক্ট বা বড় কাজের ওপর কাজ করছেন? 🚀` },
+        { topic: 'coding_tech_stack', q: "দৈনন্দিন কাজে আপনি কোন আইডিই বা টেকনোলজি টুল সবচেয়ে বেশি ব্যবহার করেন?", label: `${namePrefix}দৈনন্দিন কোডিং বা প্রজেক্টে আপনি কোন সফটওয়্যার বা টেকনোলজি টুল সবচেয়ে বেশি ব্যবহার করেন? 💻` },
+        { topic: 'work_focus', q: "কাজের সময় গভীর মনোযোগ ও ফোকাস ধরে রাখতে কী কৌশল নেন?", label: `${namePrefix}কাজের সময় পূর্ণ মনোযোগ ও ফোকাস ধরে রাখতে আপনার প্রিয় কৌশল বা অভ্যাস কোনটি? ⏱️` },
+        { topic: 'daily_learning', q: "আজ নতুন কী শিখলেন বা বিশেষ কোনো টেকনিক্যাল জ্ঞান অর্জন করলেন?", label: `${namePrefix}আজ নতুন কী শিখলেন বা বিশেষ কোনো টেকনিক্যাল টিপস/জ্ঞান অর্জন করলেন? 📚` },
+        { topic: 'work_workspace', q: "আপনার কাজের ডেস্ক বা পরিবেশ কেমন সাজানো?", label: `${namePrefix}আপনার কাজের ডেস্ক বা পরিবেশ কেমন সাজানো? ল্যাপটপ, মনিটর নাকি শান্ত কোনো কর্নার? 🖥️` },
+        
+        // Daily Routine & Habits
+        { topic: 'wake_routine', q: "সকালে আপনার দিন সাধারণত কীভাবে শুরু হয় এবং কয়টায় ওঠেন?", label: `${namePrefix}সকালে আপনার দিন সাধারণত কীভাবে শুরু হয়? কয়টায় ঘুম থেকে ওঠা পছন্দ করেন? 🌅` },
+        { topic: 'coffee_tea', q: "কাজের মাঝে বা সকালে চা নাকি কফি—কোনটি আপনার বেশি পছন্দ?", label: `${namePrefix}কাজের ফাঁকে বা সকালে চা নাকি কফি—কোনটি আপনার বেশি পছন্দ? দিনে কত কাপ খাওয়া হয়? ☕` },
+        { topic: 'meal_nutrition', q: "আজ দুপুরের বা রাতের খাবারে কী কী সুস্বাদু পদ ছিল?", label: `${namePrefix}আজ দুপুরের বা রাতের খাবারে কী কী পছন্দের পদ ছিল বলুন তো? 🍲` },
+        { topic: 'health_exercise', q: "শরীর সতেজ রাখতে হাঁটাচলা, জিম বা কোনো ব্যায়াম করেন কি?", label: `${namePrefix}কাজের ব্যস্ততার মাঝে শরীর সতেজ রাখতে হাঁটাচলা, জিম বা কোনো ব্যায়াম করেন কি? 🏃` },
+        { topic: 'evening_unwind', q: "কাজ শেষে সন্ধ্যায় বা রাতে কীভাবে রিল্যাক্স করতে ভালোবাসেন?", label: `${namePrefix}সারাদিনের কাজকর্ম শেষে সন্ধ্যায় বা রাতে কীভাবে রিল্যাক্স করতে সবচেয়ে ভালোবাসেন? 🌙` },
+        { topic: 'sleep_schedule', q: "রাতে সাধারণত কয়টায় ঘুমাতে যান এবং পর্যাপ্ত ঘুম হয় কি?", label: `${namePrefix}রাতে সাধারণত কয়টায় ঘুমাতে যান? পর্যাপ্ত ঘুম কি ঠিকঠাক বজায় থাকে? 😴` },
+        
+        // Lifestyle, Weekend & Personal Preferences
+        { topic: 'hobby', q: "অবসর সময়ে আপনার সবচেয়ে প্রিয় শখ কী?", label: `${namePrefix}অবসরে আপনার সবচেয়ে প্রিয় শখ কী? অবসর সময়ে কী করতে ভালো লাগে? 🎨` },
+        { topic: 'fav_language', q: "আপনার সবচেয়ে প্রিয় প্রোগ্রামিং ভাষা কোনটি?", label: `${namePrefix}আপনার সবচেয়ে পছন্দের প্রোগ্রামিং ভাষা বা প্রযুক্তি কোনটি? 💻` },
+        { topic: 'fav_food', q: "আপনার সবসময়ের প্রিয় খাবার কোনটি?", label: `${namePrefix}আপনার সবসময়ের পছন্দের প্রিয় খাবার কোনটি বলুন তো? 🍲` },
+        { topic: 'fav_music', q: "কোন ধরনের সঙ্গীত বা কোন শিল্পীর গান আপনার পছন্দ?", label: `${namePrefix}আপনি কোন ধরনের সঙ্গীত বা কোন শিল্পীর গান সবচেয়ে বেশি ভালোবাসেন? 🎵` },
+        { topic: 'dream', q: "আপনার জীবনের সবচেয়ে বড় স্বপ্ন বা লক্ষ্য কী?", label: `${namePrefix}আপনার জীবনের সবচেয়ে বড় স্বপ্ন বা ভবিষ্যৎ লক্ষ্য কী? 🌟` },
+        { topic: 'weekend_plan', q: "সামনের উইকএন্ড বা ছুটির দিনে কী করার পরিকল্পনা আছে?", label: `${namePrefix}সামনের উইকএন্ড বা ছুটির দিনে কী করার পরিকল্পনা আছে? কোথাও ঘুরতে যাবেন? 🏖️` },
+        { topic: 'music_while_working', q: "কাজের সময় কি ব্যাকগ্রাউন্ড মিউজিক বা গান শুনতে পছন্দ করেন?", label: `${namePrefix}কোডিং বা কাজের সময় কি ব্যাকগ্রাউন্ড মিউজিক বা গান শুনতে পছন্দ করেন? 🎧` },
+        { topic: 'stress_relief', q: "কাজের চাপ বা ক্লান্তি লাগলে কীভাবে নিজেকে মোটিভেটেড করেন?", label: `${namePrefix}কখনও কাজের চাপ বা মানসিক ক্লান্তি লাগলে নিজেকে শান্ত ও মোটিভেটেড রাখতে কী করেন? 🧘` },
+        { topic: 'favorite_app_tool', q: "দৈনন্দিন কাজে আপনার সবচেয়ে প্রিয় সফটওয়্যার বা অ্যাপ কোনটি?", label: `${namePrefix}দৈনন্দিন কাজে আপনার সবচেয়ে প্রিয় এবং প্রয়োজনীয় সফটওয়্যার বা মোবাইল অ্যাপ কোনটি? 📱` },
+        { topic: 'reading_books', q: "কোন ধরনের বই বা টেকনিক্যাল ব্লগ পড়তে ভালোবাসেন?", label: `${namePrefix}অবসর সময়ে কোন ধরনের বই, টেকনিক্যাল ব্লগ বা আর্টিকেল পড়তে ভালোবাসেন? 📖` },
+        { topic: 'ai_in_work', q: "প্রতিদিনের কাজে এআই বা চ্যাটবট কীভাবে সাহায্য করছে বলে মনে করেন?", label: `${namePrefix}আপনার প্রতিদিনের কাজে এআই টুল বা চ্যাটবট কীভাবে সাহায্য করছে বলে আপনি মনে করেন? 🤖` },
+        { topic: 'daily_achievement', q: "আজকের সারাদিনের সেরা অর্জন বা ভালো লাগার মুহূর্ত কোনটি ছিল?", label: `${namePrefix}আজকের সারাদিনের মধ্যে আপনার সেরা কোনো অর্জন বা সবচেয়ে ভালো লাগার মুহূর্ত কোনটি ছিল? 🌟` }
       ];
 
-      const dynamicQuestionsEn = [
-        { topic: 'daily_reflection', q: "What new thing did you learn or accomplish today?", label: "What is something new or exciting you did today? 📖" },
-        { topic: 'ai_vision', q: "How do you think AI and robotics will reshape human life?", label: "How do you think AI will change our world in the future? 🤖" },
-        { topic: 'refreshment', q: "What is your favorite way to unwind and refresh during a busy day?", label: "What is your go-to way to relax after work or study? ☕" },
-        { topic: 'favorite_place', q: "What is the most memorable or beautiful place you've ever visited?", label: "What is your all-time favorite travel destination? 🏖️" },
-        { topic: 'book_movie', q: "What is the best movie you've watched or book you've read recently?", label: "What is your favorite movie or book? 🎬📚" }
+      const dailyQuestionsEn = [
+        { topic: 'daily_task', q: "What is your main work goal or to-do target today?", label: `${namePrefixEn}What is your main work target or to-do list for today? 📝` },
+        { topic: 'current_project', q: "Which special project are you currently working on?", label: `${namePrefixEn}Which special project or major build are you currently focusing on? 🚀` },
+        { topic: 'coding_tech_stack', q: "Which IDE or tech tools do you use most frequently?", label: `${namePrefixEn}Which code editor, framework or software tools do you use most daily? 💻` },
+        { topic: 'work_focus', q: "What is your favorite productivity method to stay deeply focused?", label: `${namePrefixEn}What is your go-to habit or technique to maintain deep focus at work? ⏱️` },
+        { topic: 'daily_learning', q: "What new technical skill or insight did you learn today?", label: `${namePrefixEn}What is something new or insightful you learned today? 📚` },
+        { topic: 'work_workspace', q: "How is your work desk and workspace setup structured?", label: `${namePrefixEn}How is your work desk setup? Laptop, dual monitors, or a quiet cozy corner? 🖥️` },
+        { topic: 'wake_routine', q: "How does your morning routine typically start and when do you wake up?", label: `${namePrefixEn}How does your typical morning routine start? What time do you wake up? 🌅` },
+        { topic: 'coffee_tea', q: "Do you prefer tea or coffee during work breaks?", label: `${namePrefixEn}During work breaks or mornings, do you prefer tea or coffee? ☕` },
+        { topic: 'meal_nutrition', q: "What delicious meals did you have for lunch or dinner today?", label: `${namePrefixEn}What delicious meals or favorite dishes did you enjoy today? 🍲` },
+        { topic: 'health_exercise', q: "Do you engage in walks, workouts or gym to stay healthy?", label: `${namePrefixEn}Do you do walking, workouts or exercises to stay energized during work? 🏃` },
+        { topic: 'evening_unwind', q: "How do you prefer to unwind and relax in the evening?", label: `${namePrefixEn}How do you love to unwind and recharge after a busy day? 🌙` },
+        { topic: 'sleep_schedule', q: "What time do you usually sleep at night?", label: `${namePrefixEn}What time do you usually head to sleep at night? Getting enough rest? 😴` },
+        { topic: 'hobby', q: "What is your favorite hobby in your free time?", label: `${namePrefixEn}What is your favorite hobby or thing to do in your free time? 🎨` },
+        { topic: 'fav_language', q: "What is your favorite programming language or technology?", label: `${namePrefixEn}What is your favorite programming language or tech stack? 💻` },
+        { topic: 'fav_food', q: "What is your all-time favorite food or dish?", label: `${namePrefixEn}What is your all-time favorite food or dish? 🍲` },
+        { topic: 'fav_music', q: "What genre of music or singer is your favorite?", label: `${namePrefixEn}What genre of music or singer is your favorite? 🎵` },
+        { topic: 'dream', q: "What is your biggest life dream or goal?", label: `${namePrefixEn}What is your biggest life dream or goal? 🌟` },
+        { topic: 'weekend_plan', q: "What plans do you have for the upcoming weekend or holiday?", label: `${namePrefixEn}What are your plans or travel thoughts for the upcoming weekend? 🏖️` },
+        { topic: 'music_while_working', q: "Do you enjoy listening to background music while coding or working?", label: `${namePrefixEn}Do you like playing background music or lo-fi beats while working? 🎧` },
+        { topic: 'stress_relief', q: "How do you recharge when feeling work stress or fatigue?", label: `${namePrefixEn}When dealing with busy work pressure, how do you keep calm and motivated? 🧘` },
+        { topic: 'favorite_app_tool', q: "What is your most essential software or mobile app for daily productivity?", label: `${namePrefixEn}What is your most essential productivity software or mobile app? 📱` },
+        { topic: 'reading_books', q: "What kinds of books or technical blogs do you enjoy reading?", label: `${namePrefixEn}What types of books, technical articles, or blogs do you like reading? 📖` },
+        { topic: 'ai_in_work', q: "How are AI tools helping you in your daily work?", label: `${namePrefixEn}How do you feel AI tools and chatbots are helping your daily workflow? 🤖` },
+        { topic: 'daily_achievement', q: "What was your most rewarding accomplishment or highlight today?", label: `${namePrefixEn}What was the most rewarding moment or achievement of your day? 🌟` }
       ];
 
-      const pool = isBengali ? dynamicQuestionsBn : dynamicQuestionsEn;
-      const chosen = pool[Math.floor(Math.random() * pool.length)];
+      const pool = isBengali ? dailyQuestionsBn : dailyQuestionsEn;
+
+      // Filter out topics already recorded in profile and currentTopic to ask fresh unique questions
+      const unasked = pool.filter(item => !profile[item.topic] && item.topic !== currentTopic);
+      const chosen = unasked.length > 0
+        ? unasked[Math.floor(Math.random() * unasked.length)]
+        : pool[Math.floor(Math.random() * pool.length)];
+
       this.setPendingQuestion(chosen.topic, chosen.q, chosen.topic);
 
       return isBengali
@@ -1718,6 +1736,7 @@ function initVoiceAndChatEngine() {
       const profile = this.getProfile();
       const learned = this.getLearnedQA();
       const pending = this.getPendingQuestion();
+      const isQuestionQuery = /(?:^|\s)(?:কি|কী|কেন|কোথায়|কই|কে|কার|কখন|বলো|বলুন|জানাও|জানতে)(?:\s|[?!.,;:()]|$)|[?？]|\b(?:what|who|where|how|why|when|tell)\b/i.test(rawText);
 
       // 1. Reset / Clear all memory
       if (/স্মৃতি মুছে ফেলো|সব ভুলে যাও|মেমোরি ক্লিয়ার|ভুলে যাও আমাকে|reset memory|clear memory|forget me|forget my name|forget everything/i.test(cleanText)) {
@@ -1729,15 +1748,27 @@ function initVoiceAndChatEngine() {
 
       // 2. Show Learned Memories, Dialogue History & User Profile
       if (/আমার সম্পর্কে কি জানো|আমার সম্পর্কে কি জানিস|আমরা কি কি কথা বলেছি|মেমোরি দেখাও|সংরক্ষিত প্রশ্ন|সংরক্ষিত প্রশ্ন ও উত্তর|ডায়ালগ হিস্ট্রি|about me|what do you know about me|remember me|show memory|dialogue history|learned qa/i.test(cleanText)) {
-        const details = [];
-        if (profile.name) details.push(isBengali ? `• নাম: <strong>${escapeHtml(profile.name)}</strong>` : `• Name: <strong>${escapeHtml(profile.name)}</strong>`);
-        if (profile.hometown) details.push(isBengali ? `• শহর/বাড়ি: <strong>${escapeHtml(profile.hometown)}</strong>` : `• City/Hometown: <strong>${escapeHtml(profile.hometown)}</strong>`);
-        if (profile.profession) details.push(isBengali ? `• পেশা/পড়াশোনা: <strong>${escapeHtml(profile.profession)}</strong>` : `• Profession: <strong>${escapeHtml(profile.profession)}</strong>`);
-        if (profile.hobby) details.push(isBengali ? `• প্রিয় শখ: <strong>${escapeHtml(profile.hobby)}</strong>` : `• Favorite Hobby: <strong>${escapeHtml(profile.hobby)}</strong>`);
-        if (profile.fav_language) details.push(isBengali ? `• প্রিয় প্রোগ্রামিং ভাষা: <strong>${escapeHtml(profile.fav_language)}</strong>` : `• Favorite Language: <strong>${escapeHtml(profile.fav_language)}</strong>`);
-        if (profile.fav_food) details.push(isBengali ? `• প্রিয় খাবার: <strong>${escapeHtml(profile.fav_food)}</strong>` : `• Favorite Food: <strong>${escapeHtml(profile.fav_food)}</strong>`);
-        if (profile.fav_music) details.push(isBengali ? `• প্রিয় সঙ্গীত: <strong>${escapeHtml(profile.fav_music)}</strong>` : `• Favorite Music: <strong>${escapeHtml(profile.fav_music)}</strong>`);
-        if (profile.dream) details.push(isBengali ? `• স্বপ্ন/লক্ষ্য: <strong>${escapeHtml(profile.dream)}</strong>` : `• Life Dream: <strong>${escapeHtml(profile.dream)}</strong>`);
+        const basicDetails = [];
+        if (profile.name) basicDetails.push(isBengali ? `• নাম: <strong>${escapeHtml(profile.name)}</strong>` : `• Name: <strong>${escapeHtml(profile.name)}</strong>`);
+        if (profile.hometown) basicDetails.push(isBengali ? `• শহর/বাড়ি: <strong>${escapeHtml(profile.hometown)}</strong>` : `• City/Hometown: <strong>${escapeHtml(profile.hometown)}</strong>`);
+        if (profile.profession) basicDetails.push(isBengali ? `• পেশা/পড়াশোনা: <strong>${escapeHtml(profile.profession)}</strong>` : `• Profession: <strong>${escapeHtml(profile.profession)}</strong>`);
+        if (profile.hobby) basicDetails.push(isBengali ? `• প্রিয় শখ: <strong>${escapeHtml(profile.hobby)}</strong>` : `• Favorite Hobby: <strong>${escapeHtml(profile.hobby)}</strong>`);
+        if (profile.fav_language) basicDetails.push(isBengali ? `• প্রিয় প্রোগ্রামিং ভাষা: <strong>${escapeHtml(profile.fav_language)}</strong>` : `• Favorite Language: <strong>${escapeHtml(profile.fav_language)}</strong>`);
+        if (profile.fav_food) basicDetails.push(isBengali ? `• প্রিয় খাবার: <strong>${escapeHtml(profile.fav_food)}</strong>` : `• Favorite Food: <strong>${escapeHtml(profile.fav_food)}</strong>`);
+        if (profile.fav_music) basicDetails.push(isBengali ? `• প্রিয় সঙ্গীত: <strong>${escapeHtml(profile.fav_music)}</strong>` : `• Favorite Music: <strong>${escapeHtml(profile.fav_music)}</strong>`);
+        if (profile.dream) basicDetails.push(isBengali ? `• স্বপ্ন/লক্ষ্য: <strong>${escapeHtml(profile.dream)}</strong>` : `• Life Dream: <strong>${escapeHtml(profile.dream)}</strong>`);
+
+        const dailyDetails = [];
+        if (profile.daily_task) dailyDetails.push(isBengali ? `• কাজের লক্ষ্য: <strong>${escapeHtml(profile.daily_task)}</strong>` : `• Daily Goal: <strong>${escapeHtml(profile.daily_task)}</strong>`);
+        if (profile.current_project) dailyDetails.push(isBengali ? `• বর্তমান প্রজেক্ট: <strong>${escapeHtml(profile.current_project)}</strong>` : `• Current Project: <strong>${escapeHtml(profile.current_project)}</strong>`);
+        if (profile.coding_tech_stack) dailyDetails.push(isBengali ? `• কোডিং টুল/টেক: <strong>${escapeHtml(profile.coding_tech_stack)}</strong>` : `• Tech Tools: <strong>${escapeHtml(profile.coding_tech_stack)}</strong>`);
+        if (profile.wake_routine) dailyDetails.push(isBengali ? `• সকালের রুটিন: <strong>${escapeHtml(profile.wake_routine)}</strong>` : `• Morning Routine: <strong>${escapeHtml(profile.wake_routine)}</strong>`);
+        if (profile.coffee_tea) dailyDetails.push(isBengali ? `• চা/কফি অভ্যাস: <strong>${escapeHtml(profile.coffee_tea)}</strong>` : `• Coffee/Tea Habit: <strong>${escapeHtml(profile.coffee_tea)}</strong>`);
+        if (profile.evening_unwind) dailyDetails.push(isBengali ? `• কাজ শেষে রিল্যাক্স: <strong>${escapeHtml(profile.evening_unwind)}</strong>` : `• Evening Unwind: <strong>${escapeHtml(profile.evening_unwind)}</strong>`);
+        if (profile.weekend_plan) dailyDetails.push(isBengali ? `• উইকএন্ড প্ল্যান: <strong>${escapeHtml(profile.weekend_plan)}</strong>` : `• Weekend Plan: <strong>${escapeHtml(profile.weekend_plan)}</strong>`);
+        if (profile.work_focus) dailyDetails.push(isBengali ? `• ফোকাস মেথড: <strong>${escapeHtml(profile.work_focus)}</strong>` : `• Focus Method: <strong>${escapeHtml(profile.work_focus)}</strong>`);
+        if (profile.favorite_app_tool) dailyDetails.push(isBengali ? `• প্রিয় সফটওয়্যার/অ্যাপ: <strong>${escapeHtml(profile.favorite_app_tool)}</strong>` : `• Favorite App/Tool: <strong>${escapeHtml(profile.favorite_app_tool)}</strong>`);
+        if (profile.daily_achievement) dailyDetails.push(isBengali ? `• দিনের সেরা মুহূর্ত: <strong>${escapeHtml(profile.daily_achievement)}</strong>` : `• Today's Highlight: <strong>${escapeHtml(profile.daily_achievement)}</strong>`);
 
         let learnedHtml = '';
         if (learned.length > 0) {
@@ -1747,14 +1778,23 @@ function initVoiceAndChatEngine() {
 
         const nextQ = this.generateReciprocalQuestion(profile, isBengali);
 
-        if (details.length > 0 || learned.length > 0) {
-          return isBengali
-            ? `হ্যাঁ, আপনার সাথে প্রতিটি প্রশ্নোত্তর আমি মনে রাখি! ❤️<br><br><strong>👤 আপনার সংরক্ষিত প্রোফাইল:</strong><br>${details.length > 0 ? details.join('<br>') : '<em>(প্রোফাইল তথ্য খালি)</em>'}${learnedHtml}${nextQ}`
-            : `Yes, I remember our conversations and Q&A! ❤️<br><br><strong>👤 Your Saved Profile:</strong><br>${details.length > 0 ? details.join('<br>') : '<em>(No profile set)</em>'}${learnedHtml}${nextQ}`;
+        if (basicDetails.length > 0 || dailyDetails.length > 0 || learned.length > 0) {
+          let out = isBengali
+            ? `হ্যাঁ, আপনার সাথে প্রতিটি প্রশ্নোত্তর ও কাজের বিষয় আমি মনে রাখি! ❤️<br><br><strong>👤 আপনার ব্যক্তিগত পরিচিতি:</strong><br>${basicDetails.length > 0 ? basicDetails.join('<br>') : '<em>(সাধারণ তথ্য খালি)</em>'}`
+            : `Yes, I remember our conversations, work details, and Q&A! ❤️<br><br><strong>👤 Personal Profile:</strong><br>${basicDetails.length > 0 ? basicDetails.join('<br>') : '<em>(No basic profile)</em>'}`;
+
+          if (dailyDetails.length > 0) {
+            out += isBengali
+              ? `<br><br><strong>💼 দৈনন্দিন কাজ ও লাইফস্টাইল:</strong><br>${dailyDetails.join('<br>')}`
+              : `<br><br><strong>💼 Daily Work & Lifestyle:</strong><br>${dailyDetails.join('<br>')}`;
+          }
+
+          out += `${learnedHtml}${nextQ}`;
+          return out;
         } else {
           return isBengali
             ? `অবশ্যই আপনাকে মনে আছে! তবে নির্দিষ্ট কোনো তথ্য বা প্রশ্ন-উত্তর এখনো মেমোরিতে জমা হয়নি।${nextQ}`
-            : `I remember you! Tell me your name or favorite things and I will keep them stored!${nextQ}`;
+            : `I remember you! Tell me about your name, daily work or favorite things and I will keep them stored!${nextQ}`;
         }
       }
 
@@ -1816,7 +1856,7 @@ function initVoiceAndChatEngine() {
         }
       }
 
-      // 4. Direct User Inquiries for Memorized Profile Fields
+      // 4. Direct User Inquiries for Memorized Profile & Daily Work Fields
       if (/আমার নাম (?:কি|কী|বলো|জানিস|জানেন)|আমার নামটা কি|what is my name|do you remember my name|who am i/i.test(cleanText)) {
         if (profile.name) {
           const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'name');
@@ -1889,6 +1929,119 @@ function initVoiceAndChatEngine() {
         }
       }
 
+      // Inquiries for Daily Work & Routine fields (require question intent)
+      if (/(?:আজকের কাজের (?:লক্ষ্য|টার্গেট|প্ল্যান)|আমার কাজের (?:লক্ষ্য|টার্গেট))\s*(?:কি|কী|বলো|জানাও|\?)|আজকে কি কি কাজ|what is my (?:work )?(?:goal|target)|what is my daily task/i.test(rawText) || (/আজকের কাজের (?:লক্ষ্য|টার্গেট)|daily task/i.test(cleanText) && isQuestionQuery)) {
+        if (profile.daily_task) {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'daily_task');
+          return isBengali
+            ? `আজ আপনার প্রধান কাজের টার্গেট হলো: <strong>${escapeHtml(profile.daily_task)}</strong>! 📝 শুভকামনা রইলো।${nextQ}`
+            : `Your main work target today is: <strong>${escapeHtml(profile.daily_task)}</strong>! 📝 Wishing you productivity.${nextQ}`;
+        } else {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'daily_task');
+          return isBengali
+            ? `আজকের কাজের লক্ষ্য এখনও জানা হয়নি! আজ আপনি কী কী কাজ সম্পন্ন করতে চান? 📝${nextQ}`
+            : `Your daily work target hasn't been recorded yet! What are your goals for today? 📝${nextQ}`;
+        }
+      }
+
+      if (/আমার বর্তমান প্রজেক্ট\s*(?:কি|কী|বলো|জানাও|\?)|আমি কোন প্রজেক্টে কাজ করছি|what is my current project/i.test(rawText) || (/বর্তমান প্রজেক্ট|current project/i.test(cleanText) && isQuestionQuery)) {
+        if (profile.current_project) {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'current_project');
+          return isBengali
+            ? `আপনি বর্তমানে <strong>${escapeHtml(profile.current_project)}</strong> প্রজেক্টের ওপর কাজ করছেন! 🚀${nextQ}`
+            : `You are currently working on <strong>${escapeHtml(profile.current_project)}</strong>! 🚀${nextQ}`;
+        } else {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'current_project');
+          return isBengali
+            ? `আপনার বর্তমান প্রজেক্টের নাম এখনও আমার জানা নেই! বর্তমানে কোন আকর্ষণীয় প্রজেক্ট নিয়ে কাজ করছেন? 🚀${nextQ}`
+            : `I don't know your current project yet! What exciting project are you working on? 🚀${nextQ}`;
+        }
+      }
+
+      if (/আমার (?:কোডিং )?টুল\s*(?:কি|কী|বলো|\?)|আমার টেক স্ট্যাক\s*(?:কি|কী|বলো|\?)|what are my (?:tech|coding) tools/i.test(rawText) || (/(?:কোডিং টুল|টেক স্ট্যাক|tech stack|coding tools)/i.test(cleanText) && isQuestionQuery)) {
+        if (profile.coding_tech_stack) {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'coding_tech_stack');
+          return isBengali
+            ? `আপনার পছন্দের প্রধান কোডিং টুল ও টেক স্ট্যাক হলো <strong>${escapeHtml(profile.coding_tech_stack)}</strong>! 💻${nextQ}`
+            : `Your primary development tools are <strong>${escapeHtml(profile.coding_tech_stack)}</strong>! 💻${nextQ}`;
+        } else {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'coding_tech_stack');
+          return isBengali
+            ? `আপনার পছন্দের কোডিং টুল বা টেক স্ট্যাক সম্পর্কে এখনও জানা হয়নি! আপনি কোডিংয়ে কোন কোন টুল বা প্রযুক্তি বেশি ব্যবহার করেন? 💻${nextQ}`
+            : `I haven't recorded your tech stack yet! Which tools or technologies do you code with? 💻${nextQ}`;
+        }
+      }
+
+      if (/আমার সকালের রুটিন\s*(?:কি|কী|বলো|\?)|আমি সকালে (?:কখন|কয়টায়) উঠি|what is my morning routine|what time do i wake up/i.test(rawText) || (/সকালের রুটিন|morning routine/i.test(cleanText) && isQuestionQuery)) {
+        if (profile.wake_routine) {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'wake_routine');
+          return isBengali
+            ? `আপনার সকালের রুটিন ও ওঠার সময়: <strong>${escapeHtml(profile.wake_routine)}</strong>! 🌅${nextQ}`
+            : `Your morning routine is: <strong>${escapeHtml(profile.wake_routine)}</strong>! 🌅${nextQ}`;
+        } else {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'wake_routine');
+          return isBengali
+            ? `আপনার সকালের রুটিন এখনও আমার মেমোরিতে নেই! আপনি সকালে সাধারণত কখন ঘুম থেকে ওঠেন? 🌅${nextQ}`
+            : `I haven't learned your morning routine yet! What time do you usually wake up? 🌅${nextQ}`;
+        }
+      }
+
+      if (/আমার চা কফির অভ্যাস\s*(?:কি|কী|বলো|\?)|আমি কি চা পছন্দ করি না কফি|চা কফির অভ্যাস\s*(?:কি|কী|\?)|what is my (?:tea|coffee) habit|do i prefer tea or coffee/i.test(rawText) || (/চা কফির অভ্যাস|coffee tea habit/i.test(cleanText) && isQuestionQuery)) {
+        if (profile.coffee_tea) {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'coffee_tea');
+          return isBengali
+            ? `আপনার চা/কফি খাওয়ার অভ্যাস হলো: <strong>${escapeHtml(profile.coffee_tea)}</strong>! ☕${nextQ}`
+            : `Your tea/coffee preference is: <strong>${escapeHtml(profile.coffee_tea)}</strong>! ☕${nextQ}`;
+        } else {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'coffee_tea');
+          return isBengali
+            ? `আপনার চা বা কফির পছন্দ এখনও মেমোরিতে নেই! আপনি চা নাকি কফি বেশি পছন্দ করেন? ☕${nextQ}`
+            : `I haven't recorded your tea/coffee preference yet! Do you prefer tea or coffee? ☕${nextQ}`;
+        }
+      }
+
+      if (/কাজ শেষে (?:আমি )?কি করি|আমার রিল্যাক্স করার উপায়\s*(?:কি|কী|বলো|\?)|what is my evening routine|how do i relax after work/i.test(rawText) || (/রিল্যাক্স করার উপায়|evening unwind/i.test(cleanText) && isQuestionQuery)) {
+        if (profile.evening_unwind) {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'evening_unwind');
+          return isBengali
+            ? `কাজ শেষে আপনার রিল্যাক্স করার মাধ্যম হলো: <strong>${escapeHtml(profile.evening_unwind)}</strong>! 🌙${nextQ}`
+            : `Your evening relaxation habit is: <strong>${escapeHtml(profile.evening_unwind)}</strong>! 🌙${nextQ}`;
+        } else {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'evening_unwind');
+          return isBengali
+            ? `কাজ শেষে আপনার রিল্যাক্স করার উপায় এখনও জানা নেই! সারাদিনের ব্যস্ততা শেষে আপনি কীভাবে সময় কাটান? 🌙${nextQ}`
+            : `I haven't learned your evening routine yet! How do you like to unwind after a busy day? 🌙${nextQ}`;
+        }
+      }
+
+      if (/আমার উইকএন্ডের প্ল্যান\s*(?:কি|কী|বলো|\?)|ছুটির পরিকল্পনা\s*(?:কি|কী|বলো|\?)|what is my weekend plan/i.test(rawText) || (/উইকএন্ডের প্ল্যান|ছুটির পরিকল্পনা|weekend plan/i.test(cleanText) && isQuestionQuery)) {
+        if (profile.weekend_plan) {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'weekend_plan');
+          return isBengali
+            ? `আপনার উইকএন্ড বা ছুটির পরিকল্পনা: <strong>${escapeHtml(profile.weekend_plan)}</strong>! 🏖️${nextQ}`
+            : `Your weekend plan is: <strong>${escapeHtml(profile.weekend_plan)}</strong>! 🏖️${nextQ}`;
+        } else {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'weekend_plan');
+          return isBengali
+            ? `আপনার ছুটির পরিকল্পনা এখনও জানা নেই! সামনের উইকএন্ডে আপনার কী করার ইচ্ছা আছে? 🏖️${nextQ}`
+            : `I don't know your weekend plans yet! What do you plan to do this weekend? 🏖️${nextQ}`;
+        }
+      }
+
+      if (/আমার প্রিয় অ্যাপ\s*(?:কি|কী|বলো|\?)|আমার প্রিয় সফটওয়্যার\s*(?:কি|কী|বলো|\?)|what is my favorite app/i.test(rawText) || (/প্রিয় অ্যাপ|প্রিয় সফটওয়্যার|favorite app/i.test(cleanText) && isQuestionQuery)) {
+        if (profile.favorite_app_tool) {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'favorite_app_tool');
+          return isBengali
+            ? `আপনার সবচেয়ে প্রয়োজনীয় প্রিয় অ্যাপ/সফটওয়্যার হলো: <strong>${escapeHtml(profile.favorite_app_tool)}</strong>! 📱${nextQ}`
+            : `Your favorite essential app/tool is: <strong>${escapeHtml(profile.favorite_app_tool)}</strong>! 📱${nextQ}`;
+        } else {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'favorite_app_tool');
+          return isBengali
+            ? `আপনার প্রয়োজনীয় বা প্রিয় অ্যাপ/টুলের নাম এখনও জানা নেই! আপনার সবচেয়ে প্রিয় সফটওয়্যার বা মোবাইল অ্যাপ কোনটি? 📱${nextQ}`
+            : `I haven't recorded your favorite apps yet! What is your most essential software or app? 📱${nextQ}`;
+        }
+      }
+
       // Check if query matches any dynamically learned custom Q&A item
       for (const item of learned) {
         const kws = isBengali
@@ -1906,12 +2059,10 @@ function initVoiceAndChatEngine() {
       }
 
       // 5. Direct Natural Statements & Self Introductions
-      const isQuestionQuery = /[?？]|কি|কী|কেন|কোথায়|কই|কে|কার|বলো|বলুন|what|who|where|how|why|when/i.test(rawText);
-
       if (!isQuestionQuery) {
-        // Name statement
-        const bnNameMatch = rawText.match(/(?:আমার নাম|আমি)\s+(?:হলো|হচ্ছে|হল)?\s*([^\n?!.,;:()]{2,20})/i);
-        const enNameMatch = rawText.match(/(?:my name is|i am|call me)\s+([a-zA-Z]{2,20})/i);
+        // Name statement (Strict)
+        const bnNameMatch = rawText.match(/(?:আমার নাম)\s+(?:হলো|হচ্ছে|হল)?\s*([^\n?!.,;:()]{2,20})/i);
+        const enNameMatch = rawText.match(/(?:my name is|call me)\s+([a-zA-Z]{2,20})/i);
         if (bnNameMatch) {
           const cand = bnNameMatch[1].trim();
           if (cand && !['ভালো', 'খারাপ', 'সুস্থ', 'রোবট', 'এআই'].includes(cand)) {
@@ -2006,16 +2157,66 @@ function initVoiceAndChatEngine() {
             return `খুব ভালো! <strong>${escapeHtml(cand)}</strong> নিয়ে আপনার ভবিষ্যৎ সফলতা কামনা করি! 💼 মেমোরিতে সেভ হলো।${nextQ}`;
           }
         }
+
+        // Daily task statement
+        const bnTaskMatch = rawText.match(/(?:আজকের কাজের লক্ষ্য|আজকের কাজ|আজকের টার্গেট|আমার কাজের লক্ষ্য)\s+(?:হলো|হচ্ছে|হল)?\s*([^\n?!.,;:()]{2,50})/i);
+        if (bnTaskMatch) {
+          const cand = bnTaskMatch[1].trim();
+          if (cand) {
+            this.setProfileField('daily_task', cand);
+            this.saveLearnedQA({
+              id: 'qa_daily_task',
+              topic: 'daily_task',
+              category: 'qa_memory',
+              title: `আজকের কাজের লক্ষ্য (Daily Goal)`,
+              questionText: 'আজকের কাজের লক্ষ্য কি ছিল?',
+              answerText: cand,
+              keywords_bn: ['আজকের কাজের লক্ষ্য কি', 'আজকের টার্গেট কি', 'আমার কাজের লক্ষ্য', 'আজকের কাজ কি'],
+              keywords_en: ['what is my work goal', 'daily task target'],
+              responses_bn: [`আজ আপনার প্রধান কাজের টার্গেট হলো: <strong>${escapeHtml(cand)}</strong>! 📝`],
+              responses_en: [`Your daily work goal is: <strong>${escapeHtml(cand)}</strong>! 📝`],
+              isLearnedQA: true
+            });
+            this.clearPendingQuestion();
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'daily_task');
+            return `দারুণ লক্ষ্য! <strong>${escapeHtml(cand)}</strong> সফলভাবে সম্পন্ন করার শুভকামনা! 📝 মেমোরিতে লিখে রাখলাম।${nextQ}`;
+          }
+        }
+
+        // Coffee / Tea statement
+        if (/(?:চা|কফি|coffee|tea)/i.test(rawText) && /(?:খাই|পছন্দ|ভালোবাসি|অভ্যাস|প্রিয়|prefer|like|drink|love)/i.test(rawText)) {
+          const cand = rawText.trim();
+          this.setProfileField('coffee_tea', cand);
+          this.saveLearnedQA({
+            id: 'qa_coffee_tea',
+            topic: 'coffee_tea',
+            category: 'qa_memory',
+            title: `চা/কফি পছন্দ ও অভ্যাস (Coffee & Tea Habit)`,
+            questionText: 'আমার চা কফির অভ্যাস কি?',
+            answerText: cand,
+            keywords_bn: ['আমার চা কফির অভ্যাস কি', 'আমি কি চা পছন্দ করি না কফি', 'আমার চা পছন্দ না কফি', 'চা কফির অভ্যাস'],
+            keywords_en: ['do i prefer tea or coffee', 'my coffee tea habit'],
+            responses_bn: [`আপনার চা/কফি খাওয়ার অভ্যাস হলো: <strong>${escapeHtml(cand)}</strong>! ☕`],
+            responses_en: [`Your tea/coffee habit is: <strong>${escapeHtml(cand)}</strong>! ☕`],
+            isLearnedQA: true
+          });
+          this.clearPendingQuestion();
+          const updatedProfile = this.getProfile();
+          const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'coffee_tea');
+          return `দারুণ পছন্দ! <strong>${escapeHtml(cand)}</strong> কাজের ক্লান্তি দূর করতে অনন্য! ☕ মেমোরিতে লিখে নিলাম।${nextQ}`;
+        }
       }
 
       // 6. Processing Direct Answer to Bot's Prior Pending Question
       if (pending && pending.topic && !isQuestionQuery && cleanText.length > 0 && !/কেমন|গান|জোক|প্রজেক্ট|ভিডিও|মডেল|আর্কিটেকচার/i.test(cleanText)) {
         const topic = pending.topic;
         const rawAnswer = rawText.trim();
-        let cleanAnswer = rawAnswer.replace(/^(আমার|আমি|হলো|হচ্ছে|আমার প্রিয়|আমার নাম|আমার বাড়ি|আমার পেশা|আমার শখ|i live in|my name is|i am|my hobby is|my favorite)\s+/i, '').trim();
+        let cleanAnswer = rawAnswer.replace(/^(আমার|আমি|হলো|হচ্ছে|আমার প্রিয়|আমার নাম|আমার বাড়ি|আমার পেশা|আমার শখ|আজকের|আজকের কাজ|আজকের লক্ষ্য|i live in|my name is|i am|my hobby is|my favorite|today my goal is)\s+/i, '').trim();
         cleanAnswer = cleanAnswer.replace(/[?!.,;:()]/g, '').trim();
 
         if (cleanAnswer && cleanAnswer.length >= 2) {
+          // --- Basic Profile Topics ---
           if (topic === 'name') {
             this.setProfileField('name', cleanAnswer);
             this.saveLearnedQA({
@@ -2206,6 +2407,199 @@ function initVoiceAndChatEngine() {
             return isBengali
               ? `অনেক বড় স্বপ্ন! <strong>${escapeHtml(cleanAnswer)}</strong> পূরণে আপনার পাশে দোয়া ও শুভকামনা থাকবে! 🌟 মেমোরিতে লিখে রাখলাম।${nextQ}`
               : `An inspiring dream! Wishing you huge success in achieving <strong>${escapeHtml(cleanAnswer)}</strong>! 🌟 Saved to memory.${nextQ}`;
+          }
+
+          // --- Daily Work & Routine Topics ---
+          if (topic === 'daily_task') {
+            this.setProfileField('daily_task', cleanAnswer);
+            this.saveLearnedQA({
+              id: 'qa_daily_task',
+              topic: 'daily_task',
+              category: 'qa_memory',
+              title: `আজকের কাজের লক্ষ্য (Daily Target)`,
+              questionText: 'আজকের কাজের লক্ষ্য কি ছিল?',
+              answerText: cleanAnswer,
+              keywords_bn: ['আজকের কাজের লক্ষ্য কি', 'আজকের টার্গেট কি', 'আজকে কি কি কাজ', 'আমার কাজের লক্ষ্য'],
+              keywords_en: ['what is my work goal today', 'daily task target', 'my work target'],
+              responses_bn: [`আজ আপনার প্রধান কাজের লক্ষ্য হলো: <strong>${escapeHtml(cleanAnswer)}</strong>! 📝`],
+              responses_en: [`Your main work target today is: <strong>${escapeHtml(cleanAnswer)}</strong>! 📝`],
+              isLearnedQA: true
+            });
+            this.addDialogueTurn({ userQuestionOrAnswer: rawAnswer, botQuestionOrAnswer: pending.questionText, topic: 'daily_task', learnedFact: `Daily Goal: ${cleanAnswer}`, isBengali });
+            this.clearPendingQuestion();
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'daily_task');
+            return isBengali
+              ? `খুবই চমৎকার লক্ষ্য! <strong>${escapeHtml(cleanAnswer)}</strong> সফলভাবে সম্পন্ন করার জন্য শুভকামনা! 📝 মেমোরিতে নোট করে নিলাম।${nextQ}`
+              : `Great goal! Wishing you maximum productivity with <strong>${escapeHtml(cleanAnswer)}</strong>! 📝 Stored in memory.${nextQ}`;
+          }
+
+          if (topic === 'current_project') {
+            this.setProfileField('current_project', cleanAnswer);
+            this.saveLearnedQA({
+              id: 'qa_current_project',
+              topic: 'current_project',
+              category: 'qa_memory',
+              title: `বর্তমান প্রজেক্ট (Current Project)`,
+              questionText: 'আমার বর্তমান প্রজেক্ট কি?',
+              answerText: cleanAnswer,
+              keywords_bn: ['আমার বর্তমান প্রজেক্ট কি', 'আমি কোন প্রজেক্টে কাজ করছি', 'আমার প্রজেক্টের নাম কি'],
+              keywords_en: ['what is my current project', 'which project am i working on'],
+              responses_bn: [`আপনি বর্তমানে <strong>${escapeHtml(cleanAnswer)}</strong> প্রজেক্টের ওপর কাজ করছেন! 🚀`],
+              responses_en: [`You are currently working on <strong>${escapeHtml(cleanAnswer)}</strong>! 🚀`],
+              isLearnedQA: true
+            });
+            this.addDialogueTurn({ userQuestionOrAnswer: rawAnswer, botQuestionOrAnswer: pending.questionText, topic: 'current_project', learnedFact: `Current Project: ${cleanAnswer}`, isBengali });
+            this.clearPendingQuestion();
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'current_project');
+            return isBengali
+              ? `উত্তেজনাপূর্ণ প্রজেক্ট! <strong>${escapeHtml(cleanAnswer)}</strong> অবশ্যই দারুন কিছু হবে! 🚀 প্রজেক্টের তথ্য মেমোরিতে লিখে রাখলাম।${nextQ}`
+              : `Exciting build! <strong>${escapeHtml(cleanAnswer)}</strong> sounds amazing! 🚀 Saved your project details to memory.${nextQ}`;
+          }
+
+          if (topic === 'coding_tech_stack') {
+            this.setProfileField('coding_tech_stack', cleanAnswer);
+            this.saveLearnedQA({
+              id: 'qa_coding_tech_stack',
+              topic: 'coding_tech_stack',
+              category: 'qa_memory',
+              title: `কোডিং টুল ও টেক স্ট্যাক (Tech Tools)`,
+              questionText: 'আমার কোডিং টুল বা টেক স্ট্যাক কি?',
+              answerText: cleanAnswer,
+              keywords_bn: ['আমার কোডিং টুল কি', 'আমার টেক স্ট্যাক কি', 'আমি কোন আইডিই ব্যবহার করি'],
+              keywords_en: ['what is my coding tool', 'what is my tech stack', 'my dev tools'],
+              responses_bn: [`আপনার প্রধান কোডিং টুল ও টেক স্ট্যাক হলো <strong>${escapeHtml(cleanAnswer)}</strong>! 💻`],
+              responses_en: [`Your primary development tools are <strong>${escapeHtml(cleanAnswer)}</strong>! 💻`],
+              isLearnedQA: true
+            });
+            this.addDialogueTurn({ userQuestionOrAnswer: rawAnswer, botQuestionOrAnswer: pending.questionText, topic: 'coding_tech_stack', learnedFact: `Tech Stack: ${cleanAnswer}`, isBengali });
+            this.clearPendingQuestion();
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'coding_tech_stack');
+            return isBengali
+              ? `অসাধারণ টুল চয়েস! <strong>${escapeHtml(cleanAnswer)}</strong> দিয়ে কাজ করা অনেক স্মুথ ও পাওয়ারফুল! 💻 মেমোরিতে সেভ হলো।${nextQ}`
+              : `Great tool choices! Developing with <strong>${escapeHtml(cleanAnswer)}</strong> is fast and efficient! 💻 Saved to memory.${nextQ}`;
+          }
+
+          if (topic === 'wake_routine') {
+            this.setProfileField('wake_routine', cleanAnswer);
+            this.saveLearnedQA({
+              id: 'qa_wake_routine',
+              topic: 'wake_routine',
+              category: 'qa_memory',
+              title: `সকালের রুটিন ও ঘুম ভাঙার সময় (Morning Routine)`,
+              questionText: 'আমার সকালের রুটিন কি / আমি সকালে কখন উঠি?',
+              answerText: cleanAnswer,
+              keywords_bn: ['আমার সকালের রুটিন কি', 'আমি সকালে কখন উঠি', 'আমি সকালে কয়টায় উঠি'],
+              keywords_en: ['what is my morning routine', 'what time do i wake up'],
+              responses_bn: [`আপনার সকালের রুটিন ও ওঠার সময় হলো: <strong>${escapeHtml(cleanAnswer)}</strong>! 🌅`],
+              responses_en: [`Your morning routine and wake up time is: <strong>${escapeHtml(cleanAnswer)}</strong>! 🌅`],
+              isLearnedQA: true
+            });
+            this.addDialogueTurn({ userQuestionOrAnswer: rawAnswer, botQuestionOrAnswer: pending.questionText, topic: 'wake_routine', learnedFact: `Morning Routine: ${cleanAnswer}`, isBengali });
+            this.clearPendingQuestion();
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'wake_routine');
+            return isBengali
+              ? `সুন্দর সকালের সূচনা! <strong>${escapeHtml(cleanAnswer)}</strong>—দিনের শুরু ভালো হলে সারাদিনই প্রাণবন্ত কাটে! 🌅 মেমোরিতে সেভ করলাম।${nextQ}`
+              : `A great morning routine! <strong>${escapeHtml(cleanAnswer)}</strong> sets a productive tone for the whole day! 🌅 Saved to memory.${nextQ}`;
+          }
+
+          if (topic === 'coffee_tea') {
+            this.setProfileField('coffee_tea', cleanAnswer);
+            this.saveLearnedQA({
+              id: 'qa_coffee_tea',
+              topic: 'coffee_tea',
+              category: 'qa_memory',
+              title: `চা/কফি পছন্দ ও অভ্যাস (Coffee & Tea Habit)`,
+              questionText: 'আমার চা কফির অভ্যাস কি?',
+              answerText: cleanAnswer,
+              keywords_bn: ['আমার চা কফির অভ্যাস কি', 'আমি কি চা পছন্দ করি না কফি', 'আমার চা পছন্দ না কফি'],
+              keywords_en: ['do i prefer tea or coffee', 'my coffee tea habit'],
+              responses_bn: [`আপনার চা/কফি খাওয়ার অভ্যাস হলো: <strong>${escapeHtml(cleanAnswer)}</strong>! ☕`],
+              responses_en: [`Your tea/coffee habit is: <strong>${escapeHtml(cleanAnswer)}</strong>! ☕`],
+              isLearnedQA: true
+            });
+            this.addDialogueTurn({ userQuestionOrAnswer: rawAnswer, botQuestionOrAnswer: pending.questionText, topic: 'coffee_tea', learnedFact: `Coffee/Tea: ${cleanAnswer}`, isBengali });
+            this.clearPendingQuestion();
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'coffee_tea');
+            return isBengali
+              ? `পারফেক্ট রিফ্রেশমেন্ট! <strong>${escapeHtml(cleanAnswer)}</strong> কাজের ফাঁকে দারুণ শক্তি যোগায়! ☕ লিখে নিলাম মেমোরিতে।${nextQ}`
+              : `The perfect refresher! <strong>${escapeHtml(cleanAnswer)}</strong> keeps the mind active and sharp! ☕ Saved to memory.${nextQ}`;
+          }
+
+          if (topic === 'evening_unwind') {
+            this.setProfileField('evening_unwind', cleanAnswer);
+            this.saveLearnedQA({
+              id: 'qa_evening_unwind',
+              topic: 'evening_unwind',
+              category: 'qa_memory',
+              title: `কাজ শেষে রিল্যাক্স করার মাধ্যম (Evening Unwind)`,
+              questionText: 'কাজ শেষে আমি কীভাবে রিল্যাক্স করি?',
+              answerText: cleanAnswer,
+              keywords_bn: ['কাজ শেষে আমি কি করি', 'আমার রিল্যাক্স করার উপায় কি', 'সন্ধ্যায় আমি কি করি'],
+              keywords_en: ['how do i relax after work', 'my evening routine', 'evening unwind'],
+              responses_bn: [`কাজ শেষে আপনার রিল্যাক্স করার মাধ্যম হলো: <strong>${escapeHtml(cleanAnswer)}</strong>! 🌙`],
+              responses_en: [`Your evening relaxation method is: <strong>${escapeHtml(cleanAnswer)}</strong>! 🌙`],
+              isLearnedQA: true
+            });
+            this.addDialogueTurn({ userQuestionOrAnswer: rawAnswer, botQuestionOrAnswer: pending.questionText, topic: 'evening_unwind', learnedFact: `Evening Unwind: ${cleanAnswer}`, isBengali });
+            this.clearPendingQuestion();
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'evening_unwind');
+            return isBengali
+              ? `দারুণ উপায়! সারাদিনের ক্লান্তি দূর করতে <strong>${escapeHtml(cleanAnswer)}</strong> সত্যিই চমৎকার! 🌙 মেমোরিতে লিখে রাখলাম।${nextQ}`
+              : `Wonderful way to recharge! <strong>${escapeHtml(cleanAnswer)}</strong> is truly refreshing! 🌙 Saved to memory.${nextQ}`;
+          }
+
+          if (topic === 'weekend_plan') {
+            this.setProfileField('weekend_plan', cleanAnswer);
+            this.saveLearnedQA({
+              id: 'qa_weekend_plan',
+              topic: 'weekend_plan',
+              category: 'qa_memory',
+              title: `উইকএন্ড বা ছুটির পরিকল্পনা (Weekend Plan)`,
+              questionText: 'আমার উইকএন্ডের প্ল্যান কি?',
+              answerText: cleanAnswer,
+              keywords_bn: ['আমার উইকএন্ডের প্ল্যান কি', 'ছুটিতে আমার কি পরিকল্পনা', 'আমার উইকএন্ড প্ল্যান'],
+              keywords_en: ['what is my weekend plan', 'my holiday plan'],
+              responses_bn: [`আপনার উইকএন্ড বা ছুটির পরিকল্পনা: <strong>${escapeHtml(cleanAnswer)}</strong>! 🏖️`],
+              responses_en: [`Your weekend plan is: <strong>${escapeHtml(cleanAnswer)}</strong>! 🏖️`],
+              isLearnedQA: true
+            });
+            this.addDialogueTurn({ userQuestionOrAnswer: rawAnswer, botQuestionOrAnswer: pending.questionText, topic: 'weekend_plan', learnedFact: `Weekend: ${cleanAnswer}`, isBengali });
+            this.clearPendingQuestion();
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'weekend_plan');
+            return isBengali
+              ? `দারুণ মজার পরিকল্পনা! <strong>${escapeHtml(cleanAnswer)}</strong> নিয়ে আপনার ছুটি দারুণ কাটুক! 🏖️ মেমোরিতে লিখে রাখলাম।${nextQ}`
+              : `Sounds like a fantastic plan! Have a memorable time with <strong>${escapeHtml(cleanAnswer)}</strong>! 🏖️ Saved to memory.${nextQ}`;
+          }
+
+          if (topic === 'favorite_app_tool') {
+            this.setProfileField('favorite_app_tool', cleanAnswer);
+            this.saveLearnedQA({
+              id: 'qa_favorite_app_tool',
+              topic: 'favorite_app_tool',
+              category: 'qa_memory',
+              title: `প্রিয় সফটওয়্যার বা অ্যাপ (Favorite App/Tool)`,
+              questionText: 'আমার প্রিয় সফটওয়্যার বা অ্যাপ কি?',
+              answerText: cleanAnswer,
+              keywords_bn: ['আমার প্রিয় অ্যাপ কি', 'আমার প্রিয় সফটওয়্যার কি', 'আমার প্রয়োজনীয় অ্যাপ'],
+              keywords_en: ['what is my favorite app', 'my favorite software', 'essential tools'],
+              responses_bn: [`আপনার সবচেয়ে প্রয়োজনীয় প্রিয় অ্যাপ/সফটওয়্যার হলো: <strong>${escapeHtml(cleanAnswer)}</strong>! 📱`],
+              responses_en: [`Your favorite essential software/app is: <strong>${escapeHtml(cleanAnswer)}</strong>! 📱`],
+              isLearnedQA: true
+            });
+            this.addDialogueTurn({ userQuestionOrAnswer: rawAnswer, botQuestionOrAnswer: pending.questionText, topic: 'favorite_app_tool', learnedFact: `Favorite App: ${cleanAnswer}`, isBengali });
+            this.clearPendingQuestion();
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'favorite_app_tool');
+            return isBengali
+              ? `সত্যিই প্রয়োজনীয় টুল! <strong>${escapeHtml(cleanAnswer)}</strong> কাজকে অনেক গতিময় করে! 📱 মেমোরিতে সেভ হলো।${nextQ}`
+              : `An essential tool indeed! <strong>${escapeHtml(cleanAnswer)}</strong> accelerates daily productivity! 📱 Saved to memory.${nextQ}`;
           }
 
           // General curiosity topic answer
