@@ -948,22 +948,22 @@
           <p id="userAuthDisplayInfo">লগইন করলে চ্যাটবট আপনার নাম মনে রাখবে ও নাম ধরে সম্বোধন করবে।</p>
         </div>
 
-        <form id="userAuthForm" onsubmit="event.preventDefault();">
+        <form id="userAuthForm" onsubmit="event.preventDefault(); saveUserAuth();">
           <div class="user-auth-input-group">
             <label for="userAuthInputName"><i class="fa-solid fa-user-tag"></i> আপনার নাম / ইউজারনেম (Your Name):</label>
-            <input type="text" id="userAuthInputName" placeholder="যেমন: লুৎফর রহমান / Lutfor Rahman" autocomplete="name" required />
+            <input type="text" id="userAuthInputName" placeholder="যেমন: লুৎফর রহমান / Lutfor Rahman" autocomplete="name" onkeydown="if(event.key==='Enter'){event.preventDefault(); saveUserAuth();}" required />
           </div>
 
           <div class="user-auth-input-group">
             <label for="userAuthInputCity"><i class="fa-solid fa-location-dot"></i> আপনার শহর / বাড়ি (Optional City):</label>
-            <input type="text" id="userAuthInputCity" placeholder="যেমন: ঢাকা, বাংলাদেশ" />
+            <input type="text" id="userAuthInputCity" placeholder="যেমন: ঢাকা, বাংলাদেশ" onkeydown="if(event.key==='Enter'){event.preventDefault(); saveUserAuth();}" />
           </div>
 
           <div class="user-auth-actions">
-            <button type="button" class="btn btn-primary" id="userAuthSaveBtn">
+            <button type="button" class="btn btn-primary" id="userAuthSaveBtn" onclick="saveUserAuth();">
               <i class="fa-solid fa-arrow-right-to-bracket"></i> Save &amp; Login
             </button>
-            <button type="button" class="btn btn-secondary" id="userAuthLogoutBtn" style="display:none;">
+            <button type="button" class="btn btn-secondary" id="userAuthLogoutBtn" onclick="logoutUserAuth();" style="display:none;">
               <i class="fa-solid fa-right-from-bracket"></i> Logout / Clear Name
             </button>
           </div>
@@ -984,6 +984,6 @@
   </div>
 
   <!-- Javascript -->
-  <script src="js/app.js?v=4.4"></script>
+  <script src="js/app.js?v=4.5"></script>
 </body>
 </html>

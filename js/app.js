@@ -5,7 +5,20 @@
 
 var globalAvatarController = null;
 
-// --- Bulletproof Global Helpers for Login Modal & YouTube Launch ---
+// --- Global HTML Escaping Helper ---
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str).replace(/[&<>"']/g, (m) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  }[m]));
+}
+window.escapeHtml = escapeHtml;
+
+// --- Bulletproof Global Helpers for Login Modal, User Auth & YouTube Launch ---
 function openUserAuthModal() {
   const modal = document.getElementById('userAuthModal');
   if (modal) {
@@ -13,11 +26,11 @@ function openUserAuthModal() {
     modal.style.display = 'flex';
     modal.style.pointerEvents = 'auto';
     const input = document.getElementById('userAuthInputName');
-    if (input) setTimeout(() => input.focus(), 120);
+    if (input) {
+      setTimeout(() => input.focus(), 120);
+    }
   }
-  if (typeof window.syncUserAuthUI === 'function') {
-    window.syncUserAuthUI();
-  }
+  syncUserAuthUI();
 }
 window.openUserAuthModal = openUserAuthModal;
 
@@ -26,9 +39,143 @@ function closeUserAuthModal() {
   if (modal) {
     modal.classList.remove('active');
     modal.style.display = 'none';
+    modal.style.pointerEvents = 'none';
   }
 }
 window.closeUserAuthModal = closeUserAuthModal;
+
+function syncUserAuthUI() {
+  const authBtn = document.getElementById('userAuthHeaderBtn');
+  const headerName = document.getElementById('userAuthHeaderName');
+  const statusTag = document.getElementById('userAuthStatusTag');
+  const displayName = document.getElementById('userAuthDisplayName');
+  const displayInfo = document.getElementById('userAuthDisplayInfo');
+  const inputName = document.getElementById('userAuthInputName');
+  const inputCity = document.getElementById('userAuthInputCity');
+  const authLogoutBtn = document.getElementById('userAuthLogoutBtn');
+  const authSaveBtn = document.getElementById('userAuthSaveBtn');
+
+  let loggedIn = null;
+  if (window.NeuralDialogueMemory && typeof window.NeuralDialogueMemory.getLoggedInUser === 'function') {
+    loggedIn = window.NeuralDialogueMemory.getLoggedInUser();
+  } else {
+    try {
+      const s = localStorage.getItem('neural_auth_user');
+      if (s) loggedIn = JSON.parse(s);
+    } catch (e) {}
+  }
+
+  if (loggedIn && loggedIn.name) {
+    if (authBtn) authBtn.classList.add('logged-in');
+    if (headerName) headerName.textContent = loggedIn.name;
+    if (statusTag) {
+      statusTag.textContent = 'Active & Logged In';
+      statusTag.classList.add('active');
+    }
+    if (displayName) displayName.textContent = loggedIn.name;
+    if (displayInfo) {
+      displayInfo.textContent = loggedIn.city
+        ? `শহর: ${loggedIn.city} • নিউরাল এআই আপনাকে এই নামে চিনবে ও উত্তর দেবে।`
+        : `নিউরাল এআই আপনাকে এই নামে চিনবে ও উত্তর দেবে।`;
+    }
+    if (inputName && !inputName.value) inputName.value = loggedIn.name;
+    if (inputCity && !inputCity.value) inputCity.value = loggedIn.city || '';
+    if (authLogoutBtn) authLogoutBtn.style.display = 'inline-flex';
+    if (authSaveBtn) authSaveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Update Profile';
+  } else {
+    if (authBtn) authBtn.classList.remove('logged-in');
+    if (headerName) headerName.textContent = 'Guest (Login)';
+    if (statusTag) {
+      statusTag.textContent = 'Not Logged In';
+      statusTag.classList.remove('active');
+    }
+    if (displayName) displayName.textContent = 'Guest User';
+    if (displayInfo) displayInfo.textContent = 'লগইন করলে বা নাম দিলে চ্যাটবট আপনার নাম মনে রাখবে ও উত্তর দেবে।';
+    if (authLogoutBtn) authLogoutBtn.style.display = 'none';
+    if (authSaveBtn) authSaveBtn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> Save & Login';
+  }
+}
+window.syncUserAuthUI = syncUserAuthUI;
+
+function saveUserAuth() {
+  const inputName = document.getElementById('userAuthInputName');
+  const inputCity = document.getElementById('userAuthInputCity');
+  const nameVal = inputName ? inputName.value.trim() : '';
+  const cityVal = inputCity ? inputCity.value.trim() : '';
+
+  if (!nameVal) {
+    if (inputName) {
+      inputName.focus();
+      inputName.style.borderColor = '#ff2a44';
+      inputName.style.boxShadow = '0 0 14px rgba(255, 42, 68, 0.45)';
+      setTimeout(() => {
+        inputName.style.borderColor = '';
+        inputName.style.boxShadow = '';
+      }, 2200);
+    }
+    alert('দয়া করে আপনার নাম বা ইউজারনেম লিখুন (Please enter your name)');
+    return;
+  }
+
+  // 1. Save in NeuralDialogueMemory
+  if (window.NeuralDialogueMemory && typeof window.NeuralDialogueMemory.setLoggedInUser === 'function') {
+    window.NeuralDialogueMemory.setLoggedInUser(nameVal, cityVal);
+  } else {
+    // Fallback directly to localStorage
+    const userObj = {
+      name: nameVal,
+      city: cityVal || null,
+      loggedInAt: new Date().toISOString()
+    };
+    try {
+      localStorage.setItem('neural_auth_user', JSON.stringify(userObj));
+      const profStr = localStorage.getItem('neural_user_profile');
+      const prof = profStr ? JSON.parse(profStr) : {};
+      prof.name = nameVal;
+      if (cityVal) prof.hometown = cityVal;
+      localStorage.setItem('neural_user_profile', JSON.stringify(prof));
+    } catch (e) {}
+  }
+
+  // 2. Sync UI immediately across page
+  syncUserAuthUI();
+
+  // 3. Close the modal smoothly
+  closeUserAuthModal();
+
+  // 4. Voice Greeting & Feedback
+  if (typeof window.globalSpeakResponse === 'function') {
+    const greetText = `স্বাগতম ${nameVal}! আপনার প্রোফাইল কানেক্ট হয়েছে।`;
+    window.globalSpeakResponse(greetText);
+  }
+}
+window.saveUserAuth = saveUserAuth;
+
+function logoutUserAuth() {
+  if (window.NeuralDialogueMemory && typeof window.NeuralDialogueMemory.logoutUser === 'function') {
+    window.NeuralDialogueMemory.logoutUser();
+  } else {
+    try {
+      localStorage.removeItem('neural_auth_user');
+      sessionStorage.removeItem('neural_auth_user');
+      const profStr = localStorage.getItem('neural_user_profile');
+      if (profStr) {
+        const prof = JSON.parse(profStr);
+        delete prof.name;
+        localStorage.setItem('neural_user_profile', JSON.stringify(prof));
+      }
+    } catch (e) {}
+  }
+
+  const inputName = document.getElementById('userAuthInputName');
+  const inputCity = document.getElementById('userAuthInputCity');
+  if (inputName) inputName.value = '';
+  if (inputCity) inputCity.value = '';
+
+  syncUserAuthUI();
+  closeUserAuthModal();
+}
+window.logoutUserAuth = logoutUserAuth;
 
 function launchYouTubeDirectly(targetUrl) {
   if (!targetUrl) targetUrl = 'https://www.youtube.com';
@@ -4990,112 +5137,39 @@ function initNeuralMusicStudio() {
    ========================================================================== */
 function initUserAuthSystem() {
   const authBtn = document.getElementById('userAuthHeaderBtn');
-  const authModal = document.getElementById('userAuthModal');
   const authBackdrop = document.getElementById('userAuthModalBackdrop');
   const authCloseBtn = document.getElementById('userAuthCloseBtn');
   const authSaveBtn = document.getElementById('userAuthSaveBtn');
   const authLogoutBtn = document.getElementById('userAuthLogoutBtn');
   const inputName = document.getElementById('userAuthInputName');
   const inputCity = document.getElementById('userAuthInputCity');
-  const headerName = document.getElementById('userAuthHeaderName');
-  const statusTag = document.getElementById('userAuthStatusTag');
-  const displayName = document.getElementById('userAuthDisplayName');
-  const displayInfo = document.getElementById('userAuthDisplayInfo');
+  const authForm = document.getElementById('userAuthForm');
 
-  function openAuthModal() {
-    if (!authModal) return;
-    authModal.classList.add('active');
-    syncModalState();
-    if (inputName) {
-      setTimeout(() => inputName.focus(), 100);
-    }
-  }
+  if (authBtn) authBtn.addEventListener('click', openUserAuthModal);
+  if (authCloseBtn) authCloseBtn.addEventListener('click', closeUserAuthModal);
+  if (authBackdrop) authBackdrop.addEventListener('click', closeUserAuthModal);
+  if (authSaveBtn) authSaveBtn.addEventListener('click', saveUserAuth);
+  if (authLogoutBtn) authLogoutBtn.addEventListener('click', logoutUserAuth);
 
-  function closeAuthModal() {
-    if (!authModal) return;
-    authModal.classList.remove('active');
-  }
-
-  window.openUserAuthModal = openAuthModal;
-  window.closeUserAuthModal = closeAuthModal;
-
-  function syncModalState() {
-    const loggedIn = window.NeuralDialogueMemory ? window.NeuralDialogueMemory.getLoggedInUser() : null;
-    if (loggedIn && loggedIn.name) {
-      if (authBtn) authBtn.classList.add('logged-in');
-      if (headerName) headerName.textContent = loggedIn.name;
-      if (statusTag) {
-        statusTag.textContent = 'Active & Logged In';
-        statusTag.classList.add('active');
-      }
-      if (displayName) displayName.textContent = loggedIn.name;
-      if (displayInfo) {
-        displayInfo.textContent = loggedIn.city
-          ? `শহর: ${loggedIn.city} • নিউরাল এআই আপনাকে এই নামে চিনবে ও উত্তর দেবে।`
-          : `নিউরাল এআই আপনাকে এই নামে চিনবে ও উত্তর দেবে।`;
-      }
-      if (inputName) inputName.value = loggedIn.name;
-      if (inputCity) inputCity.value = loggedIn.city || '';
-      if (authLogoutBtn) authLogoutBtn.style.display = 'inline-flex';
-      if (authSaveBtn) authSaveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Update Profile';
-    } else {
-      if (authBtn) authBtn.classList.remove('logged-in');
-      if (headerName) headerName.textContent = 'Guest (Login)';
-      if (statusTag) {
-        statusTag.textContent = 'Not Logged In';
-        statusTag.classList.remove('active');
-      }
-      if (displayName) displayName.textContent = 'Guest User';
-      if (displayInfo) displayInfo.textContent = 'লগইন করলে বা নাম দিলে চ্যাটবট আপনার নাম মনে রাখবে ও উত্তর দেবে।';
-      if (inputName) inputName.value = '';
-      if (inputCity) inputCity.value = '';
-      if (authLogoutBtn) authLogoutBtn.style.display = 'none';
-      if (authSaveBtn) authSaveBtn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> Save & Login';
-    }
-  }
-
-  window.syncUserAuthUI = syncModalState;
-  window.openUserAuthModal = openAuthModal;
-  window.closeUserAuthModal = closeAuthModal;
-
-  if (authBtn) authBtn.addEventListener('click', openAuthModal);
-  if (authCloseBtn) authCloseBtn.addEventListener('click', closeAuthModal);
-  if (authBackdrop) authBackdrop.addEventListener('click', closeAuthModal);
-
-  if (authSaveBtn) {
-    authSaveBtn.addEventListener('click', () => {
-      const nameVal = inputName ? inputName.value.trim() : '';
-      const cityVal = inputCity ? inputCity.value.trim() : '';
-      if (!nameVal) {
-        alert('দয়া করে আপনার নাম বা ইউজারনেম লিখুন (Please enter your name)');
-        if (inputName) inputName.focus();
-        return;
-      }
-      if (window.NeuralDialogueMemory) {
-        window.NeuralDialogueMemory.setLoggedInUser(nameVal, cityVal);
-      }
-      syncModalState();
-      closeAuthModal();
-
-      // Greeting voice feedback
-      if (window.globalSpeakResponse) {
-        const greetText = `স্বাগতম ${nameVal}! আপনার প্রোফাইল কানেক্ট হয়েছে।`;
-        window.globalSpeakResponse(greetText);
-      }
+  if (authForm) {
+    authForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      saveUserAuth();
     });
   }
 
-  if (authLogoutBtn) {
-    authLogoutBtn.addEventListener('click', () => {
-      if (window.NeuralDialogueMemory) {
-        window.NeuralDialogueMemory.logoutUser();
-      }
-      syncModalState();
-      closeAuthModal();
-    });
-  }
+  [inputName, inputCity].forEach((input) => {
+    if (input && typeof input.addEventListener === 'function') {
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          saveUserAuth();
+        }
+      });
+    }
+  });
 
-  // Initial Sync
-  syncModalState();
+  // Initial Sync on Page Load
+  syncUserAuthUI();
 }
 
