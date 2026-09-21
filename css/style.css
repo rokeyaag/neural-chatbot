@@ -1001,13 +1001,14 @@ h1, h2, h3, h4, h5, h6 {
 .stage-youtube-container {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 14px 16px;
+  gap: 8px;
+  padding: 10px 14px;
   width: 100%;
+  height: 100%;
   flex: 1 1 0;
-  min-height: 480px;
-  background: radial-gradient(circle at 50% 10%, rgba(255, 71, 87, 0.08) 0%, #040814 85%);
-  overflow-y: auto;
+  min-height: 0;
+  background: radial-gradient(circle at 50% 10%, rgba(255, 71, 87, 0.09) 0%, #030611 90%);
+  overflow: hidden;
   box-sizing: border-box;
   animation: fadeIn 0.3s ease-out;
 }
@@ -1016,33 +1017,33 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .stage-yt-search-wrap {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex: 1;
-  min-width: 260px;
-  background: rgba(0, 0, 0, 0.55);
-  border: 1px solid rgba(255, 71, 87, 0.35);
+  min-width: 220px;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 71, 87, 0.4);
   border-radius: var(--radius-full);
-  padding: 4px 6px 4px 14px;
+  padding: 4px 6px 4px 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   transition: var(--transition-fast);
 }
 
 .stage-yt-search-wrap:focus-within {
   border-color: #ff4757;
-  box-shadow: 0 0 18px rgba(255, 71, 87, 0.4);
+  box-shadow: 0 0 20px rgba(255, 71, 87, 0.45);
 }
 
 .stage-yt-icon {
   color: #ff4757;
-  font-size: 1.15rem;
-  filter: drop-shadow(0 0 6px rgba(255, 71, 87, 0.5));
+  font-size: 1.1rem;
+  filter: drop-shadow(0 0 6px rgba(255, 71, 87, 0.6));
 }
 
 .stage-yt-search-wrap input {
@@ -1050,14 +1051,14 @@ h1, h2, h3, h4, h5, h6 {
   border: none;
   color: #fff;
   font-family: var(--font-body);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   width: 100%;
   outline: none;
 }
 
 .stage-yt-search-wrap input::placeholder {
   color: var(--text-muted);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
 }
 
 .stage-yt-play-btn {
@@ -1065,25 +1066,53 @@ h1, h2, h3, h4, h5, h6 {
   border: none !important;
   color: #fff !important;
   border-radius: var(--radius-full) !important;
-  padding: 6px 16px !important;
-  font-size: 0.78rem !important;
+  padding: 6px 14px !important;
+  font-size: 0.76rem !important;
   font-weight: 700 !important;
   cursor: pointer;
+  white-space: nowrap;
   transition: var(--transition-fast);
 }
 
 .stage-yt-play-btn:hover {
-  box-shadow: 0 0 16px rgba(255, 71, 87, 0.6) !important;
+  box-shadow: 0 0 16px rgba(255, 71, 87, 0.7) !important;
   transform: translateY(-1px);
+}
+
+.stage-yt-controls-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.stage-yt-engine-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 71, 87, 0.12);
+  border: 1px solid rgba(255, 71, 87, 0.35);
+  color: #ff4757;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
 }
 
 .stage-yt-chips-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   overflow-x: auto;
-  padding-bottom: 4px;
-  scrollbar-width: thin;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+  flex-shrink: 0;
+}
+
+.stage-yt-chips-row::-webkit-scrollbar {
+  display: none;
 }
 
 .stage-yt-chip {
@@ -1092,12 +1121,12 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: var(--radius-full);
   color: var(--text-muted);
   font-family: var(--font-heading);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  padding: 4px 12px;
+  padding: 3px 10px;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   white-space: nowrap;
   cursor: pointer;
   transition: var(--transition-fast);
@@ -1105,49 +1134,71 @@ h1, h2, h3, h4, h5, h6 {
 
 .stage-yt-chip i {
   color: #ff4757;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
 }
 
 .stage-yt-chip:hover {
-  background: rgba(255, 71, 87, 0.18);
+  background: rgba(255, 71, 87, 0.2);
   border-color: #ff4757;
   color: #fff;
-  box-shadow: 0 0 12px rgba(255, 71, 87, 0.35);
+  box-shadow: 0 0 12px rgba(255, 71, 87, 0.4);
   transform: translateY(-1px);
 }
 
 .stage-yt-player-box {
-  background: rgba(4, 7, 16, 0.85);
-  border: 1px solid rgba(255, 71, 87, 0.3);
+  background: rgba(4, 7, 16, 0.92);
+  border: 1px solid rgba(255, 71, 87, 0.25);
   border-radius: var(--radius-md);
-  padding: 10px 12px;
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7);
+  gap: 6px;
+  flex: 1 1 0;
+  min-height: 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), inset 0 0 15px rgba(255, 71, 87, 0.04);
 }
 
 .stage-yt-now-playing {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 2px 4px;
+  gap: 8px;
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+
+.stage-yt-playing-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
 }
 
 .stage-yt-now-playing strong {
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   color: #fff;
+  font-family: var(--font-heading);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stage-yt-now-playing strong span {
+  color: #ff4757;
 }
 
 .stage-yt-iframe-wrap {
   position: relative;
   width: 100%;
-  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-  height: 0;
+  height: 100%;
+  flex: 1 1 0;
+  min-height: 0;
   overflow: hidden;
   border-radius: var(--radius-sm);
   background: #000;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.9);
 }
 
 .stage-yt-iframe-wrap iframe {

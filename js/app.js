@@ -272,13 +272,66 @@ function initVideoController() {
   const stageYtBackAvatarBtn = document.getElementById('stageYtBackAvatarBtn');
   const stageYtIframe = document.getElementById('stageYtIframe');
   const stageYtCurrentTitle = document.getElementById('stageYtCurrentTitle');
+  const stageYtEngineStatus = document.getElementById('stageYtEngineStatus');
+  const stageYtChipsRow = document.getElementById('stageYtChipsRow');
 
-  function loadStageYoutubeVideo(vidId, title) {
+  function loadStageYoutubeVideo(queryOrId, customTitle = null) {
     if (!stageYtIframe) return;
-    const cleanId = vidId.replace(/[^a-zA-Z0-9_-]/g, '');
-    stageYtIframe.src = `https://www.youtube-nocookie.com/embed/${cleanId}?autoplay=1&enablejsapi=1`;
-    if (stageYtCurrentTitle && title) {
-      stageYtCurrentTitle.textContent = title;
+    const raw = (queryOrId || '').trim();
+    if (!raw) return;
+
+    // Check if direct YouTube video link / URL
+    const ytMatch = raw.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+    if (ytMatch && ytMatch[1]) {
+      const vidId = ytMatch[1];
+      stageYtIframe.src = `https://www.youtube-nocookie.com/embed/${vidId}?autoplay=1&enablejsapi=1`;
+      if (stageYtCurrentTitle) {
+        stageYtCurrentTitle.innerHTML = `<i class="fa-solid fa-play gradient-text"></i> ${customTitle || 'Direct Video Stream'}`;
+      }
+      if (stageYtEngineStatus) {
+        stageYtEngineStatus.textContent = 'DIRECT STREAM';
+      }
+      return;
+    }
+
+    // Check if exact 11-char alphanumeric YouTube video ID
+    if (/^[a-zA-Z0-9_-]{11}$/.test(raw) && !raw.includes(' ')) {
+      stageYtIframe.src = `https://www.youtube-nocookie.com/embed/${raw}?autoplay=1&enablejsapi=1`;
+      if (stageYtCurrentTitle) {
+        stageYtCurrentTitle.innerHTML = `<i class="fa-solid fa-play gradient-text"></i> ${customTitle || 'YouTube Stream'}`;
+      }
+      if (stageYtEngineStatus) {
+        stageYtEngineStatus.textContent = 'DIRECT STREAM';
+      }
+      return;
+    }
+
+    // REAL YOUTUBE SEARCH ENGINE:
+    // Uses YouTube's official search embed mechanism listType=search&list=QUERY
+    const encodedQuery = encodeURIComponent(raw);
+    stageYtIframe.src = `https://www.youtube-nocookie.com/embed?listType=search&list=${encodedQuery}&autoplay=1&enablejsapi=1`;
+    
+    if (stageYtCurrentTitle) {
+      stageYtCurrentTitle.innerHTML = `<i class="fa-brands fa-youtube gradient-red-text"></i> YouTube: <span>"${customTitle || raw}"</span>`;
+    }
+    if (stageYtEngineStatus) {
+      stageYtEngineStatus.textContent = 'YT SEARCH ENGINE ACTIVE';
+    }
+
+    // Dynamically append new search chip if unique
+    if (stageYtChipsRow && raw.length > 2) {
+      const existingChips = Array.from(stageYtChipsRow.querySelectorAll('.stage-yt-chip'));
+      const exists = existingChips.some(c => (c.getAttribute('data-yt-search') || '').toLowerCase() === raw.toLowerCase());
+      if (!exists && existingChips.length < 15) {
+        const newChip = document.createElement('button');
+        newChip.className = 'stage-yt-chip';
+        newChip.setAttribute('data-yt-search', raw);
+        newChip.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i> ${raw.slice(0, 20)}`;
+        newChip.addEventListener('click', () => {
+          loadStageYoutubeVideo(raw, raw);
+        });
+        stageYtChipsRow.prepend(newChip);
+      }
     }
   }
   window.loadStageYoutubeVideo = loadStageYoutubeVideo;
@@ -309,7 +362,7 @@ function initVideoController() {
       if (avatarStatusLabel) avatarStatusLabel.textContent = 'AI Online';
     }
 
-    if (video && !video.paused) {
+    if (video && typeof video.pause === 'function' && !video.paused) {
       video.pause();
     }
 
@@ -357,7 +410,7 @@ function initVideoController() {
     }
   }
 
-  function switchToYoutube(vidId = null, title = null) {
+  function switchToYoutube(queryOrVidId = null, title = null) {
     const savedScrollY = window.pageYOffset || (document.documentElement && document.documentElement.scrollTop) || window.scrollY || 0;
 
     if (tabYoutubeBtn) tabYoutubeBtn.classList.add('active');
@@ -367,7 +420,7 @@ function initVideoController() {
     if (avatarStageView) avatarStageView.style.display = 'none';
     if (videoContainer) {
       videoContainer.style.display = 'none';
-      if (video && !video.paused) video.pause();
+      if (video && typeof video.pause === 'function' && !video.paused) video.pause();
     }
     if (stageYoutubeView) stageYoutubeView.style.display = 'flex';
 
@@ -375,19 +428,19 @@ function initVideoController() {
     if (replayBtn) replayBtn.style.display = 'none';
 
     if (stageFooterTitle) {
-      stageFooterTitle.innerHTML = '<i class="fa-brands fa-youtube gradient-red-text"></i> YouTube Cinema & Player Stage';
+      stageFooterTitle.innerHTML = '<i class="fa-brands fa-youtube gradient-red-text"></i> YouTube Cinema & Search Stage';
     }
     if (stageFooterSubtitle) {
-      stageFooterSubtitle.textContent = 'Live Multi-Channel YouTube Stream & Search Active';
+      stageFooterSubtitle.textContent = 'Real-Time YouTube Engine & Live Multi-Channel Stream Active';
     }
 
     if (avatarStatusPill) {
       avatarStatusPill.className = 'avatar-status-pill';
-      if (avatarStatusLabel) avatarStatusLabel.textContent = 'YouTube Active';
+      if (avatarStatusLabel) avatarStatusLabel.textContent = 'YouTube Engine Active';
     }
 
-    if (vidId) {
-      loadStageYoutubeVideo(vidId, title);
+    if (queryOrVidId) {
+      loadStageYoutubeVideo(queryOrVidId, title);
     }
 
     if (Math.abs((window.pageYOffset || 0) - savedScrollY) > 1) {
@@ -409,40 +462,7 @@ function initVideoController() {
     const q = stageYtInput.value.trim();
     if (!q) return;
 
-    // Check if direct YouTube link
-    const ytMatch = q.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
-    if (ytMatch && ytMatch[1]) {
-      loadStageYoutubeVideo(ytMatch[1], 'Custom YouTube Stream');
-      stageYtInput.value = '';
-      return;
-    }
-
-    // Keyword song catalog matching
-    const qLower = q.toLowerCase();
-    let selectedId = '2Vv-BfVoq4g';
-    let searchTitle = q;
-
-    if (qLower.includes('kesariya') || qLower.includes('brahmastra')) {
-      selectedId = 'BddP6PYo2gs';
-      searchTitle = 'Kesariya — Arijit Singh';
-    } else if (qLower.includes('pasoori')) {
-      selectedId = '5Eqb_-j3FDA';
-      searchTitle = 'Pasoori — Ali Sethi x Shae Gill';
-    } else if (qLower.includes('despacito')) {
-      selectedId = 'kJQP7kiw5Fk';
-      searchTitle = 'Despacito — Luis Fonsi';
-    } else if (qLower.includes('raataan') || qLower.includes('shershaah')) {
-      selectedId = 'gvyUuxdRdR4';
-      searchTitle = 'Raataan Lambiyan — Shershaah';
-    } else if (qLower.includes('lofi') || qLower.includes('lo-fi') || qLower.includes('chill')) {
-      selectedId = 'jfKfPfyJRdk';
-      searchTitle = 'Lo-Fi Chill Beats Live';
-    } else if (qLower.includes('tum hi ho') || qLower.includes('arijit')) {
-      selectedId = '2Vv-BfVoq4g';
-      searchTitle = 'Tum Hi Ho — Arijit Singh';
-    }
-
-    loadStageYoutubeVideo(selectedId, searchTitle);
+    loadStageYoutubeVideo(q, q);
     stageYtInput.value = '';
   }
 
@@ -459,8 +479,12 @@ function initVideoController() {
   document.querySelectorAll('.stage-yt-chip').forEach((chip) => {
     chip.addEventListener('click', () => {
       const vidId = chip.getAttribute('data-yt-id');
-      const title = chip.getAttribute('data-yt-title');
-      if (vidId) {
+      const search = chip.getAttribute('data-yt-search');
+      const title = chip.getAttribute('data-yt-title') || chip.textContent.trim();
+      
+      if (search) {
+        loadStageYoutubeVideo(search, title);
+      } else if (vidId) {
         loadStageYoutubeVideo(vidId, title);
       }
     });
@@ -2869,37 +2893,59 @@ function initVoiceAndChatEngine() {
     }
 
     // Check if user gives a command to Open/Switch to YouTube / Play on YouTube / Go to YouTube
-    const isYoutubeCommand = /(?:(?:go\s*to|open|show|switch\s*to|launch|start|play)\s*(?:on\s*)?youtube|youtube\s*(?:player|cinema|interface|video|open|chalao|dekhaw|dekhao|kholo|jao|chalu|play|stream)?)|(?:ইউটিউব|ইউটিউবে\s*(?:যাও|চলো|চলাও|চালাও|খোলো|দেখাও|প্লে|ওপেন)|গান\s*(?:চালাও|দেখাও|শোনাও|শুনবো))/i.test(cleanText);
+    const isYoutubeCommand = /(?:(?:go\s*to|open|show|switch\s*to|launch|start|play|search)\s*(?:on\s*)?youtube|youtube\s*(?:player|cinema|interface|video|open|chalao|dekhaw|dekhao|kholo|jao|chalu|play|stream)?)|(?:ইউটিউব|ইউটিউবে\s*(?:যাও|চলো|চলাও|চালাও|খোলো|দেখাও|প্লে|ওপেন|সার্চ)|গান\s*(?:চালাও|দেখাও|শোনাও|শুনবো)|ভিডিও\s*(?:চালাও|দেখাও))/i.test(cleanText);
 
     if (isYoutubeCommand) {
-      let songId = '2Vv-BfVoq4g';
-      let songTitle = 'Tum Hi Ho — Arijit Singh';
+      let searchQuery = '2Vv-BfVoq4g';
+      let searchTitle = 'Tum Hi Ho — Arijit Singh';
 
-      if (cleanText.includes('kesariya') || cleanText.includes('brahmastra')) {
-        songId = 'BddP6PYo2gs';
-        songTitle = 'Kesariya — Arijit Singh';
+      if (cleanText.includes('hindi') || cleanText.includes('হিন্দি')) {
+        searchQuery = 'Hindi Top Hit Songs';
+        searchTitle = 'Hindi Hit Songs';
+      } else if (cleanText.includes('bangla') || cleanText.includes('বাংলা') || cleanText.includes('bengali')) {
+        searchQuery = 'Bangla Popular Hit Songs';
+        searchTitle = 'বাংলা জনপ্রিয় গান';
+      } else if (cleanText.includes('arijit') || cleanText.includes('অরিজিৎ')) {
+        searchQuery = 'Arijit Singh Best Songs';
+        searchTitle = 'Arijit Singh Hits';
+      } else if (cleanText.includes('kesariya') || cleanText.includes('brahmastra')) {
+        searchQuery = 'BddP6PYo2gs';
+        searchTitle = 'Kesariya — Arijit Singh';
       } else if (cleanText.includes('pasoori')) {
-        songId = '5Eqb_-j3FDA';
-        songTitle = 'Pasoori — Ali Sethi x Shae Gill';
+        searchQuery = '5Eqb_-j3FDA';
+        searchTitle = 'Pasoori — Ali Sethi x Shae Gill';
       } else if (cleanText.includes('despacito')) {
-        songId = 'kJQP7kiw5Fk';
-        songTitle = 'Despacito — Luis Fonsi';
+        searchQuery = 'kJQP7kiw5Fk';
+        searchTitle = 'Despacito — Luis Fonsi';
       } else if (cleanText.includes('raataan') || cleanText.includes('shershaah')) {
-        songId = 'gvyUuxdRdR4';
-        songTitle = 'Raataan Lambiyan — Shershaah';
+        searchQuery = 'gvyUuxdRdR4';
+        searchTitle = 'Raataan Lambiyan — Shershaah';
       } else if (cleanText.includes('lofi') || cleanText.includes('lo-fi') || cleanText.includes('chill')) {
-        songId = 'jfKfPfyJRdk';
-        songTitle = 'Lo-Fi Chill Beats Live';
+        searchQuery = 'Lofi Hip Hop Chill Beats Live';
+        searchTitle = 'Lo-Fi Chill Beats Live';
+      } else {
+        // Extract custom search terms if provided (e.g. "play shreya ghoshal on youtube")
+        let extracted = cleanText
+          .replace(/(?:go\s*to|open|show|switch\s*to|launch|start|play|search|find|stream)\s*/gi, '')
+          .replace(/(?:on\s*youtube|in\s*youtube|from\s*youtube|youtube\s*e|youtube\s*te|youtube|yt)/gi, '')
+          .replace(/(?:ইউটিউবে\s*|ইউটিউব\s*)/gi, '')
+          .replace(/(?:গান\s*(?:চালাও|দেখাও|শোনাও|শুনবো|প্লে|সার্চ)|ভিডিও\s*(?:চালাও|দেখাও)|চালাও|দেখাও|শোনাও|শুনবো)/gi, '')
+          .trim();
+
+        if (extracted && extracted.length > 2 && extracted !== 'song' && extracted !== 'songs' && extracted !== 'গান') {
+          searchQuery = extracted;
+          searchTitle = extracted;
+        }
       }
 
       // Automatically trigger stage transition to YouTube!
       if (typeof window.switchToYoutubeStage === 'function') {
-        window.switchToYoutubeStage(songId, songTitle);
+        window.switchToYoutubeStage(searchQuery, searchTitle);
       }
 
       return isBengali
-        ? `🎬 <strong>অবশ্যই! আপনার কমান্ড অনুযায়ী অবতার পরিবর্তন করে YouTube ইন্টারফেস ওপেন করা হয়েছে!</strong><br>উপরের স্টেজে সরাসরি YouTube প্লেয়ার ও সার্চ বার চালু হয়েছে। আপনি সেখান থেকে যেকোনো গান বা ভিডিও সার্চ করে উপভোগ করতে পারেন! 🎵✨`
-        : `🎬 <strong>Sure! Switched the stage from avatar to YouTube Player interface!</strong><br>You can now search, browse, and stream any video or music directly on the stage player above! 🎵✨`;
+        ? `🎬 <strong>অবশ্যই! অবতার পরিবর্তন করে YouTube সার্চ ইঞ্জিন চালু করা হয়েছে!</strong><br>উপরের স্টেজে <strong>"${searchTitle}"</strong> এর রিয়েল YouTube সার্চ ও প্লেয়ার ওপেন হয়েছে। আপনি উপরের সার্চ বার থেকে যেকোনো হিন্দি, বাংলা বা পছন্দের গান সরাসরি সার্চ করে চালাতে পারেন! 🎵✨`
+        : `🎬 <strong>Sure! Switched the stage from avatar to Real YouTube Search Engine!</strong><br>Now playing & searching <strong>"${searchTitle}"</strong> on the YouTube stage player above! You can search any Hindi, Bangla or international tracks directly in the search bar! 🎵✨`;
     }
 
     const allKnowledge = NeuralKnowledgeStore.getAllKnowledge();
@@ -2989,6 +3035,7 @@ function initVoiceAndChatEngine() {
       return enFallbacks[Math.floor(Math.random() * enFallbacks.length)];
     }
   }
+  window.getSmartResponse = getSmartResponse;
 
   function escapeHtml(str) {
     return str.replace(/[&<>"']/g, (m) => ({
