@@ -4,7 +4,6 @@
   "private": true,
   "description": "Neural Chat Bot - Voice & Text AI Intelligence",
   "scripts": {
-    "build": "echo 'Static build ready'",
     "start": "node scripts/local-server.js",
     "dev": "node scripts/local-server.js"
   },
