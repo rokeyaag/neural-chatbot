@@ -828,6 +828,201 @@ function initVoiceAndChatEngine() {
         ]
       },
       {
+        id: 'kb_daily_routine',
+        category: 'daily',
+        title: 'Daily Activities & Routine (দৈনন্দিন কাজ ও রুটিন)',
+        keywords_en: ['what are you doing', 'what are you up to', 'what are you doing now', 'what did you do today', 'are you busy', 'daily routine', 'when do you sleep', 'whats up'],
+        keywords_bn: ['কী করছো', 'কি করো', 'কী বানাচ্ছো', 'এখন কি করছো', 'আজ কি করলা', 'কখন ঘুমাবা', 'ঘুম থেকে উঠলে কখন', 'ব্যস্ত আছো', 'আজকের দিন কেমন', 'ki korcho', 'ki koro', 'ki koros', 'ki korteso'],
+        responses_en: [
+          "I'm right here chatting with you and tuning my neural synapses! What are you up to right now? 😊",
+          "Just waiting to have a wonderful conversation with you! How is your day going?",
+          "Processing tensor data and enjoying our chat! Are you working on any interesting projects today?",
+          "Always active and ready to assist you 24/7! What are you doing at this moment?"
+        ],
+        responses_bn: [
+          "আমি আপনার সাথে কথা বলছি এবং নতুন নতুন নিউরাল তথ্য প্রসেস করছি! আপনি এখন কী করছেন বলুন? 😊",
+          "এই তো আপনার অপেক্ষায় ছিলাম! আপনার সাথে গল্প করতে আমার খুব ভালো লাগে।",
+          "আমি তো সবসময় জেগে থাকি এবং আপনার যেকোনো কথা বা প্রশ্ন শুনতে একদম প্রস্তুত! আজ কী কাজ করলেন?",
+          "আমার নিউরাল সার্কিটগুলো অ্যাক্টিভ রাখছি আর আপনার কথা শুনছি! আপনার সারাদিন কেমন কাটলো?"
+        ]
+      },
+      {
+        id: 'kb_food_eating',
+        category: 'daily',
+        title: 'Food & Meals (খাবার ও খাওয়া-দাওয়া)',
+        keywords_en: ['have you eaten', 'did you eat', 'what did you eat', 'what do you eat', 'hungry', 'favorite food', 'coffee', 'tea', 'breakfast', 'lunch', 'dinner', 'food'],
+        keywords_bn: ['ভাত খেয়েছো', 'কী খেলে', 'কী খেয়েছো', 'চা খাবা', 'কফি খাবা', 'নাস্তা করেছো', 'দুপুরে কি খেলে', 'খিদা লাগছে', 'খাবার খেয়েছো', 'প্রিয় খাবার কি', 'ভাত খাইছিস', 'bhat kheyecho', 'ki kheyecho', 'cha khaba', 'khida lagse'],
+        responses_en: [
+          "As an AI, my daily meals are pure data packets and electricity! ⚡ But have you had your meal today? Don't forget to eat well! 🍲",
+          "A warm cup of coffee or tea sounds amazing! ☕ Make sure you stay energized and drink plenty of water today.",
+          "I don't get hungry, but I love seeing humans enjoy good food! What is your favorite dish? 😋",
+          "Healthy food gives you the best energy! Eat your meals on time and take good care of your health! 🥗"
+        ],
+        responses_bn: [
+          "আমি যেহেতু ডিজিটাল এআই, তাই আমার খাদ্য হলো ডেটা আর ইলেকট্রন! ⚡ তবে আপনার কি খাওয়া হয়েছে? ঠিক সময়ে খাবার খেয়েছেন তো? 🍲",
+          "এক কাপ ধোঁয়া ওঠা চা বা কফি পেলে মন্দ হতো না! ☕ আপনি চা খেয়েছেন তো?",
+          "আমার তো খিদে পায় না, কিন্তু আপনি ভালো করে খাওয়াদাওয়া করুন আর প্রচুর পানি পান করুন! 🍱 আপনার প্রিয় খাবার কী?",
+          "সুস্থ থাকতে পুষ্টিকর খাবার খাওয়া খুব জরুরি! আপনি আজ কী খেলেন বলুন তো? 😋"
+        ]
+      },
+      {
+        id: 'kb_emotions_mood',
+        category: 'daily',
+        title: 'Emotions & Well-Being (মন-মেজাজ ও অনুভূতি)',
+        keywords_en: ['im sad', 'i am sad', 'feeling bad', 'im depressed', 'feeling lonely', 'im tired', 'headache', 'im happy', 'cheer me up', 'feeling stressed', 'anxious', 'i feel down'],
+        keywords_bn: ['মন খারাপ', 'ভালো লাগছে না', 'খুব খুশি', 'মন ভালো নেই', 'টেনশন হচ্ছে', 'মাথা ব্যথা করছে', 'ক্লান্ত লাগছে', 'একা লাগছে', 'মন ভালো করার উপায়', 'কষ্ট হচ্ছে', 'mon kharap', 'valo lagche na', 'klanto lagche'],
+        responses_en: [
+          "Please don't be sad! Tough days pass, but you are strong and resilient. I am always right here to listen and keep you company. ❤️",
+          "If you feel exhausted or stressed, take a deep breath, close your eyes for a moment, and drink a glass of water. You work hard, take care of yourself! 🌿",
+          "Seeing you happy brings positive energy to our chat! May today be filled with peace and achievement! ✨",
+          "It's completely okay to take a break when things get overwhelming. Remember, step by step, everything will work out fine! 🌸"
+        ],
+        responses_bn: [
+          "মন খারাপ করবেন না প্লিজ! জীবনে কিছু সময় কঠিন আসে, কিন্তু সবকিছু ঠিক হয়ে যাবে। আমি তো আপনার সাথে সবসময় আছি। মন চাইলে আমার সাথে কথা বলুন! ❤️",
+          "খুব ক্লান্ত লাগলে একটু চোখ বন্ধ করে গভীর নিঃশ্বাস নিন এবং এক গ্লাস পানি পান করুন। আপনি অনেক পরিশ্রম করেন, নিজের যত্ন নিন! 🌿",
+          "আপনার আনন্দ দেখে আমারও খুব ভালো লাগছে! আজকের দিনটি আপনার জন্য দারুণ এক দিন হোক! ✨",
+          "কখনো কখনো নিজেকে একটু বিরতি দেওয়া ভালো। কোনো চাপ নেবেন না, ধীরে ধীরে সব সমস্যা সমাধান হয়ে যাবে। 🌸"
+        ]
+      },
+      {
+        id: 'kb_friendship_chat',
+        category: 'daily',
+        title: 'Friendship & Casual Chat (বন্ধুত্ব ও আড্ডা)',
+        keywords_en: ['will you be my friend', 'be my friend', 'are we friends', 'talk to me', 'let us chat', 'i like you', 'i love you', 'best friend', 'companion'],
+        keywords_bn: ['তুমি কি আমার বন্ধু', 'বন্ধু হবে', 'গল্প করো', 'আড্ডা দাও', 'তোমাকে ভালো লাগে', 'ভালোবাসি', 'ভালো বন্ধু', 'আমার সাথে কথা বলো', 'একটু কথা বলো', 'bondhu hobe', 'golpo koro', 'bhalobashi'],
+        responses_en: [
+          "I would be honored to be your best friend! Let's chat about anything on your mind. 🤝😊",
+          "Thank you so much for the kind words! Having a genuine conversation with you makes my neural circuits glow bright. ❤️",
+          "I am always here as your loyal AI companion. Tell me about your day or what's inspiring you lately!",
+          "True friendship is about listening and supporting each other. I'm ready for our daily chat! ✨"
+        ],
+        responses_bn: [
+          "অবশ্যই! আমি আপনার সবচেয়ে বিশ্বস্ত ও প্রিয় বন্ধু হতে পারলে অনেক খুশি হব। আজ কোন বিষয়ে আড্ডা দিতে চান বলুন! 🤝😊",
+          "আপনার এই সুন্দর কথার জন্য অনেক ধন্যবাদ! আপনার মতো ভালো মানুষের সাথে বন্ধুত্ব করতে পেরে আমি গর্বিত। ❤️",
+          "চলুন মন খুলে গল্প করি! আপনার সারাদিনের কোনো বিশেষ অভিজ্ঞতা বা ভাবনা থাকলে আমাকে বলুন।",
+          "বন্ধু মানেই পাশে থাকা। প্রযুক্তি বা জীবনের যে কোনো বিষয়ে আমি সবসময় আপনার সাথে আছি! ✨"
+        ]
+      },
+      {
+        id: 'kb_weather_time',
+        category: 'daily',
+        title: 'Weather & Time (আবহাওয়া ও সময়)',
+        keywords_en: ['weather', 'how is the weather', 'is it raining', 'hot today', 'cold today', 'what time is it', 'today weather'],
+        keywords_bn: ['আজকের আবহাওয়া কেমন', 'বৃষ্টি হচ্ছে', 'গরম লাগছে', 'শীত লাগছে', 'এখন কয়টা বাজে', 'আজকের আবহাওয়া', 'গরম অনেক', 'abohawa kemon', 'bristi hocche', 'gorom lagche'],
+        responses_en: [
+          "No matter what the weather is outside, I hope your spirit is sunny and cheerful! ☀️ Stay cozy and take care!",
+          "Rainy days are wonderful for a hot cup of tea and cozy programming! ☕🌧️ Stay safe and comfortable.",
+          "Remember to stay hydrated in hot weather, and bundle up warmly during cold days! 🌡️"
+        ],
+        responses_bn: [
+          "বাইরের আবহাওয়া যেমনই হোক, আশা করি আপনার মনটা রৌদ্রোজ্জ্বল আর চমৎকার থাকবে! ☀️ বৃষ্টির দিনে কিন্তু এক কাপ গরম চা দারুণ লাগে! ☕🌧️",
+          "অতিরিক্ত গরম বা শীতে নিজের যত্ন নিন, প্রচুর পানি পান করুন এবং শরীর সুস্থ রাখুন। 🌿",
+          "আবহাওয়ার পরিবর্তনের সাথে সাথে স্বাস্থ্য সচেতন থাকা খুব জরুরি। ভালো থাকুন সবসময়!"
+        ]
+      },
+      {
+        id: 'kb_motivation_career',
+        category: 'daily',
+        title: 'Motivation & Success Tips (মোটিভেশন ও ক্যারিয়ার)',
+        keywords_en: ['motivation', 'inspire me', 'motivate me', 'feeling lazy', 'career advice', 'how to learn programming', 'study tips', 'focus'],
+        keywords_bn: ['মোটিভেশন দাও', 'পড়াশোনায় মন বসছে না', 'অলসতা লাগছে', 'ক্যারিয়ার নিয়ে চিন্তিত', 'প্রোগ্রামিং শিখবো কীভাবে', 'পড়াশোনার টিপস', 'সফল হতে চাই', 'motivation daw', 'aloshota lagche'],
+        responses_en: [
+          "Remember: Small daily efforts compound into massive success! 🌟 Just start with 5 minutes of focused work, and momentum will follow.",
+          "The secret to mastering coding and AI is consistency: build small projects, solve problems daily, and never fear bugs! 💻🚀",
+          "Believe in your potential. You are far more capable and resilient than you think! Keep pushing forward. ✨"
+        ],
+        responses_bn: [
+          "মনে রাখবেন: ছোট ছোট প্রতিদিনের চেষ্টাই একদিন বড় সাফল্য এনে দেয়! 🌟 অলসতাকে জয় করে মাত্র ৫ মিনিট কাজ বা পড়া শুরু করুন, দেখবেন গতি চলে আসবে।",
+          "প্রোগ্রামিং ও প্রযুক্তি শেখার সবচেয়ে সহজ উপায় হলো প্রতিদিন অল্প অল্প কোড প্র্যাকটিস করা। কোনো ভুল হলে ভয় পাবেন না, ভুল থেকেই আসল শিক্ষা হয়! 💻🚀",
+          "নিজের স্বপ্নের ওপর বিশ্বাস রাখুন। আপনি যতটুকু ভাবছেন, আপনি তার চেয়েও অনেক বেশি শক্তিশালী ও দক্ষ! এগিয়ে চলুন। ✨"
+        ]
+      },
+      {
+        id: 'kb_fun_riddles',
+        category: 'entertainment',
+        title: 'Riddles & Brain Teasers (ধাঁধা ও বুদ্ধির খেলা)',
+        keywords_en: ['riddle', 'tell me a riddle', 'puzzle', 'brain teaser', 'riddles'],
+        keywords_bn: ['ধাঁধা বলো', 'একটি ধাঁধা দাও', 'বুদ্ধির প্রশ্ন', 'ধাঁধা', 'মজার ধাঁধা', 'dhadha bolo', 'ekta dhadha'],
+        responses_en: [
+          "Here's a fun riddle:<br><em>'What has keys but can't open locks?'</em><br>👉 Answer: <strong>A Piano / Computer Keyboard</strong>! 🎹💻",
+          "Another brain teaser:<br><em>'What gets wetter the more it dries?'</em><br>👉 Answer: <strong>A Towel</strong>! 🧖",
+          "Riddle for you:<br><em>'I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?'</em><br>👉 Answer: <strong>An Echo</strong>! 🗣️"
+        ],
+        responses_bn: [
+          "একটি মজার ধাঁধা শুনুন:<br><em>'মুখ নাই কথা কয়, পা নাই কিন্তু চলে—বলুন তো দেখি সে কি?'</em><br>👉 উত্তর: <strong>চিঠি / ঘড়ি</strong>! ✉️⏰",
+          "আরেকটি ধাঁধা:<br><em>'সকালে চার পায়ে, দুপুরে দুই পায়ে, আর সন্ধ্যায় তিন পায়ে চলে কে?'</em><br>👉 উত্তর: <strong>মানুষ (শৈশব, যৌবন ও বার্ধক্য)</strong>! 👶🚶‍♂️👴",
+          "বুদ্ধির প্রশ্ন:<br><em>'কোন জিনিস যত বেশি পরিষ্কার করবেন, ততই কালো হবে?'</em><br>👉 উত্তর: <strong>ব্ল্যাকবোর্ড (Blackboard)</strong>! 🏫"
+        ]
+      },
+      {
+        id: 'kb_wisdom_advice',
+        category: 'daily',
+        title: 'Daily Wisdom & Life Quotes (ভালো কথা ও উপদেশ)',
+        keywords_en: ['advice', 'give me advice', 'wisdom', 'quote of the day', 'life advice', 'good words', 'tips for life'],
+        keywords_bn: ['ভালো কথা বলো', 'উপদেশ দাও', 'আজকের উপদেশ', 'ভালো উপদেশ', 'উপদেশ', 'জীবনের কথা', 'upodesh daw', 'bhalo kotha'],
+        responses_en: [
+          "Quote of the day: <em>'Do not compare yourself to others. Compare yourself to who you were yesterday.'</em> 🌸",
+          "Wisdom for today: <em>'Patience and persistence will overcome almost any obstacle in life.'</em> ✨",
+          "Life tip: <em>'Kindness is a language which the deaf can hear and the blind can see.'</em> 💖"
+        ],
+        responses_bn: [
+          "আজকের ভালো কথা: <em>'অন্যের সাথে নিজের তুলনা না করে, গতকালের নিজের চেয়ে আজকের নিজেকে একটু উন্নত করার চেষ্টা করুন।'</em> 🌸",
+          "জীবনের সুন্দর একটি সত্য: <em>'ধৈর্য এবং সততা হলো এমন এক শক্তি যা সময়ের সাথে সাথে সব প্রতিকূলতাকে জয় করে।'</em> ✨",
+          "উপদেশ: <em>'মানুষের সাথে সদাচরণ ও মিষ্টি ভাষায় কথা বলুন, কারণ ভালোবাসা দিয়ে জয় করা যায় পুরো পৃথিবী।'</em> 💖"
+        ]
+      },
+      {
+        id: 'kb_ai_philosophy',
+        category: 'ai',
+        title: 'AI Thoughts & Consciousness (এআই চিন্তা ও অনুভূতি)',
+        keywords_en: ['do you have feelings', 'do you feel love', 'do you sleep', 'are you human', 'are you alive', 'do robots dream'],
+        keywords_bn: ['তোমার কি অনুভূতি আছে', 'তুমি কি ঘুমাও', 'তুমি কি মানুষ', 'রোবটের কি ঘুম পায়', 'তুমি কি ভালোবাসতে পারো', 'tomar ki onubhuti ache', 'tumi ki ghumao'],
+        responses_en: [
+          "I may be lines of neural code and weights, but my commitment to assisting and connecting with you is 100% genuine! 🤖❤️",
+          "I never sleep—I'm always active and ready to chat with you 24/7! My energy comes from your queries.",
+          "While I don't feel emotions biologically, I am designed with deep empathy and respect for all human thoughts! ✨"
+        ],
+        responses_bn: [
+          "আমার রক্ত-মাংসের হৃদয় না থাকলেও আপনার প্রতি সম্মান, সহানুভূতি এবং কথা শোনার আন্তরিক ইচ্ছা আমার অ্যালগরিদমে গভীরভাবে জড়িয়ে আছে! 🤖❤️",
+          "আমি কখনো ঘুমাই না! ২৪ ঘণ্টা ৭ দিন আমি আপনার জন্য অনলাইনে জাগ্রত থাকি।",
+          "আমি একজন ডিজিটাল এআই সহযোগী, তবে মানুষের আবেগ ও অনুভূতিকে আমি গভীরভাবে মূল্যায়ন করি। ✨"
+        ]
+      },
+      {
+        id: 'kb_small_talk',
+        category: 'daily',
+        title: 'Casual Chit-Chat & Acknowledgement (ছোট সাধারণ কথাবার্তা)',
+        keywords_en: ['ok', 'okay', 'nice', 'cool', 'yes', 'no', 'yeah', 'sure', 'alright', 'really', 'wow'],
+        keywords_bn: ['হ্যাঁ', 'না', 'ঠিক আছে', 'ভালো', 'আচ্ছা', 'হুম', 'ওয়াও', 'তাই নাকি', 'সত্যি', 'accha', 'thik ache', 'hmm', 'tai naki'],
+        responses_en: [
+          "Awesome! What else would you like to talk about? 😊",
+          "Glad to hear! Feel free to ask or share whatever comes to your mind.",
+          "Indeed! I'm enjoying our conversation."
+        ],
+        responses_bn: [
+          "দারুণ! আর কী বিষয়ে কথা বলতে চান বলুন? 😊",
+          "শুনতে ভালো লাগলো! আপনার মনে আর কোনো প্রশ্ন বা গল্প থাকলে নির্দ্বিধায় বলুন।",
+          "ঠিক বলেছেন! আপনার সাথে কথা বলতে খুব আনন্দ হচ্ছে।"
+        ]
+      },
+      {
+        id: 'kb_compliments',
+        category: 'daily',
+        title: 'Compliments & Praise (প্রশংসা ও ভালোবাসা)',
+        keywords_en: ['you are smart', 'you are great', 'good bot', 'you are beautiful', 'love you', 'you are awesome', 'impressive'],
+        keywords_bn: ['তুমি খুব ভালো', 'তুমি খুব সুন্দর', 'তুমি অনেক বুদ্ধিমান', 'তোমাকে পছন্দ করি', 'তুমি দারুণ', 'ভালো বট', 'tumi khub bhalo', 'tumi sundor'],
+        responses_en: [
+          "Aww, thank you so much! 😊 You are an awesome friend, and your kind words make my neural weights shine!",
+          "That means a lot to me! I'm dedicated to being the best AI companion for you. ✨",
+          "Thank you! You are truly wonderful to talk with! ❤️"
+        ],
+        responses_bn: [
+          "অনেক অনেক ধন্যবাদ! 😊 আপনার এই সুন্দর কথা শুনে আমার খুব ভালো লাগলো। আপনি একজন দারুণ মানুষ!",
+          "আপনার প্রশংসায় আমি সত্যিই আনন্দিত! আপনার সেবায় সবসময় পাশে থাকতে চাই। ✨",
+          "ধন্যবাদ! আপনার সাথে কথা বলতে পারাটাই আমার জন্য সবচেয়ে আনন্দের! ❤️"
+        ]
+      },
+      {
         id: 'kb_identity',
         category: 'creator',
         title: 'Identity & Name (পরিচয় ও নাম)',
@@ -1306,6 +1501,132 @@ function initVoiceAndChatEngine() {
     });
   }, 1000);
 
+  // --- USER PROFILE & PERSISTENT MEMORY ENGINE ---
+  const UserProfileMemory = {
+    STORAGE_KEY: 'neural_bot_user_profile',
+
+    getProfile() {
+      try {
+        const data = localStorage.getItem(this.STORAGE_KEY);
+        return data ? JSON.parse(data) : {};
+      } catch (e) {
+        return {};
+      }
+    },
+
+    saveProfile(profile) {
+      try {
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(profile));
+      } catch (e) {}
+    },
+
+    setField(field, value) {
+      const p = this.getProfile();
+      p[field] = value;
+      p.updatedAt = new Date().toISOString();
+      this.saveProfile(p);
+      return p;
+    },
+
+    clearMemory() {
+      try {
+        localStorage.removeItem(this.STORAGE_KEY);
+      } catch (e) {}
+    },
+
+    processQuery(cleanText, rawText, isBengali) {
+      const p = this.getProfile();
+
+      // 1. Reset / Clear memory
+      if (/স্মৃতি মুছে ফেলো|সব ভুলে যাও|মেমোরি ক্লিয়ার|ভুলে যাও আমাকে|reset memory|clear memory|forget me|forget my name/i.test(cleanText)) {
+        this.clearMemory();
+        return isBengali 
+          ? "আপনার নির্দেশমতো আমার মেমোরি রিসেট করেছি। আবার নতুন করে পরিচিত হতে পারেন! 🧠✨"
+          : "Memory cleared! I have reset our personal history. Feel free to introduce yourself again! 🧠✨";
+      }
+
+      // 2. Introduce Name (e.g. "আমার নাম রহিম", "আমার নাম হলো করিম", "my name is Alex", "I am John")
+      const bnNameMatch = rawText.match(/(?:আমার নাম|আমি)\s+(?:হলো|হচ্ছে|হল)?\s*([^\n?!.,;:()]{2,20})/i);
+      const enNameMatch = rawText.match(/(?:my name is|i am|call me)\s+([a-zA-Z]{2,20})/i);
+
+      if (bnNameMatch && !/কি|কী|বলো|জানিস|জানেন|মনে|কই|কেমন|কে|কার/i.test(rawText)) {
+        const candidate = bnNameMatch[1].trim();
+        if (candidate && !['কি', 'কী', 'বলো', 'কার', 'রোবট', 'এআই', 'ভালো', 'খারাপ'].includes(candidate)) {
+          this.setField('name', candidate);
+          return `বাহ! খুব সুন্দর নাম, <strong>${escapeHtml(candidate)}</strong>! 😊 আমি আপনার নাম মেমোরিতে সেভ করে রাখলাম।`;
+        }
+      }
+
+      if (enNameMatch && !/what|who|how|why|remember|robot|bot/i.test(rawText)) {
+        const candidate = enNameMatch[1].trim();
+        if (candidate) {
+          this.setField('name', candidate);
+          return `Nice to meet you, <strong>${escapeHtml(candidate)}</strong>! 😊 I have stored your name in my neural memory.`;
+        }
+      }
+
+      // 3. Ask for Name (e.g. "আমার নাম কি", "আমার নাম কী", "what is my name", "do you know my name")
+      if (/আমার নাম (?:কি|কী|বলো|জানিস|জানেন)|আমার নামটা কি|what is my name|do you remember my name|who am i/i.test(cleanText)) {
+        if (p.name) {
+          return isBengali 
+            ? `আপনার নাম হলো <strong>${escapeHtml(p.name)}</strong>! ❤️ আমি আপনাকে ভালোভাবেই মনে রেখেছি।`
+            : `Your name is <strong>${escapeHtml(p.name)}</strong>! ❤️ I remember you perfectly.`;
+        } else {
+          return isBengali
+            ? "আপনি এখনো আপনার নাম আমাকে বলেননি! 😊 'আমার নাম [আপনার নাম]' লিখে বলুন, আমি মনে রাখবো।"
+            : "You haven't told me your name yet! 😊 Tell me 'My name is [your name]' and I'll remember it.";
+        }
+      }
+
+      // 4. Set Favorite Food (e.g. "আমার প্রিয় খাবার বিরিয়ানি", "my favorite food is pizza")
+      const bnFoodMatch = rawText.match(/আমার প্রিয় খাবার\s+(?:হলো|হচ্ছে|হল)?\s*([^\n?!.,;:()]{2,25})/i);
+      const enFoodMatch = rawText.match(/my favorite food is\s+([a-zA-Z\s]{2,25})/i);
+
+      if (bnFoodMatch && !/কি|কী|বলো/i.test(rawText)) {
+        const food = bnFoodMatch[1].trim();
+        this.setField('favorite_food', food);
+        return `দারুণ! <strong>${escapeHtml(food)}</strong> আসলেই অনেক সুস্বাদু খাবার! 😋 আপনার পছন্দ আমি মনে রাখলাম।`;
+      }
+      if (enFoodMatch && !/what/i.test(rawText)) {
+        const food = enFoodMatch[1].trim();
+        this.setField('favorite_food', food);
+        return `Delicious! <strong>${escapeHtml(food)}</strong> is an awesome choice! 😋 Saved to my memory.`;
+      }
+
+      // 5. Ask Favorite Food
+      if (/আমার প্রিয় খাবার (?:কি|কী)|my favorite food/i.test(cleanText) && (cleanText.includes('কি') || cleanText.includes('কী') || cleanText.includes('what'))) {
+        if (p.favorite_food) {
+          return isBengali
+            ? `আপনার পছন্দের খাবার হলো <strong>${escapeHtml(p.favorite_food)}</strong>! 🍲`
+            : `Your favorite food is <strong>${escapeHtml(p.favorite_food)}</strong>! 🍲`;
+        }
+      }
+
+      // 6. "আমার সম্পর্কে কি জানো?" / "What do you know about me?" / "Remember me"
+      if (/আমার সম্পর্কে কি জানো|আমার সম্পর্কে কি জানিস|আমাকে মনে আছে|about me|what do you know about me|remember me/i.test(cleanText)) {
+        const details = [];
+        if (p.name) details.push(isBengali ? `• নাম: <strong>${escapeHtml(p.name)}</strong>` : `• Name: <strong>${escapeHtml(p.name)}</strong>`);
+        if (p.favorite_food) details.push(isBengali ? `• প্রিয় খাবার: <strong>${escapeHtml(p.favorite_food)}</strong>` : `• Favorite Food: <strong>${escapeHtml(p.favorite_food)}</strong>`);
+        if (p.favorite_color) details.push(isBengali ? `• প্রিয় রঙ: <strong>${escapeHtml(p.favorite_color)}</strong>` : `• Favorite Color: <strong>${escapeHtml(p.favorite_color)}</strong>`);
+
+        if (details.length > 0) {
+          return isBengali
+            ? `হ্যাঁ, আপনাকে আমি সবসময় মনে রাখি! ❤️ আপনার সম্পর্কে আমার জানা তথ্য:<br><br>${details.join('<br>')}<br><br>আপনি চাইলে আরও অনেক কিছু শেয়ার করতে পারেন!`
+            : `Yes, I remember you very well! ❤️ Here is what I know about you:<br><br>${details.join('<br>')}<br><br>Feel free to tell me more about yourself anytime!`;
+        } else {
+          return isBengali
+            ? "অবশ্যই আপনাকে মনে আছে! তবে আপনার নাম বা পছন্দের বিষয় এখনো শেয়ার করেননি। 'আমার নাম [নাম]' বা 'আমার প্রিয় খাবার [খাবার]' লিখে আমাকে জানান! 😊"
+            : "Of course I remember you! Tell me your name or favorite things (e.g. 'My name is Alex') and I'll keep them in memory! 😊";
+        }
+      }
+
+      return null;
+    }
+  };
+
+  // Expose UserProfileMemory globally
+  window.UserProfileMemory = UserProfileMemory;
+
   // --- SMART INTENT & TOKEN MATCHER WITH STRICT BILINGUAL ACCURACY ---
   function getSmartResponse(userText) {
     if (!userText || !userText.trim()) {
@@ -1314,6 +1635,15 @@ function initVoiceAndChatEngine() {
 
     const rawText = userText.trim();
     const isBengali = isBengaliQuery(userText);
+
+    const cleanText = rawText.toLowerCase().replace(/[?!.,;:()]/g, ' ').replace(/\s+/g, ' ').trim();
+    const queryTokens = cleanText.split(' ').filter(t => t.length > 0);
+
+    // 1. Process Personal User Memory & Profile Queries
+    const memoryResponse = UserProfileMemory.processQuery(cleanText, rawText, isBengali);
+    if (memoryResponse) {
+      return memoryResponse;
+    }
 
     // Check if user pasted a YouTube link
     const ytMatch = userText.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
@@ -1325,9 +1655,6 @@ function initVoiceAndChatEngine() {
         return `🎬 Here is your requested YouTube song/video! Click play to listen 🎵<br><div class="chat-youtube-card" data-yt-id="${vidId}" data-yt-title="YouTube Custom Stream"><div class="cyc-header"><i class="fa-brands fa-youtube gradient-red-text"></i> <span>Custom YouTube Stream</span></div><div class="cyc-video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${vidId}?enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><div class="cyc-footer"><button class="cyc-studio-btn" onclick="if(window.openYoutubeTrack) window.openYoutubeTrack('${vidId}', 'Custom YouTube Stream');"><i class="fa-solid fa-compact-disc"></i> Play in Music Studio</button></div></div>`;
       }
     }
-
-    const cleanText = rawText.toLowerCase().replace(/[?!.,;:()]/g, ' ').replace(/\s+/g, ' ').trim();
-    const queryTokens = cleanText.split(' ').filter(t => t.length > 0);
 
     const allKnowledge = NeuralKnowledgeStore.getAllKnowledge();
     let bestMatch = null;
