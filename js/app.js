@@ -177,8 +177,177 @@ function logoutUserAuth() {
 }
 window.logoutUserAuth = logoutUserAuth;
 
-function launchYouTubeDirectly(targetUrl) {
-  if (!targetUrl) targetUrl = 'https://www.youtube.com';
+// ==========================================================================
+// UNIFIED SOCIAL MEDIA PLATFORMS REGISTRY & DIRECT LAUNCHER
+// Supports direct auto-launch & search for:
+// YouTube, Facebook, WhatsApp, Instagram, X (Twitter), LinkedIn, TikTok, GitHub, Telegram
+// ==========================================================================
+const SOCIAL_PLATFORMS = [
+  {
+    id: 'youtube',
+    name: 'YouTube',
+    name_bn: 'ইউটিউব',
+    icon: 'fa-brands fa-youtube',
+    color: '#ff2a44',
+    defaultUrl: 'https://www.youtube.com',
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|play|search|chalao|dekhao)\s*(?:on\s*)?(?:youtube|toutube|youtub|yt)|(?:youtube|toutube|youtub|yt)\s*(?:player|cinema|interface|video|open|chalao|dekhaw|dekhao|kholo|jao|chalu|play|stream)?)|(?:ইউটিউবে?|গান\s*(?:চালাও|দেখাও|শোনাও|শুনবো)|ভিডিও\s*(?:চালাও|দেখাও))/i,
+    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|play|search|find|stream|dekhao|dekhaw|kholo|jao|chalao|chalu)\s*|(?:on\s*youtube|in\s*youtube|from\s*youtube|youtube\s*e|youtube\s*te|youtube|toutube|youtub|yt)\s*|(?:ইউটিউবে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|প্লে|করো|চালাও|দেখাও|শোনাও|শুনবো|ঢোকো)/gi,
+    getSearchUrl: (q) => `https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,
+    msg_bn: '🎬 <strong>সরাসরি YouTube ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে YouTube পেজ ওপেন হয়েছে। আপনি সেখান থেকে সব ভিডিও ও গান সম্পূর্ণ উন্মুক্তভাবে ব্রাউজ ও সার্চ করতে পারবেন! 🎵✨',
+    msg_en: '🎬 <strong>Directing to YouTube Main Page!</strong><br>YouTube has opened in a new tab for you to search, watch, and browse all videos freely! 🎵✨'
+  },
+  {
+    id: 'facebook',
+    name: 'Facebook',
+    name_bn: 'ফেসবুক',
+    icon: 'fa-brands fa-facebook',
+    color: '#1877f2',
+    defaultUrl: 'https://www.facebook.com',
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:facebook|fb)|(?:facebook|fb)\s*(?:open|kholo|jao|chalu|login|feed|page|group|profile)?)|(?:ফেসবুকে?)/i,
+    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*facebook|in\s*facebook|from\s*facebook|facebook\s*e|facebook\s*te|facebook|fb)\s*|(?:ফেসবুকে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|ব্রাউজ|দেখাও|ঢোকো|করো)/gi,
+    getSearchUrl: (q) => `https://www.facebook.com/search/top?q=${encodeURIComponent(q)}`,
+    msg_bn: '🌐 <strong>সরাসরি Facebook ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে মেইন Facebook ওপেন হয়েছে। আপনি সেখান থেকে আপনার ফিড, গ্রুপ ও বন্ধুদের সাথে সহজে যুক্ত হতে পারবেন! ✨',
+    msg_en: '🌐 <strong>Directing to Facebook Main Page!</strong><br>Facebook has opened in a new tab for you to browse feeds, groups, and connect with friends! ✨'
+  },
+  {
+    id: 'whatsapp',
+    name: 'WhatsApp',
+    name_bn: 'হোয়াটসঅ্যাপ',
+    icon: 'fa-brands fa-whatsapp',
+    color: '#25d366',
+    defaultUrl: 'https://web.whatsapp.com',
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|chat|message)\s*(?:on\s*)?(?:whatsapp|whats\s*app|wa)|(?:whatsapp|whats\s*app|wa)\s*(?:web|open|kholo|jao|chalu|chat|msg)?)|(?:হোয়াটসঅ্যাপে?|হোয়াটসঅ্যাপে?|হোয়াটসএপে?|হোয়াটস\s*অ্যাপে?)/i,
+    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|chat|message|kholo|jao|chalu)\s*|(?:on\s*whatsapp|in\s*whatsapp|whatsapp|whats\s*app|wa)\s*|(?:হোয়াটসঅ্যাপে?|হোয়াটসঅ্যাপে?|হোয়াটসএপে?|হোয়াটস\s*অ্যাপে?)\s*|(?:যাও|চলো|খোলো|ওপেন|করো|দেখাও|ঢোকো)/gi,
+    getSearchUrl: () => `https://web.whatsapp.com`,
+    msg_bn: '💬 <strong>সরাসরি WhatsApp Web ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে WhatsApp Web ওপেন হয়েছে। আপনি সেখান থেকে সরাসরি চ্যাট ও মেসেজ করতে পারবেন! ✨',
+    msg_en: '💬 <strong>Directing to WhatsApp Web!</strong><br>WhatsApp Web has opened in a new tab for you to chat and message freely! ✨'
+  },
+  {
+    id: 'instagram',
+    name: 'Instagram',
+    name_bn: 'ইনস্টাগ্রাম',
+    icon: 'fa-brands fa-instagram',
+    color: '#e1306c',
+    defaultUrl: 'https://www.instagram.com',
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:instagram|insta|ig)|(?:instagram|insta|ig)\s*(?:open|kholo|jao|chalu|reels|profile|explore)?)|(?:ইনস্টাগ্রামে?|ইন্সটাগ্রামে?|ইনস্টাতে?|ইন্সটাতে?)/i,
+    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*instagram|in\s*instagram|instagram|insta|ig)\s*|(?:ইনস্টাগ্রামে?|ইন্সটাগ্রামে?|ইনস্টাতে?|ইন্সটাতে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|দেখাও|ঢোকো|করো)/gi,
+    getSearchUrl: (q) => `https://www.instagram.com/explore/tags/${encodeURIComponent(q.replace(/\s+/g, ''))}/`,
+    msg_bn: '📸 <strong>সরাসরি Instagram ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে Instagram ওপেন হয়েছে। আপনি সেখান থেকে ফটো, রিলস ও স্টোরিজ ব্রাউজ করতে পারবেন! ✨',
+    msg_en: '📸 <strong>Directing to Instagram Main Page!</strong><br>Instagram has opened in a new tab for you to explore photos, reels, and stories! ✨'
+  },
+  {
+    id: 'twitter',
+    name: 'X (Twitter)',
+    name_bn: 'এক্স (টুইটার)',
+    icon: 'fa-brands fa-x-twitter',
+    color: '#1da1f2',
+    defaultUrl: 'https://x.com',
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:twitter|x\.com|tweet)|(?:twitter|x\.com)\s*(?:open|kholo|jao|chalu|feed|trends)?)|(?:টুইটারে?|টুইটে?)/i,
+    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*twitter|in\s*twitter|twitter|x\.com|tweet)\s*|(?:টুইটারে?|টুইটে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|দেখাও|ঢোকো|করো)/gi,
+    getSearchUrl: (q) => `https://x.com/search?q=${encodeURIComponent(q)}`,
+    msg_bn: '🐦 <strong>সরাসরি X (Twitter) ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে X (Twitter) ওপেন হয়েছে। আপনি সেখান থেকে লেটেস্ট ট্রেন্ডস, নিউজ ও টুইট দেখতে পারবেন! ✨',
+    msg_en: '🐦 <strong>Directing to X (Twitter) Main Page!</strong><br>X (Twitter) has opened in a new tab for you to see latest trends and tweets! ✨'
+  },
+  {
+    id: 'linkedin',
+    name: 'LinkedIn',
+    name_bn: 'লিংকডইন',
+    icon: 'fa-brands fa-linkedin',
+    color: '#0a66c2',
+    defaultUrl: 'https://www.linkedin.com',
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:linkedin|linked\s*in)|(?:linkedin|linked\s*in)\s*(?:open|kholo|jao|chalu|jobs|network|feed)?)|(?:লিঙ্কডইনে?|লিংকডইনে?)/i,
+    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*linkedin|in\s*linkedin|linkedin|linked\s*in)\s*|(?:লিঙ্কডইনে?|লিংকডইনে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|দেখাও|ঢোকো|করো)/gi,
+    getSearchUrl: (q) => `https://www.linkedin.com/search/results/all/?keywords=${encodeURIComponent(q)}`,
+    msg_bn: '💼 <strong>সরাসরি LinkedIn ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে LinkedIn ওপেন হয়েছে। আপনি সেখান থেকে প্রফেশনাল নেটওয়ার্ক, ক্যারিয়ার ও জবস ব্রাউজ করতে পারবেন! ✨',
+    msg_en: '💼 <strong>Directing to LinkedIn Main Page!</strong><br>LinkedIn has opened in a new tab for you to connect and explore careers! ✨'
+  },
+  {
+    id: 'tiktok',
+    name: 'TikTok',
+    name_bn: 'টিকটক',
+    icon: 'fa-brands fa-tiktok',
+    color: '#fe2c55',
+    defaultUrl: 'https://www.tiktok.com',
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:tiktok|tik\s*tok)|(?:tiktok|tik\s*tok)\s*(?:open|kholo|jao|chalu|video|feed)?)|(?:টিকটকে?)/i,
+    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*tiktok|in\s*tiktok|tiktok|tik\s*tok)\s*|(?:টিকটকে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|দেখাও|ঢোকো|করো|চালাও)/gi,
+    getSearchUrl: (q) => `https://www.tiktok.com/search?q=${encodeURIComponent(q)}`,
+    msg_bn: '🎵 <strong>সরাসরি TikTok ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে TikTok ওপেন হয়েছে। আপনি সেখান থেকে ট্রেন্ডিং শর্ট ভিডিও ব্রাউজ করতে পারবেন! ✨',
+    msg_en: '🎵 <strong>Directing to TikTok Main Page!</strong><br>TikTok has opened in a new tab for you to watch viral short videos! ✨'
+  },
+  {
+    id: 'github',
+    name: 'GitHub',
+    name_bn: 'গিটহাব',
+    icon: 'fa-brands fa-github',
+    color: '#a371f7',
+    defaultUrl: 'https://github.com',
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:github|git\s*hub)|(?:github|git\s*hub)\s*(?:open|kholo|jao|chalu|repo|code)?)|(?:গিটহাবে?)/i,
+    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*github|in\s*github|github|git\s*hub)\s*|(?:গিটহাবে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|দেখাও|ঢোকো|করো)/gi,
+    getSearchUrl: (q) => `https://github.com/search?q=${encodeURIComponent(q)}`,
+    msg_bn: '💻 <strong>সরাসরি GitHub ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে GitHub ওপেন হয়েছে। আপনি সেখান থেকে ওপেন-সোর্স কোড ও রিপোজিটরি ব্রাউজ করতে পারবেন! ✨',
+    msg_en: '💻 <strong>Directing to GitHub Main Page!</strong><br>GitHub has opened in a new tab for you to explore code and repositories! ✨'
+  },
+  {
+    id: 'telegram',
+    name: 'Telegram',
+    name_bn: 'টেলিগ্রাম',
+    icon: 'fa-brands fa-telegram',
+    color: '#229ed9',
+    defaultUrl: 'https://web.telegram.org',
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:telegram|tg)|(?:telegram|tg)\s*(?:open|kholo|jao|chalu|web|channel)?)|(?:টেলিগ্রামে?)/i,
+    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*telegram|in\s*telegram|telegram|tg)\s*|(?:টেলিগ্রামে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|দেখাও|ঢোকো|করো)/gi,
+    getSearchUrl: () => `https://web.telegram.org`,
+    msg_bn: '✈️ <strong>সরাসরি Telegram Web ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে Telegram Web ওপেন হয়েছে। আপনি সেখান থেকে চ্যানেল ও মেসেজে যুক্ত হতে পারবেন! ✨',
+    msg_en: '✈️ <strong>Directing to Telegram Web!</strong><br>Telegram Web has opened in a new tab for you to access channels and chats! ✨'
+  }
+];
+
+function detectSocialPlatform(userText) {
+  if (!userText || typeof userText !== 'string') return null;
+  const clean = userText.toLowerCase().replace(/[?!.,;:()]/g, ' ').trim();
+  for (const plat of SOCIAL_PLATFORMS) {
+    if (plat.regex.test(clean)) {
+      let customQuery = '';
+      if (plat.id === 'youtube') {
+        if (clean.includes('hindi') || clean.includes('হিন্দি')) {
+          customQuery = 'Hindi Top Hit Songs';
+        } else if (clean.includes('bangla') || clean.includes('বাংলা') || clean.includes('bengali')) {
+          customQuery = 'Bangla Popular Hit Songs';
+        } else if (clean.includes('arijit') || clean.includes('অরিজিৎ')) {
+          customQuery = 'Arijit Singh Best Songs';
+        } else if (clean.includes('kesariya') || clean.includes('brahmastra')) {
+          customQuery = 'Kesariya Arijit Singh';
+        } else if (clean.includes('pasoori')) {
+          customQuery = 'Pasoori Ali Sethi';
+        } else if (clean.includes('despacito')) {
+          customQuery = 'Despacito Luis Fonsi';
+        } else if (clean.includes('lofi') || clean.includes('chill')) {
+          customQuery = 'Lofi Hip Hop Chill Beats Live';
+        }
+      }
+      if (!customQuery && plat.stripRegex) {
+        let extracted = clean.replace(plat.stripRegex, '').trim();
+        const stopWords = [
+          'main', 'page', 'pages', 'site', 'open', 'kholo', 'jao', 'chalu', 'feed', 'web', 'login', 'chat', 'search',
+          'song', 'songs', 'video', 'videos',
+          'যাও', 'চলো', 'খোলো', 'ওপেন', 'দেখাও', 'চালাও', 'ঢোকো', 'করো', 'পেজ', 'মেইন', 'সাইট', 'ভিডিও', 'গান', 'লগইন'
+        ];
+        if (extracted && extracted.length > 2 && !stopWords.includes(extracted.toLowerCase())) {
+          customQuery = extracted;
+        }
+      }
+      const targetUrl = customQuery && typeof plat.getSearchUrl === 'function'
+        ? plat.getSearchUrl(customQuery)
+        : plat.defaultUrl;
+      return { platform: plat, query: customQuery, targetUrl };
+    }
+  }
+  return null;
+}
+window.detectSocialPlatform = detectSocialPlatform;
+
+function launchSocialDirectly(targetUrl) {
+  if (!targetUrl) return;
   let win = null;
   try {
     win = window.open(targetUrl, '_blank');
@@ -190,20 +359,15 @@ function launchYouTubeDirectly(targetUrl) {
     window.location.href = targetUrl;
   }
 }
+window.launchSocialDirectly = launchSocialDirectly;
+
+function launchYouTubeDirectly(targetUrl) {
+  launchSocialDirectly(targetUrl || 'https://www.youtube.com');
+}
 window.launchYouTubeDirectly = launchYouTubeDirectly;
 
 function launchFacebookDirectly(targetUrl) {
-  if (!targetUrl) targetUrl = 'https://www.facebook.com';
-  let win = null;
-  try {
-    win = window.open(targetUrl, '_blank');
-  } catch (e) {
-    win = null;
-  }
-  if (!win || win.closed || typeof win.closed === 'undefined') {
-    // Automatically navigate current page directly if popup blocker interfered!
-    window.location.href = targetUrl;
-  }
+  launchSocialDirectly(targetUrl || 'https://www.facebook.com');
 }
 window.launchFacebookDirectly = launchFacebookDirectly;
 
@@ -3095,104 +3259,23 @@ function initVoiceAndChatEngine() {
       }
     }
 
-    // Check if user gives a command to Open/Switch to YouTube / Play on YouTube / Go to YouTube
-    const isYoutubeCommand = /(?:(?:go\s*to|open|show|switch\s*to|launch|start|play|search)\s*(?:on\s*)?youtube|youtube\s*(?:player|cinema|interface|video|open|chalao|dekhaw|dekhao|kholo|jao|chalu|play|stream)?)|(?:ইউটিউব|ইউটিউবে\s*(?:যাও|চলো|চলাও|চালাও|খোলো|দেখাও|প্লে|ওপেন|সার্চ)|গান\s*(?:চালাও|দেখাও|শোনাও|শুনবো)|ভিডিও\s*(?:চালাও|দেখাও))/i.test(cleanText);
-
-    if (isYoutubeCommand) {
-      let searchQuery = '';
-      let searchTitle = 'YouTube Main Page';
-      let targetUrl = 'https://www.youtube.com';
-
-      if (cleanText.includes('hindi') || cleanText.includes('হিন্দি')) {
-        searchQuery = 'Hindi Top Hit Songs';
-        searchTitle = 'Hindi Hit Songs';
-      } else if (cleanText.includes('bangla') || cleanText.includes('বাংলা') || cleanText.includes('bengali')) {
-        searchQuery = 'Bangla Popular Hit Songs';
-        searchTitle = 'বাংলা জনপ্রিয় গান';
-      } else if (cleanText.includes('arijit') || cleanText.includes('অরিজিৎ')) {
-        searchQuery = 'Arijit Singh Best Songs';
-        searchTitle = 'Arijit Singh Hits';
-      } else if (cleanText.includes('kesariya') || cleanText.includes('brahmastra')) {
-        searchQuery = 'Kesariya Arijit Singh';
-        searchTitle = 'Kesariya — Arijit Singh';
-      } else if (cleanText.includes('pasoori')) {
-        searchQuery = 'Pasoori Ali Sethi';
-        searchTitle = 'Pasoori — Ali Sethi';
-      } else if (cleanText.includes('despacito')) {
-        searchQuery = 'Despacito Luis Fonsi';
-        searchTitle = 'Despacito — Luis Fonsi';
-      } else if (cleanText.includes('raataan') || cleanText.includes('shershaah')) {
-        searchQuery = 'Raataan Lambiyan Shershaah';
-        searchTitle = 'Raataan Lambiyan';
-      } else if (cleanText.includes('lofi') || cleanText.includes('lo-fi') || cleanText.includes('chill')) {
-        searchQuery = 'Lofi Hip Hop Chill Beats Live';
-        searchTitle = 'Lo-Fi Chill Beats';
-      } else {
-        // Extract custom search terms if provided (e.g. "play shreya ghoshal on youtube")
-        let extracted = cleanText
-          .replace(/(?:go\s*to|open|show|switch\s*to|launch|start|play|search|find|stream)\s*/gi, '')
-          .replace(/(?:on\s*youtube|in\s*youtube|from\s*youtube|youtube\s*e|youtube\s*te|youtube|yt)/gi, '')
-          .replace(/(?:ইউটিউবে\s*|ইউটিউব\s*)/gi, '')
-          .replace(/(?:যাও|চলো|খোলো|ওপেন|সার্চ|প্লে)/gi, '')
-          .replace(/(?:গান\s*(?:চালাও|দেখাও|শোনাও|শুনবো|প্লে|সার্চ)|ভিডিও\s*(?:চালাও|দেখাও)|চালাও|দেখাও|শোনাও|শুনবো)/gi, '')
-          .trim();
-
-        const stopWords = ['song', 'songs', 'গান', 'ভিডিও', 'video', 'videos', 'যাও', 'চলো', 'খোলো', 'প্লে', 'main'];
-        if (extracted && extracted.length > 2 && !stopWords.includes(extracted.toLowerCase())) {
-          searchQuery = extracted;
-          searchTitle = extracted;
-        }
-      }
-
-      if (searchQuery) {
-        targetUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(searchQuery)}`;
-      } else {
-        targetUrl = 'https://www.youtube.com';
-      }
-
-      // Directly open YouTube Main Page in a new tab!
+    // Unified Social Media Direct Auto-Open Handler
+    // Supports YouTube, Facebook, WhatsApp, Instagram, X (Twitter), LinkedIn, TikTok, GitHub, Telegram
+    const socialMatch = detectSocialPlatform(cleanText);
+    if (socialMatch) {
+      const { platform, targetUrl } = socialMatch;
       try {
         window.open(targetUrl, '_blank');
       } catch (e) {
         console.log('Window open fallback:', e);
       }
 
-      return isBengali
-        ? `🎬 <strong>সরাসরি YouTube-এর মেইন পেজ ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে YouTube পেজ ওপেন হয়েছে। আপনি সেখান থেকে সব ভিডিও ও গান সম্পূর্ণ উন্মুক্তভাবে ব্রাউজ ও সার্চ করতে পারবেন! 🎵✨<br><br><a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background:#ff0000;color:#fff;border-radius:20px;padding:6px 16px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-weight:600;"><i class="fa-brands fa-youtube"></i> মেইন YouTube পেজে যান ↗</a>`
-        : `🎬 <strong>Directing to YouTube Main Page!</strong><br>YouTube has opened in a new tab for you to search, watch, and browse all videos freely! 🎵✨<br><br><a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background:#ff0000;color:#fff;border-radius:20px;padding:6px 16px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-weight:600;"><i class="fa-brands fa-youtube"></i> Open Main YouTube ↗</a>`;
-    }
+      const btnText = isBengali
+        ? `মেইন ${platform.name_bn || platform.name}-এ যান ↗`
+        : `Open Main ${platform.name} ↗`;
 
-    const isFacebookCommand = /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:facebook|fb)|(?:facebook|fb)\s*(?:open|kholo|jao|chalu|login|feed|page|group|profile)?)|(?:ফেসবুক|ফেসবুকে\s*(?:যাও|চলো|খোলো|ওপেন|দেখাও|ঢোকো))/i.test(cleanText);
-
-    if (isFacebookCommand) {
-      let searchQuery = '';
-      let targetUrl = 'https://www.facebook.com';
-
-      let extracted = cleanText
-        .replace(/(?:go\s*to|open|show|switch\s*to|launch|start|visit|browse|search|find)\s*/gi, '')
-        .replace(/(?:on\s*facebook|in\s*facebook|from\s*facebook|facebook\s*e|facebook\s*te|facebook|fb)/gi, '')
-        .replace(/(?:ফেসবুকে\s*|ফেসবুক\s*)/gi, '')
-        .replace(/(?:যাও|চলো|খোলো|ওপেন|সার্চ|ব্রাউজ|দেখাও|ঢোকো)/gi, '')
-        .trim();
-
-      const stopWords = ['page', 'pages', 'পেজ', 'যাও', 'চলো', 'খোলো', 'main', 'site', 'feed', 'login'];
-      if (extracted && extracted.length > 2 && !stopWords.includes(extracted.toLowerCase())) {
-        searchQuery = extracted;
-      }
-
-      if (searchQuery) {
-        targetUrl = `https://www.facebook.com/search/top?q=${encodeURIComponent(searchQuery)}`;
-      } else {
-        targetUrl = 'https://www.facebook.com';
-      }
-
-      try {
-        window.open(targetUrl, '_blank');
-      } catch (e) {}
-
-      return isBengali
-        ? `🌐 <strong>সরাসরি Facebook ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে মেইন Facebook ওপেন হয়েছে। আপনি সেখান থেকে আপনার ফিড, গ্রুপ ও বন্ধুদের সাথে সহজে যুক্ত হতে পারবেন! ✨<br><br><a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background:#1877f2;color:#fff;border-radius:20px;padding:6px 16px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-weight:600;"><i class="fa-brands fa-facebook"></i> মেইন Facebook পেজে যান ↗</a>`
-        : `🌐 <strong>Directing to Facebook Main Page!</strong><br>Facebook has opened in a new tab for you to browse feeds, groups, and connect with friends! ✨<br><br><a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background:#1877f2;color:#fff;border-radius:20px;padding:6px 16px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-weight:600;"><i class="fa-brands fa-facebook"></i> Open Main Facebook ↗</a>`;
+      return (isBengali ? platform.msg_bn : platform.msg_en) +
+        `<br><br><a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background:${platform.color};color:#fff;border-radius:20px;padding:6px 16px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-weight:600;box-shadow:0 4px 15px ${platform.color}40;"><i class="${platform.icon}"></i> ${btnText}</a>`;
     }
 
     const allKnowledge = NeuralKnowledgeStore.getAllKnowledge();
@@ -3929,55 +4012,11 @@ function initVoiceAndChatEngine() {
 
     appendMessageToHero(escapeHtml(userText), false);
 
-    // Instant YouTube Command Check & Immediate Launch during user interaction!
-    const cleanForYt = userText.toLowerCase().replace(/[?!.,;:()]/g, ' ').trim();
-    const isYtDirect = /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|play|search|chalao|dekhao)\s*(?:on\s*)?(?:youtube|toutube|youtub|yt)|(?:youtube|toutube|youtub|yt)\s*(?:player|cinema|interface|video|open|chalao|dekhaw|dekhao|kholo|jao|chalu|play|stream)?)|(?:ইউটিউব|ইউটিউবে\s*(?:যাও|চলো|চলাও|চালাও|খোলো|দেখাও|প্লে|ওপেন|সার্চ)|গান\s*(?:চালাও|দেখাও|শোনাও|শুনবো)|ভিডিও\s*(?:চালাও|দেখাও))/i.test(cleanForYt);
-
-    if (isYtDirect) {
-      let query = '';
-      if (cleanForYt.includes('hindi') || cleanForYt.includes('হিন্দি')) {
-        query = 'Hindi Top Hit Songs';
-      } else if (cleanForYt.includes('bangla') || cleanForYt.includes('বাংলা')) {
-        query = 'Bangla Popular Hit Songs';
-      } else if (cleanForYt.includes('arijit') || cleanForYt.includes('অরিজিৎ')) {
-        query = 'Arijit Singh Best Songs';
-      } else if (cleanForYt.includes('kesariya')) {
-        query = 'Kesariya Arijit Singh';
-      } else if (cleanForYt.includes('pasoori')) {
-        query = 'Pasoori Ali Sethi';
-      } else if (cleanForYt.includes('despacito')) {
-        query = 'Despacito Luis Fonsi';
-      } else if (cleanForYt.includes('lofi') || cleanForYt.includes('chill')) {
-        query = 'Lofi Hip Hop Chill Beats Live';
-      }
-
-      const ytUrl = query 
-        ? `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`
-        : 'https://www.youtube.com';
-
-      // Launch YouTube directly!
-      launchYouTubeDirectly(ytUrl);
-    }
-
-    // Instant Facebook Command Check & Immediate Launch during user interaction!
-    const cleanForFb = userText.toLowerCase().replace(/[?!.,;:()]/g, ' ').trim();
-    const isFbDirect = /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:facebook|fb)|(?:facebook|fb)\s*(?:open|kholo|jao|chalu|login|feed|page|group|profile)?)|(?:ফেসবুক|ফেসবুকে\s*(?:যাও|চলো|খোলো|ওপেন|দেখাও|ঢোকো))/i.test(cleanForFb);
-
-    if (isFbDirect) {
-      const cleanFbSearch = cleanForFb
-        .replace(/(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find)\s*/gi, '')
-        .replace(/(?:on\s*facebook|in\s*facebook|facebook\s*e|facebook|fb)/gi, '')
-        .replace(/(?:ফেসবুকে\s*|ফেসবুক\s*)/gi, '')
-        .replace(/(?:যাও|চলো|খোলো|ওপেন|সার্চ|দেখাও|ঢোকো)/gi, '')
-        .trim();
-
-      const stopFbWords = ['page', 'pages', 'পেজ', 'main', 'feed', 'login', 'site'];
-      const fbUrl = (cleanFbSearch && cleanFbSearch.length > 2 && !stopFbWords.includes(cleanFbSearch.toLowerCase()))
-        ? `https://www.facebook.com/search/top?q=${encodeURIComponent(cleanFbSearch)}`
-        : 'https://www.facebook.com';
-
-      // Launch Facebook directly!
-      launchFacebookDirectly(fbUrl);
+    // Instant Social Media Command Check & Immediate Launch during user interaction!
+    // Ensures popup blocker is bypassed for YouTube, Facebook, WhatsApp, Instagram, X, LinkedIn, TikTok, GitHub, Telegram
+    const directSocial = detectSocialPlatform(userText);
+    if (directSocial) {
+      launchSocialDirectly(directSocial.targetUrl);
     }
 
     // Switch avatar to thinking state with synaptic firing

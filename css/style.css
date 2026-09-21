@@ -524,21 +524,32 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   align-items: center;
   gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  max-width: 100%;
+  padding-bottom: 2px;
+}
+
+.stage-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .stage-tab-btn {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--glass-border);
   color: var(--text-muted);
-  padding: 5px 14px;
+  padding: 5px 12px;
   border-radius: var(--radius-full);
   font-family: var(--font-heading);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 600;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
   transition: var(--transition-fast);
 }
 
@@ -555,33 +566,138 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 12px rgba(0, 242, 254, 0.35);
 }
 
+/* YouTube */
 .stage-tab-btn.stage-main-yt-btn {
   text-decoration: none;
-  background: rgba(255, 71, 87, 0.12);
-  border-color: rgba(255, 71, 87, 0.45);
+  background: rgba(255, 42, 68, 0.1);
+  border-color: rgba(255, 42, 68, 0.4);
   color: #ff6b81;
 }
-
 .stage-tab-btn.stage-main-yt-btn:hover {
-  background: rgba(255, 71, 87, 0.28);
-  border-color: #ff4757;
+  background: rgba(255, 42, 68, 0.25);
+  border-color: #ff2a44;
   color: #fff;
-  box-shadow: 0 0 16px rgba(255, 71, 87, 0.55);
+  box-shadow: 0 0 14px rgba(255, 42, 68, 0.5);
   transform: translateY(-1px);
 }
 
+/* Facebook */
 .stage-tab-btn.stage-main-fb-btn {
   text-decoration: none;
-  background: rgba(24, 119, 242, 0.12);
-  border-color: rgba(24, 119, 242, 0.45);
+  background: rgba(24, 119, 242, 0.1);
+  border-color: rgba(24, 119, 242, 0.4);
   color: #4da3ff;
 }
-
 .stage-tab-btn.stage-main-fb-btn:hover {
-  background: rgba(24, 119, 242, 0.28);
+  background: rgba(24, 119, 242, 0.25);
   border-color: #1877f2;
   color: #fff;
-  box-shadow: 0 0 16px rgba(24, 119, 242, 0.55);
+  box-shadow: 0 0 14px rgba(24, 119, 242, 0.5);
+  transform: translateY(-1px);
+}
+
+/* WhatsApp */
+.stage-tab-btn.stage-main-wa-btn {
+  text-decoration: none;
+  background: rgba(37, 211, 102, 0.1);
+  border-color: rgba(37, 211, 102, 0.4);
+  color: #55ef88;
+}
+.stage-tab-btn.stage-main-wa-btn:hover {
+  background: rgba(37, 211, 102, 0.25);
+  border-color: #25d366;
+  color: #fff;
+  box-shadow: 0 0 14px rgba(37, 211, 102, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Instagram */
+.stage-tab-btn.stage-main-ig-btn {
+  text-decoration: none;
+  background: rgba(225, 48, 108, 0.1);
+  border-color: rgba(225, 48, 108, 0.4);
+  color: #ff6b9d;
+}
+.stage-tab-btn.stage-main-ig-btn:hover {
+  background: rgba(225, 48, 108, 0.25);
+  border-color: #e1306c;
+  color: #fff;
+  box-shadow: 0 0 14px rgba(225, 48, 108, 0.5);
+  transform: translateY(-1px);
+}
+
+/* X / Twitter */
+.stage-tab-btn.stage-main-x-btn {
+  text-decoration: none;
+  background: rgba(29, 161, 242, 0.1);
+  border-color: rgba(29, 161, 242, 0.4);
+  color: #70caff;
+}
+.stage-tab-btn.stage-main-x-btn:hover {
+  background: rgba(29, 161, 242, 0.25);
+  border-color: #1da1f2;
+  color: #fff;
+  box-shadow: 0 0 14px rgba(29, 161, 242, 0.5);
+  transform: translateY(-1px);
+}
+
+/* LinkedIn */
+.stage-tab-btn.stage-main-in-btn {
+  text-decoration: none;
+  background: rgba(10, 102, 194, 0.12);
+  border-color: rgba(10, 102, 194, 0.4);
+  color: #59a5f5;
+}
+.stage-tab-btn.stage-main-in-btn:hover {
+  background: rgba(10, 102, 194, 0.25);
+  border-color: #0a66c2;
+  color: #fff;
+  box-shadow: 0 0 14px rgba(10, 102, 194, 0.5);
+  transform: translateY(-1px);
+}
+
+/* TikTok */
+.stage-tab-btn.stage-main-tt-btn {
+  text-decoration: none;
+  background: rgba(0, 242, 254, 0.1);
+  border-color: rgba(0, 242, 254, 0.4);
+  color: #00f2fe;
+}
+.stage-tab-btn.stage-main-tt-btn:hover {
+  background: rgba(254, 44, 85, 0.2);
+  border-color: #fe2c55;
+  color: #fff;
+  box-shadow: 0 0 14px rgba(0, 242, 254, 0.5);
+  transform: translateY(-1px);
+}
+
+/* GitHub */
+.stage-tab-btn.stage-main-gh-btn {
+  text-decoration: none;
+  background: rgba(163, 113, 247, 0.1);
+  border-color: rgba(163, 113, 247, 0.4);
+  color: #c29ffa;
+}
+.stage-tab-btn.stage-main-gh-btn:hover {
+  background: rgba(163, 113, 247, 0.25);
+  border-color: #a371f7;
+  color: #fff;
+  box-shadow: 0 0 14px rgba(163, 113, 247, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Telegram */
+.stage-tab-btn.stage-main-tg-btn {
+  text-decoration: none;
+  background: rgba(34, 158, 217, 0.1);
+  border-color: rgba(34, 158, 217, 0.4);
+  color: #64c2f5;
+}
+.stage-tab-btn.stage-main-tg-btn:hover {
+  background: rgba(34, 158, 217, 0.25);
+  border-color: #229ed9;
+  color: #fff;
+  box-shadow: 0 0 14px rgba(34, 158, 217, 0.5);
   transform: translateY(-1px);
 }
 
