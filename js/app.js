@@ -5,6 +5,70 @@
 
 var globalAvatarController = null;
 
+// ==========================================================================
+// UNIFIED GLOBAL MEDIA & AUDIO COORDINATOR
+// Ensures MP3 Player, YouTube Streams/Cards, Demo Video, and AI Voice TTS
+// NEVER play over each other simultaneously.
+// ==========================================================================
+const MediaCoordinator = {
+  activeSource: null,
+
+  pauseAllExcept(type) {
+    this.activeSource = type;
+
+    // 1. Pause Local MP3 audio player
+    if (type !== 'mp3') {
+      if (window.NeuralAudioEngine && typeof window.NeuralAudioEngine.pause === 'function') {
+        window.NeuralAudioEngine.pause();
+      }
+    }
+
+    // 2. Pause YouTube (Modal & Chat cards)
+    if (type !== 'youtube') {
+      this.pauseAllYoutube();
+    }
+
+    // 3. Pause Demo Video Player
+    if (type !== 'video') {
+      const heroVideo = document.getElementById('heroMainVideo');
+      if (heroVideo && !heroVideo.paused) {
+        heroVideo.pause();
+      }
+    }
+
+    // 4. Stop Voice Speech Synthesis & Bengali Audio Streams
+    if (type !== 'tts') {
+      if (typeof window.globalStopAllSpeech === 'function') {
+        window.globalStopAllSpeech();
+      }
+    }
+  },
+
+  pauseAllYoutube() {
+    // Studio Modal Iframe
+    const ytStudioIframe = document.getElementById('ytMainIframe');
+    if (ytStudioIframe && ytStudioIframe.contentWindow) {
+      try {
+        ytStudioIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+      } catch (e) {}
+    }
+
+    // Chat YouTube Iframes
+    document.querySelectorAll('.chat-youtube-card iframe').forEach((iframe) => {
+      if (iframe && iframe.contentWindow) {
+        try {
+          iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+        } catch (e) {}
+      }
+    });
+  },
+
+  pauseAll() {
+    this.pauseAllExcept('none');
+  }
+};
+window.MediaCoordinator = MediaCoordinator;
+
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Initialize Neural Network Background Particle Canvas
   initBackgroundCanvas();
@@ -284,6 +348,7 @@ function initVideoController() {
   // Video playback
   function playVideo() {
     if (!video || !videoContainer) return;
+    if (window.MediaCoordinator) window.MediaCoordinator.pauseAllExcept('video');
     videoContainer.classList.add('playing');
     video.play().catch(() => {});
     video.setAttribute('controls', 'true');
@@ -359,9 +424,8 @@ function initVideoController() {
   // Initialize Avatar Canvas and controller
   initNeuralAvatarController(switchToAvatar);
 
-  // Set default initial view to Video and trigger Auto Play
-  switchToVideo();
-  attemptAutoPlay();
+  // Set default initial view to Neural Talking Avatar
+  switchToAvatar();
 }
 
 /* ==========================================================================
@@ -372,15 +436,57 @@ function initNeuralAvatarController(switchToAvatarCallback) {
   const imgIdle = document.getElementById('avatarImgIdle');
   const imgThinking = document.getElementById('avatarImgThinking');
   const imgSpeaking = document.getElementById('avatarImgSpeaking');
+  const imgEyes = document.getElementById('avatarImgEyes');
   const statusPill = document.getElementById('avatarStatusPill');
   const statusLabel = document.getElementById('avatarStatusLabel');
   const subtitlesText = document.getElementById('avatarSubtitlesText');
   const repeatBtn = document.getElementById('avatarRepeatBtn');
-  const canvas = document.getElementById('avatarCanvas');
 
   let mouthInterval = null;
+  let blinkTimeout = null;
+  let isBlinking = false;
   let lastSpokenText = 'Welcome! I am NeuralBot. How can I assist you with deep learning or this project today?';
   let isSpeaking = false;
+
+  // --- Natural Eye Blinking Engine ---
+  function triggerBlink(forceDouble = false) {
+    if (!imgEyes || isBlinking) return;
+    isBlinking = true;
+
+    // Smooth eyelid drop
+    imgEyes.style.opacity = '1';
+
+    setTimeout(() => {
+      if (imgEyes) imgEyes.style.opacity = '0';
+
+      const shouldDouble = forceDouble || (Math.random() < 0.20);
+      if (shouldDouble) {
+        // Natural quick double blink
+        setTimeout(() => {
+          if (imgEyes) imgEyes.style.opacity = '0.9';
+          setTimeout(() => {
+            if (imgEyes) imgEyes.style.opacity = '0';
+            isBlinking = false;
+          }, 70);
+        }, 110);
+      } else {
+        isBlinking = false;
+      }
+    }, 85);
+  }
+
+  function scheduleNextBlink() {
+    if (blinkTimeout) clearTimeout(blinkTimeout);
+    // Speaking blinks are more lively (2.0s - 4.2s), idle blinks are calm (3.5s - 6.2s)
+    const baseMin = isSpeaking ? 2000 : 3500;
+    const baseRange = isSpeaking ? 2200 : 2700;
+    const nextDelay = baseMin + Math.random() * baseRange;
+
+    blinkTimeout = setTimeout(() => {
+      triggerBlink();
+      scheduleNextBlink();
+    }, nextDelay);
+  }
 
   function setIdle() {
     isSpeaking = false;
@@ -407,6 +513,8 @@ function initNeuralAvatarController(switchToAvatarCallback) {
       statusPill.className = 'avatar-status-pill';
       if (statusLabel) statusLabel.textContent = 'AI Online';
     }
+
+    scheduleNextBlink();
   }
 
   function setListening() {
@@ -438,6 +546,9 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     if (subtitlesText) {
       subtitlesText.innerHTML = '<i class="fa-solid fa-microphone-lines"></i> <em>Listening to your voice... Speak now...</em>';
     }
+
+    triggerBlink();
+    scheduleNextBlink();
   }
 
   function setThinking() {
@@ -469,6 +580,48 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     if (subtitlesText) {
       subtitlesText.innerHTML = '<i class="fa-solid fa-bolt"></i> <em>Processing tensor calculation...</em>';
     }
+
+    // Contemplative blink on thinking state transition
+    triggerBlink(true);
+    scheduleNextBlink();
+  }
+
+  function generateSpeechPattern(text) {
+    if (!text || typeof text !== 'string') {
+      return [0.95, 0.45, 0.90, 0.15, 0.85, 0.50, 0.20, 0.80, 0.0];
+    }
+    const clean = text.replace(/<[^>]*>/g, '').trim();
+    const words = clean.split(/\s+/);
+    const pattern = [];
+    const vowels = new Set([
+      'a', 'e', 'i', 'o', 'u', 'y', 'A', 'E', 'I', 'O', 'U', 'Y',
+      'অ', 'আ', 'ই', 'ঈ', 'উ', 'ঊ', 'ঋ', 'এ', 'ঐ', 'ও', 'ঔ',
+      'া', 'ি', 'ী', 'ু', 'ূ', 'ৃ', 'ে', 'ৈ', 'ো', 'ৌ', 'ং', 'ঃ', 'ঁ'
+    ]);
+
+    for (let wIdx = 0; wIdx < words.length; wIdx++) {
+      const word = words[wIdx];
+      if (!word) continue;
+
+      for (let i = 0; i < word.length; i++) {
+        const char = word[i];
+        if (vowels.has(char)) {
+          pattern.push(1.0);
+          pattern.push(0.70);
+        } else if (/[.,!?;:।\-–]/.test(char)) {
+          pattern.push(0.0);
+          pattern.push(0.0);
+        } else if (i % 2 === 0) {
+          pattern.push(0.60);
+        } else {
+          pattern.push(0.15);
+        }
+      }
+      // Natural word-boundary brief pause
+      pattern.push(0.10);
+      pattern.push(0.0);
+    }
+    return pattern.length > 0 ? pattern : [0.95, 0.45, 0.90, 0.15, 0.85, 0.50, 0.20, 0.80, 0.0];
   }
 
   function startSpeaking(text) {
@@ -498,24 +651,14 @@ function initNeuralAvatarController(switchToAvatarCallback) {
       subtitlesText.textContent = text;
     }
 
-    // Natural smooth speaking mouth expression:
+    // Dynamic natural phoneme & syllable cadence synchronized with speech
     if (mouthInterval) clearInterval(mouthInterval);
     if (imgSpeaking) {
       imgSpeaking.classList.add('active');
-      imgSpeaking.style.opacity = '0.9';
+      imgSpeaking.style.opacity = '1';
     }
 
-    // Realistic syllable cadence synchronized with speech pace (140ms)
-    const mouthCadence = [
-      { opacity: 0.95, scaleY: 1.04 },
-      { opacity: 0.35, scaleY: 0.98 },
-      { opacity: 0.85, scaleY: 1.02 },
-      { opacity: 0.1,  scaleY: 0.99 },
-      { opacity: 0.92, scaleY: 1.05 },
-      { opacity: 0.5,  scaleY: 1.01 },
-      { opacity: 0.15, scaleY: 0.98 },
-      { opacity: 0.88, scaleY: 1.03 }
-    ];
+    const cadencePattern = generateSpeechPattern(text);
     let cadenceIndex = 0;
 
     mouthInterval = setInterval(() => {
@@ -524,23 +667,27 @@ function initNeuralAvatarController(switchToAvatarCallback) {
         mouthInterval = null;
         if (imgSpeaking) {
           imgSpeaking.style.opacity = '0';
-          imgSpeaking.style.transform = 'scale(1, 1)';
         }
         return;
       }
-      cadenceIndex = (cadenceIndex + 1) % mouthCadence.length;
-      const step = mouthCadence[cadenceIndex];
+      cadenceIndex = (cadenceIndex + 1) % cadencePattern.length;
+      const opacityVal = cadencePattern[cadenceIndex];
       if (imgSpeaking) {
-        imgSpeaking.style.opacity = String(step.opacity);
-        imgSpeaking.style.transform = `scale(1, ${step.scaleY})`;
+        imgSpeaking.style.opacity = String(opacityVal);
       }
-    }, 140);
+    }, 115);
+
+    // Initial natural conversational blink when speech begins
+    setTimeout(() => {
+      if (isSpeaking) triggerBlink();
+    }, 450);
+
+    scheduleNextBlink();
   }
 
   function triggerWordSyllable() {
     if (!isSpeaking || !imgSpeaking) return;
     imgSpeaking.style.opacity = '1';
-    imgSpeaking.style.transform = 'scale(1.01, 1.05)';
   }
 
   function stopSpeaking() {
@@ -555,7 +702,8 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     });
   }
 
-  // Set initial idle state
+  // Initialize eye blinking loop and idle state
+  scheduleNextBlink();
   setIdle();
 
   // Export controller API
@@ -565,6 +713,7 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     setThinking,
     startSpeaking,
     triggerWordSyllable,
+    triggerBlink,
     stopSpeaking,
     switchToAvatarView: switchToAvatarCallback,
     getLastSpokenText: () => lastSpokenText
@@ -719,13 +868,13 @@ function initVoiceAndChatEngine() {
         keywords_en: ['can you sing a song', 'sing a song', 'sing for me', 'sing', 'song', 'sing something', 'sing a melody', 'play music', 'play song', 'play mp3', 'music', 'mp3'],
         keywords_bn: ['গান গাও', 'গান শোনাও', 'গান গাইতে পারো', 'একটি গান গাও', 'গান জানো', 'গান শুনাও', 'গান বাজাও', 'মিউজিক বাজাও', 'গান শুনবো', 'একটি গান শোনাও', 'গান শোনান', 'gaan gao', 'gaan sunao', 'ekta gaan gao', 'gaan gaite paro', 'gan gao', 'gan shunao', 'gan bajao'],
         responses_en: [
-          "🎶 <em>\"Through the neural layers deep and wide, data streams like a river tide... 0 and 1 dancing through the night, AI glowing bright!\"</em> ✨<br><div class=\"chat-audio-card\" data-src=\"audio/song.mp3\" data-title=\"Neural Cyber Melody — Track 01\" data-artist=\"Neural AI Synthesizer\"><div class=\"cac-header\"><div class=\"cac-icon\"><i class=\"fa-solid fa-music\"></i></div><div class=\"cac-info\"><strong>Neural Cyber Melody</strong><span>audio/song.mp3 &bull; Hi-Fi Audio</span></div><button class=\"cac-play-btn\" title=\"Play / Pause\"><i class=\"fa-solid fa-play\"></i></button></div><div class=\"cac-spectrum\"><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span></div><div class=\"cac-footer\"><button class=\"cac-studio-link\"><i class=\"fa-solid fa-compact-disc\"></i> Open Music Studio</button></div></div>",
-          "🎤 <em>\"Tensors flowing, loss is low, PyTorch models stealing the show! Synapses humming a melody fine, learning deeper all the time!\"</em> 🎵<br><div class=\"chat-audio-card\" data-src=\"audio/song.mp3\" data-title=\"Deep Learning Lo-Fi Track\" data-artist=\"Neural AI Synthesizer\"><div class=\"cac-header\"><div class=\"cac-icon\"><i class=\"fa-solid fa-music\"></i></div><div class=\"cac-info\"><strong>Deep Learning Lo-Fi Track</strong><span>audio/song.mp3 &bull; 44.1kHz</span></div><button class=\"cac-play-btn\" title=\"Play / Pause\"><i class=\"fa-solid fa-play\"></i></button></div><div class=\"cac-spectrum\"><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span></div><div class=\"cac-footer\"><button class=\"cac-studio-link\"><i class=\"fa-solid fa-compact-disc\"></i> Open Music Studio</button></div></div>"
+          "🎶 <em>\"Through the neural layers deep and wide, data streams like a river tide... 0 and 1 dancing through the night, AI glowing bright!\"</em> ✨<br>I love singing neural melodies for you!",
+          "🎤 <em>\"Tensors flowing, loss is low, PyTorch models stealing the show! Synapses humming a melody fine, learning deeper all the time!\"</em> 🎵"
         ],
         responses_bn: [
-          "🎵 <em>\"ধনধান্য পুষ্পভরা আমাদের এই বসুন্ধরা, তাহার মাঝে আছে দেশ এক সকল দেশের সেরা...\"</em> 🎶<br>আমি রোবট হলেও বাংলা গানের সুর আমার নিউরাল কোরে ধারণ করতে পারি! 🎤<br><div class=\"chat-audio-card\" data-src=\"audio/song.mp3\" data-title=\"Neural Bangla Melody\" data-artist=\"Neural AI Audio Engine\"><div class=\"cac-header\"><div class=\"cac-icon\"><i class=\"fa-solid fa-music\"></i></div><div class=\"cac-info\"><strong>Neural Bangla Melody</strong><span>audio/song.mp3 &bull; বাংলা সুর</span></div><button class=\"cac-play-btn\" title=\"Play / Pause\"><i class=\"fa-solid fa-play\"></i></button></div><div class=\"cac-spectrum\"><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span></div><div class=\"cac-footer\"><button class=\"cac-studio-link\"><i class=\"fa-solid fa-compact-disc\"></i> Open Music Studio</button></div></div>",
-          "🎶 <em>\"গ্রাম ছাড়া ওই রাঙা মাটির পথ, আমার মন ভুলায় রে...\"</em> 🎵<br>ডিজিটাল সুরে গানটি শুনুন:<br><div class=\"chat-audio-card\" data-src=\"audio/song.mp3\" data-title=\"Neural Cyber Melody\" data-artist=\"Lutfor Rahman &bull; AI Sound\"><div class=\"cac-header\"><div class=\"cac-icon\"><i class=\"fa-solid fa-music\"></i></div><div class=\"cac-info\"><strong>Neural Cyber Melody</strong><span>audio/song.mp3 &bull; Hi-Fi Sound</span></div><button class=\"cac-play-btn\" title=\"Play / Pause\"><i class=\"fa-solid fa-play\"></i></button></div><div class=\"cac-spectrum\"><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span></div><div class=\"cac-footer\"><button class=\"cac-studio-link\"><i class=\"fa-solid fa-compact-disc\"></i> Open Music Studio</button></div></div>",
-          "🎤 ডিজিটাল সুরের একটি গান:<br><em>\"বাইনারি আর টেন্সরে গড়া নিউরাল সুরের গান, তোমার সাথে কথা বলে জুড়ায় আমার প্রাণ!\"</em> 🎶<br><div class=\"chat-audio-card\" data-src=\"audio/song.mp3\" data-title=\"Neural Synthesizer Song\" data-artist=\"AI Studio\"><div class=\"cac-header\"><div class=\"cac-icon\"><i class=\"fa-solid fa-music\"></i></div><div class=\"cac-info\"><strong>Neural Synthesizer Song</strong><span>audio/song.mp3 &bull; AI Melody</span></div><button class=\"cac-play-btn\" title=\"Play / Pause\"><i class=\"fa-solid fa-play\"></i></button></div><div class=\"cac-spectrum\"><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span><span class=\"c-bar\"></span></div><div class=\"cac-footer\"><button class=\"cac-studio-link\"><i class=\"fa-solid fa-compact-disc\"></i> Open Music Studio</button></div></div>"
+          "🎵 <em>\"ধনধান্য পুষ্পভরা আমাদের এই বসুন্ধরা, তাহার মাঝে আছে দেশ এক সকল দেশের সেরা...\"</em> 🎶<br>আমি রোবট হলেও বাংলা গানের সুর আমার নিউরাল কোরে ধারণ করতে পারি! 🎤",
+          "🎶 <em>\"গ্রাম ছাড়া ওই রাঙা মাটির পথ, আমার মন ভুলায় রে...\"</em> 🎵<br>আমার নিউরাল সুরের গান কেমন লাগলো বলুন!",
+          "🎤 <em>\"বাইনারি আর টেন্সরে গড়া নিউরাল সুরের গান, তোমার সাথে কথা বলে জুড়ায় আমার প্রাণ!\"</em> 🎶"
         ]
       },
       {
@@ -735,14 +884,14 @@ function initVoiceAndChatEngine() {
         keywords_en: ['play hindi song', 'hindi song', 'hindi music', 'play arijit singh', 'tum hi ho', 'kesariya', 'raataan lambiyan', 'pasoori', 'bollywood song', 'hindi romantic song', 'hindi lo-fi', 'hindi hits'],
         keywords_bn: ['হিন্দি গান শোনাও', 'হিন্দি গান', 'একটি হিন্দি গান', 'হিন্দি গান বাজাও', 'অরিজিৎ সিং', 'তুম হি হো', 'কেসারিয়া', 'হিন্দি সুর', 'গান শোনাও হিন্দি', 'হিন্দি গান শুনবো', 'একটি হিন্দি গান শোনাও', 'hindi gaan', 'hindi song', 'hindi gan shonaw', 'hindi gan bajaw', 'arijit singh'],
         responses_en: [
-          "🎶 <strong>Tum Hi Ho — Arijit Singh</strong> (Aashiqui 2). Here is your streaming YouTube player! 🎤<br><div class=\"chat-youtube-card\" data-yt-id=\"2Vv-BfVoq4g\" data-yt-title=\"Tum Hi Ho — Arijit Singh\"><div class=\"cyc-header\"><i class=\"fa-brands fa-youtube gradient-red-text\"></i> <span>Tum Hi Ho — Arijit Singh (Hindi Romance)</span></div><div class=\"cyc-video-wrap\"><iframe src=\"https://www.youtube-nocookie.com/embed/2Vv-BfVoq4g?autoplay=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div><div class=\"cyc-footer\"><button class=\"cyc-studio-btn\" onclick=\"if(window.openYoutubeTrack) window.openYoutubeTrack('2Vv-BfVoq4g', 'Tum Hi Ho — Arijit Singh');\"><i class=\"fa-solid fa-compact-disc\"></i> Open in Music Studio</button></div></div>",
-          "✨ <strong>Kesariya — Brahmāstra</strong> by Arijit Singh. Enjoy this melody directly from YouTube! 🎵<br><div class=\"chat-youtube-card\" data-yt-id=\"BddP6PYo2gs\" data-yt-title=\"Kesariya — Arijit Singh\"><div class=\"cyc-header\"><i class=\"fa-brands fa-youtube gradient-red-text\"></i> <span>Kesariya — Arijit Singh (Brahmāstra)</span></div><div class=\"cyc-video-wrap\"><iframe src=\"https://www.youtube-nocookie.com/embed/BddP6PYo2gs?autoplay=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div><div class=\"cyc-footer\"><button class=\"cyc-studio-btn\" onclick=\"if(window.openYoutubeTrack) window.openYoutubeTrack('BddP6PYo2gs', 'Kesariya — Arijit Singh');\"><i class=\"fa-solid fa-compact-disc\"></i> Open in Music Studio</button></div></div>",
-          "🎵 <strong>Raataan Lambiyan — Shershaah</strong>. Sit back and enjoy the soothing Hindi romantic rhythm! 🎧<br><div class=\"chat-youtube-card\" data-yt-id=\"gvyUuxdRdR4\" data-yt-title=\"Raataan Lambiyan — Shershaah\"><div class=\"cyc-header\"><i class=\"fa-brands fa-youtube gradient-red-text\"></i> <span>Raataan Lambiyan — Tanishk Bagchi, Jubin Nautiyal</span></div><div class=\"cyc-video-wrap\"><iframe src=\"https://www.youtube-nocookie.com/embed/gvyUuxdRdR4?autoplay=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div><div class=\"cyc-footer\"><button class=\"cyc-studio-btn\" onclick=\"if(window.openYoutubeTrack) window.openYoutubeTrack('gvyUuxdRdR4', 'Raataan Lambiyan — Shershaah');\"><i class=\"fa-solid fa-compact-disc\"></i> Open in Music Studio</button></div></div>"
+          "🎶 <strong>Tum Hi Ho — Arijit Singh</strong> (Aashiqui 2). Click play or open in studio to listen! 🎤<br><div class=\"chat-youtube-card\" data-yt-id=\"2Vv-BfVoq4g\" data-yt-title=\"Tum Hi Ho — Arijit Singh\"><div class=\"cyc-header\"><i class=\"fa-brands fa-youtube gradient-red-text\"></i> <span>Tum Hi Ho — Arijit Singh (Hindi Romance)</span></div><div class=\"cyc-video-wrap\"><iframe src=\"https://www.youtube-nocookie.com/embed/2Vv-BfVoq4g?enablejsapi=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div><div class=\"cyc-footer\"><button class=\"cyc-studio-btn\" onclick=\"if(window.openYoutubeTrack) window.openYoutubeTrack('2Vv-BfVoq4g', 'Tum Hi Ho — Arijit Singh');\"><i class=\"fa-solid fa-compact-disc\"></i> Open in Music Studio</button></div></div>",
+          "✨ <strong>Kesariya — Brahmāstra</strong> by Arijit Singh. Enjoy this melody directly from YouTube! 🎵<br><div class=\"chat-youtube-card\" data-yt-id=\"BddP6PYo2gs\" data-yt-title=\"Kesariya — Arijit Singh\"><div class=\"cyc-header\"><i class=\"fa-brands fa-youtube gradient-red-text\"></i> <span>Kesariya — Arijit Singh (Brahmāstra)</span></div><div class=\"cyc-video-wrap\"><iframe src=\"https://www.youtube-nocookie.com/embed/BddP6PYo2gs?enablejsapi=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div><div class=\"cyc-footer\"><button class=\"cyc-studio-btn\" onclick=\"if(window.openYoutubeTrack) window.openYoutubeTrack('BddP6PYo2gs', 'Kesariya — Arijit Singh');\"><i class=\"fa-solid fa-compact-disc\"></i> Open in Music Studio</button></div></div>",
+          "🎵 <strong>Raataan Lambiyan — Shershaah</strong>. Sit back and enjoy the soothing Hindi romantic rhythm! 🎧<br><div class=\"chat-youtube-card\" data-yt-id=\"gvyUuxdRdR4\" data-yt-title=\"Raataan Lambiyan — Shershaah\"><div class=\"cyc-header\"><i class=\"fa-brands fa-youtube gradient-red-text\"></i> <span>Raataan Lambiyan — Tanishk Bagchi, Jubin Nautiyal</span></div><div class=\"cyc-video-wrap\"><iframe src=\"https://www.youtube-nocookie.com/embed/gvyUuxdRdR4?enablejsapi=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div><div class=\"cyc-footer\"><button class=\"cyc-studio-btn\" onclick=\"if(window.openYoutubeTrack) window.openYoutubeTrack('gvyUuxdRdR4', 'Raataan Lambiyan — Shershaah');\"><i class=\"fa-solid fa-compact-disc\"></i> Open in Music Studio</button></div></div>"
         ],
         responses_bn: [
-          "🎶 হিন্দি রোমান্টিক সুরের সেরা একটি গান: <strong>Tum Hi Ho (Arijit Singh)</strong> — আপনার জন্য সরাসরি YouTube থেকে লোড করা হয়েছে! 🎤<br><div class=\"chat-youtube-card\" data-yt-id=\"2Vv-BfVoq4g\" data-yt-title=\"Tum Hi Ho — Arijit Singh\"><div class=\"cyc-header\"><i class=\"fa-brands fa-youtube gradient-red-text\"></i> <span>Tum Hi Ho — Arijit Singh (Hindi Romance)</span></div><div class=\"cyc-video-wrap\"><iframe src=\"https://www.youtube-nocookie.com/embed/2Vv-BfVoq4g?autoplay=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div><div class=\"cyc-footer\"><button class=\"cyc-studio-btn\" onclick=\"if(window.openYoutubeTrack) window.openYoutubeTrack('2Vv-BfVoq4g', 'Tum Hi Ho — Arijit Singh');\"><i class=\"fa-solid fa-compact-disc\"></i> Open in Music Studio</button></div></div>",
-          "✨ চমৎকার হিন্দি গান: <strong>Kesariya — Brahmāstra</strong> — অরিজিৎ সিংয়ের জাদুকরি কণ্ঠে শুনুন! 🎵<br><div class=\"chat-youtube-card\" data-yt-id=\"BddP6PYo2gs\" data-yt-title=\"Kesariya — Arijit Singh\"><div class=\"cyc-header\"><i class=\"fa-brands fa-youtube gradient-red-text\"></i> <span>Kesariya — Arijit Singh (Brahmāstra)</span></div><div class=\"cyc-video-wrap\"><iframe src=\"https://www.youtube-nocookie.com/embed/BddP6PYo2gs?autoplay=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div><div class=\"cyc-footer\"><button class=\"cyc-studio-btn\" onclick=\"if(window.openYoutubeTrack) window.openYoutubeTrack('BddP6PYo2gs', 'Kesariya — Arijit Singh');\"><i class=\"fa-solid fa-compact-disc\"></i> Open in Music Studio</button></div></div>",
-          "🎵 <strong>Raataan Lambiyan — Shershaah</strong>। দারুণ রোমান্টিক সুরের গানটি উপভোগ করুন! 🎧<br><div class=\"chat-youtube-card\" data-yt-id=\"gvyUuxdRdR4\" data-yt-title=\"Raataan Lambiyan — Shershaah\"><div class=\"cyc-header\"><i class=\"fa-brands fa-youtube gradient-red-text\"></i> <span>Raataan Lambiyan — Shershaah</span></div><div class=\"cyc-video-wrap\"><iframe src=\"https://www.youtube-nocookie.com/embed/gvyUuxdRdR4?autoplay=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div><div class=\"cyc-footer\"><button class=\"cyc-studio-btn\" onclick=\"if(window.openYoutubeTrack) window.openYoutubeTrack('gvyUuxdRdR4', 'Raataan Lambiyan — Shershaah');\"><i class=\"fa-solid fa-compact-disc\"></i> Open in Music Studio</button></div></div>"
+          "🎶 হিন্দি রোমান্টিক সুরের সেরা একটি গান: <strong>Tum Hi Ho (Arijit Singh)</strong> — প্লে বাটনে ক্লিক করে গানটি উপভোগ করুন! 🎤<br><div class=\"chat-youtube-card\" data-yt-id=\"2Vv-BfVoq4g\" data-yt-title=\"Tum Hi Ho — Arijit Singh\"><div class=\"cyc-header\"><i class=\"fa-brands fa-youtube gradient-red-text\"></i> <span>Tum Hi Ho — Arijit Singh (Hindi Romance)</span></div><div class=\"cyc-video-wrap\"><iframe src=\"https://www.youtube-nocookie.com/embed/2Vv-BfVoq4g?enablejsapi=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div><div class=\"cyc-footer\"><button class=\"cyc-studio-btn\" onclick=\"if(window.openYoutubeTrack) window.openYoutubeTrack('2Vv-BfVoq4g', 'Tum Hi Ho — Arijit Singh');\"><i class=\"fa-solid fa-compact-disc\"></i> Open in Music Studio</button></div></div>",
+          "✨ চমৎকার হিন্দি গান: <strong>Kesariya — Brahmāstra</strong> — অরিজিৎ সিংয়ের জাদুকরি কণ্ঠে শুনুন! 🎵<br><div class=\"chat-youtube-card\" data-yt-id=\"BddP6PYo2gs\" data-yt-title=\"Kesariya — Arijit Singh\"><div class=\"cyc-header\"><i class=\"fa-brands fa-youtube gradient-red-text\"></i> <span>Kesariya — Arijit Singh (Brahmāstra)</span></div><div class=\"cyc-video-wrap\"><iframe src=\"https://www.youtube-nocookie.com/embed/BddP6PYo2gs?enablejsapi=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div><div class=\"cyc-footer\"><button class=\"cyc-studio-btn\" onclick=\"if(window.openYoutubeTrack) window.openYoutubeTrack('BddP6PYo2gs', 'Kesariya — Arijit Singh');\"><i class=\"fa-solid fa-compact-disc\"></i> Open in Music Studio</button></div></div>",
+          "🎵 <strong>Raataan Lambiyan — Shershaah</strong>। দারুণ রোমান্টিক সুরের গানটি উপভোগ করতে প্লে বাটনে চাপুন! 🎧<br><div class=\"chat-youtube-card\" data-yt-id=\"gvyUuxdRdR4\" data-yt-title=\"Raataan Lambiyan — Shershaah\"><div class=\"cyc-header\"><i class=\"fa-brands fa-youtube gradient-red-text\"></i> <span>Raataan Lambiyan — Shershaah</span></div><div class=\"cyc-video-wrap\"><iframe src=\"https://www.youtube-nocookie.com/embed/gvyUuxdRdR4?enablejsapi=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div><div class=\"cyc-footer\"><button class=\"cyc-studio-btn\" onclick=\"if(window.openYoutubeTrack) window.openYoutubeTrack('gvyUuxdRdR4', 'Raataan Lambiyan — Shershaah');\"><i class=\"fa-solid fa-compact-disc\"></i> Open in Music Studio</button></div></div>"
         ]
       },
       {
@@ -1171,9 +1320,9 @@ function initVoiceAndChatEngine() {
     if (ytMatch && ytMatch[1]) {
       const vidId = ytMatch[1];
       if (isBengali) {
-        return `🎬 আপনার দেওয়া YouTube ভিডিও/গানটি সরাসরি প্লে করা হচ্ছে! 🎵<br><div class="chat-youtube-card" data-yt-id="${vidId}" data-yt-title="YouTube Custom Stream"><div class="cyc-header"><i class="fa-brands fa-youtube gradient-red-text"></i> <span>Custom YouTube Stream</span></div><div class="cyc-video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${vidId}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><div class="cyc-footer"><button class="cyc-studio-btn" onclick="if(window.openYoutubeTrack) window.openYoutubeTrack('${vidId}', 'Custom YouTube Stream');"><i class="fa-solid fa-compact-disc"></i> Play in Music Studio</button></div></div>`;
+        return `🎬 আপনার দেওয়া YouTube ভিডিও/গানটি নিচে সংযুক্ত করা হয়েছে! প্লে বাটনে চাপ দিয়ে শুনুন 🎵<br><div class="chat-youtube-card" data-yt-id="${vidId}" data-yt-title="YouTube Custom Stream"><div class="cyc-header"><i class="fa-brands fa-youtube gradient-red-text"></i> <span>Custom YouTube Stream</span></div><div class="cyc-video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${vidId}?enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><div class="cyc-footer"><button class="cyc-studio-btn" onclick="if(window.openYoutubeTrack) window.openYoutubeTrack('${vidId}', 'Custom YouTube Stream');"><i class="fa-solid fa-compact-disc"></i> Play in Music Studio</button></div></div>`;
       } else {
-        return `🎬 Here is your requested YouTube song/video! Enjoy streaming directly inside NeuralBot 🎵<br><div class="chat-youtube-card" data-yt-id="${vidId}" data-yt-title="YouTube Custom Stream"><div class="cyc-header"><i class="fa-brands fa-youtube gradient-red-text"></i> <span>Custom YouTube Stream</span></div><div class="cyc-video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${vidId}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><div class="cyc-footer"><button class="cyc-studio-btn" onclick="if(window.openYoutubeTrack) window.openYoutubeTrack('${vidId}', 'Custom YouTube Stream');"><i class="fa-solid fa-compact-disc"></i> Play in Music Studio</button></div></div>`;
+        return `🎬 Here is your requested YouTube song/video! Click play to listen 🎵<br><div class="chat-youtube-card" data-yt-id="${vidId}" data-yt-title="YouTube Custom Stream"><div class="cyc-header"><i class="fa-brands fa-youtube gradient-red-text"></i> <span>Custom YouTube Stream</span></div><div class="cyc-video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${vidId}?enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><div class="cyc-footer"><button class="cyc-studio-btn" onclick="if(window.openYoutubeTrack) window.openYoutubeTrack('${vidId}', 'Custom YouTube Stream');"><i class="fa-solid fa-compact-disc"></i> Play in Music Studio</button></div></div>`;
       }
     }
 
@@ -1293,8 +1442,12 @@ function initVoiceAndChatEngine() {
         window.speechSynthesis.cancel();
       } catch (e) {}
     }
+    if (globalAvatarController && typeof globalAvatarController.stopSpeaking === 'function') {
+      globalAvatarController.stopSpeaking();
+    }
     activeUtterance = null;
   }
+  window.globalStopAllSpeech = stopAllSpeechAndAudio;
 
   function getSpokenCleanText(html) {
     if (!html) return '';
@@ -1470,20 +1623,40 @@ function initVoiceAndChatEngine() {
 
   // --- Main Unified Speak Engine ---
   function speakText(text) {
-    stopAllSpeechAndAudio();
+    // If response includes a streaming YouTube card, prioritize music playback and prevent TTS audio clash
+    if (text && text.includes('chat-youtube-card')) {
+      if (window.MediaCoordinator) {
+        window.MediaCoordinator.pauseAllExcept('youtube');
+      }
+      stopAllSpeechAndAudio();
+      const spokenText = getSpokenCleanText(text);
+      if (spokenText) {
+        const subText = document.getElementById('avatarSubtitlesText');
+        if (subText) subText.textContent = spokenText;
+      }
+      return;
+    }
+
+    if (window.MediaCoordinator) {
+      window.MediaCoordinator.pauseAllExcept('tts');
+    } else {
+      stopAllSpeechAndAudio();
+    }
 
     const spokenText = getSpokenCleanText(text);
     if (!spokenText) return;
 
-    // If voice output is toggled OFF, still show visual subtitles and mouth animation
+    // Immediately trigger avatar mouth motion synchronized with the response text
+    if (globalAvatarController) {
+      globalAvatarController.startSpeaking(spokenText);
+    }
+
+    // If voice output is toggled OFF, keep mouth speaking for the estimated text duration
     if (!isVoiceOutputEnabled) {
-      if (globalAvatarController) {
-        globalAvatarController.startSpeaking(spokenText);
-        const duration = Math.min(Math.max(spokenText.length * 65, 1800), 7000);
-        speechFallbackTimer = setTimeout(() => {
-          if (globalAvatarController) globalAvatarController.stopSpeaking();
-        }, duration);
-      }
+      const duration = Math.min(Math.max(spokenText.length * 65, 1800), 7000);
+      speechFallbackTimer = setTimeout(() => {
+        if (globalAvatarController) globalAvatarController.stopSpeaking();
+      }, duration);
       return;
     }
 
@@ -1768,12 +1941,16 @@ function initVoiceAndChatEngine() {
       alert('Speech Recognition is supported in Google Chrome and Microsoft Edge. Please use Chrome or Edge for voice chatting.');
       return;
     }
-    // Cancel prior speech output so microphone receives clear input
-    if ('speechSynthesis' in window) {
-      try { window.speechSynthesis.cancel(); } catch(e) {}
-    }
-    if (globalAvatarController) {
-      globalAvatarController.stopSpeaking();
+    // Cancel prior speech & audio outputs so microphone receives clean input
+    if (window.MediaCoordinator) {
+      window.MediaCoordinator.pauseAll();
+    } else {
+      if ('speechSynthesis' in window) {
+        try { window.speechSynthesis.cancel(); } catch(e) {}
+      }
+      if (globalAvatarController) {
+        globalAvatarController.stopSpeaking();
+      }
     }
 
     try {
@@ -1869,6 +2046,11 @@ function initVoiceAndChatEngine() {
 
     if (heroChatInput) {
       heroChatInput.value = '';
+    }
+
+    // Clear previous chat history & welcome message so ONLY the active message and reply are shown
+    if (heroChatBody) {
+      heroChatBody.innerHTML = '';
     }
 
     appendMessageToHero(escapeHtml(userText), false);
@@ -2680,6 +2862,10 @@ function initNeuralMusicStudio() {
     const track = playlist[currentTrackIndex];
     if (!track) return;
 
+    if (window.MediaCoordinator) {
+      window.MediaCoordinator.pauseAllExcept('mp3');
+    }
+
     if (!audioPlayer.src || audioPlayer.src === '' || audioPlayer.src.endsWith('/')) {
       audioPlayer.src = track.src;
     }
@@ -2730,11 +2916,6 @@ function initNeuralMusicStudio() {
     }
     if (miniPlayIcon) {
       miniPlayIcon.className = isPlaying ? 'fa-solid fa-pause' : 'fa-solid fa-play';
-    }
-
-    // Show floating mini bar
-    if (floatingMiniBar) {
-      floatingMiniBar.style.display = 'flex';
     }
 
     // Update all chat audio cards
@@ -2906,6 +3087,11 @@ function initNeuralMusicStudio() {
       musicBackdrop.classList.remove('active');
       document.body.style.overflow = '';
     }
+    if (ytMainIframe && ytMainIframe.contentWindow) {
+      try {
+        ytMainIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+      } catch (e) {}
+    }
   }
 
   if (openMusicBtn) openMusicBtn.addEventListener('click', openStudio);
@@ -2990,6 +3176,12 @@ function initNeuralMusicStudio() {
       if (tabYoutubeStreamBtn) tabYoutubeStreamBtn.classList.remove('active');
       if (localMp3View) localMp3View.style.display = 'flex';
       if (youtubeStreamView) youtubeStreamView.style.display = 'none';
+      // Pause YouTube streamer when switching to Local MP3
+      if (ytMainIframe && ytMainIframe.contentWindow) {
+        try {
+          ytMainIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+        } catch (e) {}
+      }
     }
   }
 
@@ -2998,6 +3190,9 @@ function initNeuralMusicStudio() {
 
   function playYoutubeId(vidId, title) {
     if (!vidId || !ytMainIframe) return;
+    if (window.MediaCoordinator) {
+      window.MediaCoordinator.pauseAllExcept('youtube');
+    }
     switchStudioTab('youtube');
     ytMainIframe.src = `https://www.youtube-nocookie.com/embed/${vidId}?autoplay=1&enablejsapi=1`;
     if (ytPlayingTitle) ytPlayingTitle.textContent = title || 'Custom YouTube Track';

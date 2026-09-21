@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="css/style.css?v=2.0">
+  <link rel="stylesheet" href="css/style.css?v=3.8">
 </head>
 <body>
 
@@ -29,99 +29,94 @@
   <div class="ambient-glow ambient-glow-2"></div>
   <div class="ambient-glow ambient-glow-3"></div>
 
-  <!-- ================= HEADER / NAVBAR ================= -->
-  <header class="header" id="navbar">
-    <div class="container nav-container">
-      <a href="#hero" class="logo-wrapper">
-        <div class="logo-icon">
-          <svg viewBox="0 0 24 24">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/>
-          </svg>
-        </div>
-        <div class="logo-text">
-          <span class="logo-title">Neural<span class="gradient-text">Bot</span></span>
-          <span class="logo-subtitle">Voice &amp; Neural Intelligence</span>
-        </div>
-      </a>
-
-      <!-- Navigation Links -->
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#hero" class="nav-link active">Home &amp; Video</a></li>
-        <li><a href="#features" class="nav-link">AI Features</a></li>
-        <li><a href="#gallery" class="nav-link">Asset Gallery</a></li>
-        <li><a href="#playground" class="nav-link">Neural Console</a></li>
-        <li><a href="#about" class="nav-link">About Dev</a></li>
-      </ul>
-
-      <!-- Action Buttons -->
-      <div class="nav-actions">
-        <button id="openMusicModalBtn" class="btn btn-secondary btn-sm nav-music-btn" title="Open Neural MP3 Music Player">
-          <i class="fa-solid fa-music gradient-text"></i> <span>MP3 Player</span>
-        </button>
-        <button id="openKnowledgeModalBtn" class="btn btn-secondary btn-sm nav-kb-btn" title="Open Neural Knowledge Store & Memory">
-          <i class="fa-solid fa-brain-circuit gradient-text"></i> <span>Knowledge Store</span>
-        </button>
-        <button id="globalVoiceToggle" class="voice-toggle-btn active" title="Toggle AI Voice Response">
-          <i class="fa-solid fa-volume-high"></i> <span>Voice ON</span>
-        </button>
-        <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Toggle navigation">
-          <i class="fa-solid fa-bars-staggered"></i>
-        </button>
-      </div>
-    </div>
-  </header>
-
   <!-- ================= TOP HERO SECTION: VIDEO + VOICE/TEXT CHAT ================= -->
   <section class="hero-top-section" id="hero">
     <div class="container">
       
-      <!-- Top Headline & Status Banner (Compact & Streamlined) -->
+      <!-- Top Unified Header Banner: Left Logo | Center Title & Subtitle | Right Live Status Badge -->
       <div class="hero-header-banner">
-        <div class="badge-tag">
-          <span class="pulse-dot"></span>
-          <span>LIVE NEURAL AI &bull; VOICE &amp; TEXT</span>
+        <!-- Left Side: Brand Logo -->
+        <div class="hero-header-left">
+          <a href="#hero" class="logo-wrapper">
+            <div class="logo-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/>
+              </svg>
+            </div>
+            <div class="logo-text">
+              <span class="logo-title">Neural<span class="gradient-text">Bot</span></span>
+              <span class="logo-subtitle">Voice &amp; Neural Intelligence</span>
+            </div>
+          </a>
         </div>
-        <h1 class="hero-main-title">
-          Talk, Type &amp; Experience <span class="gradient-text">Neural Bot</span>
-        </h1>
-        <p class="hero-subtitle">
-          Next-Generation Neural AI Assistant with Real-Time Voice &amp; Text Intelligence.
-        </p>
+
+        <!-- Center: Main Title & Subtitle -->
+        <div class="hero-header-center">
+          <h1 class="hero-main-title">
+            Talk, Type &amp; Experience <span class="gradient-text">Neural Bot</span>
+          </h1>
+          <p class="hero-subtitle">
+            Next-Generation Neural AI Assistant with Real-Time Voice &amp; Text Intelligence.
+          </p>
+        </div>
+
+        <!-- Right Side: Live Neural AI Badge -->
+        <div class="hero-header-right">
+          <div class="badge-tag">
+            <span class="pulse-dot"></span>
+            <span>LIVE NEURAL AI &bull; VOICE &amp; TEXT</span>
+          </div>
+        </div>
       </div>
 
       <!-- Main Dual Grid: Left = Video Player | Right = Voice & Text Interactive Box -->
       <div class="hero-primary-grid">
         
-        <!-- LEFT: Interactive Neural Talking Avatar & Video Stage Card -->
+        <!-- TOP: Full-Face Interactive Neural Talking Avatar & Video Stage Card -->
         <div class="hero-video-card neural-stage-card" id="neuralStageCard">
           <div class="video-card-header stage-header">
             <!-- Mode Switcher Tabs -->
             <div class="stage-tabs">
-              <button class="stage-tab-btn" id="tabAvatarBtn" data-target="avatar" title="Switch to Live Neural Talking Avatar">
+              <button class="stage-tab-btn active" id="tabAvatarBtn" data-target="avatar" title="Switch to Live Neural Talking Avatar">
                 <i class="fa-solid fa-robot gradient-text"></i>
                 <span>Neural Avatar</span>
                 <span class="live-pulse-dot"></span>
               </button>
-              <button class="stage-tab-btn active" id="tabVideoBtn" data-target="video" title="Switch to Demo Walkthrough Video">
+              <button class="stage-tab-btn" id="tabVideoBtn" data-target="video" title="Switch to Demo Walkthrough Video">
                 <i class="fa-solid fa-circle-play"></i>
                 <span>Demo Video</span>
               </button>
             </div>
             
-            <!-- Dynamic Avatar Status Pill -->
-            <div class="avatar-status-pill" id="avatarStatusPill">
-              <span class="status-indicator-dot"></span>
-              <span id="avatarStatusLabel">Demo Video Ready</span>
+            <!-- Dynamic Avatar Status & Header Action Controls -->
+            <div class="stage-header-actions">
+              <button class="lang-switch-btn stage-action-btn" id="voiceLangToggleBtn" title="Switch Voice Language (English / বাংলা)">
+                <i class="fa-solid fa-language"></i> <span id="voiceLangLabel">EN</span>
+              </button>
+              <button class="speaker-switch-btn stage-action-btn-icon" id="speakerToggleBtn" title="Mute/Unmute Bot Voice">
+                <i class="fa-solid fa-volume-high"></i>
+              </button>
+              <button id="avatarRepeatBtn" class="stage-action-btn" style="display: inline-flex;" title="Re-speak last answer">
+                <i class="fa-solid fa-rotate-right"></i> <span class="hide-on-mobile">Replay Voice</span>
+              </button>
+              <button id="videoReplayBtn" class="stage-action-btn" style="display: none;" title="Replay Video">
+                <i class="fa-solid fa-rotate-left"></i> <span class="hide-on-mobile">Replay Video</span>
+              </button>
+              <div class="avatar-status-pill" id="avatarStatusPill">
+                <span class="status-indicator-dot"></span>
+                <span id="avatarStatusLabel">AI Online</span>
+              </div>
             </div>
           </div>
           
-          <!-- VIEW 1: Interactive Neural Talking Avatar Stage (Hidden initially until user chats) -->
-          <div class="avatar-stage-container" id="avatarStageView" style="display: none;">
+          <!-- VIEW 1: Interactive Neural Talking Avatar Stage (Full Face View) -->
+          <div class="avatar-stage-container" id="avatarStageView" style="display: flex;">
             <div class="avatar-visual-box" id="avatarVisualBox">
               <!-- Layered Avatar Face Elements for Seamless Talking Transitions -->
               <img src="avatar_face.jpg" alt="Neural AI Avatar Idle" class="avatar-face-layer avatar-idle-layer active" id="avatarImgIdle">
               <img src="avatar_thinking.jpg" alt="Neural AI Avatar Thinking" class="avatar-face-layer avatar-thinking-layer" id="avatarImgThinking">
-              <img src="avatar_speaking.jpg" alt="Neural AI Avatar Speaking" class="avatar-face-layer avatar-speaking-layer" id="avatarImgSpeaking">
+              <img src="avatar_mouth_speaking.png" alt="Neural AI Avatar Speaking" class="avatar-face-layer avatar-speaking-layer" id="avatarImgSpeaking">
+              <img src="avatar_eyes_blink.png" alt="Neural AI Avatar Eyes Blink" class="avatar-face-layer avatar-eyes-layer" id="avatarImgEyes">
 
               <!-- HUD Cyber Overlay Badges -->
               <div class="avatar-hud-top-left">
@@ -141,22 +136,14 @@
                 <span class="eq-bar"></span>
               </div>
 
-              <!-- Live Synchronized Subtitles / Spoken Response Bar -->
-              <div class="avatar-subtitles-bar" id="avatarSubtitlesBar">
-                <div class="subtitles-badge">
-                  <i class="fa-solid fa-waveform-lines"></i>
-                  <span>NEURAL VOICE</span>
-                </div>
-                <p class="subtitles-text" id="avatarSubtitlesText">
-                  Neural AI Online &bull; Type a message or speak through the microphone.
-                </p>
-              </div>
+              <!-- Hidden Subtitles Span for Background Processing -->
+              <span id="avatarSubtitlesText" style="display: none;"></span>
             </div>
           </div>
 
-          <!-- VIEW 2: Project Video Player Container (Auto-Plays on Home Page Open) -->
-          <div class="video-frame-container" id="videoContainer" style="display: flex;">
-            <video id="heroMainVideo" preload="auto" playsinline autoplay muted loop controls>
+          <!-- VIEW 2: Project Video Player Container -->
+          <div class="video-frame-container" id="videoContainer" style="display: none;">
+            <video id="heroMainVideo" preload="auto" playsinline loop controls>
               <source src="ami_ekta_Neural_Chat_Boot_Bana.mp4" type="video/mp4">
               Your browser does not support the video tag.
             </video>
@@ -174,53 +161,11 @@
               <span class="play-label">Click to Play Video</span>
             </div>
           </div>
-
-          <!-- Stage Card Footer -->
-          <div class="video-card-footer stage-footer">
-            <div class="video-file-info avatar-footer-info">
-              <h4 id="stageFooterTitle"><i class="fa-solid fa-video"></i> ami_ekta_Neural_Chat_Boot_Bana.mp4</h4>
-              <p id="stageFooterSubtitle">Neural Network Architecture &amp; Training Demo</p>
-            </div>
-            <div class="stage-footer-actions">
-              <button id="avatarRepeatBtn" class="btn btn-secondary btn-sm" style="padding: 4px 10px; font-size: 0.75rem; display: none;" title="Re-speak last answer">
-                <i class="fa-solid fa-volume-high"></i> Replay Voice
-              </button>
-              <button id="videoReplayBtn" class="btn btn-secondary btn-sm" style="padding: 4px 10px; font-size: 0.75rem; display: inline-flex;" title="Replay Video">
-                <i class="fa-solid fa-rotate-left"></i> Replay Video
-              </button>
-            </div>
-          </div>
         </div>
 
-        <!-- RIGHT: Voice & Text Interactive AI Chat Box -->
+        <!-- BOTTOM: Voice & Text Interactive AI Chat Box -->
         <div class="hero-chat-container">
           <div class="chat-simulator-card voice-chat-card">
-            
-            <!-- Chat Header -->
-            <div class="chat-header">
-              <div class="chat-header-info">
-                <div class="chat-avatar">
-                  <i class="fa-solid fa-microphone-lines"></i>
-                </div>
-                <div class="chat-user-details">
-                  <h4>Neural Voice &amp; Text Assistant</h4>
-                  <span id="voiceStatusText"><i class="fa-solid fa-circle-dot"></i> Ready &bull; Mic Active</span>
-                </div>
-              </div>
-              <div class="voice-controls-header">
-                <button class="lang-switch-btn" id="voiceLangToggleBtn" title="Switch Voice Language (English / বাংলা)">
-                  <i class="fa-solid fa-language"></i> <span id="voiceLangLabel">EN</span>
-                </button>
-                <button class="speaker-switch-btn" id="speakerToggleBtn" title="Mute/Unmute Bot Voice">
-                  <i class="fa-solid fa-volume-high"></i>
-                </button>
-                <div class="chat-controls">
-                  <span class="control-dot red"></span>
-                  <span class="control-dot yellow"></span>
-                  <span class="control-dot green"></span>
-                </div>
-              </div>
-            </div>
 
             <!-- Chat Message Thread -->
             <div class="chat-body" id="heroChatBody">
@@ -263,6 +208,8 @@
                 
                 <input type="text" class="chat-input" id="heroChatInput" placeholder="Type your message or click Mic to speak (English / Bangla)..." autocomplete="off">
                 
+                <span id="voiceStatusText" style="display: none;">Ready &bull; Mic Active</span>
+
                 <button type="button" class="chat-send-btn" id="heroSendBtn" title="Send Message">
                   <i class="fa-solid fa-paper-plane"></i>
                 </button>
@@ -959,20 +906,6 @@
     </div>
   </div>
 
-  <!-- ================= FLOATING MINI MUSIC BAR ================= -->
-  <div class="floating-mini-music-bar" id="floatingMiniMusicBar" style="display: none;">
-    <div class="mini-disc-wrap">
-      <i class="fa-solid fa-compact-disc spin-disc mini-disc" id="miniDisc"></i>
-    </div>
-    <div class="mini-info" id="miniMusicBarOpen">
-      <h5 id="miniTrackTitle">Neural Cyber Melody</h5>
-      <p id="miniTrackArtist">audio/song.mp3</p>
-    </div>
-    <div class="mini-actions">
-      <button class="mini-btn" id="miniPlayBtn" title="Play / Pause"><i class="fa-solid fa-play" id="miniPlayIcon"></i></button>
-      <button class="mini-btn" id="miniCloseBtn" title="Close player">&times;</button>
-    </div>
-  </div>
 
   <!-- ================= LIGHTBOX MODAL ================= -->
   <div class="lightbox-modal" id="lightboxModal">
@@ -986,6 +919,6 @@
   </div>
 
   <!-- Javascript -->
-  <script src="js/app.js?v=2.0"></script>
+  <script src="js/app.js?v=3.8"></script>
 </body>
 </html>
