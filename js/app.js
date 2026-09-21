@@ -192,6 +192,21 @@ function launchYouTubeDirectly(targetUrl) {
 }
 window.launchYouTubeDirectly = launchYouTubeDirectly;
 
+function launchFacebookDirectly(targetUrl) {
+  if (!targetUrl) targetUrl = 'https://www.facebook.com';
+  let win = null;
+  try {
+    win = window.open(targetUrl, '_blank');
+  } catch (e) {
+    win = null;
+  }
+  if (!win || win.closed || typeof win.closed === 'undefined') {
+    // Automatically navigate current page directly if popup blocker interfered!
+    window.location.href = targetUrl;
+  }
+}
+window.launchFacebookDirectly = launchFacebookDirectly;
+
 // ==========================================================================
 // UNIFIED GLOBAL MEDIA & AUDIO COORDINATOR
 // Ensures MP3 Player, YouTube Streams/Cards, Demo Video, and AI Voice TTS
@@ -3147,6 +3162,39 @@ function initVoiceAndChatEngine() {
         : `🎬 <strong>Directing to YouTube Main Page!</strong><br>YouTube has opened in a new tab for you to search, watch, and browse all videos freely! 🎵✨<br><br><a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background:#ff0000;color:#fff;border-radius:20px;padding:6px 16px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-weight:600;"><i class="fa-brands fa-youtube"></i> Open Main YouTube ↗</a>`;
     }
 
+    const isFacebookCommand = /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:facebook|fb)|(?:facebook|fb)\s*(?:open|kholo|jao|chalu|login|feed|page|group|profile)?)|(?:ফেসবুক|ফেসবুকে\s*(?:যাও|চলো|খোলো|ওপেন|দেখাও|ঢোকো))/i.test(cleanText);
+
+    if (isFacebookCommand) {
+      let searchQuery = '';
+      let targetUrl = 'https://www.facebook.com';
+
+      let extracted = cleanText
+        .replace(/(?:go\s*to|open|show|switch\s*to|launch|start|visit|browse|search|find)\s*/gi, '')
+        .replace(/(?:on\s*facebook|in\s*facebook|from\s*facebook|facebook\s*e|facebook\s*te|facebook|fb)/gi, '')
+        .replace(/(?:ফেসবুকে\s*|ফেসবুক\s*)/gi, '')
+        .replace(/(?:যাও|চলো|খোলো|ওপেন|সার্চ|ব্রাউজ|দেখাও|ঢোকো)/gi, '')
+        .trim();
+
+      const stopWords = ['page', 'pages', 'পেজ', 'যাও', 'চলো', 'খোলো', 'main', 'site', 'feed', 'login'];
+      if (extracted && extracted.length > 2 && !stopWords.includes(extracted.toLowerCase())) {
+        searchQuery = extracted;
+      }
+
+      if (searchQuery) {
+        targetUrl = `https://www.facebook.com/search/top?q=${encodeURIComponent(searchQuery)}`;
+      } else {
+        targetUrl = 'https://www.facebook.com';
+      }
+
+      try {
+        window.open(targetUrl, '_blank');
+      } catch (e) {}
+
+      return isBengali
+        ? `🌐 <strong>সরাসরি Facebook ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে মেইন Facebook ওপেন হয়েছে। আপনি সেখান থেকে আপনার ফিড, গ্রুপ ও বন্ধুদের সাথে সহজে যুক্ত হতে পারবেন! ✨<br><br><a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background:#1877f2;color:#fff;border-radius:20px;padding:6px 16px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-weight:600;"><i class="fa-brands fa-facebook"></i> মেইন Facebook পেজে যান ↗</a>`
+        : `🌐 <strong>Directing to Facebook Main Page!</strong><br>Facebook has opened in a new tab for you to browse feeds, groups, and connect with friends! ✨<br><br><a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background:#1877f2;color:#fff;border-radius:20px;padding:6px 16px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-weight:600;"><i class="fa-brands fa-facebook"></i> Open Main Facebook ↗</a>`;
+    }
+
     const allKnowledge = NeuralKnowledgeStore.getAllKnowledge();
     let bestMatch = null;
     let highestScore = 0;
@@ -3909,6 +3957,27 @@ function initVoiceAndChatEngine() {
 
       // Launch YouTube directly!
       launchYouTubeDirectly(ytUrl);
+    }
+
+    // Instant Facebook Command Check & Immediate Launch during user interaction!
+    const cleanForFb = userText.toLowerCase().replace(/[?!.,;:()]/g, ' ').trim();
+    const isFbDirect = /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:facebook|fb)|(?:facebook|fb)\s*(?:open|kholo|jao|chalu|login|feed|page|group|profile)?)|(?:ফেসবুক|ফেসবুকে\s*(?:যাও|চলো|খোলো|ওপেন|দেখাও|ঢোকো))/i.test(cleanForFb);
+
+    if (isFbDirect) {
+      const cleanFbSearch = cleanForFb
+        .replace(/(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find)\s*/gi, '')
+        .replace(/(?:on\s*facebook|in\s*facebook|facebook\s*e|facebook|fb)/gi, '')
+        .replace(/(?:ফেসবুকে\s*|ফেসবুক\s*)/gi, '')
+        .replace(/(?:যাও|চলো|খোলো|ওপেন|সার্চ|দেখাও|ঢোকো)/gi, '')
+        .trim();
+
+      const stopFbWords = ['page', 'pages', 'পেজ', 'main', 'feed', 'login', 'site'];
+      const fbUrl = (cleanFbSearch && cleanFbSearch.length > 2 && !stopFbWords.includes(cleanFbSearch.toLowerCase()))
+        ? `https://www.facebook.com/search/top?q=${encodeURIComponent(cleanFbSearch)}`
+        : 'https://www.facebook.com';
+
+      // Launch Facebook directly!
+      launchFacebookDirectly(fbUrl);
     }
 
     // Switch avatar to thinking state with synaptic firing
