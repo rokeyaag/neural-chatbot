@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="css/style.css?v=4.3">
+  <link rel="stylesheet" href="css/style.css?v=4.4">
 </head>
 <body>
 
@@ -89,10 +89,6 @@
               <button class="stage-tab-btn" id="tabVideoBtn" data-target="video" title="Switch to Demo Walkthrough Video">
                 <i class="fa-solid fa-circle-play"></i>
                 <span>Demo Video</span>
-              </button>
-              <button class="stage-tab-btn" id="tabYoutubeBtn" data-target="youtube" title="Switch to Live YouTube Player & Cinema Hub">
-                <i class="fa-brands fa-youtube gradient-red-text"></i>
-                <span>YouTube Player</span>
               </button>
               <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="stage-tab-btn stage-main-yt-btn" id="tabMainYoutubeBtn" title="Open Official Main YouTube (youtube.com) to search and browse all videos freely">
                 <i class="fa-brands fa-youtube" style="color: #ff2a44;"></i>
@@ -174,58 +170,6 @@
             </div>
           </div>
 
-          <!-- VIEW 3: Interactive YouTube Cinema & Player Stage View -->
-          <div class="stage-youtube-container" id="stageYoutubeView" style="display: none;">
-            <!-- Top Search & Quick Action Bar -->
-            <div class="stage-yt-bar">
-              <div class="stage-yt-search-wrap">
-                <i class="fa-brands fa-youtube stage-yt-icon"></i>
-                <input type="text" id="stageYtInput" placeholder="🔍 Real YouTube Search — যেকোনো হিন্দি গান, বাংলা গান বা আর্টিস্টের নাম লিখে সার্চ করুন..." />
-                <button type="button" class="btn btn-primary btn-sm stage-yt-play-btn" id="stageYtPlayBtn" title="Search & Play on Stage Player">
-                  <i class="fa-solid fa-play"></i> Play
-                </button>
-                <button type="button" class="btn btn-sm stage-yt-browse-btn" id="stageYtBrowseBtn" title="Search & Browse All Results on Main YouTube.com in a new tab">
-                  <i class="fa-brands fa-youtube"></i> <span>Browse on YT ↗</span>
-                </button>
-              </div>
-              <div class="stage-yt-controls-right">
-                <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="stage-action-btn stage-main-yt-action-btn" title="Open Main YouTube (youtube.com) in New Tab to browse all videos freely">
-                  <i class="fa-brands fa-youtube gradient-red-text"></i> <span>Open Main YouTube ↗</span>
-                </a>
-                <button class="stage-action-btn" id="stageYtBackAvatarBtn" title="Return back to Talking Avatar">
-                  <i class="fa-solid fa-robot"></i> <span>Back to Avatar</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Quick Recommended Song & Real Search Chips -->
-            <div class="stage-yt-chips-row" id="stageYtChipsRow">
-              <button class="stage-yt-chip" data-yt-search="Hindi Top Hit Songs"><i class="fa-solid fa-music"></i> 🇮🇳 Hindi Songs</button>
-              <button class="stage-yt-chip" data-yt-search="Bangla Hit Songs"><i class="fa-solid fa-music"></i> 🇧🇩 বাংলা গান</button>
-              <button class="stage-yt-chip" data-yt-search="Arijit Singh Best Songs"><i class="fa-solid fa-microphone"></i> Arijit Singh</button>
-              <button class="stage-yt-chip" data-yt-search="Bollywood Romantic Hindi Songs"><i class="fa-solid fa-film"></i> Bollywood Hits</button>
-              <button class="stage-yt-chip" data-yt-search="Shreya Ghoshal Hits"><i class="fa-solid fa-star"></i> Shreya Ghoshal</button>
-              <button class="stage-yt-chip" data-yt-search="Lofi Hip Hop Chill Beats Live"><i class="fa-solid fa-headphones"></i> Lo-Fi Chill</button>
-              <button class="stage-yt-chip" data-yt-id="2Vv-BfVoq4g" data-yt-title="Tum Hi Ho — Arijit Singh"><i class="fa-solid fa-fire"></i> Tum Hi Ho</button>
-              <button class="stage-yt-chip" data-yt-id="BddP6PYo2gs" data-yt-title="Kesariya — Arijit Singh"><i class="fa-solid fa-heart"></i> Kesariya</button>
-              <button class="stage-yt-chip" data-yt-id="5Eqb_-j3FDA" data-yt-title="Pasoori — Ali Sethi x Shae Gill"><i class="fa-solid fa-bolt"></i> Pasoori</button>
-            </div>
-
-            <!-- YouTube Embedded Player Display Card -->
-            <div class="stage-yt-player-box">
-              <div class="stage-yt-now-playing">
-                <div class="stage-yt-playing-left">
-                  <span class="hud-mono-tag"><i class="fa-brands fa-youtube"></i> LIVE YT CINEMA</span>
-                  <strong id="stageYtCurrentTitle"><i class="fa-solid fa-play gradient-text"></i> Tum Hi Ho — Arijit Singh</strong>
-                </div>
-                <div class="stage-yt-playing-right">
-                  <span class="hud-mono-val" id="stageYtEngineStatus">SEARCH ENGINE ACTIVE</span>
-                </div>
-              </div>
-              <div class="stage-yt-iframe-wrap">
-                <iframe id="stageYtIframe" src="https://www.youtube-nocookie.com/embed/2Vv-BfVoq4g?enablejsapi=1" title="YouTube Stage Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -1040,6 +984,6 @@
   </div>
 
   <!-- Javascript -->
-  <script src="js/app.js?v=4.3"></script>
+  <script src="js/app.js?v=4.4"></script>
 </body>
 </html>
