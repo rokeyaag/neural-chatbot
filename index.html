@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="css/style.css?v=4.2">
+  <link rel="stylesheet" href="css/style.css?v=4.3">
 </head>
 <body>
 
@@ -94,6 +94,10 @@
                 <i class="fa-brands fa-youtube gradient-red-text"></i>
                 <span>YouTube Player</span>
               </button>
+              <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="stage-tab-btn stage-main-yt-btn" id="tabMainYoutubeBtn" title="Open Official Main YouTube (youtube.com) to search and browse all videos freely">
+                <i class="fa-brands fa-youtube" style="color: #ff2a44;"></i>
+                <span>Main YouTube <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; margin-left: 2px;"></i></span>
+              </a>
             </div>
             
             <!-- Dynamic Avatar Status & Header Action Controls -->
@@ -177,12 +181,17 @@
               <div class="stage-yt-search-wrap">
                 <i class="fa-brands fa-youtube stage-yt-icon"></i>
                 <input type="text" id="stageYtInput" placeholder="🔍 Real YouTube Search — যেকোনো হিন্দি গান, বাংলা গান বা আর্টিস্টের নাম লিখে সার্চ করুন..." />
-                <button type="button" class="btn btn-primary btn-sm stage-yt-play-btn" id="stageYtPlayBtn" title="Search & Play on YouTube">
-                  <i class="fa-solid fa-magnifying-glass"></i> Search &amp; Play
+                <button type="button" class="btn btn-primary btn-sm stage-yt-play-btn" id="stageYtPlayBtn" title="Search & Play on Stage Player">
+                  <i class="fa-solid fa-play"></i> Play
+                </button>
+                <button type="button" class="btn btn-sm stage-yt-browse-btn" id="stageYtBrowseBtn" title="Search & Browse All Results on Main YouTube.com in a new tab">
+                  <i class="fa-brands fa-youtube"></i> <span>Browse on YT ↗</span>
                 </button>
               </div>
               <div class="stage-yt-controls-right">
-                <span class="stage-yt-engine-badge"><i class="fa-solid fa-bolt"></i> Real YT Engine</span>
+                <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="stage-action-btn stage-main-yt-action-btn" title="Open Main YouTube (youtube.com) in New Tab to browse all videos freely">
+                  <i class="fa-brands fa-youtube gradient-red-text"></i> <span>Open Main YouTube ↗</span>
+                </a>
                 <button class="stage-action-btn" id="stageYtBackAvatarBtn" title="Return back to Talking Avatar">
                   <i class="fa-solid fa-robot"></i> <span>Back to Avatar</span>
                 </button>
@@ -1031,6 +1040,6 @@
   </div>
 
   <!-- Javascript -->
-  <script src="js/app.js?v=4.2"></script>
+  <script src="js/app.js?v=4.3"></script>
 </body>
 </html>

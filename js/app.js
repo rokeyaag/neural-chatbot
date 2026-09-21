@@ -269,6 +269,7 @@ function initVideoController() {
   // Stage YouTube Player Elements
   const stageYtInput = document.getElementById('stageYtInput');
   const stageYtPlayBtn = document.getElementById('stageYtPlayBtn');
+  const stageYtBrowseBtn = document.getElementById('stageYtBrowseBtn');
   const stageYtBackAvatarBtn = document.getElementById('stageYtBackAvatarBtn');
   const stageYtIframe = document.getElementById('stageYtIframe');
   const stageYtCurrentTitle = document.getElementById('stageYtCurrentTitle');
@@ -431,7 +432,7 @@ function initVideoController() {
       stageFooterTitle.innerHTML = '<i class="fa-brands fa-youtube gradient-red-text"></i> YouTube Cinema & Search Stage';
     }
     if (stageFooterSubtitle) {
-      stageFooterSubtitle.textContent = 'Real-Time YouTube Engine & Live Multi-Channel Stream Active';
+      stageFooterSubtitle.textContent = 'Real-Time YouTube Engine Active • Click "Browse on YT ↗" to view all search results on Main YouTube';
     }
 
     if (avatarStatusPill) {
@@ -467,6 +468,16 @@ function initVideoController() {
   }
 
   if (stageYtPlayBtn) stageYtPlayBtn.addEventListener('click', handleStageYtSubmit);
+  if (stageYtBrowseBtn) {
+    stageYtBrowseBtn.addEventListener('click', () => {
+      const q = stageYtInput ? stageYtInput.value.trim() : '';
+      if (q) {
+        window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`, '_blank');
+      } else {
+        window.open('https://www.youtube.com', '_blank');
+      }
+    });
+  }
   if (stageYtInput) {
     stageYtInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
