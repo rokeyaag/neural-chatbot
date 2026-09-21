@@ -2503,6 +2503,7 @@ h1, h2, h3, h4, h5, h6 {
 .kb-card[data-cat="entertainment"]::before { background: #ffbd2e; }
 .kb-card[data-cat="github"]::before { background: #8b5cf6; }
 .kb-card[data-cat="custom"]::before { background: var(--accent-emerald); }
+.kb-card[data-cat="qa_memory"]::before { background: #00f2fe; }
 
 .kb-card:hover {
   border-color: rgba(0, 242, 254, 0.4);
@@ -2547,6 +2548,12 @@ h1, h2, h3, h4, h5, h6 {
   background: rgba(0, 245, 160, 0.15);
   border-color: var(--accent-emerald);
   color: var(--accent-emerald);
+}
+
+.kb-card-cat-badge.qa {
+  background: rgba(0, 242, 254, 0.18);
+  border-color: rgba(0, 242, 254, 0.5);
+  color: #00f2fe;
 }
 
 .kb-card-keywords {

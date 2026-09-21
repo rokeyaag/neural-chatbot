@@ -1456,9 +1456,12 @@ function initVoiceAndChatEngine() {
     },
 
     getAllKnowledge() {
+      const learned = (window.NeuralDialogueMemory && typeof window.NeuralDialogueMemory.getLearnedQA === 'function')
+        ? window.NeuralDialogueMemory.getLearnedQA()
+        : [];
       const custom = this.getCustomKnowledge();
       const github = this.getGitHubKnowledge();
-      return [...custom, ...github, ...this.defaultStore];
+      return [...learned, ...custom, ...github, ...this.defaultStore];
     },
 
     // Dynamic non-repeating selector strictly filtered by language
@@ -1501,13 +1504,16 @@ function initVoiceAndChatEngine() {
     });
   }, 1000);
 
-  // --- USER PROFILE & PERSISTENT MEMORY ENGINE ---
-  const UserProfileMemory = {
-    STORAGE_KEY: 'neural_bot_user_profile',
+  // --- INTERACTIVE RECIPROCAL DIALOGUE & TWO-WAY Q&A MEMORY ENGINE ---
+  const NeuralDialogueMemory = {
+    PROFILE_KEY: 'neural_bot_user_profile',
+    DIALOGUE_HISTORY_KEY: 'neural_bot_qa_dialogue_history',
+    LEARNED_QA_KEY: 'neural_bot_learned_qa_items',
+    PENDING_STATE_KEY: 'neural_bot_pending_dialogue_state',
 
     getProfile() {
       try {
-        const data = localStorage.getItem(this.STORAGE_KEY);
+        const data = localStorage.getItem(this.PROFILE_KEY);
         return data ? JSON.parse(data) : {};
       } catch (e) {
         return {};
@@ -1516,11 +1522,11 @@ function initVoiceAndChatEngine() {
 
     saveProfile(profile) {
       try {
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(profile));
+        localStorage.setItem(this.PROFILE_KEY, JSON.stringify(profile));
       } catch (e) {}
     },
 
-    setField(field, value) {
+    setProfileField(field, value) {
       const p = this.getProfile();
       p[field] = value;
       p.updatedAt = new Date().toISOString();
@@ -1528,104 +1534,715 @@ function initVoiceAndChatEngine() {
       return p;
     },
 
-    clearMemory() {
+    getDialogueHistory() {
       try {
-        localStorage.removeItem(this.STORAGE_KEY);
+        const d = localStorage.getItem(this.DIALOGUE_HISTORY_KEY);
+        return d ? JSON.parse(d) : [];
+      } catch (e) {
+        return [];
+      }
+    },
+
+    addDialogueTurn(turn) {
+      try {
+        const history = this.getDialogueHistory();
+        history.unshift({
+          id: 'turn_' + Date.now(),
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          date: new Date().toLocaleDateString(),
+          ...turn
+        });
+        if (history.length > 100) history.pop();
+        localStorage.setItem(this.DIALOGUE_HISTORY_KEY, JSON.stringify(history));
       } catch (e) {}
     },
 
-    processQuery(cleanText, rawText, isBengali) {
-      const p = this.getProfile();
+    getLearnedQA() {
+      try {
+        const d = localStorage.getItem(this.LEARNED_QA_KEY);
+        return d ? JSON.parse(d) : [];
+      } catch (e) {
+        return [];
+      }
+    },
 
-      // 1. Reset / Clear memory
-      if (/স্মৃতি মুছে ফেলো|সব ভুলে যাও|মেমোরি ক্লিয়ার|ভুলে যাও আমাকে|reset memory|clear memory|forget me|forget my name/i.test(cleanText)) {
-        this.clearMemory();
+    saveLearnedQA(item) {
+      try {
+        const list = this.getLearnedQA();
+        const filtered = list.filter(i => i.id !== item.id && (item.topic ? i.topic !== item.topic : true));
+        filtered.unshift(item);
+        localStorage.setItem(this.LEARNED_QA_KEY, JSON.stringify(filtered));
+        return filtered;
+      } catch (e) {
+        return [];
+      }
+    },
+
+    deleteLearnedQA(id) {
+      try {
+        let list = this.getLearnedQA();
+        list = list.filter(i => i.id !== id);
+        localStorage.setItem(this.LEARNED_QA_KEY, JSON.stringify(list));
+        return list;
+      } catch (e) {
+        return [];
+      }
+    },
+
+    getPendingQuestion() {
+      try {
+        const d = sessionStorage.getItem(this.PENDING_STATE_KEY) || localStorage.getItem(this.PENDING_STATE_KEY);
+        return d ? JSON.parse(d) : null;
+      } catch (e) {
+        return null;
+      }
+    },
+
+    setPendingQuestion(topic, questionText, expectedField = null) {
+      try {
+        const state = {
+          topic,
+          questionText,
+          expectedField: expectedField || topic,
+          timestamp: Date.now()
+        };
+        sessionStorage.setItem(this.PENDING_STATE_KEY, JSON.stringify(state));
+        localStorage.setItem(this.PENDING_STATE_KEY, JSON.stringify(state));
+      } catch (e) {}
+    },
+
+    clearPendingQuestion() {
+      try {
+        sessionStorage.removeItem(this.PENDING_STATE_KEY);
+        localStorage.removeItem(this.PENDING_STATE_KEY);
+      } catch (e) {}
+    },
+
+    clearAllMemory() {
+      try {
+        localStorage.removeItem(this.PROFILE_KEY);
+        localStorage.removeItem(this.DIALOGUE_HISTORY_KEY);
+        localStorage.removeItem(this.LEARNED_QA_KEY);
+        this.clearPendingQuestion();
+      } catch (e) {}
+    },
+
+    // Generates a reciprocal follow-up question to ask the user
+    generateReciprocalQuestion(profile, isBengali, currentTopic = null) {
+      if (!profile.name && currentTopic !== 'name') {
+        this.setPendingQuestion('name', isBengali ? 'আপনার সুন্দর নাম কী? আমাকে বলুন যাতে মনে রাখতে পারি!' : 'What is your name? Please tell me so I can remember you!', 'name');
+        return isBengali
+          ? "<br><br>💡 <strong>প্রশ্ন:</strong> আপনার সুন্দর নাম কী? আমাকে বলুন, যাতে সবসময় মনে রাখতে পারি! 😊"
+          : "<br><br>💡 <strong>Question:</strong> What is your name? Tell me so I can keep you in memory! 😊";
+      }
+
+      if (!profile.hometown && currentTopic !== 'hometown') {
+        const nameGreeting = profile.name ? `আচ্ছা <strong>${escapeHtml(profile.name)}</strong>, ` : 'আচ্ছা, ';
+        const nameGreetingEn = profile.name ? `By the way <strong>${escapeHtml(profile.name)}</strong>, ` : 'By the way, ';
+        this.setPendingQuestion('hometown', isBengali ? 'আপনি কোন শহরে বা জেলায় থাকেন?' : 'Which city or hometown do you live in?', 'hometown');
+        return isBengali
+          ? `<br><br>💡 <strong>প্রশ্ন:</strong> ${nameGreeting}আপনি কোন শহরে বা জেলায় থাকেন? আপনার বাড়ি কোথায়? 🏙️`
+          : `<br><br>💡 <strong>Question:</strong> ${nameGreetingEn}which city or country do you live in? 🏙️`;
+      }
+
+      if (!profile.profession && currentTopic !== 'profession') {
+        this.setPendingQuestion('profession', isBengali ? 'আপনার পেশা কী বা কী নিয়ে পড়াশোনা করছেন?' : 'What is your profession or field of study?', 'profession');
+        return isBengali
+          ? "<br><br>💡 <strong>প্রশ্ন:</strong> আপনি কী নিয়ে পড়াশোনা করছেন বা আপনার পেশা কী? 💼"
+          : "<br><br>💡 <strong>Question:</strong> What is your profession or field of study? 💼";
+      }
+
+      if (!profile.hobby && currentTopic !== 'hobby') {
+        this.setPendingQuestion('hobby', isBengali ? 'অবসর সময়ে আপনার সবচেয়ে প্রিয় শখ কী?' : 'What is your favorite hobby in your free time?', 'hobby');
+        return isBengali
+          ? "<br><br>💡 <strong>প্রশ্ন:</strong> অবসরে আপনার সবচেয়ে প্রিয় শখ কী? অবসর সময়ে কী করতে ভালো লাগে? 🎨"
+          : "<br><br>💡 <strong>Question:</strong> What is your favorite hobby or thing to do in your free time? 🎨";
+      }
+
+      if (!profile.fav_language && currentTopic !== 'fav_language') {
+        this.setPendingQuestion('fav_language', isBengali ? 'আপনার সবচেয়ে প্রিয় প্রোগ্রামিং ভাষা বা পছন্দের প্রযুক্তি কোনটি?' : 'What is your favorite programming language or technology?', 'fav_language');
+        return isBengali
+          ? "<br><br>💡 <strong>প্রশ্ন:</strong> আপনার সবচেয়ে পছন্দের প্রোগ্রামিং ভাষা বা প্রযুক্তি কোনটি? 💻"
+          : "<br><br>💡 <strong>Question:</strong> What is your favorite programming language or technology? 💻";
+      }
+
+      if (!profile.fav_food && currentTopic !== 'fav_food') {
+        this.setPendingQuestion('fav_food', isBengali ? 'আপনার সবসময়ের প্রিয় খাবার কোনটি?' : 'What is your favorite food or dish?', 'fav_food');
+        return isBengali
+          ? "<br><br>💡 <strong>প্রশ্ন:</strong> আপনার সবসময়ের পছন্দের প্রিয় খাবার কোনটি বলুন তো? 🍲"
+          : "<br><br>💡 <strong>Question:</strong> What is your all-time favorite food or dish? 🍲";
+      }
+
+      if (!profile.fav_music && currentTopic !== 'fav_music') {
+        this.setPendingQuestion('fav_music', isBengali ? 'কোন ধরনের সঙ্গীত বা কোন শিল্পীর গান আপনার বেশি পছন্দ?' : 'What genre of music or singer is your favorite?', 'fav_music');
+        return isBengali
+          ? "<br><br>💡 <strong>প্রশ্ন:</strong> আপনি কোন ধরনের সঙ্গীত বা কোন শিল্পীর গান সবচেয়ে বেশি ভালোবাসেন? 🎵"
+          : "<br><br>💡 <strong>Question:</strong> What genre of music or singer is your favorite? 🎵";
+      }
+
+      if (!profile.dream && currentTopic !== 'dream') {
+        this.setPendingQuestion('dream', isBengali ? 'আপনার জীবনের সবচেয়ে বড় স্বপ্ন বা ভবিষ্যৎ লক্ষ্য কী?' : 'What is your biggest life dream or goal?', 'dream');
+        return isBengali
+          ? "<br><br>💡 <strong>প্রশ্ন:</strong> আপনার জীবনের সবচেয়ে বড় স্বপ্ন বা ভবিষ্যৎ লক্ষ্য কী? 🌟"
+          : "<br><br>💡 <strong>Question:</strong> What is your biggest life dream or goal? 🌟";
+      }
+
+      // Dynamic engaging pool of reciprocal curiosity questions
+      const dynamicQuestionsBn = [
+        { topic: 'daily_reflection', q: "আজ সারাদিনে নতুন কী শিখলেন বা বিশেষ কোনো অভিজ্ঞতা হলো?", label: "আজ সারাদিনে নতুন কী শিখলেন বা বিশেষ কী কাজ করলেন? 📖" },
+        { topic: 'ai_vision', q: "ভবিষ্যতে এআই ও রোবট প্রযুক্তি মানুষের জীবনকে কেমন করবে বলে আপনার ধারণা?", label: "ভবিষ্যতে এআই প্রযুক্তি মানুষের জীবনকে কীভাবে বদলে দেবে বলে আপনার ধারণা? 🤖" },
+        { topic: 'refreshment', q: "ক্লান্ত লাগলে মন ভালো করার জন্য আপনি সাধারণত কী করেন?", label: "কাজের ফাঁকে রিফ্রেশমেন্টের জন্য আপনি কী করতে ভালোবাসেন? ☕" },
+        { topic: 'favorite_place', q: "আপনার প্রিয় কোনো ভ্রমণ বা সুন্দর জায়গার স্মৃতি আছে কি?", label: "আপনার দেখা সবচেয়ে প্রিয় বা সুন্দর ভ্রমণস্থান কোনটি? 🏖️" },
+        { topic: 'book_movie', q: "আপনার দেখা সেরা কোনো মুভি বা পড়া সেরা বইয়ের নাম কী?", label: "আপনার পছন্দের সেরা কোনো সিনেমা বা বইয়ের নাম কী? 🎬📚" }
+      ];
+
+      const dynamicQuestionsEn = [
+        { topic: 'daily_reflection', q: "What new thing did you learn or accomplish today?", label: "What is something new or exciting you did today? 📖" },
+        { topic: 'ai_vision', q: "How do you think AI and robotics will reshape human life?", label: "How do you think AI will change our world in the future? 🤖" },
+        { topic: 'refreshment', q: "What is your favorite way to unwind and refresh during a busy day?", label: "What is your go-to way to relax after work or study? ☕" },
+        { topic: 'favorite_place', q: "What is the most memorable or beautiful place you've ever visited?", label: "What is your all-time favorite travel destination? 🏖️" },
+        { topic: 'book_movie', q: "What is the best movie you've watched or book you've read recently?", label: "What is your favorite movie or book? 🎬📚" }
+      ];
+
+      const pool = isBengali ? dynamicQuestionsBn : dynamicQuestionsEn;
+      const chosen = pool[Math.floor(Math.random() * pool.length)];
+      this.setPendingQuestion(chosen.topic, chosen.q, chosen.topic);
+
+      return isBengali
+        ? `<br><br>💡 <strong>প্রশ্ন:</strong> ${chosen.label}`
+        : `<br><br>💡 <strong>Question:</strong> ${chosen.label}`;
+    },
+
+    // Main turn handler for Q&A learning, reciprocal answering, and memory retrieval
+    processUserTurn(cleanText, rawText, isBengali) {
+      const profile = this.getProfile();
+      const learned = this.getLearnedQA();
+      const pending = this.getPendingQuestion();
+
+      // 1. Reset / Clear all memory
+      if (/স্মৃতি মুছে ফেলো|সব ভুলে যাও|মেমোরি ক্লিয়ার|ভুলে যাও আমাকে|reset memory|clear memory|forget me|forget my name|forget everything/i.test(cleanText)) {
+        this.clearAllMemory();
         return isBengali 
-          ? "আপনার নির্দেশমতো আমার মেমোরি রিসেট করেছি। আবার নতুন করে পরিচিত হতে পারেন! 🧠✨"
-          : "Memory cleared! I have reset our personal history. Feel free to introduce yourself again! 🧠✨";
+          ? "আপনার নির্দেশমতো আমার সকল ডায়ালগ ও পার্সোনাল মেমোরি রিসেট করেছি। আবার নতুন করে পরিচিত হতে পারেন! 🧠✨"
+          : "All dialogue & personal memory cleared! I have reset our history. Feel free to introduce yourself again! 🧠✨";
       }
 
-      // 2. Introduce Name (e.g. "আমার নাম রহিম", "আমার নাম হলো করিম", "my name is Alex", "I am John")
-      const bnNameMatch = rawText.match(/(?:আমার নাম|আমি)\s+(?:হলো|হচ্ছে|হল)?\s*([^\n?!.,;:()]{2,20})/i);
-      const enNameMatch = rawText.match(/(?:my name is|i am|call me)\s+([a-zA-Z]{2,20})/i);
-
-      if (bnNameMatch && !/কি|কী|বলো|জানিস|জানেন|মনে|কই|কেমন|কে|কার/i.test(rawText)) {
-        const candidate = bnNameMatch[1].trim();
-        if (candidate && !['কি', 'কী', 'বলো', 'কার', 'রোবট', 'এআই', 'ভালো', 'খারাপ'].includes(candidate)) {
-          this.setField('name', candidate);
-          return `বাহ! খুব সুন্দর নাম, <strong>${escapeHtml(candidate)}</strong>! 😊 আমি আপনার নাম মেমোরিতে সেভ করে রাখলাম।`;
-        }
-      }
-
-      if (enNameMatch && !/what|who|how|why|remember|robot|bot/i.test(rawText)) {
-        const candidate = enNameMatch[1].trim();
-        if (candidate) {
-          this.setField('name', candidate);
-          return `Nice to meet you, <strong>${escapeHtml(candidate)}</strong>! 😊 I have stored your name in my neural memory.`;
-        }
-      }
-
-      // 3. Ask for Name (e.g. "আমার নাম কি", "আমার নাম কী", "what is my name", "do you know my name")
-      if (/আমার নাম (?:কি|কী|বলো|জানিস|জানেন)|আমার নামটা কি|what is my name|do you remember my name|who am i/i.test(cleanText)) {
-        if (p.name) {
-          return isBengali 
-            ? `আপনার নাম হলো <strong>${escapeHtml(p.name)}</strong>! ❤️ আমি আপনাকে ভালোভাবেই মনে রেখেছি।`
-            : `Your name is <strong>${escapeHtml(p.name)}</strong>! ❤️ I remember you perfectly.`;
-        } else {
-          return isBengali
-            ? "আপনি এখনো আপনার নাম আমাকে বলেননি! 😊 'আমার নাম [আপনার নাম]' লিখে বলুন, আমি মনে রাখবো।"
-            : "You haven't told me your name yet! 😊 Tell me 'My name is [your name]' and I'll remember it.";
-        }
-      }
-
-      // 4. Set Favorite Food (e.g. "আমার প্রিয় খাবার বিরিয়ানি", "my favorite food is pizza")
-      const bnFoodMatch = rawText.match(/আমার প্রিয় খাবার\s+(?:হলো|হচ্ছে|হল)?\s*([^\n?!.,;:()]{2,25})/i);
-      const enFoodMatch = rawText.match(/my favorite food is\s+([a-zA-Z\s]{2,25})/i);
-
-      if (bnFoodMatch && !/কি|কী|বলো/i.test(rawText)) {
-        const food = bnFoodMatch[1].trim();
-        this.setField('favorite_food', food);
-        return `দারুণ! <strong>${escapeHtml(food)}</strong> আসলেই অনেক সুস্বাদু খাবার! 😋 আপনার পছন্দ আমি মনে রাখলাম।`;
-      }
-      if (enFoodMatch && !/what/i.test(rawText)) {
-        const food = enFoodMatch[1].trim();
-        this.setField('favorite_food', food);
-        return `Delicious! <strong>${escapeHtml(food)}</strong> is an awesome choice! 😋 Saved to my memory.`;
-      }
-
-      // 5. Ask Favorite Food
-      if (/আমার প্রিয় খাবার (?:কি|কী)|my favorite food/i.test(cleanText) && (cleanText.includes('কি') || cleanText.includes('কী') || cleanText.includes('what'))) {
-        if (p.favorite_food) {
-          return isBengali
-            ? `আপনার পছন্দের খাবার হলো <strong>${escapeHtml(p.favorite_food)}</strong>! 🍲`
-            : `Your favorite food is <strong>${escapeHtml(p.favorite_food)}</strong>! 🍲`;
-        }
-      }
-
-      // 6. "আমার সম্পর্কে কি জানো?" / "What do you know about me?" / "Remember me"
-      if (/আমার সম্পর্কে কি জানো|আমার সম্পর্কে কি জানিস|আমাকে মনে আছে|about me|what do you know about me|remember me/i.test(cleanText)) {
+      // 2. Show Learned Memories, Dialogue History & User Profile
+      if (/আমার সম্পর্কে কি জানো|আমার সম্পর্কে কি জানিস|আমরা কি কি কথা বলেছি|মেমোরি দেখাও|সংরক্ষিত প্রশ্ন|সংরক্ষিত প্রশ্ন ও উত্তর|ডায়ালগ হিস্ট্রি|about me|what do you know about me|remember me|show memory|dialogue history|learned qa/i.test(cleanText)) {
         const details = [];
-        if (p.name) details.push(isBengali ? `• নাম: <strong>${escapeHtml(p.name)}</strong>` : `• Name: <strong>${escapeHtml(p.name)}</strong>`);
-        if (p.favorite_food) details.push(isBengali ? `• প্রিয় খাবার: <strong>${escapeHtml(p.favorite_food)}</strong>` : `• Favorite Food: <strong>${escapeHtml(p.favorite_food)}</strong>`);
-        if (p.favorite_color) details.push(isBengali ? `• প্রিয় রঙ: <strong>${escapeHtml(p.favorite_color)}</strong>` : `• Favorite Color: <strong>${escapeHtml(p.favorite_color)}</strong>`);
+        if (profile.name) details.push(isBengali ? `• নাম: <strong>${escapeHtml(profile.name)}</strong>` : `• Name: <strong>${escapeHtml(profile.name)}</strong>`);
+        if (profile.hometown) details.push(isBengali ? `• শহর/বাড়ি: <strong>${escapeHtml(profile.hometown)}</strong>` : `• City/Hometown: <strong>${escapeHtml(profile.hometown)}</strong>`);
+        if (profile.profession) details.push(isBengali ? `• পেশা/পড়াশোনা: <strong>${escapeHtml(profile.profession)}</strong>` : `• Profession: <strong>${escapeHtml(profile.profession)}</strong>`);
+        if (profile.hobby) details.push(isBengali ? `• প্রিয় শখ: <strong>${escapeHtml(profile.hobby)}</strong>` : `• Favorite Hobby: <strong>${escapeHtml(profile.hobby)}</strong>`);
+        if (profile.fav_language) details.push(isBengali ? `• প্রিয় প্রোগ্রামিং ভাষা: <strong>${escapeHtml(profile.fav_language)}</strong>` : `• Favorite Language: <strong>${escapeHtml(profile.fav_language)}</strong>`);
+        if (profile.fav_food) details.push(isBengali ? `• প্রিয় খাবার: <strong>${escapeHtml(profile.fav_food)}</strong>` : `• Favorite Food: <strong>${escapeHtml(profile.fav_food)}</strong>`);
+        if (profile.fav_music) details.push(isBengali ? `• প্রিয় সঙ্গীত: <strong>${escapeHtml(profile.fav_music)}</strong>` : `• Favorite Music: <strong>${escapeHtml(profile.fav_music)}</strong>`);
+        if (profile.dream) details.push(isBengali ? `• স্বপ্ন/লক্ষ্য: <strong>${escapeHtml(profile.dream)}</strong>` : `• Life Dream: <strong>${escapeHtml(profile.dream)}</strong>`);
 
-        if (details.length > 0) {
+        let learnedHtml = '';
+        if (learned.length > 0) {
+          learnedHtml = `<br><br><strong>🧠 মেমোরিতে সংরক্ষিত প্রশ্ন ও উত্তর (${learned.length}টি):</strong><br>` + 
+            learned.map((item, idx) => `<div style="margin-top:6px; padding:6px 10px; background:rgba(0,242,254,0.06); border-left:3px solid #00f2fe; border-radius:4px; font-size:0.85rem;"><strong>Q${idx+1}:</strong> ${escapeHtml(item.questionText || item.title)}<br><strong>A:</strong> ${escapeHtml(item.answerText || (item.responses_bn && item.responses_bn[0]) || (item.responses && item.responses[0]))}</div>`).join('');
+        }
+
+        const nextQ = this.generateReciprocalQuestion(profile, isBengali);
+
+        if (details.length > 0 || learned.length > 0) {
           return isBengali
-            ? `হ্যাঁ, আপনাকে আমি সবসময় মনে রাখি! ❤️ আপনার সম্পর্কে আমার জানা তথ্য:<br><br>${details.join('<br>')}<br><br>আপনি চাইলে আরও অনেক কিছু শেয়ার করতে পারেন!`
-            : `Yes, I remember you very well! ❤️ Here is what I know about you:<br><br>${details.join('<br>')}<br><br>Feel free to tell me more about yourself anytime!`;
+            ? `হ্যাঁ, আপনার সাথে প্রতিটি প্রশ্নোত্তর আমি মনে রাখি! ❤️<br><br><strong>👤 আপনার সংরক্ষিত প্রোফাইল:</strong><br>${details.length > 0 ? details.join('<br>') : '<em>(প্রোফাইল তথ্য খালি)</em>'}${learnedHtml}${nextQ}`
+            : `Yes, I remember our conversations and Q&A! ❤️<br><br><strong>👤 Your Saved Profile:</strong><br>${details.length > 0 ? details.join('<br>') : '<em>(No profile set)</em>'}${learnedHtml}${nextQ}`;
         } else {
           return isBengali
-            ? "অবশ্যই আপনাকে মনে আছে! তবে আপনার নাম বা পছন্দের বিষয় এখনো শেয়ার করেননি। 'আমার নাম [নাম]' বা 'আমার প্রিয় খাবার [খাবার]' লিখে আমাকে জানান! 😊"
-            : "Of course I remember you! Tell me your name or favorite things (e.g. 'My name is Alex') and I'll keep them in memory! 😊";
+            ? `অবশ্যই আপনাকে মনে আছে! তবে নির্দিষ্ট কোনো তথ্য বা প্রশ্ন-উত্তর এখনো মেমোরিতে জমা হয়নি।${nextQ}`
+            : `I remember you! Tell me your name or favorite things and I will keep them stored!${nextQ}`;
+        }
+      }
+
+      // 3. Explicit Teaching / Q&A Direct Training Mode
+      // Format 3a: "প্রশ্ন: [Q] উত্তর: [A]" or "Q: [Q] A: [A]"
+      const explicitQAMatch = rawText.match(/(?:প্রশ্ন|question|Q)\s*[:：]\s*([^\n]+?)\s*(?:উত্তর|answer|A)\s*[:：]\s*([^\n]+)/i);
+      if (explicitQAMatch) {
+        const qText = explicitQAMatch[1].trim();
+        const aText = explicitQAMatch[2].trim();
+        if (qText && aText) {
+          const cleanQ = qText.toLowerCase().replace(/[?!.,;:()]/g, ' ').replace(/\s+/g, ' ').trim();
+          const newItem = {
+            id: 'qa_' + Date.now(),
+            category: 'qa_memory',
+            title: `প্রশ্নোত্তর: ${qText}`,
+            questionText: qText,
+            answerText: aText,
+            keywords_bn: [cleanQ, qText.toLowerCase().trim()],
+            keywords_en: [cleanQ, qText.toLowerCase().trim()],
+            responses_bn: [`<strong>${escapeHtml(aText)}</strong>`],
+            responses_en: [`<strong>${escapeHtml(aText)}</strong>`],
+            isLearnedQA: true,
+            createdAt: new Date().toLocaleDateString()
+          };
+          this.saveLearnedQA(newItem);
+          this.addDialogueTurn({ userQuestionOrAnswer: qText, botQuestionOrAnswer: aText, topic: 'custom_qa', learnedFact: `${qText} -> ${aText}`, isBengali });
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali);
+          return isBengali
+            ? `চমৎকার! আমি এই প্রশ্ন ও উত্তর নিউরাল মেমোরিতে সেভ করে নিয়েছি:<br>• <strong>প্রশ্ন:</strong> ${escapeHtml(qText)}<br>• <strong>উত্তর:</strong> ${escapeHtml(aText)} 🧠✨${nextQ}`
+            : `Awesome! I have stored this Question & Answer into my neural memory:<br>• <strong>Question:</strong> ${escapeHtml(qText)}<br>• <strong>Answer:</strong> ${escapeHtml(aText)} 🧠✨${nextQ}`;
+        }
+      }
+
+      // Format 3b: "মনে রাখো: [তথ্য]" or "Remember that: [fact]"
+      const rememberMatch = rawText.match(/(?:মনে রাখো|মনে রাখিস|মনে রেখো|remember that|remember)\s*[:\s]+([^\n]+)/i);
+      if (rememberMatch) {
+        const fact = rememberMatch[1].trim();
+        if (fact) {
+          const cleanFact = fact.toLowerCase().replace(/[?!.,;:()]/g, ' ').replace(/\s+/g, ' ').trim();
+          const newItem = {
+            id: 'qa_' + Date.now(),
+            category: 'qa_memory',
+            title: `সংরক্ষিত তথ্য: ${fact.slice(0, 30)}`,
+            questionText: fact,
+            answerText: fact,
+            keywords_bn: [cleanFact, fact.toLowerCase().trim()],
+            keywords_en: [cleanFact, fact.toLowerCase().trim()],
+            responses_bn: [`আপনি আমাকে মনে রাখতে বলেছিলেন: <strong>${escapeHtml(fact)}</strong>! 😊`],
+            responses_en: [`You told me to remember: <strong>${escapeHtml(fact)}</strong>! 😊`],
+            isLearnedQA: true,
+            createdAt: new Date().toLocaleDateString()
+          };
+          this.saveLearnedQA(newItem);
+          this.addDialogueTurn({ userQuestionOrAnswer: fact, botQuestionOrAnswer: fact, topic: 'remember_fact', learnedFact: fact, isBengali });
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali);
+          return isBengali
+            ? `আমি এটি যত্ন সহকারে মনে রাখলাম: <strong>${escapeHtml(fact)}</strong>! 🧠✨${nextQ}`
+            : `I have committed this to memory: <strong>${escapeHtml(fact)}</strong>! 🧠✨${nextQ}`;
+        }
+      }
+
+      // 4. Direct User Inquiries for Memorized Profile Fields
+      if (/আমার নাম (?:কি|কী|বলো|জানিস|জানেন)|আমার নামটা কি|what is my name|do you remember my name|who am i/i.test(cleanText)) {
+        if (profile.name) {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'name');
+          return isBengali 
+            ? `আপনার নাম হলো <strong>${escapeHtml(profile.name)}</strong>! ❤️ আমি আপনাকে ভালোভাবেই মনে রেখেছি।${nextQ}`
+            : `Your name is <strong>${escapeHtml(profile.name)}</strong>! ❤️ I remember you perfectly.${nextQ}`;
+        }
+      }
+
+      if (/আমার বাড়ি (?:কোথায়|কই|বলো)|আমি কোথায় থাকি|where do i live|what is my hometown/i.test(cleanText)) {
+        if (profile.hometown) {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'hometown');
+          return isBengali
+            ? `আপনার বাড়ি তো <strong>${escapeHtml(profile.hometown)}</strong>! 🏙️${nextQ}`
+            : `Your hometown is <strong>${escapeHtml(profile.hometown)}</strong>! 🏙️${nextQ}`;
+        }
+      }
+
+      if (/আমার পেশা (?:কি|কী)|আমি কি কাজ করি|what is my profession|what is my job/i.test(cleanText)) {
+        if (profile.profession) {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'profession');
+          return isBengali
+            ? `আপনার পেশা হলো <strong>${escapeHtml(profile.profession)}</strong>! 💼${nextQ}`
+            : `Your profession is <strong>${escapeHtml(profile.profession)}</strong>! 💼${nextQ}`;
+        }
+      }
+
+      if (/আমার (?:প্রিয় )?শখ (?:কি|কী)|what is my hobby/i.test(cleanText)) {
+        if (profile.hobby) {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'hobby');
+          return isBengali
+            ? `আপনার প্রিয় শখ তো <strong>${escapeHtml(profile.hobby)}</strong>! 🎨${nextQ}`
+            : `Your favorite hobby is <strong>${escapeHtml(profile.hobby)}</strong>! 🎨${nextQ}`;
+        }
+      }
+
+      if (/আমার প্রিয় (?:প্রোগ্রামিং )?ভাষা (?:কি|কী)|what is my favorite (?:programming )?language/i.test(cleanText)) {
+        if (profile.fav_language) {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'fav_language');
+          return isBengali
+            ? `আপনার প্রিয় প্রোগ্রামিং ভাষা হলো <strong>${escapeHtml(profile.fav_language)}</strong>! 💻${nextQ}`
+            : `Your favorite language is <strong>${escapeHtml(profile.fav_language)}</strong>! 💻${nextQ}`;
+        }
+      }
+
+      if (/আমার প্রিয় খাবার (?:কি|কী)|my favorite food/i.test(cleanText) && (cleanText.includes('কি') || cleanText.includes('কী') || cleanText.includes('what'))) {
+        if (profile.fav_food) {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'fav_food');
+          return isBengali
+            ? `আপনার পছন্দের প্রিয় খাবার হলো <strong>${escapeHtml(profile.fav_food)}</strong>! 🍲${nextQ}`
+            : `Your favorite food is <strong>${escapeHtml(profile.fav_food)}</strong>! 🍲${nextQ}`;
+        }
+      }
+
+      if (/আমার প্রিয় গান (?:কি|কী)|আমার প্রিয় সঙ্গীত (?:কি|কী)|what is my favorite music|what is my favorite song/i.test(cleanText)) {
+        if (profile.fav_music) {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'fav_music');
+          return isBengali
+            ? `আপনার পছন্দের প্রিয় সঙ্গীত/গান হলো <strong>${escapeHtml(profile.fav_music)}</strong>! 🎵${nextQ}`
+            : `Your favorite music is <strong>${escapeHtml(profile.fav_music)}</strong>! 🎵${nextQ}`;
+        }
+      }
+
+      if (/আমার স্বপ্ন (?:কি|কী)|আমার লক্ষ্য (?:কি|কী)|what is my dream|what is my goal/i.test(cleanText)) {
+        if (profile.dream) {
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali, 'dream');
+          return isBengali
+            ? `আপনার জীবনের লক্ষ্য ও স্বপ্ন হলো: <strong>${escapeHtml(profile.dream)}</strong>! 🌟${nextQ}`
+            : `Your dream & goal is: <strong>${escapeHtml(profile.dream)}</strong>! 🌟${nextQ}`;
+        }
+      }
+
+      // Check if query matches any dynamically learned custom Q&A item
+      for (const item of learned) {
+        const kws = isBengali
+          ? [...(item.keywords_bn || []), ...(item.keywords || []), ...(item.keywords_en || [])]
+          : [...(item.keywords_en || []), ...(item.keywords || []), ...(item.keywords_bn || [])];
+
+        for (const kw of kws) {
+          const cleanKw = kw.toLowerCase().trim();
+          if (cleanText === cleanKw || (cleanText.includes(cleanKw) && cleanKw.length >= 4)) {
+            const resp = (isBengali ? (item.responses_bn && item.responses_bn[0]) : (item.responses_en && item.responses_en[0])) || (item.responses && item.responses[0]) || item.answerText;
+            const nextQ = this.generateReciprocalQuestion(profile, isBengali);
+            return `${resp}${nextQ}`;
+          }
+        }
+      }
+
+      // 5. Direct Natural Statements & Self Introductions
+      const isQuestionQuery = /[?？]|কি|কী|কেন|কোথায়|কই|কে|কার|বলো|বলুন|what|who|where|how|why|when/i.test(rawText);
+
+      if (!isQuestionQuery) {
+        // Name statement
+        const bnNameMatch = rawText.match(/(?:আমার নাম|আমি)\s+(?:হলো|হচ্ছে|হল)?\s*([^\n?!.,;:()]{2,20})/i);
+        const enNameMatch = rawText.match(/(?:my name is|i am|call me)\s+([a-zA-Z]{2,20})/i);
+        if (bnNameMatch) {
+          const cand = bnNameMatch[1].trim();
+          if (cand && !['ভালো', 'খারাপ', 'সুস্থ', 'রোবট', 'এআই'].includes(cand)) {
+            this.setProfileField('name', cand);
+            this.saveLearnedQA({
+              id: 'qa_name',
+              topic: 'name',
+              category: 'qa_memory',
+              title: `ব্যবহারকারীর নাম (User Name)`,
+              questionText: 'আমার নাম কি?',
+              answerText: cand,
+              keywords_bn: ['আমার নাম কি', 'আমার নাম কী', 'আমার নামটা কি', 'আমার নাম বলো', 'amar nam ki', 'who am i'],
+              keywords_en: ['what is my name', 'who am i'],
+              responses_bn: [`আপনার নাম হলো <strong>${escapeHtml(cand)}</strong>! ❤️`],
+              responses_en: [`Your name is <strong>${escapeHtml(cand)}</strong>! ❤️`],
+              isLearnedQA: true
+            });
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'name');
+            return `বাহ! খুব সুন্দর নাম, <strong>${escapeHtml(cand)}</strong>! 😊 আমি আপনার নাম এবং এই প্রশ্নোত্তর মেমোরিতে সেভ করে রাখলাম।${nextQ}`;
+          }
+        }
+        if (enNameMatch) {
+          const cand = enNameMatch[1].trim();
+          if (cand && !['fine', 'good', 'happy', 'robot', 'bot'].includes(cand.toLowerCase())) {
+            this.setProfileField('name', cand);
+            this.saveLearnedQA({
+              id: 'qa_name',
+              topic: 'name',
+              category: 'qa_memory',
+              title: `User Name`,
+              questionText: 'What is my name?',
+              answerText: cand,
+              keywords_bn: ['আমার নাম কি', 'amar nam ki'],
+              keywords_en: ['what is my name', 'who am i', 'my name'],
+              responses_bn: [`আপনার নাম হলো <strong>${escapeHtml(cand)}</strong>! ❤️`],
+              responses_en: [`Your name is <strong>${escapeHtml(cand)}</strong>! ❤️`],
+              isLearnedQA: true
+            });
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'name');
+            return `Nice to meet you, <strong>${escapeHtml(cand)}</strong>! 😊 I have saved your name and this Q&A into memory.${nextQ}`;
+          }
+        }
+
+        // Hometown statement
+        const bnHomeMatch = rawText.match(/(?:আমার বাড়ি|আমার বাসা|আমি থাকি)\s+(?:হলো|হচ্ছে|হল)?\s*([^\n?!.,;:()]{2,30})/i);
+        if (bnHomeMatch) {
+          const cand = bnHomeMatch[1].trim();
+          if (cand) {
+            this.setProfileField('hometown', cand);
+            this.saveLearnedQA({
+              id: 'qa_hometown',
+              topic: 'hometown',
+              category: 'qa_memory',
+              title: `ব্যবহারকারীর বাড়ি/শহর (Hometown)`,
+              questionText: 'আমার বাড়ি কোথায় / আমি কোথায় থাকি?',
+              answerText: cand,
+              keywords_bn: ['আমার বাড়ি কোথায়', 'আমার বাড়ি কই', 'আমি কোথায় থাকি', 'আমার শহর কি', 'amar bari kothay'],
+              keywords_en: ['where do i live', 'my hometown', 'what is my city'],
+              responses_bn: [`আপনার বাড়ি তো <strong>${escapeHtml(cand)}</strong>! 🏙️`],
+              responses_en: [`Your hometown is <strong>${escapeHtml(cand)}</strong>! 🏙️`],
+              isLearnedQA: true
+            });
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'hometown');
+            return `দারুণ! <strong>${escapeHtml(cand)}</strong> চমৎকার জায়গা! 🏙️ আপনার শহর/বাড়ির তথ্য মেমোরিতে লিখে রাখলাম।${nextQ}`;
+          }
+        }
+
+        // Profession statement
+        const bnProfMatch = rawText.match(/(?:আমার পেশা|আমার কাজ|আমি একজন)\s+(?:হলো|হচ্ছে|হল)?\s*([^\n?!.,;:()]{2,30})/i);
+        if (bnProfMatch) {
+          const cand = bnProfMatch[1].trim();
+          if (cand) {
+            this.setProfileField('profession', cand);
+            this.saveLearnedQA({
+              id: 'qa_profession',
+              topic: 'profession',
+              category: 'qa_memory',
+              title: `ব্যবহারকারীর পেশা (Profession)`,
+              questionText: 'আমার পেশা কি?',
+              answerText: cand,
+              keywords_bn: ['আমার পেশা কি', 'আমার পেশা কী', 'আমি কি কাজ করি', 'amar pesha ki'],
+              keywords_en: ['what is my profession', 'what is my job'],
+              responses_bn: [`আপনার পেশা হলো <strong>${escapeHtml(cand)}</strong>! 💼`],
+              responses_en: [`Your profession is <strong>${escapeHtml(cand)}</strong>! 💼`],
+              isLearnedQA: true
+            });
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'profession');
+            return `খুব ভালো! <strong>${escapeHtml(cand)}</strong> নিয়ে আপনার ভবিষ্যৎ সফলতা কামনা করি! 💼 মেমোরিতে সেভ হলো।${nextQ}`;
+          }
+        }
+      }
+
+      // 6. Processing Direct Answer to Bot's Prior Pending Question
+      if (pending && pending.topic && !isQuestionQuery && cleanText.length > 0 && !/কেমন|গান|জোক|প্রজেক্ট|ভিডিও|মডেল|আর্কিটেকচার/i.test(cleanText)) {
+        const topic = pending.topic;
+        const rawAnswer = rawText.trim();
+        let cleanAnswer = rawAnswer.replace(/^(আমার|আমি|হলো|হচ্ছে|আমার প্রিয়|আমার নাম|আমার বাড়ি|আমার পেশা|আমার শখ|i live in|my name is|i am|my hobby is|my favorite)\s+/i, '').trim();
+        cleanAnswer = cleanAnswer.replace(/[?!.,;:()]/g, '').trim();
+
+        if (cleanAnswer && cleanAnswer.length >= 2) {
+          if (topic === 'name') {
+            this.setProfileField('name', cleanAnswer);
+            this.saveLearnedQA({
+              id: 'qa_name',
+              topic: 'name',
+              category: 'qa_memory',
+              title: `ব্যবহারকারীর নাম (User Name)`,
+              questionText: 'আমার নাম কি?',
+              answerText: cleanAnswer,
+              keywords_bn: ['আমার নাম কি', 'আমার নাম কী', 'আমার নামটা কি', 'আমার নাম বলো', 'amar nam ki', 'amar naam ki', 'who am i'],
+              keywords_en: ['what is my name', 'do you remember my name', 'who am i'],
+              responses_bn: [`আপনার নাম হলো <strong>${escapeHtml(cleanAnswer)}</strong>! ❤️ আমি আপনাকে ভালোভাবেই মনে রেখেছি।`],
+              responses_en: [`Your name is <strong>${escapeHtml(cleanAnswer)}</strong>! ❤️ I remember you perfectly.`],
+              isLearnedQA: true
+            });
+            this.addDialogueTurn({ userQuestionOrAnswer: rawAnswer, botQuestionOrAnswer: pending.questionText, topic: 'name', learnedFact: `Name: ${cleanAnswer}`, isBengali });
+            this.clearPendingQuestion();
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'name');
+            return isBengali
+              ? `বাহ! খুব সুন্দর নাম, <strong>${escapeHtml(cleanAnswer)}</strong>! 😊 আপনার নাম এবং এই প্রশ্নোত্তর আমার মেমোরিতে লিখে নিলাম।${nextQ}`
+              : `Nice to meet you, <strong>${escapeHtml(cleanAnswer)}</strong>! 😊 I have saved your name and this Q&A into memory.${nextQ}`;
+          }
+
+          if (topic === 'hometown') {
+            this.setProfileField('hometown', cleanAnswer);
+            this.saveLearnedQA({
+              id: 'qa_hometown',
+              topic: 'hometown',
+              category: 'qa_memory',
+              title: `ব্যবহারকারীর বাড়ি/শহর (Hometown)`,
+              questionText: 'আমার বাড়ি কোথায় / আমি কোথায় থাকি?',
+              answerText: cleanAnswer,
+              keywords_bn: ['আমার বাড়ি কোথায়', 'আমার বাড়ি কই', 'আমি কোথায় থাকি', 'আমার শহর কি', 'আমার জেলা কি', 'amar bari kothay', 'amar bari koi', 'kothay thaki', 'amar shohor ki'],
+              keywords_en: ['where do i live', 'where is my home', 'my hometown', 'my city', 'what city do i live in'],
+              responses_bn: [`আপনার বাড়ি তো <strong>${escapeHtml(cleanAnswer)}</strong>! 🏙️ আমি মনে রেখেছি।`],
+              responses_en: [`Your hometown is <strong>${escapeHtml(cleanAnswer)}</strong>! 🏙️ I have stored it in memory.`],
+              isLearnedQA: true
+            });
+            this.addDialogueTurn({ userQuestionOrAnswer: rawAnswer, botQuestionOrAnswer: pending.questionText, topic: 'hometown', learnedFact: `Hometown: ${cleanAnswer}`, isBengali });
+            this.clearPendingQuestion();
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'hometown');
+            return isBengali
+              ? `দারুণ! <strong>${escapeHtml(cleanAnswer)}</strong> চমৎকার একটি জায়গা! 🏙️ আপনার শহর/বাড়ির তথ্য মেমোরিতে লিখে নিলাম।${nextQ}`
+              : `Awesome! <strong>${escapeHtml(cleanAnswer)}</strong> is a wonderful place! 🏙️ Saved your hometown to memory.${nextQ}`;
+          }
+
+          if (topic === 'profession') {
+            this.setProfileField('profession', cleanAnswer);
+            this.saveLearnedQA({
+              id: 'qa_profession',
+              topic: 'profession',
+              category: 'qa_memory',
+              title: `ব্যবহারকারীর পেশা (Profession)`,
+              questionText: 'আমার পেশা কি / আমি কি কাজ করি?',
+              answerText: cleanAnswer,
+              keywords_bn: ['আমার পেশা কি', 'আমার পেশা কী', 'আমি কি কাজ করি', 'আমি কি করি', 'amar pesha ki', 'ami ki kaj kori'],
+              keywords_en: ['what is my profession', 'what is my job', 'what do i do', 'my career'],
+              responses_bn: [`আপনার পেশা/পড়াশোনা হলো <strong>${escapeHtml(cleanAnswer)}</strong>! 💼`],
+              responses_en: [`Your profession/field is <strong>${escapeHtml(cleanAnswer)}</strong>! 💼`],
+              isLearnedQA: true
+            });
+            this.addDialogueTurn({ userQuestionOrAnswer: rawAnswer, botQuestionOrAnswer: pending.questionText, topic: 'profession', learnedFact: `Profession: ${cleanAnswer}`, isBengali });
+            this.clearPendingQuestion();
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'profession');
+            return isBengali
+              ? `খুব ভালো! <strong>${escapeHtml(cleanAnswer)}</strong> নিয়ে আপনার যাত্রা সফল হোক! 💼 এটি আমি মেমোরিতে সেভ করলাম।${nextQ}`
+              : `Great! Wishing you success with <strong>${escapeHtml(cleanAnswer)}</strong>! 💼 Saved to memory.${nextQ}`;
+          }
+
+          if (topic === 'hobby') {
+            this.setProfileField('hobby', cleanAnswer);
+            this.saveLearnedQA({
+              id: 'qa_hobby',
+              topic: 'hobby',
+              category: 'qa_memory',
+              title: `ব্যবহারকারীর শখ (Hobby)`,
+              questionText: 'আমার প্রিয় শখ কি?',
+              answerText: cleanAnswer,
+              keywords_bn: ['আমার প্রিয় শখ কি', 'আমার প্রিয় শখ কী', 'আমার শখ কি', 'আমার শখ কী', 'amar priyo shokh ki', 'amar shokh ki'],
+              keywords_en: ['what is my favorite hobby', 'what is my hobby', 'my hobby'],
+              responses_bn: [`আপনার প্রিয় শখ তো <strong>${escapeHtml(cleanAnswer)}</strong>! 🎨`],
+              responses_en: [`Your favorite hobby is <strong>${escapeHtml(cleanAnswer)}</strong>! 🎨`],
+              isLearnedQA: true
+            });
+            this.addDialogueTurn({ userQuestionOrAnswer: rawAnswer, botQuestionOrAnswer: pending.questionText, topic: 'hobby', learnedFact: `Hobby: ${cleanAnswer}`, isBengali });
+            this.clearPendingQuestion();
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'hobby');
+            return isBengali
+              ? `অসাধারণ! <strong>${escapeHtml(cleanAnswer)}</strong> আসলেই দারুণ একটি শখ! 🎨 মেমোরিতে লিখে রাখলাম।${nextQ}`
+              : `Fantastic! <strong>${escapeHtml(cleanAnswer)}</strong> is a great hobby! 🎨 Saved to memory.${nextQ}`;
+          }
+
+          if (topic === 'fav_language') {
+            this.setProfileField('fav_language', cleanAnswer);
+            this.saveLearnedQA({
+              id: 'qa_fav_language',
+              topic: 'fav_language',
+              category: 'qa_memory',
+              title: `প্রিয় প্রোগ্রামিং ভাষা (Favorite Language)`,
+              questionText: 'আমার প্রিয় ভাষা বা প্রযুক্তি কি?',
+              answerText: cleanAnswer,
+              keywords_bn: ['আমার প্রিয় প্রোগ্রামিং ভাষা কি', 'আমার প্রিয় ভাষা কি', 'আমার পছন্দের ভাষা কি', 'amar priyo bhasha ki', 'amar priyo language ki'],
+              keywords_en: ['what is my favorite programming language', 'what is my favorite language', 'my favorite tech'],
+              responses_bn: [`আপনার প্রিয় প্রযুক্তি/ভাষা হলো <strong>${escapeHtml(cleanAnswer)}</strong>! 💻`],
+              responses_en: [`Your favorite language/tech is <strong>${escapeHtml(cleanAnswer)}</strong>! 💻`],
+              isLearnedQA: true
+            });
+            this.addDialogueTurn({ userQuestionOrAnswer: rawAnswer, botQuestionOrAnswer: pending.questionText, topic: 'fav_language', learnedFact: `Language: ${cleanAnswer}`, isBengali });
+            this.clearPendingQuestion();
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'fav_language');
+            return isBengali
+              ? `চমৎকার পছন্দ! <strong>${escapeHtml(cleanAnswer)}</strong> প্রযুক্তি বিশ্বে দারুণ জনপ্রিয়! 💻 মেমোরিতে সেভ হলো।${nextQ}`
+              : `Awesome choice! <strong>${escapeHtml(cleanAnswer)}</strong> is incredibly powerful! 💻 Saved to memory.${nextQ}`;
+          }
+
+          if (topic === 'fav_food') {
+            this.setProfileField('fav_food', cleanAnswer);
+            this.saveLearnedQA({
+              id: 'qa_fav_food',
+              topic: 'fav_food',
+              category: 'qa_memory',
+              title: `প্রিয় খাবার (Favorite Food)`,
+              questionText: 'আমার প্রিয় খাবার কি?',
+              answerText: cleanAnswer,
+              keywords_bn: ['আমার প্রিয় খাবার কি', 'আমার প্রিয় খাবার কী', 'আমার পছন্দের খাবার কি', 'amar priyo khabar ki'],
+              keywords_en: ['what is my favorite food', 'my favorite food', 'what do i like to eat'],
+              responses_bn: [`আপনার পছন্দের খাবার হলো <strong>${escapeHtml(cleanAnswer)}</strong>! 🍲`],
+              responses_en: [`Your favorite food is <strong>${escapeHtml(cleanAnswer)}</strong>! 🍲`],
+              isLearnedQA: true
+            });
+            this.addDialogueTurn({ userQuestionOrAnswer: rawAnswer, botQuestionOrAnswer: pending.questionText, topic: 'fav_food', learnedFact: `Food: ${cleanAnswer}`, isBengali });
+            this.clearPendingQuestion();
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'fav_food');
+            return isBengali
+              ? `জিভে জল আসার মতো খাবার! <strong>${escapeHtml(cleanAnswer)}</strong> আসলেই সুস্বাদু! 😋 মেমোরিতে রাখলাম।${nextQ}`
+              : `Delicious! <strong>${escapeHtml(cleanAnswer)}</strong> is a mouth-watering choice! 😋 Saved to memory.${nextQ}`;
+          }
+
+          if (topic === 'fav_music') {
+            this.setProfileField('fav_music', cleanAnswer);
+            this.saveLearnedQA({
+              id: 'qa_fav_music',
+              topic: 'fav_music',
+              category: 'qa_memory',
+              title: `প্রিয় সঙ্গীত/শিল্পী (Favorite Music)`,
+              questionText: 'আমার প্রিয় গান বা সঙ্গীত কি?',
+              answerText: cleanAnswer,
+              keywords_bn: ['আমার প্রিয় গান কি', 'আমার প্রিয় সঙ্গীত কি', 'আমার প্রিয় শিল্পী কে', 'amar priyo gaan ki', 'amar priyo shilpi ke'],
+              keywords_en: ['what is my favorite music', 'who is my favorite singer', 'my favorite song'],
+              responses_bn: [`আপনার প্রিয় গান/সঙ্গীত হলো <strong>${escapeHtml(cleanAnswer)}</strong>! 🎵`],
+              responses_en: [`Your favorite music/singer is <strong>${escapeHtml(cleanAnswer)}</strong>! 🎵`],
+              isLearnedQA: true
+            });
+            this.addDialogueTurn({ userQuestionOrAnswer: rawAnswer, botQuestionOrAnswer: pending.questionText, topic: 'fav_music', learnedFact: `Music: ${cleanAnswer}`, isBengali });
+            this.clearPendingQuestion();
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'fav_music');
+            return isBengali
+              ? `চমৎকার সঙ্গীত রুচি! <strong>${escapeHtml(cleanAnswer)}</strong> মনকে সতেজ রাখে! 🎵 মেমোরিতে সেভ হলো।${nextQ}`
+              : `Wonderful musical taste! <strong>${escapeHtml(cleanAnswer)}</strong> is lovely! 🎵 Saved to memory.${nextQ}`;
+          }
+
+          if (topic === 'dream') {
+            this.setProfileField('dream', cleanAnswer);
+            this.saveLearnedQA({
+              id: 'qa_dream',
+              topic: 'dream',
+              category: 'qa_memory',
+              title: `ভবিষ্যৎ স্বপ্ন/লক্ষ্য (Life Dream)`,
+              questionText: 'আমার স্বপ্ন বা লক্ষ্য কি?',
+              answerText: cleanAnswer,
+              keywords_bn: ['আমার স্বপ্ন কি', 'আমার লক্ষ্য কি', 'আমার ভবিষ্যৎ স্বপ্ন কি', 'amar shopno ki', 'amar lokkho ki'],
+              keywords_en: ['what is my dream', 'what is my goal', 'my future dream'],
+              responses_bn: [`আপনার স্বপ্ন ও লক্ষ্য হলো: <strong>${escapeHtml(cleanAnswer)}</strong>! 🌟`],
+              responses_en: [`Your dream & goal is: <strong>${escapeHtml(cleanAnswer)}</strong>! 🌟`],
+              isLearnedQA: true
+            });
+            this.addDialogueTurn({ userQuestionOrAnswer: rawAnswer, botQuestionOrAnswer: pending.questionText, topic: 'dream', learnedFact: `Dream: ${cleanAnswer}`, isBengali });
+            this.clearPendingQuestion();
+            const updatedProfile = this.getProfile();
+            const nextQ = this.generateReciprocalQuestion(updatedProfile, isBengali, 'dream');
+            return isBengali
+              ? `অনেক বড় স্বপ্ন! <strong>${escapeHtml(cleanAnswer)}</strong> পূরণে আপনার পাশে দোয়া ও শুভকামনা থাকবে! 🌟 মেমোরিতে লিখে রাখলাম।${nextQ}`
+              : `An inspiring dream! Wishing you huge success in achieving <strong>${escapeHtml(cleanAnswer)}</strong>! 🌟 Saved to memory.${nextQ}`;
+          }
+
+          // General curiosity topic answer
+          this.saveLearnedQA({
+            id: 'qa_' + topic + '_' + Date.now(),
+            topic: topic,
+            category: 'qa_memory',
+            title: `সংরক্ষিত উত্তর: ${cleanAnswer.slice(0, 30)}`,
+            questionText: pending.questionText,
+            answerText: cleanAnswer,
+            keywords_bn: [cleanAnswer.toLowerCase(), topic],
+            keywords_en: [cleanAnswer.toLowerCase(), topic],
+            responses_bn: [`আপনার উত্তর ছিল: <strong>${escapeHtml(cleanAnswer)}</strong>! 😊`],
+            responses_en: [`Your answer was: <strong>${escapeHtml(cleanAnswer)}</strong>! 😊`],
+            isLearnedQA: true
+          });
+          this.addDialogueTurn({ userQuestionOrAnswer: rawAnswer, botQuestionOrAnswer: pending.questionText, topic: topic, learnedFact: cleanAnswer, isBengali });
+          this.clearPendingQuestion();
+          const nextQ = this.generateReciprocalQuestion(profile, isBengali);
+          return isBengali
+            ? `আপনার ভাবনাটি শেয়ার করার জন্য ধন্যবাদ! আপনার এই উত্তর আমি মেমোরিতে নোট করে রাখলাম। 😊${nextQ}`
+            : `Thank you for sharing your thoughts! I have noted this in my neural memory. 😊${nextQ}`;
         }
       }
 
       return null;
+    },
+
+    // Alias for backward compatibility
+    processQuery(cleanText, rawText, isBengali) {
+      return this.processUserTurn(cleanText, rawText, isBengali);
     }
   };
 
-  // Expose UserProfileMemory globally
-  window.UserProfileMemory = UserProfileMemory;
+  // Expose NeuralDialogueMemory and UserProfileMemory globally
+  window.NeuralDialogueMemory = NeuralDialogueMemory;
+  window.UserProfileMemory = NeuralDialogueMemory;
 
   // --- SMART INTENT & TOKEN MATCHER WITH STRICT BILINGUAL ACCURACY ---
   function getSmartResponse(userText) {
@@ -1639,10 +2256,10 @@ function initVoiceAndChatEngine() {
     const cleanText = rawText.toLowerCase().replace(/[?!.,;:()]/g, ' ').replace(/\s+/g, ' ').trim();
     const queryTokens = cleanText.split(' ').filter(t => t.length > 0);
 
-    // 1. Process Personal User Memory & Profile Queries
-    const memoryResponse = UserProfileMemory.processQuery(cleanText, rawText, isBengali);
-    if (memoryResponse) {
-      return memoryResponse;
+    // 1. Process Personal User Memory, Q&A Learning, and Dialogue Turns
+    const dialogueResponse = NeuralDialogueMemory.processUserTurn(cleanText, rawText, isBengali);
+    if (dialogueResponse) {
+      return dialogueResponse;
     }
 
     // Check if user pasted a YouTube link
@@ -1719,26 +2336,36 @@ function initVoiceAndChatEngine() {
       }
     }
 
+    const currentProfile = NeuralDialogueMemory.getProfile();
+
     // Match found with confident score
     if (bestMatch && highestScore >= 8) {
-      return NeuralKnowledgeStore.getRandomResponse(bestMatch, isBengali);
+      let answer = NeuralKnowledgeStore.getRandomResponse(bestMatch, isBengali);
+      if (!answer.includes('chat-youtube-card') && !answer.includes('chat-audio-card') && !answer.includes('💡 <strong>')) {
+        const reciprocalQ = NeuralDialogueMemory.generateReciprocalQuestion(currentProfile, isBengali, bestMatch.id);
+        answer += reciprocalQ;
+      }
+      return answer;
     }
 
-    // Intelligent context-aware Fallback strictly in matching language
+    // Intelligent context-aware Fallback strictly in matching language with reciprocal follow-up question
+    const reciprocalQ = NeuralDialogueMemory.generateReciprocalQuestion(currentProfile, isBengali);
     if (isBengali) {
       const bnFallbacks = [
-        "আপনার প্রশ্নটি আমি বুঝতে চেষ্টা করছি। আপনি ক্রিয়েটর লুৎফর রহমান, ডিপ লার্নিং মডেল, ডেমো ভিডিও, হিন্দি গান বা প্রজেক্ট সম্পর্কিত প্রশ্ন করতে পারেন! 😊",
+        "আপনার প্রশ্নটি আমি বুঝতে চেষ্টা করছি। আপনি ক্রিয়েটর লুৎফর রহমান, ডিপ লার্নিং মডেল, ডেমো ভিডিও, গান বা প্রজেক্ট সম্পর্কিত প্রশ্ন করতে পারেন! 😊",
         "দারুণ প্রশ্ন! আপনি চাইলে 'কেমন আছো', 'গান শোনাও', 'হিন্দি গান শোনাও', বা 'পাইটর্চ আর্কিটেকচার' সম্পর্কে জানতে চাইতে পারেন।",
         "আমি আপনার প্রশ্নটি প্রসেস করেছি। অনুগ্রহ করে মডেল আর্কিটেকচার, ডেমো ভিডিও বা ক্রিয়েটর সম্পর্কে জিজ্ঞাসা করুন!"
       ];
-      return bnFallbacks[Math.floor(Math.random() * bnFallbacks.length)];
+      const base = bnFallbacks[Math.floor(Math.random() * bnFallbacks.length)];
+      return base + reciprocalQ;
     } else {
       const enFallbacks = [
         "Query processed! Feel free to ask about well-being, our PyTorch AI model, creator Lutfor Rahman, or request a Hindi song or joke!",
         "Interesting query! To explore further, ask me about 'How are you?', 'Can you sing a song?', 'Play Hindi song', 'PyTorch architecture', or 'Who created you?' 😊",
         "I'm continuously learning! Feel free to ask about our deep learning pipeline, demo video, or developer Lutfor Rahman."
       ];
-      return enFallbacks[Math.floor(Math.random() * enFallbacks.length)];
+      const base = enFallbacks[Math.floor(Math.random() * enFallbacks.length)];
+      return base + reciprocalQ;
     }
   }
 
@@ -2863,6 +3490,7 @@ function initKnowledgeStoreModal() {
   }
 
   const countGithub = document.getElementById('kbCountGithub');
+  const countQa = document.getElementById('kbCountQa');
   const syncGithubBtn = document.getElementById('syncGithubKbBtn');
 
   if (syncGithubBtn) {
@@ -2897,22 +3525,30 @@ function initKnowledgeStoreModal() {
       if (storedGh) githubItems.push(...JSON.parse(storedGh));
     } catch(e) {}
 
+    const learnedQAItems = (window.NeuralDialogueMemory && typeof window.NeuralDialogueMemory.getLearnedQA === 'function')
+      ? window.NeuralDialogueMemory.getLearnedQA()
+      : [];
+
     const allItems = (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.getAllKnowledge === 'function')
       ? window.NeuralKnowledgeStore.getAllKnowledge()
-      : [...customItems, ...githubItems];
+      : [...learnedQAItems, ...customItems, ...githubItems];
 
     const githubCount = allItems.filter(i => i.category === 'github' || i.isGitHub).length;
     const customCount = allItems.filter(i => i.isCustom || i.category === 'custom').length;
+    const qaCount = allItems.filter(i => i.isLearnedQA || i.category === 'qa_memory').length;
 
     if (countAll) countAll.textContent = String(allItems.length);
     if (countCustom) countCustom.textContent = String(customCount);
     if (countGithub) countGithub.textContent = String(githubCount);
+    if (countQa) countQa.textContent = String(qaCount);
 
     let filtered = allItems;
     if (activeCategory === 'custom') {
       filtered = filtered.filter((i) => i.isCustom || i.category === 'custom' || customItems.some(c => c.id === i.id));
     } else if (activeCategory === 'github') {
       filtered = filtered.filter((i) => i.category === 'github' || i.isGitHub || githubItems.some(g => g.id === i.id));
+    } else if (activeCategory === 'qa_memory') {
+      filtered = filtered.filter((i) => i.isLearnedQA || i.category === 'qa_memory' || learnedQAItems.some(q => q.id === i.id));
     } else if (activeCategory !== 'all') {
       filtered = filtered.filter((i) => i.category === activeCategory);
     }
@@ -2924,7 +3560,9 @@ function initKnowledgeStoreModal() {
         const kwMatch = allKws.some((k) => k.toLowerCase().includes(searchQuery));
         const allResps = [...(i.responses_bn || []), ...(i.responses_en || []), ...(i.responses || [])];
         const respMatch = allResps.some((r) => r.toLowerCase().includes(searchQuery));
-        return titleMatch || kwMatch || respMatch;
+        const qMatch = (i.questionText || '').toLowerCase().includes(searchQuery);
+        const aMatch = (i.answerText || '').toLowerCase().includes(searchQuery);
+        return titleMatch || kwMatch || respMatch || qMatch || aMatch;
       });
     }
 
@@ -2948,6 +3586,7 @@ function initKnowledgeStoreModal() {
     cardsGrid.innerHTML = filtered.map((item) => {
       const isCustomItem = item.isCustom || customItems.some(c => c.id === item.id);
       const isGhItem = item.category === 'github' || item.isGitHub;
+      const isQaItem = item.isLearnedQA || item.category === 'qa_memory';
       const catBadgeText = (item.category || 'GENERAL').toUpperCase();
       
       const allKws = [...(item.keywords_bn || []), ...(item.keywords_en || []), ...(item.keywords || [])];
@@ -2962,8 +3601,8 @@ function initKnowledgeStoreModal() {
         <div class="kb-card" data-cat="${item.category}">
           <div class="kb-card-header">
             <h4 class="kb-card-title">${item.title}</h4>
-            <span class="kb-card-cat-badge ${isCustomItem ? 'custom' : (isGhItem ? 'github' : '')}">
-              ${isCustomItem ? '<i class="fa-solid fa-database"></i> CUSTOM' : (isGhItem ? '<i class="fa-brands fa-github"></i> GITHUB' : catBadgeText)}
+            <span class="kb-card-cat-badge ${isQaItem ? 'qa' : (isCustomItem ? 'custom' : (isGhItem ? 'github' : ''))}">
+              ${isQaItem ? '<i class="fa-solid fa-brain"></i> LEARNED Q&amp;A' : (isCustomItem ? '<i class="fa-solid fa-database"></i> CUSTOM' : (isGhItem ? '<i class="fa-brands fa-github"></i> GITHUB' : catBadgeText))}
             </span>
           </div>
 
@@ -2973,6 +3612,7 @@ function initKnowledgeStoreModal() {
           </div>
 
           <div class="kb-card-responses">
+            ${isQaItem && item.questionText ? `<div class="kb-response-item" style="border-left-color:#8b5cf6;"><strong style="color:#8b5cf6;">Q:</strong> ${escapeHtml(item.questionText)}</div>` : ''}
             ${bnResps.map(r => `<div class="kb-response-item"><span style="display:inline-block; font-size:0.65rem; font-weight:700; color:#00f2fe; background:rgba(0,242,254,0.12); padding:1px 6px; border-radius:4px; margin-right:6px;">বাংলা</span>${r}</div>`).join('')}
             ${enResps.map(r => `<div class="kb-response-item"><span style="display:inline-block; font-size:0.65rem; font-weight:700; color:#8b5cf6; background:rgba(139,92,246,0.15); padding:1px 6px; border-radius:4px; margin-right:6px;">English</span>${r}</div>`).join('')}
             ${customResps.map(r => `<div class="kb-response-item">${r}</div>`).join('')}
@@ -2994,8 +3634,8 @@ function initKnowledgeStoreModal() {
                   <i class="fa-brands fa-github"></i>
                 </a>
               ` : ''}
-              ${isCustomItem ? `
-                <button class="kb-action-btn delete delete-kb-btn" data-id="${item.id}" title="Delete custom memory">
+              ${(isCustomItem || isQaItem) ? `
+                <button class="kb-action-btn delete delete-kb-btn" data-id="${item.id}" data-type="${isQaItem ? 'qa' : 'custom'}" title="Delete memory">
                   <i class="fa-solid fa-trash-can"></i>
                 </button>
               ` : ''}
@@ -3029,16 +3669,25 @@ function initKnowledgeStoreModal() {
     cardsGrid.querySelectorAll('.delete-kb-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
         const id = btn.getAttribute('data-id');
+        const type = btn.getAttribute('data-type');
         if (id) {
-          try {
-            const stored = localStorage.getItem('neural_bot_custom_kb');
-            let customList = stored ? JSON.parse(stored) : [];
-            customList = customList.filter(c => c.id !== id);
-            localStorage.setItem('neural_bot_custom_kb', JSON.stringify(customList));
-            showToast('Custom knowledge entry deleted.');
-            renderKnowledgeGrid();
-          } catch(err) {
-            console.error(err);
+          if (type === 'qa') {
+            if (window.NeuralDialogueMemory && typeof window.NeuralDialogueMemory.deleteLearnedQA === 'function') {
+              window.NeuralDialogueMemory.deleteLearnedQA(id);
+              showToast('Learned Q&A memory deleted.');
+              renderKnowledgeGrid();
+            }
+          } else {
+            try {
+              const stored = localStorage.getItem('neural_bot_custom_kb');
+              let customList = stored ? JSON.parse(stored) : [];
+              customList = customList.filter(c => c.id !== id);
+              localStorage.setItem('neural_bot_custom_kb', JSON.stringify(customList));
+              showToast('Custom knowledge entry deleted.');
+              renderKnowledgeGrid();
+            } catch(err) {
+              console.error(err);
+            }
           }
         }
       });
