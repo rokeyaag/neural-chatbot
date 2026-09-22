@@ -1881,6 +1881,39 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
 }
 
+.chat-lang-pill {
+  background: rgba(0, 242, 254, 0.1);
+  border: 1px solid rgba(0, 242, 254, 0.35);
+  color: var(--accent-cyan);
+  padding: 0 9px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+  user-select: none;
+}
+
+.chat-lang-pill:hover {
+  background: rgba(0, 242, 254, 0.22);
+  border-color: var(--accent-cyan);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.chat-lang-pill.en-mode {
+  background: rgba(163, 113, 247, 0.15);
+  border-color: rgba(163, 113, 247, 0.45);
+  color: #c29ffa;
+}
+
 .voice-mic-btn.recording {
   background: var(--accent-red);
   color: #fff;

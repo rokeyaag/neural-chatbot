@@ -18,8 +18,8 @@
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- Custom Stylesheet (v18.3 with Cache-Bust) -->
-  <link rel="stylesheet" href="css/style.css?v=18.3">
+  <!-- Custom Stylesheet (v18.4 with Cache-Bust) -->
+  <link rel="stylesheet" href="css/style.css?v=18.4">
 </head>
 <body>
 
@@ -277,8 +277,11 @@
                 <button type="button" class="voice-mic-btn" id="voiceMicBtn" title="Click to Speak (Voice Record)">
                   <i class="fa-solid fa-microphone"></i>
                 </button>
+                <button type="button" class="chat-lang-pill" id="chatVoiceLangBtn" title="Switch Voice Language (বাংলা / English)">
+                  <span id="chatVoiceLangLabel">বাংলা</span>
+                </button>
                 
-                <input type="text" class="chat-input" id="heroChatInput" placeholder="Type your message or click Mic to speak (English / Bangla)..." autocomplete="off">
+                <input type="text" class="chat-input" id="heroChatInput" placeholder="Type or click Mic to speak (বাংলা / English)..." autocomplete="off">
                 
                 <span id="voiceStatusText" style="display: none;">Ready &bull; Mic Active</span>
 
@@ -1303,6 +1306,6 @@
   </div>
 
   <!-- Javascript -->
-  <script src="js/app.js?v=17.0"></script>
+  <script src="js/app.js?v=18.4"></script>
 </body>
 </html>

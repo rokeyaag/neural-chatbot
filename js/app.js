@@ -3588,7 +3588,7 @@ function initVoiceAndChatEngine() {
       chunkIdx++;
 
       // Google Translate TTS endpoint with natural Bengali pronunciation
-      const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=bn&q=${encodeURIComponent(chunk)}`;
+      const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&client=gtx&tl=bn&q=${encodeURIComponent(chunk)}`;
       const audio = new Audio(audioUrl);
       audio.volume = 1.0;
       audio.playbackRate = 0.94; // Calibrated for clear, distinct and articulate pronunciation
@@ -3700,8 +3700,6 @@ function initVoiceAndChatEngine() {
           utterance.rate = 0.92; // Clear, articulate, distinct Bengali pronunciation
           utterance.pitch = 1.15; // Natural sweet female tone
 
-          let didStart = false;
-
           utterance.onboundary = () => {
             if (globalAvatarController && typeof globalAvatarController.triggerWordSyllable === 'function') {
               globalAvatarController.triggerWordSyllable();
@@ -3718,22 +3716,10 @@ function initVoiceAndChatEngine() {
           utterance.onerror = (e) => {
             console.warn('Native Bengali TTS failed, falling back to Audio Stream:', e);
             activeUtterance = null;
-            // Immediate seamless fallback to high-definition Bengali Audio Stream!
             playBengaliAudioStream(spokenText);
           };
 
-          // Timeout check: if native speech synthesis doesn't start in 400ms, fallback to audio stream
-          const startCheckTimer = setTimeout(() => {
-            if (!didStart) {
-              try { window.speechSynthesis.cancel(); } catch(e) {}
-              activeUtterance = null;
-              playBengaliAudioStream(spokenText);
-            }
-          }, 400);
-
           utterance.onstart = () => {
-            clearTimeout(startCheckTimer);
-            didStart = true;
             if (globalAvatarController) {
               globalAvatarController.startSpeaking(spokenText);
             }
@@ -3743,6 +3729,8 @@ function initVoiceAndChatEngine() {
           return;
         } catch (err) {
           console.warn('SpeechSynthesis invocation error:', err);
+          playBengaliAudioStream(spokenText);
+          return;
         }
       }
 
@@ -3880,8 +3868,10 @@ function initVoiceAndChatEngine() {
   const heroChatInput = document.getElementById('heroChatInput');
   const voiceLangToggleBtn = document.getElementById('voiceLangToggleBtn');
   const voiceLangLabel = document.getElementById('voiceLangLabel');
+  const chatVoiceLangBtn = document.getElementById('chatVoiceLangBtn');
+  const chatVoiceLangLabel = document.getElementById('chatVoiceLangLabel');
 
-  let currentVoiceLang = 'en-US'; // Default English with 1-click Bangla toggle
+  let currentVoiceLang = 'bn-BD'; // Default to Bangla for high accuracy, with instant 1-click English switch
   let recognition = null;
   let isRecording = false;
 
@@ -3890,79 +3880,60 @@ function initVoiceAndChatEngine() {
   function updateVoiceLanguage(lang) {
     currentVoiceLang = lang;
     if (recognition) {
-      recognition.lang = lang;
+      try { recognition.lang = lang; } catch(e) {}
     }
+    const isBn = (lang === 'bn-BD');
     if (voiceLangLabel) {
-      voiceLangLabel.textContent = lang === 'bn-BD' ? 'বাংলা' : 'EN';
+      voiceLangLabel.textContent = isBn ? 'বাংলা' : 'EN';
+    }
+    if (chatVoiceLangLabel) {
+      chatVoiceLangLabel.textContent = isBn ? 'বাংলা' : 'EN';
+    }
+    if (chatVoiceLangBtn) {
+      if (isBn) {
+        chatVoiceLangBtn.classList.remove('en-mode');
+      } else {
+        chatVoiceLangBtn.classList.add('en-mode');
+      }
     }
     if (voiceStatusText) {
-      voiceStatusText.innerHTML = `<i class="fa-solid fa-circle-dot"></i> Mic: ${lang === 'bn-BD' ? 'Bangla' : 'English'}`;
+      voiceStatusText.innerHTML = `<i class="fa-solid fa-circle-dot"></i> Mic: ${isBn ? 'বাংলা' : 'English'}`;
     }
   }
 
   if (voiceLangToggleBtn) {
     voiceLangToggleBtn.addEventListener('click', () => {
-      const nextLang = currentVoiceLang === 'en-US' ? 'bn-BD' : 'en-US';
+      const nextLang = currentVoiceLang === 'bn-BD' ? 'en-US' : 'bn-BD';
       updateVoiceLanguage(nextLang);
     });
   }
 
-  if (SpeechRecognition) {
-    recognition = new SpeechRecognition();
-    recognition.continuous = false;
-    recognition.interimResults = false;
-    recognition.lang = currentVoiceLang;
+  if (chatVoiceLangBtn) {
+    chatVoiceLangBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const nextLang = currentVoiceLang === 'bn-BD' ? 'en-US' : 'bn-BD';
+      updateVoiceLanguage(nextLang);
+    });
+  }
 
-    recognition.onstart = () => {
-      isRecording = true;
-      if (voiceMicBtn) voiceMicBtn.classList.add('recording');
-      if (voiceWaveBar) voiceWaveBar.style.display = 'flex';
-      if (voiceStatusText) {
-        voiceStatusText.innerHTML = `<i class="fa-solid fa-circle-dot" style="color:var(--accent-red);"></i> Listening (${currentVoiceLang === 'bn-BD' ? 'Bangla' : 'English'})...`;
-      }
-      if (globalAvatarController) globalAvatarController.setListening();
-    };
+  // Initialize initial label
+  updateVoiceLanguage(currentVoiceLang);
 
-    recognition.onresult = (event) => {
-      let speechTranscript = '';
-      if (event.results && event.results[0] && event.results[0][0]) {
-        speechTranscript = event.results[0][0].transcript;
-      }
-      stopVoiceRecording();
-      try { recognition.stop(); } catch (e) {}
-
-      if (speechTranscript && speechTranscript.trim()) {
-        if (heroChatInput) {
-          heroChatInput.value = speechTranscript;
-        }
-        // Auto trigger AI response and avatar speech
-        handleHeroSend(speechTranscript);
-      }
-    };
-
-    recognition.onerror = (event) => {
-      console.warn('Speech Recognition error:', event.error);
-      stopVoiceRecording();
-      if (voiceStatusText) {
-        if (event.error === 'not-allowed') {
-          voiceStatusText.innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="color:#ffbd2e;"></i> Mic permission needed';
-        } else {
-          voiceStatusText.innerHTML = '<i class="fa-solid fa-circle-dot"></i> Mic Ready &bull; Click to speak';
-        }
-      }
-      if (globalAvatarController) globalAvatarController.setIdle();
-    };
-
-    recognition.onend = () => {
-      stopVoiceRecording();
-    };
+  function stopVoiceRecording() {
+    isRecording = false;
+    if (voiceMicBtn) voiceMicBtn.classList.remove('recording');
+    if (voiceWaveBar) voiceWaveBar.style.display = 'none';
+    if (voiceStatusText) {
+      voiceStatusText.innerHTML = `<i class="fa-solid fa-circle-dot"></i> Mic Active (${currentVoiceLang === 'bn-BD' ? 'বাংলা' : 'English'})`;
+    }
   }
 
   function startVoiceRecording() {
-    if (!recognition) {
-      alert('Speech Recognition is supported in Google Chrome and Microsoft Edge. Please use Chrome or Edge for voice chatting.');
+    if (!SpeechRecognition) {
+      alert('Speech Recognition is supported in Google Chrome and Microsoft Edge. Please open this site in Chrome or Edge for voice input.');
       return;
     }
+
     // Cancel prior speech & audio outputs so microphone receives clean input
     if (window.MediaCoordinator) {
       window.MediaCoordinator.pauseAll();
@@ -3975,29 +3946,85 @@ function initVoiceAndChatEngine() {
       }
     }
 
-    try {
-      recognition.lang = currentVoiceLang;
-      recognition.start();
-    } catch (e) {
-      console.warn('Recognition restart attempt:', e);
-      try {
-        recognition.stop();
-        setTimeout(() => {
-          recognition.lang = currentVoiceLang;
-          recognition.start();
-        }, 120);
-      } catch (err) {
-        console.error(err);
-      }
+    // Stop any existing recognition instance
+    if (recognition) {
+      try { recognition.abort(); } catch(e) {}
+      recognition = null;
     }
-  }
 
-  function stopVoiceRecording() {
-    isRecording = false;
-    if (voiceMicBtn) voiceMicBtn.classList.remove('recording');
-    if (voiceWaveBar) voiceWaveBar.style.display = 'none';
-    if (voiceStatusText) {
-      voiceStatusText.innerHTML = `<i class="fa-solid fa-circle-dot"></i> Mic Active (${currentVoiceLang === 'bn-BD' ? 'Bangla' : 'English'})`;
+    try {
+      recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.maxAlternatives = 1;
+      recognition.lang = currentVoiceLang;
+
+      recognition.onstart = () => {
+        isRecording = true;
+        if (voiceMicBtn) voiceMicBtn.classList.add('recording');
+        if (voiceWaveBar) {
+          voiceWaveBar.style.display = 'flex';
+          const textSpan = voiceWaveBar.querySelector('.voice-wave-text');
+          if (textSpan) {
+            textSpan.textContent = currentVoiceLang === 'bn-BD' 
+              ? 'বাংলায় কথা বলুন... শুনছি' 
+              : 'Listening in English... Speak now';
+          }
+        }
+        if (globalAvatarController) globalAvatarController.setListening();
+      };
+
+      let finalRecognizedText = '';
+
+      recognition.onresult = (event) => {
+        let interimText = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          const trans = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalRecognizedText += trans;
+          } else {
+            interimText += trans;
+          }
+        }
+
+        const displayText = finalRecognizedText || interimText;
+        if (displayText && heroChatInput) {
+          heroChatInput.value = displayText;
+        }
+      };
+
+      recognition.onerror = (event) => {
+        console.warn('Speech Recognition error:', event.error);
+        stopVoiceRecording();
+        if (globalAvatarController) globalAvatarController.setIdle();
+
+        if (event.error === 'not-allowed') {
+          alert('মাইক্রোফোন পারমিশন প্রয়োজন। ব্রাউজারের অ্যাড্রেস বারের লক/ক্যামেরা আইকনে ক্লিক করে Microphone: Allow করুন।');
+        } else if (event.error === 'no-speech') {
+          if (voiceWaveBar) {
+            voiceWaveBar.style.display = 'flex';
+            const textSpan = voiceWaveBar.querySelector('.voice-wave-text');
+            if (textSpan) textSpan.textContent = 'কথা স্পষ্ট শোনা যায়নি, আবার বলুন...';
+            setTimeout(() => { if (!isRecording && voiceWaveBar) voiceWaveBar.style.display = 'none'; }, 2200);
+          }
+        }
+      };
+
+      recognition.onend = () => {
+        stopVoiceRecording();
+        if (globalAvatarController) globalAvatarController.setIdle();
+        if (finalRecognizedText && finalRecognizedText.trim()) {
+          const query = finalRecognizedText.trim();
+          finalRecognizedText = '';
+          handleHeroSend(query);
+        }
+      };
+
+      recognition.start();
+    } catch (err) {
+      console.warn('Recognition start exception:', err);
+      stopVoiceRecording();
+      if (globalAvatarController) globalAvatarController.setIdle();
     }
   }
 
