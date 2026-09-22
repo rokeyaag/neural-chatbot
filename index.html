@@ -18,8 +18,8 @@
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="css/style.css?v=4.9">
+  <!-- Custom Stylesheet (v18.3 with Cache-Bust) -->
+  <link rel="stylesheet" href="css/style.css?v=18.3">
 </head>
 <body>
 
@@ -146,10 +146,10 @@
               <!-- Head Motion Wrapper: Pivot-based Natural Head Nods, Tilts & Micro-Gestures -->
               <div class="avatar-head-motion-wrap" id="avatarHeadMotionWrap">
                 <!-- Layered Avatar Face Elements for Seamless Talking Transitions -->
-                <img src="avatar_face.jpg" alt="Neural AI Avatar Idle" class="avatar-face-layer avatar-idle-layer active" id="avatarImgIdle">
-                <img src="avatar_thinking.jpg" alt="Neural AI Avatar Thinking" class="avatar-face-layer avatar-thinking-layer" id="avatarImgThinking">
-                <img src="avatar_mouth_speaking.png" alt="Neural AI Avatar Speaking" class="avatar-face-layer avatar-speaking-layer" id="avatarImgSpeaking">
-                <img src="avatar_eyes_blink.png" alt="Neural AI Avatar Eyes Blink" class="avatar-face-layer avatar-eyes-layer" id="avatarImgEyes">
+                <img src="images/avatar_face.jpg" alt="Neural AI Avatar Idle" class="avatar-face-layer avatar-idle-layer active" id="avatarImgIdle">
+                <img src="images/avatar_thinking.jpg" alt="Neural AI Avatar Thinking" class="avatar-face-layer avatar-thinking-layer" id="avatarImgThinking">
+                <img src="images/avatar_mouth_speaking.png" alt="Neural AI Avatar Speaking" class="avatar-face-layer avatar-speaking-layer" id="avatarImgSpeaking">
+                <img src="images/avatar_eyes_blink.png" alt="Neural AI Avatar Eyes Blink" class="avatar-face-layer avatar-eyes-layer" id="avatarImgEyes">
 
                 <!-- Dynamic Neural Brain Synaptic Energy & Cranial Wave Aura -->
                 <div class="avatar-brain-aura" id="avatarBrainAura">
@@ -208,18 +208,33 @@
               <button class="custom-play-btn" id="customPlayBtn" aria-label="Play Demo Video">
                 <i class="fa-solid fa-play"></i>
               </button>
-              <span class="play-label">Click to Play Video</span>
             </div>
           </div>
 
-          </div>
         </div>
 
-        <!-- BOTTOM: Voice & Text Interactive AI Chat Box -->
-        <div class="hero-chat-container">
-          <div class="chat-simulator-card voice-chat-card">
+        <!-- RIGHT: Voice & Text Interactive AI Chat Box (Right-Side Corner Chatbot) -->
+        <div class="hero-chat-container" id="heroChatContainer">
+          <div class="chat-simulator-card voice-chat-card" id="heroChatCard">
 
-            <!-- Chat Message Thread -->
+            <!-- Chat Card Header: Title & Action Controls -->
+            <div class="chat-card-header">
+              <div class="chat-header-info">
+                <span class="chat-header-icon"><i class="fa-solid fa-robot"></i></span>
+                <span class="chat-header-title">Neural Assistant</span>
+                <span class="chat-status-pill">
+                  <span class="status-indicator-dot"></span>
+                  <span>Live AI</span>
+                </span>
+              </div>
+              <div class="chat-header-tools">
+                <button type="button" class="chat-tool-btn" id="heroClearChatBtn" title="Clear Conversation" aria-label="Clear Conversation">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Chat Message Thread (Expands upwards as messages flow) -->
             <div class="chat-body" id="heroChatBody">
               <div class="chat-message bot">
                 <div class="chat-bubble">
@@ -239,7 +254,7 @@
               <span class="voice-wave-text">Listening to your voice... Speak now</span>
             </div>
 
-            <!-- Chat Quick Prompt Chips -->
+            <!-- Chat Quick Prompt Chips & Input Form (Docked at Bottom Right) -->
             <div class="chat-input-area">
               <div class="quick-prompts">
                 <button class="quick-chip" data-prompt="YouTube ওপেন করো">YouTube 🎬</button>
@@ -408,72 +423,72 @@
       <!-- Gallery Grid -->
       <div class="gallery-grid" id="galleryGrid">
         
-        <div class="gallery-item" data-category="models" data-src="01.avif" data-title="Neural Network Weight Optimization" data-desc="Model inference and loss calibration curve">
-          <img src="01.avif" alt="Neural Asset 01" loading="lazy">
+        <div class="gallery-item" data-category="models" data-src="images/01.avif" data-title="Neural Network Weight Optimization" data-desc="Model inference and loss calibration curve">
+          <img src="images/01.avif" alt="Neural Asset 01" loading="lazy">
           <div class="gallery-overlay">
             <h4>Neural Network Weights</h4>
             <p>Model Calibration &bull; 01.avif</p>
           </div>
         </div>
 
-        <div class="gallery-item" data-category="interface" data-src="02.jpg" data-title="AI UI Design System" data-desc="Cyberpunk conversational user interface layout">
-          <img src="02.jpg" alt="Neural Asset 02" loading="lazy">
+        <div class="gallery-item" data-category="interface" data-src="images/02.jpg" data-title="AI UI Design System" data-desc="Cyberpunk conversational user interface layout">
+          <img src="images/02.jpg" alt="Neural Asset 02" loading="lazy">
           <div class="gallery-overlay">
             <h4>Interface Layout</h4>
             <p>UI Component System &bull; 02.jpg</p>
           </div>
         </div>
 
-        <div class="gallery-item" data-category="training" data-src="03.jpg" data-title="Training Loss &amp; Convergence" data-desc="Epoch convergence analysis on custom dataset">
-          <img src="03.jpg" alt="Neural Asset 03" loading="lazy">
+        <div class="gallery-item" data-category="training" data-src="images/03.jpg" data-title="Training Loss &amp; Convergence" data-desc="Epoch convergence analysis on custom dataset">
+          <img src="images/03.jpg" alt="Neural Asset 03" loading="lazy">
           <div class="gallery-overlay">
             <h4>Training Convergence</h4>
             <p>Loss Matrix &bull; 03.jpg</p>
           </div>
         </div>
 
-        <div class="gallery-item" data-category="models" data-src="04.jpg" data-title="Multi-Layer Perceptron Graph" data-desc="Hidden layer activations and embedding matrix">
-          <img src="04.jpg" alt="Neural Asset 04" loading="lazy">
+        <div class="gallery-item" data-category="models" data-src="images/04.jpg" data-title="Multi-Layer Perceptron Graph" data-desc="Hidden layer activations and embedding matrix">
+          <img src="images/04.jpg" alt="Neural Asset 04" loading="lazy">
           <div class="gallery-overlay">
             <h4>Layer Activations</h4>
             <p>Hidden Layers &bull; 04.jpg</p>
           </div>
         </div>
 
-        <div class="gallery-item" data-category="interface" data-src="05.jpg" data-title="Chatbot Core Dashboard" data-desc="Real-time dialogue metrics and telemetry view">
-          <img src="05.jpg" alt="Neural Asset 05" loading="lazy">
+        <div class="gallery-item" data-category="interface" data-src="images/05.jpg" data-title="Chatbot Core Dashboard" data-desc="Real-time dialogue metrics and telemetry view">
+          <img src="images/05.jpg" alt="Neural Asset 05" loading="lazy">
           <div class="gallery-overlay">
             <h4>Core Telemetry</h4>
             <p>Dashboard View &bull; 05.jpg</p>
           </div>
         </div>
 
-        <div class="gallery-item" data-category="training" data-src="06.jpg" data-title="Dataset Preprocessing &amp; Lemmatization" data-desc="Bengali and English corpus tokenization pipeline">
-          <img src="06.jpg" alt="Neural Asset 06" loading="lazy">
+        <div class="gallery-item" data-category="training" data-src="images/06.jpg" data-title="Dataset Preprocessing &amp; Lemmatization" data-desc="Bengali and English corpus tokenization pipeline">
+          <img src="images/06.jpg" alt="Neural Asset 06" loading="lazy">
           <div class="gallery-overlay">
             <h4>Tokenization Pipeline</h4>
             <p>Data Prep &bull; 06.jpg</p>
           </div>
         </div>
 
-        <div class="gallery-item" data-category="models" data-src="07.jpg" data-title="Hyperparameter Tuning" data-desc="Learning rate optimization and AdamW benchmarks">
-          <img src="07.jpg" alt="Neural Asset 07" loading="lazy">
+        <div class="gallery-item" data-category="models" data-src="images/07.jpg" data-title="Hyperparameter Tuning" data-desc="Learning rate optimization and AdamW benchmarks">
+          <img src="images/07.jpg" alt="Neural Asset 07" loading="lazy">
           <div class="gallery-overlay">
             <h4>Hyperparameters</h4>
             <p>Optimization &bull; 07.jpg</p>
           </div>
         </div>
 
-        <div class="gallery-item" data-category="interface" data-src="09.jpg" data-title="Interactive Visualizer" data-desc="Live response synthesis and token confidence">
-          <img src="09.jpg" alt="Neural Asset 09" loading="lazy">
+        <div class="gallery-item" data-category="interface" data-src="images/09.jpg" data-title="Interactive Visualizer" data-desc="Live response synthesis and token confidence">
+          <img src="images/09.jpg" alt="Neural Asset 09" loading="lazy">
           <div class="gallery-overlay">
             <h4>Visualizer Graph</h4>
             <p>Token Probabilities &bull; 09.jpg</p>
           </div>
         </div>
 
-        <div class="gallery-item" data-category="models" data-src="images.jpg" data-title="Deep Learning Framework" data-desc="Complete end-to-end AI runtime pipeline">
-          <img src="images.jpg" alt="Neural Asset images" loading="lazy">
+        <div class="gallery-item" data-category="models" data-src="images/images.jpg" data-title="Deep Learning Framework" data-desc="Complete end-to-end AI runtime pipeline">
+          <img src="images/images.jpg" alt="Neural Asset images" loading="lazy">
           <div class="gallery-overlay">
             <h4>Deep Learning Framework</h4>
             <p>Runtime System &bull; images.jpg</p>
@@ -855,7 +870,7 @@
     <div class="container">
       <div class="about-card">
         <div class="about-img-box">
-          <img src="05.jpg" alt="Developer & Project Showcase" id="aboutImg">
+          <img src="images/05.jpg" alt="Developer & Project Showcase" id="aboutImg">
         </div>
         <div class="about-content">
           <span class="about-role">AI ENGINEER &bull; FULL-STACK DEVELOPER</span>
@@ -1288,6 +1303,6 @@
   </div>
 
   <!-- Javascript -->
-  <script src="js/app.js?v=4.7"></script>
+  <script src="js/app.js?v=17.0"></script>
 </body>
 </html>

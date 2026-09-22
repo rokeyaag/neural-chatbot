@@ -4062,6 +4062,19 @@ function initVoiceAndChatEngine() {
     return indicator;
   }
 
+  const heroClearChatBtn = document.getElementById('heroClearChatBtn');
+  if (heroClearChatBtn && heroChatBody) {
+    heroClearChatBtn.addEventListener('click', () => {
+      heroChatBody.innerHTML = `
+        <div class="chat-message bot">
+          <div class="chat-bubble">
+            Welcome! 👋 I am <strong>NeuralBot</strong>. You can type your question in the box or click the <strong>Microphone</strong> to talk in English or Bengali. How can I assist you today?
+          </div>
+        </div>
+      `;
+    });
+  }
+
   function handleHeroSend(userText) {
     if (!userText || !userText.trim()) return;
     const currentWindowY = window.pageYOffset || document.documentElement.scrollTop || window.scrollY || 0;
@@ -4070,9 +4083,11 @@ function initVoiceAndChatEngine() {
       heroChatInput.value = '';
     }
 
-    // Clear previous chat history & welcome message so ONLY the active message and reply are shown
-    if (heroChatBody) {
-      heroChatBody.innerHTML = '';
+    // Keep conversation thread smooth and prune old messages if over limit
+    if (heroChatBody && heroChatBody.children.length > 50) {
+      while (heroChatBody.children.length > 40) {
+        heroChatBody.removeChild(heroChatBody.children[0]);
+      }
     }
 
     appendMessageToHero(escapeHtml(userText), false);

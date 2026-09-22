@@ -40,7 +40,14 @@ const server = http.createServer((req, res) => {
   }
 
   const rootDir = path.resolve(__dirname, '..');
-  const filePath = path.join(rootDir, reqPath);
+  let filePath = path.join(rootDir, reqPath);
+
+  if (!fs.existsSync(filePath)) {
+    const fallbackImagesPath = path.join(rootDir, 'images', reqPath);
+    if (fs.existsSync(fallbackImagesPath)) {
+      filePath = fallbackImagesPath;
+    }
+  }
 
   fs.stat(filePath, (err, stats) => {
     if (err || !stats.isFile()) {

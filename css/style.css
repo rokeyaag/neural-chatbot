@@ -469,18 +469,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero-top-section .container {
-  max-width: 1420px;
+  max-width: 1540px;
   padding: 0 20px;
 }
 
-/* Stacked Layout: Avatar Stage on Top, Text & Chat Box Directly Underneath */
+/* Hero Layout: 75% Avatar Stage & 25% Interactive Chat Box */
 .hero-primary-grid {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(310px, 1fr);
+  align-items: stretch;
+  gap: 16px;
   width: 100%;
-  max-width: 1380px;
+  max-width: 1540px;
   margin: 0 auto;
 }
 
@@ -492,12 +492,12 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg, 16px);
   overflow: hidden;
-  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.6), 0 0 32px rgba(0, 242, 254, 0.15);
+  box-shadow: 0 20px 52px rgba(0, 0, 0, 0.68), 0 0 42px rgba(0, 242, 254, 0.18);
   display: flex;
   flex-direction: column;
-  height: clamp(520px, 68vh, 720px);
-  max-height: 760px;
-  min-height: 480px;
+  height: clamp(620px, 78vh, 840px);
+  max-height: 860px;
+  min-height: 560px;
   width: 100%;
   transition: var(--transition-smooth);
   position: relative;
@@ -518,6 +518,8 @@ h1, h2, h3, h4, h5, h6 {
   flex-shrink: 0;
   gap: 10px;
   z-index: 10;
+  height: 46px;
+  box-sizing: border-box;
   flex-wrap: nowrap;
 }
 
@@ -848,7 +850,7 @@ h1, h2, h3, h4, h5, h6 {
 .avatar-visual-box {
   position: relative;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1440px;
   height: 100%;
   margin: 0 auto;
   overflow: hidden;
@@ -933,12 +935,13 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 0.65;
 }
 
-/* Head Layer Wrapper: Fixed in place so background NEVER moves */
+/* Head Layer Wrapper: Scaled for grand, large avatar prominence with zero jitter */
 .avatar-head-motion-wrap {
   position: relative;
   width: 100%;
   height: 100%;
-  transform: none !important;
+  transform: scale(1.08) !important;
+  transform-origin: center 38% !important;
   animation: none !important;
   will-change: auto;
 }
@@ -1562,23 +1565,39 @@ h1, h2, h3, h4, h5, h6 {
   100% { transform: scale(1.25); }
 }
 
-/* --- Bottom: Voice & Text Interactive AI Chat Box Underneath Avatar --- */
+/* --- Right: Voice & Text Interactive AI Chat Box (Right-Side Symmetrical Chatbot) --- */
 .hero-chat-container {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: auto;
+  height: clamp(620px, 78vh, 840px);
+  max-height: 860px;
+  min-height: 560px;
+  overflow: hidden;
+  position: relative;
 }
 
 .voice-chat-card {
   width: 100%;
-  height: auto;
-  min-height: 140px;
-  max-height: 240px;
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   border-radius: var(--radius-lg, 16px);
+  background: rgba(8, 14, 28, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 242, 254, 0.3);
+  box-shadow: 0 20px 52px rgba(0, 0, 0, 0.68), 0 0 42px rgba(0, 242, 254, 0.18);
+  transition: var(--transition-smooth);
+  position: relative;
+}
+
+.voice-chat-card:hover {
+  border-color: var(--glass-border-hover);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.7), 0 0 36px rgba(0, 242, 254, 0.25);
 }
 
 .chat-simulator-card {
@@ -1588,29 +1607,106 @@ h1, h2, h3, h4, h5, h6 {
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg, 16px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 242, 254, 0.08);
+  box-shadow: 0 20px 52px rgba(0, 0, 0, 0.68), 0 0 42px rgba(0, 242, 254, 0.18);
   overflow: hidden;
   transition: var(--transition-smooth);
 }
 
 .chat-simulator-card:hover {
   border-color: var(--glass-border-hover);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 28px rgba(0, 242, 254, 0.18);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.7), 0 0 36px rgba(0, 242, 254, 0.25);
+}
+
+/* Chat Card Header: Sleek Cybernetic Header matching Avatar Stage Header */
+.chat-card-header {
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  gap: 10px;
+  z-index: 10;
+  height: 46px;
+  box-sizing: border-box;
+}
+
+.chat-header-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chat-header-icon {
+  color: var(--accent-cyan);
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+}
+
+.chat-header-title {
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--text-main);
+}
+
+.chat-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  background: rgba(0, 245, 160, 0.1);
+  border: 1px solid rgba(0, 245, 160, 0.3);
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 600;
+  color: var(--accent-emerald);
+}
+
+.chat-header-tools {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chat-tool-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-border);
+  color: var(--text-muted);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.74rem;
+  transition: var(--transition-fast);
+}
+
+.chat-tool-btn:hover {
+  background: rgba(255, 71, 87, 0.2);
+  border-color: var(--accent-red);
+  color: #fff;
+  transform: scale(1.08);
 }
 
 /* Internal Scroll Area for Messages */
 .chat-body {
-  padding: 10px 16px;
+  padding: 14px 16px;
   overflow-y: auto;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 242, 254, 0.3) transparent;
-  flex: 1 1 auto;
-  min-height: 52px;
-  max-height: 110px;
+  flex: 1 1 0;
+  min-height: 0;
   overscroll-behavior: contain;
   overflow-anchor: auto;
 }
@@ -1719,8 +1815,23 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   gap: 6px;
   overflow-x: auto;
-  padding-bottom: 2px;
+  padding-bottom: 3px;
   scrollbar-width: thin;
+  scrollbar-color: rgba(0, 242, 254, 0.3) transparent;
+}
+
+.quick-prompts::-webkit-scrollbar {
+  height: 3px;
+}
+.quick-prompts::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+.quick-prompts::-webkit-scrollbar-thumb {
+  background: rgba(0, 242, 254, 0.3);
+  border-radius: 4px;
+}
+.quick-prompts::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 242, 254, 0.6);
 }
 
 .quick-chip {
@@ -2362,28 +2473,24 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .hero-primary-grid {
+    grid-template-columns: minmax(0, 2.5fr) minmax(290px, 1fr);
     width: 100%;
     max-width: 100%;
     gap: 12px;
   }
   
   .hero-video-card,
-  .hero-video-card.neural-stage-card {
-    height: clamp(440px, 60vh, 600px);
-    max-height: 620px;
-    min-height: 380px;
+  .hero-video-card.neural-stage-card,
+  .hero-chat-container {
+    height: clamp(540px, 72vh, 720px);
+    max-height: 740px;
+    min-height: 480px;
   }
   
-  .hero-chat-container,
   .voice-chat-card {
-    height: auto;
-    min-height: 140px;
-    max-height: 230px;
-  }
-
-  .chat-body {
-    min-height: 50px;
-    max-height: 95px;
+    height: 100%;
+    max-height: 100%;
+    min-height: 0;
   }
   
   .hero-main-title {
@@ -2492,27 +2599,21 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     flex-direction: column;
     height: auto;
-    gap: 10px;
+    gap: 14px;
     max-width: 100%;
   }
 
   .hero-video-card,
   .hero-video-card.neural-stage-card {
-    height: clamp(380px, 54vh, 500px);
-    max-height: 520px;
-    min-height: 340px;
+    height: clamp(380px, 52vh, 480px);
+    max-height: 500px;
+    min-height: 320px;
   }
   
   .hero-chat-container,
   .voice-chat-card {
     height: auto;
-    min-height: 140px;
-    max-height: 230px;
-  }
-
-  .chat-body {
-    min-height: 50px;
-    max-height: 95px;
+    min-height: 360px;
   }
 
   .section {
@@ -2588,15 +2689,15 @@ h1, h2, h3, h4, h5, h6 {
 
   .hero-video-card,
   .hero-video-card.neural-stage-card {
-    height: 320px;
-    max-height: 360px;
-    min-height: 270px;
+    height: clamp(360px, 54vh, 450px);
+    max-height: 460px;
+    min-height: 320px;
   }
 
   .hero-chat-container,
   .voice-chat-card {
     height: auto;
-    min-height: 140px;
+    min-height: 320px;
   }
 
   .hide-on-mobile {
@@ -2604,9 +2705,8 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .chat-body {
-    min-height: 45px;
-    max-height: 80px;
-    padding: 6px 10px;
+    min-height: 120px;
+    padding: 10px;
   }
 
   .custom-play-btn {
