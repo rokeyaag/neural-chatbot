@@ -495,9 +495,9 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 16px 44px rgba(0, 0, 0, 0.6), 0 0 32px rgba(0, 242, 254, 0.15);
   display: flex;
   flex-direction: column;
-  height: clamp(380px, 48vh, 520px);
-  max-height: 520px;
-  min-height: 350px;
+  height: clamp(520px, 68vh, 720px);
+  max-height: 760px;
+  min-height: 480px;
   width: 100%;
   transition: var(--transition-smooth);
   position: relative;
@@ -858,14 +858,14 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: inset 35px 0 45px -20px #03060f, inset -35px 0 45px -20px #03060f;
 }
 
-/* Face Layer Transitions — Solid Base, Zero Blink, Full Picture Display */
+/* Face Layer Transitions — Solid Base, Zero Blink */
 .avatar-face-layer {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: center center;
+  object-fit: cover;
+  object-position: center 36%;
   pointer-events: none;
   user-select: none;
 }
@@ -897,8 +897,8 @@ h1, h2, h3, h4, h5, h6 {
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: center center;
+  object-fit: cover;
+  object-position: center 36%;
   opacity: 0;
   z-index: 3;
   transition: opacity 0.07s ease-in-out;
@@ -914,8 +914,8 @@ h1, h2, h3, h4, h5, h6 {
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: center center;
+  object-fit: cover;
+  object-position: center 36%;
   opacity: 0;
   z-index: 4;
   transition: opacity 0.05s ease-in-out;
@@ -933,19 +933,11 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 0.65;
 }
 
-/* Head Layer Wrapper: Fixed in place so background NEVER moves and full aspect ratio is preserved */
+/* Head Layer Wrapper: Fixed in place so background NEVER moves */
 .avatar-head-motion-wrap {
   position: relative;
   width: 100%;
   height: 100%;
-  max-width: 100%;
-  max-height: 100%;
-  aspect-ratio: 1376 / 768;
-  margin: 0 auto;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   transform: none !important;
   animation: none !important;
   will-change: auto;
@@ -954,11 +946,11 @@ h1, h2, h3, h4, h5, h6 {
 /* --- Neural Brain Synaptic Energy & Cranial Wave Aura --- */
 .avatar-brain-aura {
   position: absolute;
-  top: 18%;
+  top: 15%;
   left: 50%;
   transform: translate(-50%, -20%);
-  width: 200px;
-  height: 140px;
+  width: 220px;
+  height: 160px;
   border-radius: 50%;
   pointer-events: none;
   z-index: 5;
@@ -2377,9 +2369,9 @@ h1, h2, h3, h4, h5, h6 {
   
   .hero-video-card,
   .hero-video-card.neural-stage-card {
-    height: clamp(340px, 44vh, 460px);
-    max-height: 480px;
-    min-height: 300px;
+    height: clamp(440px, 60vh, 600px);
+    max-height: 620px;
+    min-height: 380px;
   }
   
   .hero-chat-container,
@@ -2506,9 +2498,9 @@ h1, h2, h3, h4, h5, h6 {
 
   .hero-video-card,
   .hero-video-card.neural-stage-card {
-    height: clamp(300px, 40vh, 400px);
-    max-height: 420px;
-    min-height: 260px;
+    height: clamp(380px, 54vh, 500px);
+    max-height: 520px;
+    min-height: 340px;
   }
   
   .hero-chat-container,
@@ -2596,9 +2588,9 @@ h1, h2, h3, h4, h5, h6 {
 
   .hero-video-card,
   .hero-video-card.neural-stage-card {
-    height: 260px;
-    max-height: 290px;
-    min-height: 220px;
+    height: 320px;
+    max-height: 360px;
+    min-height: 270px;
   }
 
   .hero-chat-container,
