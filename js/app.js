@@ -2027,6 +2027,30 @@ function initVoiceAndChatEngine() {
       }
     },
 
+    // Memory loaded from data/memory.json
+    fileMemory: [],
+
+    async loadFileMemory() {
+      try {
+        const res = await fetch('data/memory.json?v=' + Date.now());
+        if (res.ok) {
+          const items = await res.json();
+          if (Array.isArray(items)) {
+            this.fileMemory = items.map(item => ({
+              ...item,
+              isFileMemory: true,
+              category: item.category || 'file_memory'
+            }));
+            console.log(`[NeuralBot] Loaded ${this.fileMemory.length} items from data/memory.json`);
+            return this.fileMemory;
+          }
+        }
+      } catch (err) {
+        console.warn('[NeuralBot] Note: data/memory.json could not be loaded:', err);
+      }
+      return [];
+    },
+
     saveCustomKnowledge(item) {
       const customList = this.getCustomKnowledge();
       customList.unshift(item);
@@ -2046,8 +2070,9 @@ function initVoiceAndChatEngine() {
         ? window.NeuralDialogueMemory.getLearnedQA()
         : [];
       const custom = this.getCustomKnowledge();
+      const file = this.fileMemory || [];
       const github = this.getGitHubKnowledge();
-      return [...learned, ...custom, ...github, ...this.defaultStore];
+      return [...learned, ...custom, ...file, ...github, ...this.defaultStore];
     },
 
     // Dynamic non-repeating selector strictly filtered by language
@@ -2081,14 +2106,17 @@ function initVoiceAndChatEngine() {
   // Expose knowledge store globally
   window.NeuralKnowledgeStore = NeuralKnowledgeStore;
 
-  // Auto-sync GitHub repositories on launch
+  // Auto-load external memory from data/memory.json and sync GitHub repositories on launch
   setTimeout(() => {
-    NeuralKnowledgeStore.syncFromGitHub().then(() => {
+    Promise.all([
+      NeuralKnowledgeStore.loadFileMemory(),
+      NeuralKnowledgeStore.syncFromGitHub()
+    ]).then(() => {
       if (typeof window.refreshKnowledgeStoreUI === 'function') {
         window.refreshKnowledgeStoreUI();
       }
     });
-  }, 1000);
+  }, 400);
 
   // --- INTERACTIVE RECIPROCAL DIALOGUE & TWO-WAY Q&A MEMORY ENGINE ---
   const NeuralDialogueMemory = {
@@ -4538,7 +4566,24 @@ function initKnowledgeStoreModal() {
 
   const countGithub = document.getElementById('kbCountGithub');
   const countQa = document.getElementById('kbCountQa');
+  const countFile = document.getElementById('kbCountFile');
   const syncGithubBtn = document.getElementById('syncGithubKbBtn');
+  const syncFileMemoryBtn = document.getElementById('syncFileMemoryBtn');
+
+  if (syncFileMemoryBtn) {
+    syncFileMemoryBtn.addEventListener('click', async () => {
+      syncFileMemoryBtn.disabled = true;
+      syncFileMemoryBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading...';
+      showToast('Reloading memory from data/memory.json...');
+      if (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.loadFileMemory === 'function') {
+        const items = await window.NeuralKnowledgeStore.loadFileMemory();
+        showToast(`Successfully loaded ${items.length} items from data/memory.json! 🧠✨`);
+      }
+      syncFileMemoryBtn.disabled = false;
+      syncFileMemoryBtn.innerHTML = '<i class="fa-solid fa-rotate" style="color: #00f2fe;"></i> Reload memory.json';
+      renderKnowledgeGrid();
+    });
+  }
 
   if (syncGithubBtn) {
     syncGithubBtn.addEventListener('click', async () => {
@@ -4576,21 +4621,29 @@ function initKnowledgeStoreModal() {
       ? window.NeuralDialogueMemory.getLearnedQA()
       : [];
 
+    const fileItems = (window.NeuralKnowledgeStore && Array.isArray(window.NeuralKnowledgeStore.fileMemory))
+      ? window.NeuralKnowledgeStore.fileMemory
+      : [];
+
     const allItems = (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.getAllKnowledge === 'function')
       ? window.NeuralKnowledgeStore.getAllKnowledge()
-      : [...learnedQAItems, ...customItems, ...githubItems];
+      : [...learnedQAItems, ...customItems, ...fileItems, ...githubItems];
 
     const githubCount = allItems.filter(i => i.category === 'github' || i.isGitHub).length;
     const customCount = allItems.filter(i => i.isCustom || i.category === 'custom').length;
     const qaCount = allItems.filter(i => i.isLearnedQA || i.category === 'qa_memory').length;
+    const fileCount = fileItems.length;
 
     if (countAll) countAll.textContent = String(allItems.length);
     if (countCustom) countCustom.textContent = String(customCount);
     if (countGithub) countGithub.textContent = String(githubCount);
     if (countQa) countQa.textContent = String(qaCount);
+    if (countFile) countFile.textContent = String(fileCount);
 
     let filtered = allItems;
-    if (activeCategory === 'custom') {
+    if (activeCategory === 'file_memory') {
+      filtered = filtered.filter((i) => i.isFileMemory || i.category === 'file_memory' || fileItems.some(f => f.id === i.id));
+    } else if (activeCategory === 'custom') {
       filtered = filtered.filter((i) => i.isCustom || i.category === 'custom' || customItems.some(c => c.id === i.id));
     } else if (activeCategory === 'github') {
       filtered = filtered.filter((i) => i.category === 'github' || i.isGitHub || githubItems.some(g => g.id === i.id));
@@ -4631,6 +4684,7 @@ function initKnowledgeStoreModal() {
     }
 
     cardsGrid.innerHTML = filtered.map((item) => {
+      const isFileItem = item.isFileMemory || fileItems.some(f => f.id === item.id);
       const isCustomItem = item.isCustom || customItems.some(c => c.id === item.id);
       const isGhItem = item.category === 'github' || item.isGitHub;
       const isQaItem = item.isLearnedQA || item.category === 'qa_memory';
@@ -4648,8 +4702,8 @@ function initKnowledgeStoreModal() {
         <div class="kb-card" data-cat="${item.category}">
           <div class="kb-card-header">
             <h4 class="kb-card-title">${item.title}</h4>
-            <span class="kb-card-cat-badge ${isQaItem ? 'qa' : (isCustomItem ? 'custom' : (isGhItem ? 'github' : ''))}">
-              ${isQaItem ? '<i class="fa-solid fa-brain"></i> LEARNED Q&amp;A' : (isCustomItem ? '<i class="fa-solid fa-database"></i> CUSTOM' : (isGhItem ? '<i class="fa-brands fa-github"></i> GITHUB' : catBadgeText))}
+            <span class="kb-card-cat-badge ${isFileItem ? 'file-memory' : (isQaItem ? 'qa' : (isCustomItem ? 'custom' : (isGhItem ? 'github' : '')))}" ${isFileItem ? 'style="background:rgba(0,242,254,0.15); color:#00f2fe; border:1px solid rgba(0,242,254,0.3);"' : ''}>
+              ${isFileItem ? '<i class="fa-solid fa-file-code"></i> MEMORY.JSON' : (isQaItem ? '<i class="fa-solid fa-brain"></i> LEARNED Q&amp;A' : (isCustomItem ? '<i class="fa-solid fa-database"></i> CUSTOM' : (isGhItem ? '<i class="fa-brands fa-github"></i> GITHUB' : catBadgeText)))}
             </span>
           </div>
 

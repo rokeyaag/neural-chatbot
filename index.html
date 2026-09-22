@@ -963,6 +963,7 @@
         </div>
         <div class="knowledge-category-tabs" id="knowledgeCategoryTabs">
           <button class="kb-tab-btn active" data-cat="all">All (<span id="kbCountAll">0</span>)</button>
+          <button class="kb-tab-btn" data-cat="file_memory" style="border-color: rgba(0, 242, 254, 0.4);"><i class="fa-solid fa-file-code" style="color: #00f2fe;"></i> File Memory (<span id="kbCountFile">0</span>)</button>
           <button class="kb-tab-btn" data-cat="github"><i class="fa-brands fa-github"></i> GitHub Repos (<span id="kbCountGithub">0</span>)</button>
           <button class="kb-tab-btn" data-cat="kusol"><i class="fa-solid fa-hand-holding-heart"></i> Kusol Binimoy</button>
           <button class="kb-tab-btn" data-cat="greetings"><i class="fa-solid fa-hand-wave"></i> Greetings</button>
@@ -983,6 +984,9 @@
             <span id="knowledgeListStatus">Loading neural knowledge matrix...</span>
           </div>
           <div style="display: flex; align-items: center; gap: 8px;">
+            <button id="syncFileMemoryBtn" class="btn btn-secondary btn-sm" title="Reload memory from data/memory.json">
+              <i class="fa-solid fa-rotate" style="color: #00f2fe;"></i> Reload memory.json
+            </button>
             <button id="syncGithubKbBtn" class="btn btn-secondary btn-sm" title="Sync live repositories from GitHub">
               <i class="fa-solid fa-arrows-rotate"></i> Sync GitHub
             </button>
@@ -1284,6 +1288,6 @@
   </div>
 
   <!-- Javascript -->
-  <script src="js/app.js?v=4.6"></script>
+  <script src="js/app.js?v=4.7"></script>
 </body>
 </html>

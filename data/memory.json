@@ -1,0 +1,67 @@
+[
+  {
+    "id": "mem_lutfor_profile",
+    "category": "personal",
+    "title": "লুৎফর রহমান (Lutfor Rahman) পরিচিতি ও স্কিল",
+    "keywords_en": ["who is lutfor", "about lutfor", "lutfor rahman", "creator", "developer", "founder", "author"],
+    "keywords_bn": ["লুৎফর কে", "লুৎফর রহমান কে", "লুৎফর রহমান সম্পর্কে বলো", "নির্মাতা", "ডেভেলপার", "কে বানিয়েছে", "প্রজেক্টের মালিক"],
+    "responses_en": [
+      "<strong>Lutfor Rahman</strong> is an AI Engineer and Full-Stack Developer specializing in PyTorch Deep Learning, Neural Network architectures, real-time Voice AI, and high-performance Web Systems."
+    ],
+    "responses_bn": [
+      "<strong>লুৎফর রহমান</strong> একজন এআই ও ফুল-স্ট্যাক সফটওয়্যার ইঞ্জিনিয়ার। তিনি পাইটর্চ ডিপ লার্নিং, ভয়েস এআই ইন্টেলিজেন্স এবং স্কেলেবল সিস্টেম ডেভেলপমেন্টে পারদর্শী।"
+    ]
+  },
+  {
+    "id": "mem_contact_info",
+    "category": "contact",
+    "title": "যোগাযোগের ঠিকানা ও তথ্য (Contact Info)",
+    "keywords_en": ["contact", "how to contact", "email", "phone", "reach you", "hire", "social links"],
+    "keywords_bn": ["যোগাযোগ", "কিভাবে যোগাযোগ করব", "ইমেইল", "ফোন নম্বর", "কন্টাক্ট", "হায়ার করতে চাই"],
+    "responses_en": [
+      "You can connect directly with Lutfor Rahman via:<br>• <strong>GitHub:</strong> <a href='https://github.com/rokeyaag' target='_blank' style='color:#00f2fe;'>github.com/rokeyaag</a><br>• <strong>Facebook:</strong> <a href='https://facebook.com' target='_blank' style='color:#00f2fe;'>Official Facebook</a><br>• <strong>WhatsApp:</strong> Available via top WhatsApp button."
+    ],
+    "responses_bn": [
+      "লুৎফর রহমানের সাথে সরাসরি যোগাযোগ করার মাধ্যমসমূহ:<br>• <strong>গিটহাব:</strong> <a href='https://github.com/rokeyaag' target='_blank' style='color:#00f2fe;'>github.com/rokeyaag</a><br>• <strong>ফেসবুক:</strong> অফিসিয়াল ফেসবুক পেজ<br>• <strong>হোয়াটসঅ্যাপ:</strong> উপরের WhatsApp বাটনে ক্লিক করে সরাসরি মেসেজ দিতে পারেন।"
+    ]
+  },
+  {
+    "id": "mem_neural_bot_mission",
+    "category": "ai",
+    "title": "NeuralBot এর লক্ষ্য ও উদ্দেশ্য (Bot Mission)",
+    "keywords_en": ["what is neuralbot", "your purpose", "bot mission", "features", "what can you do"],
+    "keywords_bn": ["নিউরালবট কি", "তোমার উদ্দেশ্য কি", "তোমার ফিচার কি", "তুমি কি কি করতে পারো", "কাজের লক্ষ্য"],
+    "responses_en": [
+      "<strong>NeuralBot</strong> is a state-of-the-art Neural AI assistant featuring real-time Voice-to-Voice dialogue, Bengali & English speech intelligence, neural avatar lip-sync, and dynamic knowledge memory."
+    ],
+    "responses_bn": [
+      "<strong>NeuralBot</strong> একটি আধুনিক নিউরাল এআই অ্যাসিস্ট্যান্ট। এটি রিয়েল-টাইম ভয়েস ও টেক্সটে বাংলা এবং ইংরেজিতে কথা বলতে পারে, অবতারের মাধ্যমে লিপ-সিঙ্ক করে এবং নতুন তথ্য স্মৃতিতে সংরক্ষণ করতে পারে।"
+    ]
+  },
+  {
+    "id": "mem_custom_example_service",
+    "category": "services",
+    "title": "কাস্টম সার্ভিস / সেবা সংক্রান্ত তথ্য (Example Service)",
+    "keywords_en": ["services", "what services", "pricing", "ai development", "web development"],
+    "keywords_bn": ["কি কি সেবা দাও", "সার্ভিস কি কি", "খরচ কেমন", "ওয়েব ডেভেলপমেন্ট", "এআই প্রজেক্ট"],
+    "responses_en": [
+      "We build modern AI-driven Web Applications, Deep Learning Neural Models, Custom Voice Chatbots, and Microservices APIs. Contact us for project collaborations!"
+    ],
+    "responses_bn": [
+      "আমরা অত্যাধুনিক এআই সমৃদ্ধ ওয়েব অ্যাপ্লিকেশন, ডিপ লার্নিং নিউরাল মডেল, কাস্টম ভয়েস চ্যাটবট এবং মাইক্রোসার্ভিস সিস্টেম তৈরি করে থাকি।"
+    ]
+  },
+  {
+    "id": "mem_sample_template",
+    "category": "general",
+    "title": "নতুন প্রশ্ন ও উত্তরের নমুনা টেমপ্লেট (Sample Template)",
+    "keywords_en": ["sample question", "test memory", "template"],
+    "keywords_bn": ["নমুনা প্রশ্ন", "টেস্ট মেমোরি", "স্যাম্পল"],
+    "responses_en": [
+      "This is an example answer loaded from <code>data/memory.json</code>. You can add as many questions and answers here as you like!"
+    ],
+    "responses_bn": [
+      "এটি <code>data/memory.json</code> ফাইল থেকে লোড হওয়া একটি নমুনা উত্তর। আপনি এই ফাইলে যত খুশি নতুন প্রশ্ন এবং উত্তর লিখে যুক্ত করতে পারেন!"
+    ]
+  }
+]
