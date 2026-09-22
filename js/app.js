@@ -790,7 +790,15 @@ function initVideoController() {
   window.switchToVideoStage = switchToVideo;
 
   if (tabAvatarBtn) tabAvatarBtn.addEventListener('click', switchToAvatar);
-  if (tabVideoBtn) tabVideoBtn.addEventListener('click', switchToVideo);
+  if (tabVideoBtn) {
+    tabVideoBtn.addEventListener('click', () => {
+      if (tabVideoBtn.classList.contains('active')) {
+        switchToAvatar();
+      } else {
+        switchToVideo();
+      }
+    });
+  }
   if (tabYoutubeBtn) tabYoutubeBtn.addEventListener('click', () => switchToYoutube());
   if (stageYtBackAvatarBtn) stageYtBackAvatarBtn.addEventListener('click', switchToAvatar);
 

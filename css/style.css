@@ -509,26 +509,31 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .stage-header {
-  padding: 8px 16px;
+  padding: 8px 14px;
   background: rgba(255, 255, 255, 0.03);
   border-bottom: 1px solid var(--glass-border);
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
-  gap: 12px;
+  gap: 10px;
   z-index: 10;
+  flex-wrap: nowrap;
 }
 
 .stage-tabs {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  max-width: 100%;
-  padding-bottom: 2px;
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  padding-bottom: 1px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .stage-tabs::-webkit-scrollbar {
@@ -539,15 +544,15 @@ h1, h2, h3, h4, h5, h6 {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--glass-border);
   color: var(--text-muted);
-  padding: 5px 12px;
+  padding: 4px 10px;
   border-radius: var(--radius-full);
   font-family: var(--font-heading);
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   font-weight: 600;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   white-space: nowrap;
   flex-shrink: 0;
   transition: var(--transition-fast);
@@ -704,19 +709,26 @@ h1, h2, h3, h4, h5, h6 {
 .stage-header-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+  gap: 6px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.stage-header-actions > * {
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .stage-action-btn {
   background: rgba(0, 242, 254, 0.08);
   border: 1px solid rgba(0, 242, 254, 0.35);
   color: var(--accent-cyan);
-  padding: 4px 12px;
+  padding: 4px 10px;
   border-radius: var(--radius-full);
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   cursor: pointer;
   font-family: var(--font-heading);
   font-size: 0.74rem;
