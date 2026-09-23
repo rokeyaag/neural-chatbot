@@ -4,12 +4,7 @@
   "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": false,
-  "rewrites": [
-    {
-      "source": "/((?!css|js|images|audio|data|.*\\..*).*)",
-      "destination": "/index.html"
-    }
-  ],
+
   "headers": [
     {
       "source": "/(.*)",
