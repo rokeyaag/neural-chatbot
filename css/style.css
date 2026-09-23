@@ -488,23 +488,23 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero-top-section .container {
-  max-width: 2040px;
+  max-width: 1680px;
   width: 100%;
-  padding: 0 28px;
+  padding: 0 24px;
 }
 
-/* Hero Layout: 80% Avatar Stage & 20% Interactive Chat Box (10% Grand Scale) */
+/* Hero Layout: 80% Avatar Stage & 20% Interactive Chat Box */
 .hero-primary-grid {
   display: grid;
   grid-template-columns: minmax(0, 4fr) minmax(280px, 1fr);
   align-items: stretch;
-  gap: 20px;
+  gap: 16px;
   width: 100%;
-  max-width: 2040px;
+  max-width: 1680px;
   margin: 0 auto;
 }
 
-/* --- Top: Full-Face Interactive Neural Talking Avatar & Video Stage Card (Grand Scale) --- */
+/* --- Top: Full-Face Interactive Neural Talking Avatar & Video Stage Card --- */
 .hero-video-card.neural-stage-card {
   background: var(--glass-bg-card);
   backdrop-filter: var(--glass-blur);
@@ -515,9 +515,9 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 26px 66px rgba(0, 0, 0, 0.75), 0 0 52px rgba(0, 242, 254, 0.25);
   display: flex;
   flex-direction: column;
-  height: clamp(810px, 90vh, 1080px);
-  max-height: 1120px;
-  min-height: 740px;
+  height: clamp(650px, 72vh, 860px);
+  max-height: 900px;
+  min-height: 590px;
   width: 100%;
   transition: var(--transition-smooth);
   position: relative;
@@ -2551,9 +2551,9 @@ h1, h2, h3, h4, h5, h6 {
   .hero-video-card,
   .hero-video-card.neural-stage-card,
   .hero-chat-container {
-    height: clamp(640px, 78vh, 840px);
-    max-height: 860px;
-    min-height: 560px;
+    height: clamp(510px, 62vh, 670px);
+    max-height: 690px;
+    min-height: 450px;
   }
   
   .voice-chat-card {
