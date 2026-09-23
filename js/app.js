@@ -957,6 +957,7 @@ function initVideoController() {
 function initNeuralAvatarController(switchToAvatarCallback) {
   const stageContainer = document.getElementById('avatarStageView');
   const imgIdle = document.getElementById('avatarImgIdle');
+  const imgThinking = document.getElementById('avatarImgThinking');
   const imgMouthSubtle = document.getElementById('avatarMouthSubtle');
   const imgMouthOpen = document.getElementById('avatarImgSpeaking');
   const imgMouthO = document.getElementById('avatarMouthO');
@@ -1032,6 +1033,9 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     if (imgIdle) {
       imgIdle.classList.add('active');
     }
+    if (imgThinking) {
+      imgThinking.classList.remove('active');
+    }
 
     if (statusPill) {
       statusPill.className = 'avatar-status-pill';
@@ -1053,6 +1057,9 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     }
     if (imgIdle) {
       imgIdle.classList.add('active');
+    }
+    if (imgThinking) {
+      imgThinking.classList.remove('active');
     }
 
     if (statusPill) {
@@ -1079,6 +1086,9 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     }
     if (imgIdle) {
       imgIdle.classList.add('active');
+    }
+    if (imgThinking) {
+      imgThinking.classList.add('active');
     }
 
     if (statusPill) {
@@ -1146,6 +1156,9 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     }
     if (imgIdle) {
       imgIdle.classList.add('active');
+    }
+    if (imgThinking) {
+      imgThinking.classList.remove('active');
     }
 
     if (statusPill) {
