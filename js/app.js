@@ -967,7 +967,8 @@ function initNeuralAvatarController(switchToAvatarCallback) {
   const subtitlesText = document.getElementById('avatarSubtitlesText');
   const repeatBtn = document.getElementById('avatarRepeatBtn');
 
-  let mouthInterval = null;
+  let mouthTimeout = null;
+  let wordTimeout = null;
   let blinkTimeout = null;
   let isBlinking = false;
   let lastSpokenText = 'Welcome! I am NeuralBot. How can I assist you with deep learning or this project today?';
@@ -986,13 +987,13 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     if (!imgEyes || isBlinking) return;
     isBlinking = true;
 
-    // Smooth natural eyelid drop
+    // Smooth natural eyelid drop (150ms total closed duration)
     imgEyes.classList.add('blinking');
 
     setTimeout(() => {
       if (imgEyes) imgEyes.classList.remove('blinking');
 
-      const shouldDouble = forceDouble || (Math.random() < 0.22);
+      const shouldDouble = forceDouble || (Math.random() < 0.15);
       if (shouldDouble) {
         // Natural quick double blink
         setTimeout(() => {
@@ -1000,19 +1001,19 @@ function initNeuralAvatarController(switchToAvatarCallback) {
           setTimeout(() => {
             if (imgEyes) imgEyes.classList.remove('blinking');
             isBlinking = false;
-          }, 80);
-        }, 110);
+          }, 110);
+        }, 130);
       } else {
         isBlinking = false;
       }
-    }, 95);
+    }, 150);
   }
 
   function scheduleNextBlink() {
     if (blinkTimeout) clearTimeout(blinkTimeout);
-    // Speaking blinks are conversational (2.2s - 4.5s), idle blinks are calm (3.5s - 6.5s)
-    const baseMin = isSpeaking ? 2200 : 3500;
-    const baseRange = isSpeaking ? 2300 : 3000;
+    // Speaking blinks are calm and conversational (4.0s - 7.5s), idle blinks (3.8s - 7.0s)
+    const baseMin = isSpeaking ? 4000 : 3800;
+    const baseRange = isSpeaking ? 3500 : 3200;
     const nextDelay = baseMin + Math.random() * baseRange;
 
     blinkTimeout = setTimeout(() => {
@@ -1023,8 +1024,10 @@ function initNeuralAvatarController(switchToAvatarCallback) {
 
   function setIdle() {
     isSpeaking = false;
-    if (mouthInterval) clearInterval(mouthInterval);
-    mouthInterval = null;
+    if (mouthTimeout) clearTimeout(mouthTimeout);
+    if (wordTimeout) clearTimeout(wordTimeout);
+    mouthTimeout = null;
+    wordTimeout = null;
     setMouthViseme('closed');
 
     if (stageContainer) {
@@ -1077,7 +1080,10 @@ function initNeuralAvatarController(switchToAvatarCallback) {
   function setThinking() {
     if (switchToAvatarCallback) switchToAvatarCallback();
     isSpeaking = false;
-    if (mouthInterval) clearInterval(mouthInterval);
+    if (mouthTimeout) clearTimeout(mouthTimeout);
+    if (wordTimeout) clearTimeout(wordTimeout);
+    mouthTimeout = null;
+    wordTimeout = null;
     setMouthViseme('closed');
 
     if (stageContainer) {
@@ -1104,45 +1110,64 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     scheduleNextBlink();
   }
 
-  // --- Natural Multi-Viseme Speech Phoneme Parser ---
-  function generateSpeechVisemes(text) {
+  // --- Natural Syllable & Human Speech Cadence Generator ---
+  function generateSpeechCadence(text) {
     if (!text || typeof text !== 'string') {
-      return ['subtle', 'open', 'subtle', 'o', 'subtle', 'open', 'closed'];
+      return [
+        { shape: 'subtle', duration: 230 },
+        { shape: 'open', duration: 260 },
+        { shape: 'subtle', duration: 190 },
+        { shape: 'closed', duration: 150 }
+      ];
     }
     const clean = text.replace(/<[^>]*>/g, '').trim();
     const words = clean.split(/\s+/);
-    const visemes = [];
+    const steps = [];
 
     const oVowels = new Set(['o', 'u', 'w', 'O', 'U', 'W', 'ও', 'উ', 'ঊ', 'ো', 'ৌ']);
-    const openVowels = new Set([
-      'a', 'e', 'i', 'A', 'E', 'I', 'অ', 'আ', 'ই', 'ঈ', 'ঋ', 'এ', 'ঐ',
-      'া', 'ি', 'ী', 'ু', 'ূ', 'ৃ', 'ে', 'ৈ', '্যা', 'ং', 'ঃ'
-    ]);
 
     for (let w = 0; w < words.length; w++) {
       const word = words[w];
       if (!word) continue;
 
-      for (let i = 0; i < word.length; i++) {
-        const ch = word[i];
-        if (/[.,!?;:।\-–]/.test(ch)) {
-          visemes.push('closed');
-          visemes.push('closed');
-        } else if (oVowels.has(ch)) {
-          visemes.push('o');
-          visemes.push('subtle');
-        } else if (openVowels.has(ch)) {
-          visemes.push('open');
-          visemes.push('subtle');
-        } else {
-          // Consonants alternate subtle and open
-          visemes.push(i % 2 === 0 ? 'subtle' : 'open');
-        }
+      const hasPunctuation = /[.,!?;:।\-–]/.test(word);
+      const cleanWord = word.replace(/[.,!?;:।\-–]/g, '');
+
+      let hasO = false;
+      for (let c of cleanWord) {
+        if (oVowels.has(c)) { hasO = true; break; }
       }
-      // Natural brief word-boundary rest
-      visemes.push('closed');
+
+      const len = cleanWord.length;
+
+      if (len <= 3) {
+        // Short word: gentle single syllable
+        steps.push({ shape: hasO ? 'o' : 'subtle', duration: 220 });
+        steps.push({ shape: 'closed', duration: 120 });
+      } else if (len <= 7) {
+        // Medium word: 2 natural speech phonemes
+        steps.push({ shape: hasO ? 'o' : 'open', duration: 250 });
+        steps.push({ shape: 'subtle', duration: 190 });
+        steps.push({ shape: 'closed', duration: 130 });
+      } else {
+        // Long multi-syllabic word: fluid articulation
+        steps.push({ shape: 'subtle', duration: 200 });
+        steps.push({ shape: hasO ? 'o' : 'open', duration: 260 });
+        steps.push({ shape: 'subtle', duration: 190 });
+        steps.push({ shape: 'closed', duration: 140 });
+      }
+
+      // Natural breathing / speech pause at punctuation
+      if (hasPunctuation) {
+        steps.push({ shape: 'closed', duration: /[.!?।]/.test(word) ? 450 : 280 });
+      }
     }
-    return visemes.length > 0 ? visemes : ['subtle', 'open', 'subtle', 'closed'];
+
+    return steps.length > 0 ? steps : [
+      { shape: 'subtle', duration: 230 },
+      { shape: 'open', duration: 260 },
+      { shape: 'closed', duration: 150 }
+    ];
   }
 
   function startSpeaking(text) {
@@ -1170,40 +1195,50 @@ function initNeuralAvatarController(switchToAvatarCallback) {
       subtitlesText.textContent = text;
     }
 
-    if (mouthInterval) clearInterval(mouthInterval);
-    const visemeSequence = generateSpeechVisemes(text);
-    let visemeIndex = 0;
+    if (mouthTimeout) clearTimeout(mouthTimeout);
+    if (wordTimeout) clearTimeout(wordTimeout);
 
-    // Fluid, lifelike articulation speed (~115ms per phoneme)
-    mouthInterval = setInterval(() => {
+    const cadenceSteps = generateSpeechCadence(text);
+    let cadenceIndex = 0;
+
+    function runCadence() {
       if (!isSpeaking) {
-        clearInterval(mouthInterval);
-        mouthInterval = null;
         setMouthViseme('closed');
         return;
       }
-      const viseme = visemeSequence[visemeIndex];
-      setMouthViseme(viseme);
-      visemeIndex = (visemeIndex + 1) % visemeSequence.length;
-    }, 115);
+      const step = cadenceSteps[cadenceIndex];
+      setMouthViseme(step.shape);
+      cadenceIndex = (cadenceIndex + 1) % cadenceSteps.length;
+      mouthTimeout = setTimeout(runCadence, step.duration);
+    }
 
-    // Initial natural conversational blink when speech begins
+    // Start natural cadence
+    runCadence();
+
+    // Natural attentive initial blink after speech begins (~550ms)
     setTimeout(() => {
       if (isSpeaking) triggerBlink();
-    }, 380);
+    }, 550);
 
     scheduleNextBlink();
   }
 
   function triggerWordSyllable() {
     if (!isSpeaking) return;
+    // Word boundary cue from TTS speech engine
     setMouthViseme('open');
-    setTimeout(() => {
+    if (wordTimeout) clearTimeout(wordTimeout);
+    wordTimeout = setTimeout(() => {
       if (isSpeaking) setMouthViseme('subtle');
-    }, 85);
+    }, 180);
   }
 
   function stopSpeaking() {
+    isSpeaking = false;
+    if (mouthTimeout) clearTimeout(mouthTimeout);
+    if (wordTimeout) clearTimeout(wordTimeout);
+    mouthTimeout = null;
+    wordTimeout = null;
     setIdle();
   }
 
@@ -3672,14 +3707,12 @@ function initVoiceAndChatEngine() {
     const spokenText = getSpokenCleanText(text);
     if (!spokenText) return;
 
-    // Immediately trigger avatar mouth motion synchronized with the response text
-    if (globalAvatarController) {
-      globalAvatarController.startSpeaking(spokenText);
-    }
-
-    // If voice output is toggled OFF, keep mouth speaking for the estimated text duration
+    // If voice output is toggled OFF, run mouth cadence for the estimated text duration
     if (!isVoiceOutputEnabled) {
-      const duration = Math.min(Math.max(spokenText.length * 65, 1800), 7000);
+      if (globalAvatarController) {
+        globalAvatarController.startSpeaking(spokenText);
+      }
+      const duration = Math.min(Math.max(spokenText.length * 75, 1800), 7000);
       speechFallbackTimer = setTimeout(() => {
         if (globalAvatarController) globalAvatarController.stopSpeaking();
       }, duration);

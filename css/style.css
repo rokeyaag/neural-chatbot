@@ -924,7 +924,7 @@ h1, h2, h3, h4, h5, h6 {
   object-position: center center;
   opacity: 0;
   z-index: 3;
-  transition: opacity 0.08s ease-in-out;
+  transition: opacity 0.16s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
   user-select: none;
   will-change: opacity;
@@ -946,7 +946,7 @@ h1, h2, h3, h4, h5, h6 {
   object-position: center center;
   opacity: 0;
   z-index: 4;
-  transition: opacity 0.06s ease-out;
+  transition: opacity 0.10s ease-in-out;
   pointer-events: none;
   user-select: none;
   will-change: opacity;
