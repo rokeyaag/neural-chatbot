@@ -489,14 +489,14 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0 20px;
 }
 
-/* Hero Layout: 75% Avatar Stage & 25% Interactive Chat Box */
+/* Hero Layout: Balanced Avatar Stage & Interactive Chat Box */
 .hero-primary-grid {
   display: grid;
-  grid-template-columns: minmax(0, 3fr) minmax(310px, 1fr);
+  grid-template-columns: minmax(0, 1.22fr) minmax(360px, 1fr);
   align-items: stretch;
   gap: 16px;
   width: 100%;
-  max-width: 1540px;
+  max-width: 1380px;
   margin: 0 auto;
 }
 
@@ -511,9 +511,9 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 20px 52px rgba(0, 0, 0, 0.68), 0 0 42px rgba(0, 242, 254, 0.18);
   display: flex;
   flex-direction: column;
-  height: clamp(620px, 78vh, 840px);
-  max-height: 860px;
-  min-height: 560px;
+  height: clamp(480px, 60vh, 620px);
+  max-height: 640px;
+  min-height: 440px;
   width: 100%;
   transition: var(--transition-smooth);
   position: relative;
@@ -866,7 +866,7 @@ h1, h2, h3, h4, h5, h6 {
 .avatar-visual-box {
   position: relative;
   width: 100%;
-  max-width: 1440px;
+  max-width: 540px;
   height: 100%;
   margin: 0 auto;
   overflow: hidden;
@@ -883,7 +883,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 36%;
+  object-position: center 25%;
   pointer-events: none;
   user-select: none;
 }
@@ -916,7 +916,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 36%;
+  object-position: center 25%;
   opacity: 0;
   z-index: 3;
   transition: opacity 0.07s ease-in-out;
@@ -933,7 +933,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 36%;
+  object-position: center 25%;
   opacity: 0;
   z-index: 4;
   transition: opacity 0.05s ease-in-out;
@@ -1617,9 +1617,9 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: clamp(620px, 78vh, 840px);
-  max-height: 860px;
-  min-height: 560px;
+  height: clamp(480px, 60vh, 620px);
+  max-height: 640px;
+  min-height: 440px;
   overflow: hidden;
   position: relative;
 }
@@ -2562,9 +2562,9 @@ h1, h2, h3, h4, h5, h6 {
   .hero-video-card,
   .hero-video-card.neural-stage-card,
   .hero-chat-container {
-    height: clamp(540px, 72vh, 720px);
-    max-height: 740px;
-    min-height: 480px;
+    height: clamp(440px, 55vh, 560px);
+    max-height: 580px;
+    min-height: 380px;
   }
   
   .voice-chat-card {
