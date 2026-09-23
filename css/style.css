@@ -898,60 +898,15 @@ h1, h2, h3, h4, h5, h6 {
   animation: none !important;
 }
 
-/* Thinking Face Overlay */
-.avatar-thinking-layer {
-  opacity: 0;
-  z-index: 2;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-  transform: none !important;
+/* Dynamic Active State Effects for Main Avatar */
+.avatar-stage-container.talking .avatar-face-layer {
+  filter: drop-shadow(0 0 25px rgba(0, 242, 254, 0.3));
 }
 
-.avatar-thinking-layer.active {
-  opacity: 0.85;
+.avatar-stage-container.thinking .avatar-face-layer {
+  filter: drop-shadow(0 0 22px rgba(138, 43, 226, 0.35));
 }
 
-/* Speaking Mouth Layer: High-precision feathered mouth overlay seamlessly aligned with base idle face */
-.avatar-speaking-layer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 25%;
-  opacity: 0;
-  z-index: 3;
-  transition: opacity 0.07s ease-in-out;
-  pointer-events: none;
-  user-select: none;
-  will-change: opacity;
-  transform: none !important;
-}
-
-/* Natural Eye Blinking & Expression Layer */
-.avatar-eyes-layer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 25%;
-  opacity: 0;
-  z-index: 4;
-  transition: opacity 0.05s ease-in-out;
-  pointer-events: none;
-  user-select: none;
-  will-change: opacity;
-  transform: none !important;
-}
-
-.avatar-eyes-layer.blinking {
-  opacity: 1;
-}
-
-.avatar-eyes-layer.half-blink {
-  opacity: 0.65;
-}
 
 /* Head Layer Wrapper: Fixed & scaled naturally for immersive experience */
 .avatar-head-motion-wrap {
