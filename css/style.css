@@ -897,11 +897,8 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 1 !important;
   z-index: 1;
   transform: none !important;
-  animation: none !important;
-}
-
-/* Speaking Mouth Layer: High-precision feathered mouth overlay seamlessly aligned with base idle face */
-.avatar-speaking-layer {
+/* Photorealistic Mouth Viseme Layers: Seamlessly feathered on base idle face */
+.avatar-mouth-layer {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -910,14 +907,17 @@ h1, h2, h3, h4, h5, h6 {
   object-position: center 25%;
   opacity: 0;
   z-index: 3;
-  transition: opacity 0.05s ease-in-out, transform 0.05s ease-in-out;
-  transform-origin: 50% 59%;
+  transition: opacity 0.08s ease-in-out;
   pointer-events: none;
   user-select: none;
-  will-change: opacity, transform;
+  will-change: opacity;
 }
 
-/* Natural Eye Blinking Layer: Seamlessly feathered on base face */
+.avatar-mouth-layer.active {
+  opacity: 1 !important;
+}
+
+/* Natural Eye Blinking Layer: Exactly positioned over eyelids */
 .avatar-eyes-layer {
   position: absolute;
   inset: 0;
@@ -927,60 +927,35 @@ h1, h2, h3, h4, h5, h6 {
   object-position: center 25%;
   opacity: 0;
   z-index: 4;
-  transition: opacity 0.05s ease-out;
+  transition: opacity 0.06s ease-out;
   pointer-events: none;
   user-select: none;
   will-change: opacity;
 }
 
 .avatar-eyes-layer.blinking {
-  opacity: 1;
+  opacity: 1 !important;
 }
 
-.avatar-eyes-layer.half-blink {
-  opacity: 0.65;
-}
-
-/* Dynamic Active State Effects for Main Avatar */
-.avatar-stage-container.talking .avatar-face-layer {
-  filter: drop-shadow(0 0 25px rgba(0, 242, 254, 0.3));
-}
-
-.avatar-stage-container.thinking .avatar-face-layer {
-  filter: drop-shadow(0 0 22px rgba(138, 43, 226, 0.35));
-}
-
-
-/* Head Layer Wrapper: Fixed & scaled naturally for immersive experience */
+/* Base Head Motion Wrapper: 100% Completely Stationary — ONLY Eyes & Mouth Animate */
 .avatar-head-motion-wrap {
   position: relative;
   width: 100%;
   height: 100%;
-  transform: scale(0.98) !important;
-  transform-origin: center center !important;
-  animation: none !important;
-  will-change: auto;
-}
-
-.avatar-stage-container.talking .avatar-head-motion-wrap {
-  transform: scale(0.98) !important;
+  transform: none !important;
   animation: none !important;
 }
 
-/* --- Neural Brain Synaptic Energy & Cranial Wave Aura --- */
+.avatar-stage-container.talking .avatar-head-motion-wrap,
+.avatar-stage-container.thinking .avatar-head-motion-wrap,
+.avatar-stage-container.listening .avatar-head-motion-wrap {
+  transform: none !important;
+  animation: none !important;
+}
+
+/* --- Neural Brain Synaptic Energy & Cranial Wave Aura (Disabled for Pure Natural Human Realism) --- */
 .avatar-brain-aura {
-  position: absolute;
-  top: 15%;
-  left: 50%;
-  transform: translate(-50%, -20%);
-  width: 220px;
-  height: 160px;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 5;
-  opacity: 0.35;
-  transition: opacity 0.5s ease, transform 0.5s ease;
-  mix-blend-mode: screen;
+  display: none !important;
 }
 
 /* Ambient Cranial Sphere Glow */

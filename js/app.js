@@ -957,8 +957,9 @@ function initVideoController() {
 function initNeuralAvatarController(switchToAvatarCallback) {
   const stageContainer = document.getElementById('avatarStageView');
   const imgIdle = document.getElementById('avatarImgIdle');
-  const imgThinking = document.getElementById('avatarImgThinking');
-  const imgSpeaking = document.getElementById('avatarImgSpeaking');
+  const imgMouthSubtle = document.getElementById('avatarMouthSubtle');
+  const imgMouthOpen = document.getElementById('avatarImgSpeaking');
+  const imgMouthO = document.getElementById('avatarMouthO');
   const imgEyes = document.getElementById('avatarImgEyes');
   const statusPill = document.getElementById('avatarStatusPill');
   const statusLabel = document.getElementById('avatarStatusLabel');
@@ -971,38 +972,46 @@ function initNeuralAvatarController(switchToAvatarCallback) {
   let lastSpokenText = 'Welcome! I am NeuralBot. How can I assist you with deep learning or this project today?';
   let isSpeaking = false;
 
-  // --- Natural Eye Blinking Engine ---
+  // --- Photorealistic Mouth Viseme Controller ---
+  function setMouthViseme(shape) {
+    // shape: 'closed', 'subtle', 'open', 'o'
+    if (imgMouthSubtle) imgMouthSubtle.classList.toggle('active', shape === 'subtle');
+    if (imgMouthOpen) imgMouthOpen.classList.toggle('active', shape === 'open');
+    if (imgMouthO) imgMouthO.classList.toggle('active', shape === 'o');
+  }
+
+  // --- Natural Human Eye Blinking Engine ---
   function triggerBlink(forceDouble = false) {
     if (!imgEyes || isBlinking) return;
     isBlinking = true;
 
-    // Smooth eyelid drop
-    imgEyes.style.opacity = '1';
+    // Smooth natural eyelid drop
+    imgEyes.classList.add('blinking');
 
     setTimeout(() => {
-      if (imgEyes) imgEyes.style.opacity = '0';
+      if (imgEyes) imgEyes.classList.remove('blinking');
 
-      const shouldDouble = forceDouble || (Math.random() < 0.20);
+      const shouldDouble = forceDouble || (Math.random() < 0.22);
       if (shouldDouble) {
         // Natural quick double blink
         setTimeout(() => {
-          if (imgEyes) imgEyes.style.opacity = '0.9';
+          if (imgEyes) imgEyes.classList.add('blinking');
           setTimeout(() => {
-            if (imgEyes) imgEyes.style.opacity = '0';
+            if (imgEyes) imgEyes.classList.remove('blinking');
             isBlinking = false;
-          }, 70);
+          }, 80);
         }, 110);
       } else {
         isBlinking = false;
       }
-    }, 85);
+    }, 95);
   }
 
   function scheduleNextBlink() {
     if (blinkTimeout) clearTimeout(blinkTimeout);
-    // Speaking blinks are more lively (2.0s - 4.2s), idle blinks are calm (3.5s - 6.2s)
-    const baseMin = isSpeaking ? 2000 : 3500;
-    const baseRange = isSpeaking ? 2200 : 2700;
+    // Speaking blinks are conversational (2.2s - 4.5s), idle blinks are calm (3.5s - 6.5s)
+    const baseMin = isSpeaking ? 2200 : 3500;
+    const baseRange = isSpeaking ? 2300 : 3000;
     const nextDelay = baseMin + Math.random() * baseRange;
 
     blinkTimeout = setTimeout(() => {
@@ -1015,25 +1024,13 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     isSpeaking = false;
     if (mouthInterval) clearInterval(mouthInterval);
     mouthInterval = null;
-
-    const headMotionWrap = document.getElementById('avatarHeadMotionWrap');
-    if (headMotionWrap) headMotionWrap.classList.remove('syllable-accent');
+    setMouthViseme('closed');
 
     if (stageContainer) {
       stageContainer.classList.remove('talking', 'thinking', 'listening');
     }
     if (imgIdle) {
       imgIdle.classList.add('active');
-      imgIdle.style.opacity = '1';
-    }
-    if (imgThinking) {
-      imgThinking.classList.remove('active');
-      imgThinking.style.opacity = '0';
-    }
-    if (imgSpeaking) {
-      imgSpeaking.classList.remove('active');
-      imgSpeaking.style.opacity = '0';
-      imgSpeaking.style.transform = 'scaleY(1)';
     }
 
     if (statusPill) {
@@ -1048,6 +1045,7 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     if (switchToAvatarCallback) switchToAvatarCallback();
     isSpeaking = false;
     if (mouthInterval) clearInterval(mouthInterval);
+    setMouthViseme('closed');
 
     if (stageContainer) {
       stageContainer.classList.remove('talking', 'thinking');
@@ -1055,15 +1053,6 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     }
     if (imgIdle) {
       imgIdle.classList.add('active');
-      imgIdle.style.opacity = '1';
-    }
-    if (imgThinking) {
-      imgThinking.classList.remove('active');
-      imgThinking.style.opacity = '0';
-    }
-    if (imgSpeaking) {
-      imgSpeaking.classList.remove('active');
-      imgSpeaking.style.opacity = '0';
     }
 
     if (statusPill) {
@@ -1082,6 +1071,7 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     if (switchToAvatarCallback) switchToAvatarCallback();
     isSpeaking = false;
     if (mouthInterval) clearInterval(mouthInterval);
+    setMouthViseme('closed');
 
     if (stageContainer) {
       stageContainer.classList.remove('talking', 'listening');
@@ -1089,15 +1079,6 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     }
     if (imgIdle) {
       imgIdle.classList.add('active');
-      imgIdle.style.opacity = '1';
-    }
-    if (imgThinking) {
-      imgThinking.classList.add('active');
-      imgThinking.style.opacity = '0.75';
-    }
-    if (imgSpeaking) {
-      imgSpeaking.classList.remove('active');
-      imgSpeaking.style.opacity = '0';
     }
 
     if (statusPill) {
@@ -1113,42 +1094,45 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     scheduleNextBlink();
   }
 
-  function generateSpeechPattern(text) {
+  // --- Natural Multi-Viseme Speech Phoneme Parser ---
+  function generateSpeechVisemes(text) {
     if (!text || typeof text !== 'string') {
-      return [0.95, 0.45, 0.90, 0.15, 0.85, 0.50, 0.20, 0.80, 0.0];
+      return ['subtle', 'open', 'subtle', 'o', 'subtle', 'open', 'closed'];
     }
     const clean = text.replace(/<[^>]*>/g, '').trim();
     const words = clean.split(/\s+/);
-    const pattern = [];
-    const vowels = new Set([
-      'a', 'e', 'i', 'o', 'u', 'y', 'A', 'E', 'I', 'O', 'U', 'Y',
-      'অ', 'আ', 'ই', 'ঈ', 'উ', 'ঊ', 'ঋ', 'এ', 'ঐ', 'ও', 'ঔ',
-      'া', 'ি', 'ী', 'ু', 'ূ', 'ৃ', 'ে', 'ৈ', 'ো', 'ৌ', 'ং', 'ঃ', 'ঁ'
+    const visemes = [];
+
+    const oVowels = new Set(['o', 'u', 'w', 'O', 'U', 'W', 'ও', 'উ', 'ঊ', 'ো', 'ৌ']);
+    const openVowels = new Set([
+      'a', 'e', 'i', 'A', 'E', 'I', 'অ', 'আ', 'ই', 'ঈ', 'ঋ', 'এ', 'ঐ',
+      'া', 'ি', 'ী', 'ু', 'ূ', 'ৃ', 'ে', 'ৈ', '্যা', 'ং', 'ঃ'
     ]);
 
-    for (let wIdx = 0; wIdx < words.length; wIdx++) {
-      const word = words[wIdx];
+    for (let w = 0; w < words.length; w++) {
+      const word = words[w];
       if (!word) continue;
 
       for (let i = 0; i < word.length; i++) {
-        const char = word[i];
-        if (vowels.has(char)) {
-          pattern.push(1.0);
-          pattern.push(0.70);
-        } else if (/[.,!?;:।\-–]/.test(char)) {
-          pattern.push(0.0);
-          pattern.push(0.0);
-        } else if (i % 2 === 0) {
-          pattern.push(0.60);
+        const ch = word[i];
+        if (/[.,!?;:।\-–]/.test(ch)) {
+          visemes.push('closed');
+          visemes.push('closed');
+        } else if (oVowels.has(ch)) {
+          visemes.push('o');
+          visemes.push('subtle');
+        } else if (openVowels.has(ch)) {
+          visemes.push('open');
+          visemes.push('subtle');
         } else {
-          pattern.push(0.15);
+          // Consonants alternate subtle and open
+          visemes.push(i % 2 === 0 ? 'subtle' : 'open');
         }
       }
-      // Natural word-boundary brief pause
-      pattern.push(0.10);
-      pattern.push(0.0);
+      // Natural brief word-boundary rest
+      visemes.push('closed');
     }
-    return pattern.length > 0 ? pattern : [0.95, 0.45, 0.90, 0.15, 0.85, 0.50, 0.20, 0.80, 0.0];
+    return visemes.length > 0 ? visemes : ['subtle', 'open', 'subtle', 'closed'];
   }
 
   function startSpeaking(text) {
@@ -1162,11 +1146,6 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     }
     if (imgIdle) {
       imgIdle.classList.add('active');
-      imgIdle.style.opacity = '1';
-    }
-    if (imgThinking) {
-      imgThinking.classList.remove('active');
-      imgThinking.style.opacity = '0';
     }
 
     if (statusPill) {
@@ -1178,68 +1157,37 @@ function initNeuralAvatarController(switchToAvatarCallback) {
       subtitlesText.textContent = text;
     }
 
-    // Dynamic natural phoneme & syllable cadence synchronized with speech
     if (mouthInterval) clearInterval(mouthInterval);
-    if (imgSpeaking) {
-      imgSpeaking.classList.add('active');
-      imgSpeaking.style.opacity = '1';
-    }
+    const visemeSequence = generateSpeechVisemes(text);
+    let visemeIndex = 0;
 
-    const cadencePattern = generateSpeechPattern(text);
-    let cadenceIndex = 0;
-    const headMotionWrap = document.getElementById('avatarHeadMotionWrap');
-    let lastNodTime = 0;
-
+    // Fluid, lifelike articulation speed (~115ms per phoneme)
     mouthInterval = setInterval(() => {
       if (!isSpeaking) {
         clearInterval(mouthInterval);
         mouthInterval = null;
-        if (imgSpeaking) {
-          imgSpeaking.style.opacity = '0';
-          imgSpeaking.style.transform = 'scaleY(1)';
-        }
-        if (headMotionWrap) headMotionWrap.classList.remove('syllable-accent');
+        setMouthViseme('closed');
         return;
       }
-      cadenceIndex = (cadenceIndex + 1) % cadencePattern.length;
-      const opacityVal = cadencePattern[cadenceIndex];
-      if (imgSpeaking) {
-        imgSpeaking.style.opacity = String(opacityVal);
-        // Dynamic mouth opening & closing modulation aligned with speech
-        const scaleVal = (0.90 + opacityVal * 0.28).toFixed(3);
-        imgSpeaking.style.transform = `scaleY(${scaleVal})`;
-      }
-
-      // Dynamic neural brain electric surge on emphasized speech syllables
-      if (opacityVal >= 0.85 && (Date.now() - lastNodTime > 900)) {
-        lastNodTime = Date.now();
-        const brainAura = document.getElementById('avatarBrainAura');
-        if (brainAura) {
-          brainAura.classList.remove('brain-surge');
-          void brainAura.offsetWidth;
-          brainAura.classList.add('brain-surge');
-          setTimeout(() => {
-            if (brainAura) brainAura.classList.remove('brain-surge');
-          }, 350);
-        }
-      }
+      const viseme = visemeSequence[visemeIndex];
+      setMouthViseme(viseme);
+      visemeIndex = (visemeIndex + 1) % visemeSequence.length;
     }, 115);
 
     // Initial natural conversational blink when speech begins
     setTimeout(() => {
       if (isSpeaking) triggerBlink();
-    }, 450);
+    }, 380);
 
     scheduleNextBlink();
   }
 
   function triggerWordSyllable() {
-    if (!isSpeaking || !imgSpeaking) return;
-    imgSpeaking.style.opacity = '1';
-    imgSpeaking.style.transform = 'scaleY(1.2)';
+    if (!isSpeaking) return;
+    setMouthViseme('open');
     setTimeout(() => {
-      if (imgSpeaking && isSpeaking) imgSpeaking.style.transform = 'scaleY(0.95)';
-    }, 75);
+      if (isSpeaking) setMouthViseme('subtle');
+    }, 85);
   }
 
   function stopSpeaking() {
