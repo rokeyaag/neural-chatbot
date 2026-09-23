@@ -3,7 +3,7 @@
    Modern Cyberpunk Glassmorphic UI with Dynamic Neon Accents
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 
 /* --- Design Tokens & Variables --- */
 :root {
@@ -82,6 +82,7 @@ body {
   position: relative;
   min-height: 100vh;
   overscroll-behavior-y: none;
+  zoom: 0.8; /* 20% Zoom Out for Ultra-Sleek Grand Interface */
 }
 
 /* --- Background Ambient Glows & Canvas --- */
@@ -487,36 +488,36 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero-top-section .container {
-  max-width: 1440px;
+  max-width: 2040px;
   width: 100%;
-  padding: 0 20px;
+  padding: 0 28px;
 }
 
-/* Hero Layout: Balanced Avatar Stage & Interactive Chat Box */
+/* Hero Layout: 80% Avatar Stage & 20% Interactive Chat Box (10% Grand Scale) */
 .hero-primary-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.22fr) minmax(360px, 1fr);
+  grid-template-columns: minmax(0, 4fr) minmax(280px, 1fr);
   align-items: stretch;
-  gap: 16px;
+  gap: 20px;
   width: 100%;
-  max-width: 1380px;
+  max-width: 2040px;
   margin: 0 auto;
 }
 
-/* --- Top: Full-Face Interactive Neural Talking Avatar & Video Stage Card --- */
+/* --- Top: Full-Face Interactive Neural Talking Avatar & Video Stage Card (Grand Scale) --- */
 .hero-video-card.neural-stage-card {
   background: var(--glass-bg-card);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg, 16px);
+  border-radius: var(--radius-lg, 18px);
   overflow: hidden;
-  box-shadow: 0 20px 52px rgba(0, 0, 0, 0.68), 0 0 42px rgba(0, 242, 254, 0.18);
+  box-shadow: 0 26px 66px rgba(0, 0, 0, 0.75), 0 0 52px rgba(0, 242, 254, 0.25);
   display: flex;
   flex-direction: column;
-  height: clamp(480px, 60vh, 620px);
-  max-height: 640px;
-  min-height: 440px;
+  height: clamp(810px, 90vh, 1080px);
+  max-height: 1120px;
+  min-height: 740px;
   width: 100%;
   transition: var(--transition-smooth);
   position: relative;
@@ -524,7 +525,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .hero-video-card.neural-stage-card:hover {
   border-color: var(--glass-border-hover);
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.7), 0 0 36px rgba(0, 242, 254, 0.25);
+  box-shadow: 0 24px 58px rgba(0, 0, 0, 0.78), 0 0 46px rgba(0, 242, 254, 0.32);
 }
 
 .stage-header {
@@ -869,7 +870,7 @@ h1, h2, h3, h4, h5, h6 {
 .avatar-visual-box {
   position: relative;
   width: 100%;
-  max-width: 540px;
+  max-width: 1900px;
   height: 100%;
   margin: 0 auto;
   overflow: hidden;
@@ -896,8 +897,25 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 1 !important;
   z-index: 1;
   transform: none !important;
+  animation: none !important;
+}
+
+/* Thinking Face Overlay */
+.avatar-thinking-layer {
+  opacity: 0;
+  z-index: 2;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  transform: none !important;
+}
+
+.avatar-thinking-layer.active {
+  opacity: 0.85;
+}
+
 /* Photorealistic Mouth Viseme Layers: Seamlessly feathered on base idle face */
-.avatar-mouth-layer {
+.avatar-mouth-layer,
+.avatar-speaking-layer {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -910,9 +928,11 @@ h1, h2, h3, h4, h5, h6 {
   pointer-events: none;
   user-select: none;
   will-change: opacity;
+  transform: none !important;
 }
 
-.avatar-mouth-layer.active {
+.avatar-mouth-layer.active,
+.avatar-speaking-layer.active {
   opacity: 1 !important;
 }
 
@@ -930,29 +950,34 @@ h1, h2, h3, h4, h5, h6 {
   pointer-events: none;
   user-select: none;
   will-change: opacity;
+  transform: none !important;
 }
 
 .avatar-eyes-layer.blinking {
   opacity: 1 !important;
 }
 
-/* Base Head Motion Wrapper: 100% Completely Stationary — ONLY Eyes & Mouth Animate */
+.avatar-eyes-layer.half-blink {
+  opacity: 0.65;
+}
+
+/* Head Layer Wrapper: Fixed & scaled naturally for immersive experience */
 .avatar-head-motion-wrap {
   position: relative;
   width: 100%;
   height: 100%;
-  transform: none !important;
+  transform: scale(0.98) !important;
+  transform-origin: center center !important;
+  animation: none !important;
+  will-change: auto;
+}
+
+.avatar-stage-container.talking .avatar-head-motion-wrap {
+  transform: scale(0.98) !important;
   animation: none !important;
 }
 
-.avatar-stage-container.talking .avatar-head-motion-wrap,
-.avatar-stage-container.thinking .avatar-head-motion-wrap,
-.avatar-stage-container.listening .avatar-head-motion-wrap {
-  transform: none !important;
-  animation: none !important;
-}
-
-/* --- Neural Brain Synaptic Energy & Cranial Wave Aura (Disabled for Pure Natural Human Realism) --- */
+/* --- Neural Brain Synaptic Energy & Cranial Wave Aura (Disabled for Pure Natural Realism) --- */
 .avatar-brain-aura {
   display: none !important;
 }
@@ -1565,9 +1590,8 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: clamp(480px, 60vh, 620px);
-  max-height: 640px;
-  min-height: 440px;
+  height: 100%;
+  min-height: 0;
   overflow: hidden;
   position: relative;
 }
@@ -1575,7 +1599,7 @@ h1, h2, h3, h4, h5, h6 {
 .voice-chat-card {
   width: 100%;
   height: 100%;
-  max-height: 100%;
+  flex: 1 1 auto;
   min-height: 0;
   display: flex;
   flex-direction: column;
@@ -1585,7 +1609,7 @@ h1, h2, h3, h4, h5, h6 {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(0, 242, 254, 0.3);
-  box-shadow: 0 20px 52px rgba(0, 0, 0, 0.68), 0 0 42px rgba(0, 242, 254, 0.18);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.72), 0 0 48px rgba(0, 242, 254, 0.22);
   transition: var(--transition-smooth);
   position: relative;
 }
@@ -2518,18 +2542,18 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .hero-primary-grid {
-    grid-template-columns: minmax(0, 1.2fr) minmax(320px, 1fr);
+    grid-template-columns: minmax(0, 3.8fr) minmax(260px, 1.2fr);
     width: 100%;
     max-width: 100%;
-    gap: 12px;
+    gap: 14px;
   }
   
   .hero-video-card,
   .hero-video-card.neural-stage-card,
   .hero-chat-container {
-    height: clamp(440px, 55vh, 560px);
-    max-height: 580px;
-    min-height: 380px;
+    height: clamp(640px, 78vh, 840px);
+    max-height: 860px;
+    min-height: 560px;
   }
   
   .voice-chat-card {
