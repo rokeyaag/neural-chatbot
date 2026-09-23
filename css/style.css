@@ -82,7 +82,7 @@ body {
   position: relative;
   min-height: 100vh;
   overscroll-behavior-y: none;
-  zoom: 0.8; /* 20% Zoom Out for Ultra-Sleek Grand Interface */
+  zoom: 0.9; /* 10% Zoom Out for Sleek Interface */
 }
 
 /* --- Background Ambient Glows & Canvas --- */
