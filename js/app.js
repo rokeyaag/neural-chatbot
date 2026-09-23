@@ -1114,10 +1114,10 @@ function initNeuralAvatarController(switchToAvatarCallback) {
   function generateSpeechCadence(text) {
     if (!text || typeof text !== 'string') {
       return [
-        { shape: 'subtle', duration: 230 },
-        { shape: 'open', duration: 260 },
-        { shape: 'subtle', duration: 190 },
-        { shape: 'closed', duration: 150 }
+        { shape: 'subtle', duration: 300 },
+        { shape: 'open', duration: 360 },
+        { shape: 'subtle', duration: 260 },
+        { shape: 'closed', duration: 200 }
       ];
     }
     const clean = text.replace(/<[^>]*>/g, '').trim();
@@ -1141,32 +1141,32 @@ function initNeuralAvatarController(switchToAvatarCallback) {
       const len = cleanWord.length;
 
       if (len <= 3) {
-        // Short word: gentle single syllable
-        steps.push({ shape: hasO ? 'o' : 'subtle', duration: 220 });
-        steps.push({ shape: 'closed', duration: 120 });
+        // Short word: calm, gentle single syllable
+        steps.push({ shape: hasO ? 'o' : 'subtle', duration: 320 });
+        steps.push({ shape: 'closed', duration: 180 });
       } else if (len <= 7) {
-        // Medium word: 2 natural speech phonemes
-        steps.push({ shape: hasO ? 'o' : 'open', duration: 250 });
-        steps.push({ shape: 'subtle', duration: 190 });
-        steps.push({ shape: 'closed', duration: 130 });
+        // Medium word: 2 relaxed natural speech phonemes
+        steps.push({ shape: hasO ? 'o' : 'open', duration: 360 });
+        steps.push({ shape: 'subtle', duration: 260 });
+        steps.push({ shape: 'closed', duration: 190 });
       } else {
-        // Long multi-syllabic word: fluid articulation
-        steps.push({ shape: 'subtle', duration: 200 });
-        steps.push({ shape: hasO ? 'o' : 'open', duration: 260 });
-        steps.push({ shape: 'subtle', duration: 190 });
-        steps.push({ shape: 'closed', duration: 140 });
+        // Long multi-syllabic word: fluid, unhurried articulation
+        steps.push({ shape: 'subtle', duration: 280 });
+        steps.push({ shape: hasO ? 'o' : 'open', duration: 380 });
+        steps.push({ shape: 'subtle', duration: 260 });
+        steps.push({ shape: 'closed', duration: 200 });
       }
 
       // Natural breathing / speech pause at punctuation
       if (hasPunctuation) {
-        steps.push({ shape: 'closed', duration: /[.!?।]/.test(word) ? 450 : 280 });
+        steps.push({ shape: 'closed', duration: /[.!?।]/.test(word) ? 580 : 380 });
       }
     }
 
     return steps.length > 0 ? steps : [
-      { shape: 'subtle', duration: 230 },
-      { shape: 'open', duration: 260 },
-      { shape: 'closed', duration: 150 }
+      { shape: 'subtle', duration: 300 },
+      { shape: 'open', duration: 360 },
+      { shape: 'closed', duration: 200 }
     ];
   }
 
@@ -1215,10 +1215,10 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     // Start natural cadence
     runCadence();
 
-    // Natural attentive initial blink after speech begins (~550ms)
+    // Natural attentive initial blink after speech begins (~650ms)
     setTimeout(() => {
       if (isSpeaking) triggerBlink();
-    }, 550);
+    }, 650);
 
     scheduleNextBlink();
   }
@@ -1230,7 +1230,7 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     if (wordTimeout) clearTimeout(wordTimeout);
     wordTimeout = setTimeout(() => {
       if (isSpeaking) setMouthViseme('subtle');
-    }, 180);
+    }, 260);
   }
 
   function stopSpeaking() {

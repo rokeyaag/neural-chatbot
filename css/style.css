@@ -924,7 +924,7 @@ h1, h2, h3, h4, h5, h6 {
   object-position: center center;
   opacity: 0;
   z-index: 3;
-  transition: opacity 0.16s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
   user-select: none;
   will-change: opacity;
@@ -946,7 +946,7 @@ h1, h2, h3, h4, h5, h6 {
   object-position: center center;
   opacity: 0;
   z-index: 4;
-  transition: opacity 0.10s ease-in-out;
+  transition: opacity 0.12s ease-in-out;
   pointer-events: none;
   user-select: none;
   will-change: opacity;
@@ -961,19 +961,19 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 0.65;
 }
 
-/* Head Layer Wrapper: Fixed & scaled naturally for immersive experience */
+/* Head Layer Wrapper: Fixed & enlarged naturally for immersive experience */
 .avatar-head-motion-wrap {
   position: relative;
   width: 100%;
   height: 100%;
-  transform: scale(0.98) !important;
+  transform: scale(1.15) !important;
   transform-origin: center center !important;
   animation: none !important;
   will-change: auto;
 }
 
 .avatar-stage-container.talking .avatar-head-motion-wrap {
-  transform: scale(0.98) !important;
+  transform: scale(1.15) !important;
   animation: none !important;
 }
 
