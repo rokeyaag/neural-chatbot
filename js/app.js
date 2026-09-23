@@ -1033,6 +1033,7 @@ function initNeuralAvatarController(switchToAvatarCallback) {
     if (imgSpeaking) {
       imgSpeaking.classList.remove('active');
       imgSpeaking.style.opacity = '0';
+      imgSpeaking.style.transform = 'scaleY(1)';
     }
 
     if (statusPill) {
@@ -1195,6 +1196,7 @@ function initNeuralAvatarController(switchToAvatarCallback) {
         mouthInterval = null;
         if (imgSpeaking) {
           imgSpeaking.style.opacity = '0';
+          imgSpeaking.style.transform = 'scaleY(1)';
         }
         if (headMotionWrap) headMotionWrap.classList.remove('syllable-accent');
         return;
@@ -1203,6 +1205,9 @@ function initNeuralAvatarController(switchToAvatarCallback) {
       const opacityVal = cadencePattern[cadenceIndex];
       if (imgSpeaking) {
         imgSpeaking.style.opacity = String(opacityVal);
+        // Dynamic mouth opening & closing modulation aligned with speech
+        const scaleVal = (0.90 + opacityVal * 0.28).toFixed(3);
+        imgSpeaking.style.transform = `scaleY(${scaleVal})`;
       }
 
       // Dynamic neural brain electric surge on emphasized speech syllables
@@ -1231,6 +1236,10 @@ function initNeuralAvatarController(switchToAvatarCallback) {
   function triggerWordSyllable() {
     if (!isSpeaking || !imgSpeaking) return;
     imgSpeaking.style.opacity = '1';
+    imgSpeaking.style.transform = 'scaleY(1.2)';
+    setTimeout(() => {
+      if (imgSpeaking && isSpeaking) imgSpeaking.style.transform = 'scaleY(0.95)';
+    }, 75);
   }
 
   function stopSpeaking() {
@@ -1324,22 +1333,54 @@ function initVoiceAndChatEngine() {
     return null;
   }
 
-  // --- LANGUAGE DETECTION HELPER ---
+  // --- LANGUAGE DETECTION HELPER (STRICT BILINGUAL / BANGLISH ROUTER) ---
   function isBengaliQuery(text) {
-    if (!text) return false;
-    // Check Bengali Unicode script range [\u0980-\u09FF]
+    if (!text || typeof text !== 'string') return false;
+    // 1. Check Bengali Unicode script range [\u0980-\u09FF]
     if (/[\u0980-\u09FF]/.test(text)) return true;
     
-    // Check common Romanized Bengali (Banglish) keywords
-    const banglishTokens = [
-      'kemon', 'acho', 'achen', 'asos', 'obosta', 'obostha', 'khobor', 'valo', 'bhalo',
-      'korcho', 'koro', 'koros', 'tumi', 'apni', 'amake', 'amra', 'tomar', 'apnar',
-      'naam', 'nam', 'ke', 'toiri', 'banise', 'banayse', 'banieche', 'gaan', 'gan',
-      'shunao', 'sunao', 'gao', 'gaite', 'koutuk', 'hasir', 'dhonnobad', 'shubho',
-      'shuvo', 'sokal', 'shondha', 'ratri', 'ki', 'kivabe', 'konta', 'bolun', 'bolo'
-    ];
-    const words = text.toLowerCase().replace(/[?!.,;:()]/g, ' ').split(/\s+/);
-    return words.some(w => banglishTokens.includes(w));
+    // 2. Comprehensive Romanized Bengali (Banglish) vocabulary & phonetic tokens
+    const banglishTokens = new Set([
+      // Pronouns & Referrals
+      'ami', 'tumi', 'apni', 'tui', 'amra', 'tomra', 'apnara', 'tora',
+      'amader', 'tomader', 'apnader', 'amar', 'tomar', 'apnar', 'tor', 'tar', 'tader',
+      'uni', 'unara', 'oder', 'ora', 'era', 'eita', 'eta', 'oita', 'ota', 'she', 'taha',
+      // Question words
+      'ki', 'kemon', 'keno', 'kobe', 'kothay', 'kotodur', 'kototuku', 'koto', 'koi',
+      'kivabe', 'ke', 'kara', 'konta', 'kake', 'kon', 'kisob',
+      // State & Greetings
+      'acho', 'achen', 'asos', 'achi', 'aso', 'asis', 'bhalo', 'valo', 'balo',
+      'khobor', 'obostha', 'obosta', 'obstha', 'halchal',
+      // Common Verbs
+      'korcho', 'koro', 'koros', 'korchi', 'koren', 'korba', 'korbe', 'korben',
+      'bolcho', 'bolo', 'bolen', 'bolte', 'boli', 'bolis', 'bolba', 'bolbe', 'bolben', 'bolley', 'bolle',
+      'shuno', 'shunao', 'shonao', 'sunao', 'shunte', 'shunbo', 'shone',
+      'gao', 'gaite', 'gan', 'gaan', 'gaiba', 'gaibo',
+      'khabo', 'kheyecho', 'kheyechi', 'kheyechen', 'khaba', 'kheye', 'khawa', 'khabar',
+      'dekhao', 'dekhbo', 'dekhchi', 'dekho', 'dekhen', 'dekhano',
+      'jani', 'jano', 'janen', 'jante', 'janba', 'janabo',
+      'parba', 'paro', 'paren', 'parchi', 'parbo', 'parbe', 'parben',
+      'hobe', 'hoyeche', 'hoise', 'holo', 'hoilo', 'hocche', 'hoy',
+      'asho', 'asben', 'aschi', 'ashchi', 'ashbo', 'asbo', 'ashun',
+      'thako', 'thaken', 'thaki', 'thakbo', 'thakben',
+      'ghuma', 'ghumabo', 'ghumate', 'ghum',
+      'bujhlam', 'bujhi', 'bujho', 'bujhen', 'bujhte', 'bujhina',
+      'shikho', 'shikhbo', 'shikhe', 'shikhao',
+      'banise', 'banayse', 'banieche', 'banano', 'toiri', 'korecho', 'korechi', 'korlam',
+      // Nouns, feelings, relationships
+      'naam', 'nam', 'bhai', 'bon', 'bondhu', 'dost', 'mama', 'kire', 'vai', 'bhaiya', 'apu',
+      'koutuk', 'hasir', 'golpo', 'kobita', 'dhonnobad',
+      'shubho', 'shuvo', 'sokal', 'shokal', 'dupur', 'bikal', 'shondha', 'sondha', 'raat', 'ratri',
+      'thik', 'bhul', 'vul', 'pagol', 'boka', 'shundor', 'kharap', 'mon',
+      'bhalobashi', 'prem', 'biye', 'bari', 'desh', 'bangladesh', 'bangla', 'banglish',
+      'muk', 'mukh', 'chokh', 'kan', 'matha', 'kotha',
+      // Particles & Negations
+      'na', 'nah', 'ha', 'haa', 'tai', 'to', 'naaki', 'naki', 'nki', 're',
+      'ekta', 'duto', 'egulo', 'ogulo', 'shegulo', 'jeh', 'onek', 'aro', 'shob', 'sob'
+    ]);
+
+    const words = text.toLowerCase().replace(/[?!.,;:()]/g, ' ').split(/\s+/).filter(Boolean);
+    return words.some(w => banglishTokens.has(w));
   }
 
   // --- NEURAL KNOWLEDGE STORE & DYNAMIC BILINGUAL RESPONSE MATRIX ---
@@ -3907,6 +3948,9 @@ function initVoiceAndChatEngine() {
     voiceLangToggleBtn.addEventListener('click', () => {
       const nextLang = currentVoiceLang === 'bn-BD' ? 'en-US' : 'bn-BD';
       updateVoiceLanguage(nextLang);
+      if (typeof showToast === 'function') {
+        showToast(nextLang === 'en-US' ? '🎤 Voice Language: English (US)' : '🎤 ভয়েস ইনপুট: বাংলা (BD)');
+      }
     });
   }
 
@@ -3915,6 +3959,9 @@ function initVoiceAndChatEngine() {
       e.preventDefault();
       const nextLang = currentVoiceLang === 'bn-BD' ? 'en-US' : 'bn-BD';
       updateVoiceLanguage(nextLang);
+      if (typeof showToast === 'function') {
+        showToast(nextLang === 'en-US' ? '🎤 Voice Language: English (US)' : '🎤 ভয়েস ইনপুট: বাংলা (BD)');
+      }
     });
   }
 
@@ -3977,6 +4024,7 @@ function initVoiceAndChatEngine() {
       };
 
       let finalRecognizedText = '';
+      let latestTranscribedText = '';
 
       recognition.onresult = (event) => {
         let interimText = '';
@@ -3989,9 +4037,12 @@ function initVoiceAndChatEngine() {
           }
         }
 
-        const displayText = finalRecognizedText || interimText;
-        if (displayText && heroChatInput) {
-          heroChatInput.value = displayText;
+        const displayText = (finalRecognizedText || interimText || '').trim();
+        if (displayText) {
+          latestTranscribedText = displayText;
+          if (heroChatInput) {
+            heroChatInput.value = displayText;
+          }
         }
       };
 
@@ -4006,7 +4057,7 @@ function initVoiceAndChatEngine() {
           if (voiceWaveBar) {
             voiceWaveBar.style.display = 'flex';
             const textSpan = voiceWaveBar.querySelector('.voice-wave-text');
-            if (textSpan) textSpan.textContent = 'কথা স্পষ্ট শোনা যায়নি, আবার বলুন...';
+            if (textSpan) textSpan.textContent = currentVoiceLang === 'bn-BD' ? 'কথা স্পষ্ট শোনা যায়নি, আবার বলুন...' : 'Speech not detected, please speak again...';
             setTimeout(() => { if (!isRecording && voiceWaveBar) voiceWaveBar.style.display = 'none'; }, 2200);
           }
         }
@@ -4015,9 +4066,16 @@ function initVoiceAndChatEngine() {
       recognition.onend = () => {
         stopVoiceRecording();
         if (globalAvatarController) globalAvatarController.setIdle();
-        if (finalRecognizedText && finalRecognizedText.trim()) {
-          const query = finalRecognizedText.trim();
+        
+        // Retrieve spoken text from final transcript, latest interim transcript, or input box
+        const query = (finalRecognizedText && finalRecognizedText.trim())
+          || (latestTranscribedText && latestTranscribedText.trim())
+          || (heroChatInput && heroChatInput.value && heroChatInput.value.trim());
+
+        if (query) {
           finalRecognizedText = '';
+          latestTranscribedText = '';
+          if (heroChatInput) heroChatInput.value = '';
           handleHeroSend(query);
         }
       };
@@ -4058,6 +4116,15 @@ function initVoiceAndChatEngine() {
 
     const bubble = document.createElement('div');
     bubble.className = 'chat-bubble';
+    
+    // Strict typography font family separation:
+    const hasBengaliScript = /[\u0980-\u09FF]/.test(text);
+    if (hasBengaliScript) {
+      bubble.classList.add('lang-bn');
+    } else {
+      bubble.classList.add('lang-en');
+    }
+    
     bubble.innerHTML = text;
 
     msgDiv.appendChild(bubble);
