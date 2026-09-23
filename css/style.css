@@ -951,18 +951,19 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 0.65;
 }
 
-/* Head Layer Wrapper: 100% Fixed & Perfectly Stationary Background */
+/* Head Layer Wrapper: 100% Fixed & Zoom Reduced by 10% (scale 0.90) */
 .avatar-head-motion-wrap {
   position: relative;
   width: 100%;
   height: 100%;
-  transform: none !important;
+  transform: scale(0.90) !important;
+  transform-origin: center center !important;
   animation: none !important;
   will-change: auto;
 }
 
 .avatar-stage-container.talking .avatar-head-motion-wrap {
-  transform: none !important;
+  transform: scale(0.90) !important;
   animation: none !important;
 }
 
