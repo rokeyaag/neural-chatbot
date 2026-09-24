@@ -141,5 +141,70 @@
     "responses_bn": [
       "🛡️ <strong>MITRE ATT&CK ব্যবহার করে সাইবার ডিফেন্স ও থ্রেট হান্টিং:</strong><br><br>১. <strong>মাল্টি-ফ্যাক্টর অথেনটিকেশন (MFA):</strong> পাসওয়ার্ড চুরি হলেও অ্যাকাউন্টে হ্যাকার প্রবেশ রোধ করে।<br>২. <strong>লিস্ট প্রিভিলেজ (Privilege Management):</strong> ইউজারদের অপ্রয়োজনীয় অ্যাডমিন পাওয়ার না দিয়ে অ্যাক্সেস নিয়ন্ত্রণ।<br>৩. <strong>SOC ও SIEM ডিটেকশন রুল:</strong> টেকনিক আইডির উপর ভিত্তি করে স্বয়ংক্রিয় এলার্ট ও লগ অ্যানালাইসিস করা।<br>৪. <strong>রেড টিম ও পার্পল টিম টেস্ট:</strong> নিয়মিত ATT&CK পদ্ধতি দিয়ে নিজস্ব সিস্টেমের নিরাপত্তা দুর্বলতা যাচাই করা।"
     ]
+  },
+  {
+    "id": "mem_tryhackme_overview",
+    "category": "tech",
+    "title": "TryHackMe ও ড্যাশবোর্ড পরিচিতি (TryHackMe Overview)",
+    "keywords_en": ["tryhackme", "what is tryhackme", "tryhackme dashboard", "thm", "tryhackme.com"],
+    "keywords_bn": ["tryhackme কি", "ট্রাইহ্যাকমি কি", "tryhackme dashboard কি", "ট্রাইহ্যাকমি পরিচিতি", "tryhackme সম্পর্কে বলো"],
+    "responses_en": [
+      "🎯 <strong>TryHackMe (THM):</strong> A premier hands-on online platform for learning cybersecurity and ethical hacking through gamified, browser-based virtual labs.<br><br>• <strong>Dashboard Features:</strong> Shows daily learning streaks, active Learning Paths, completed rooms, total points, global rank, and recommended modules.<br>• <strong>Official Website:</strong> <a href='https://tryhackme.com' target='_blank' style='color:#00f2fe;'>tryhackme.com</a>"
+    ],
+    "responses_bn": [
+      "🎯 <strong>TryHackMe (THM):</strong> সাইবার সিকিউরিটি ও এথিক্যাল হ্যাকিং শেখার জন্য বিশ্বের অন্যতম সেরা ও জনপ্রিয় প্র্যাকটিক্যাল ল্যাব প্ল্যাটফর্ম।<br><br>• <strong>ড্যাশবোর্ডের সুবিধা:</strong> আপনার দৈনিক প্র্যাকটিস স্ট্রিক (Streak), বর্তমান লার্নিং পাথ, কমপ্লিট করা রুমের সংখ্যা, অর্জিত পয়েন্ট এবং গ্লোবাল র‍্যাঙ্ক দেখা যায়।<br>• <strong>অফিসিয়াল ওয়েবসাইট:</strong> <a href='https://tryhackme.com' target='_blank' style='color:#00f2fe;'>tryhackme.com</a>"
+    ]
+  },
+  {
+    "id": "mem_tryhackme_learning_paths",
+    "category": "tech",
+    "title": "TryHackMe এর প্রধান লার্নিং পাথসমূহ (Learning Paths)",
+    "keywords_en": ["tryhackme learning paths", "thm learning path", "pre security", "jr penetration tester", "soc level 1", "cyber defense path"],
+    "keywords_bn": ["tryhackme এর লার্নিং পাথ কি কি", "ট্রাইহ্যাকমির কোর্স কি কি", "লার্নিং পাথসমূহ", "tryhackme কোর্স"],
+    "responses_en": [
+      "🚀 <strong>Key TryHackMe Learning Paths:</strong><br><br>1. <strong>Pre-Security:</strong> Basics of Networking, Linux, Windows & Web Fundamentals.<br>2. <strong>Complete Beginner:</strong> Foundational offensive and defensive security concepts.<br>3. <strong>Jr Penetration Tester:</strong> Vulnerability scanning, Burp Suite, Metasploit, Privilege Escalation.<br>4. <strong>SOC Level 1:</strong> Incident response, Wireshark, Splunk, Snort, and SIEM monitoring.<br>5. <strong>Web Fundamentals:</strong> OWASP Top 10, SQL Injection, XSS, and Web Hacking.<br>6. <strong>Red Teaming:</strong> Advanced adversary emulation and enterprise defense bypassing."
+    ],
+    "responses_bn": [
+      "🚀 <strong>TryHackMe-এর জনপ্রিয় ও কার্যকর লার্নিং পাথসমূহ:</strong><br><br>১. <strong>Pre-Security:</strong> নেটওয়ার্কিং, লিনাক্স এবং ওয়েবের প্রাথমিক ভিত্তি।<br>২. <strong>Complete Beginner:</strong> একদম শুরু থেকে সাইবার সিকিউরিটির মূল বিষয়গুলো শেখা।<br>৩. <strong>Jr Penetration Tester:</strong> সিস্টেমের দুর্বলতা খোঁজা, বার্প স্যুট ও মেটাস্প্লয়েটের ব্যবহার।<br>৪. <strong>SOC Level 1:</strong> ব্লু-টিম ডিফেন্স, লগ অ্যানালাইসিস, স্প্লাঙ্ক (Splunk) এবং ওয়্যারশার্ক।<br>৫. <strong>Web Fundamentals:</strong> OWASP Top 10, এসকিউএল ইনজেকশন ও ওয়েব হ্যাকিং।<br>৬. <strong>Red Teaming:</strong> অ্যাডভান্সড সাইবার অ্যাটাক সিমুলেশন।"
+    ]
+  },
+  {
+    "id": "mem_tryhackme_attackbox_rooms",
+    "category": "tech",
+    "title": "TryHackMe রুম ও AttackBox এর কাজ (Rooms & AttackBox)",
+    "keywords_en": ["tryhackme attackbox", "thm rooms", "how does tryhackme work", "virtual machines", "openvpn thm"],
+    "keywords_bn": ["tryhackme attackbox কি", "ট্রাইহ্যাকমি রুম কি", "attackbox কিভাবে কাজ করে", "tryhackme কিভাবে কাজ করে"],
+    "responses_en": [
+      "💻 <strong>TryHackMe Rooms & In-Browser AttackBox:</strong><br><br>• <strong>Walkthrough Rooms:</strong> Step-by-step interactive lessons explaining specific tools and vulnerabilities.<br>• <strong>Challenge Rooms (CTF):</strong> Real vulnerable machines where you must find hidden flags to submit.<br>• <strong>AttackBox:</strong> A cloud-based Kali Linux instance running right inside your browser without installing anything locally, or accessible via OpenVPN configuration."
+    ],
+    "responses_bn": [
+      "💻 <strong>TryHackMe রুম এবং AttackBox এর কার্যপদ্ধতি:</strong><br><br>• <strong>Walkthrough Rooms:</strong> ধাপে ধাপে গাইড করা পাঠ যেখানে থিওরি পড়ে সাথে সাথে প্র্যাকটিস করা যায়।<br>• <strong>Challenge / CTF Rooms:</strong> বাস্তব দুর্বল সার্ভার যেখানে হ্যাক করে গোপন ফ্ল্যাগ (Flag) খুঁজে বের করতে হয়।<br>• <strong>AttackBox:</strong> ব্রাউজারের ভেতরে সরাসরি ক্লাউডভিত্তিক কালী লিনাক্স (Kali Linux), যাতে নিজের পিসিতে কোনো ভারী সফটওয়্যার ইন্সটল ছাড়াই প্র্যাকটিস করা যায়।"
+    ]
+  },
+  {
+    "id": "mem_tryhackme_streaks_badges",
+    "category": "tech",
+    "title": "TryHackMe স্ট্রিক, ব্যাজ ও র‍্যাঙ্কিং (Streaks & Badges)",
+    "keywords_en": ["tryhackme streaks", "thm badges", "tryhackme ranking", "how to level up on tryhackme"],
+    "keywords_bn": ["tryhackme streak কি", "ট্রাইহ্যাকমি ব্যাজ কি", "tryhackme ranking কিভাবে বাড়ে", "স্ট্রিক এবং ব্যাজ"],
+    "responses_en": [
+      "🔥 <strong>TryHackMe Gamification: Streaks, Badges & Points:</strong><br><br>• <strong>Daily Streak:</strong> Answering at least one question every 24 hours maintains your streak score.<br>• <strong>Badges & Certificates:</strong> Awarded upon finishing Learning Paths or solving milestones (e.g., Cat Linux, Burp Specialist).<br>• <strong>Leaderboards:</strong> Earn points with each solved room to climb monthly and global leaderboards!"
+    ],
+    "responses_bn": [
+      "🔥 <strong>TryHackMe স্ট্রিক, ব্যাজ এবং র‍্যাঙ্কিং সিস্টেম:</strong><br><br>• <strong>Daily Streak:</strong> প্রতিদিন অন্তত একটি প্রশ্নের উত্তর দিলে আপনার স্ট্রিক ধরে রাখা যায়, যা নিয়মিত প্র্যাকটিসে উৎসাহিত করে।<br>• <strong>ব্যাজ ও সার্টিফিকেট:</strong> কোনো লার্নিং পাথ বা রুম ক্যাটাগরি শেষ করলে অফিসিয়াল ব্যাজ ও প্রশংসাপত্র পাওয়া যায়।<br>• <strong>গ্লোবাল র‍্যাঙ্ক:</strong> প্রতিটি সঠিক উত্তরের জন্য পয়েন্ট পেয়ে আপনি বিশ্বব্যাপী লিডারবোর্ডে এগিয়ে যেতে পারবেন।"
+    ]
+  },
+  {
+    "id": "mem_tryhackme_career_benefit",
+    "category": "tech",
+    "title": "সাইবার সিকিউরিটি ক্যারিয়ারে TryHackMe এর সুবিধা (Career Impact)",
+    "keywords_en": ["tryhackme for career", "why use tryhackme", "job preparation cybersecurity", "tryhackme certifications"],
+    "keywords_bn": ["সাইবার সিকিউরিটি ক্যারিয়ারে tryhackme এর সুবিধা", "tryhackme কেন শিখব", "চাকরি পাওয়ার জন্য tryhackme", "tryhackme এর লাভ কি"],
+    "responses_en": [
+      "🏆 <strong>How TryHackMe Helps Your Cybersecurity Career:</strong><br><br>• <strong>Practical Experience:</strong> Real hands-on experience demanded by cybersecurity employers and SOC teams.<br>• <strong>Certification Prep:</strong> Great preparation for industry certifications like CompTIA Security+, CEH, eJPT, and OSCP.<br>• <strong>Portfolio Showcase:</strong> You can link your public TryHackMe profile and certificate badges on LinkedIn and your resume!"
+    ],
+    "responses_bn": [
+      "🏆 <strong>সাইবার সিকিউরিটি ক্যারিয়ারে TryHackMe যেভাবে সাহায্য করে:</strong><br><br>• <strong>প্র্যাকটিক্যাল অভিজ্ঞতা:</strong> বই পড়ে মুখস্থ করার বদলে সরাসরি হ্যাকিং ও সিকিউরিটি টুলস ব্যবহারের অভিজ্ঞতা অর্জন।<br>• <strong>সার্টিফিকেশন প্রস্তুতি:</strong> CompTIA Security+, CEH, eJPT এবং OSCP-এর মতো আন্তর্জাতিক পরীক্ষার জন্য উপযুক্ত প্রস্তুতি।<br>• <strong>সিভি ও পোর্টফোলিও:</strong> আপনার TryHackMe প্রোফাইল লিঙ্ক ও সার্টিফিকেট লিঙ্কডইন (LinkedIn) এবং সিভিতে যুক্ত করে নিয়োগদাতাদের দৃষ্টি আকর্ষণ করা যায়।"
+    ]
   }
 ]
