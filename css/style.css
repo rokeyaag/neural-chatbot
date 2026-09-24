@@ -880,7 +880,30 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: inset 35px 0 45px -20px #03060f, inset -35px 0 45px -20px #03060f;
 }
 
-/* Face Layer Transitions — Solid Base, Zero Blink */
+/* 60 FPS HTML5 Canvas Neural Lip Warp & Face Engine */
+.avatar-canvas-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#avatarCanvas {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transform: scale(1.15);
+  transform-origin: center center;
+  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.6));
+  will-change: transform;
+}
+
+/* Face Layer Transitions — Solid Base, Zero Blink (Legacy fallback compatibility) */
 .avatar-face-layer {
   position: absolute;
   inset: 0;
@@ -924,7 +947,7 @@ h1, h2, h3, h4, h5, h6 {
   object-position: center center;
   opacity: 0;
   z-index: 3;
-  transition: opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.075s cubic-bezier(0.25, 0.1, 0.25, 1);
   pointer-events: none;
   user-select: none;
   will-change: opacity;
@@ -946,7 +969,7 @@ h1, h2, h3, h4, h5, h6 {
   object-position: center center;
   opacity: 0;
   z-index: 4;
-  transition: opacity 0.12s ease-in-out;
+  transition: opacity 0.09s ease-in-out;
   pointer-events: none;
   user-select: none;
   will-change: opacity;
@@ -961,20 +984,25 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 0.65;
 }
 
-/* Head Layer Wrapper: Fixed & enlarged naturally for immersive experience */
+/* Head Layer Wrapper: Fixed & enlarged naturally with lifelike micro-presence */
 .avatar-head-motion-wrap {
   position: relative;
   width: 100%;
   height: 100%;
-  transform: scale(1.15) !important;
-  transform-origin: center center !important;
-  animation: none !important;
-  will-change: auto;
+  transform: scale(1.15);
+  transform-origin: center center;
+  will-change: transform;
+}
+
+@keyframes avatarLifelikeTalkingPresence {
+  0% { transform: scale(1.15) translateY(0px); }
+  28% { transform: scale(1.1512) translateY(-0.65px); }
+  65% { transform: scale(1.1495) translateY(0.45px); }
+  100% { transform: scale(1.15) translateY(0px); }
 }
 
 .avatar-stage-container.talking .avatar-head-motion-wrap {
-  transform: scale(1.15) !important;
-  animation: none !important;
+  animation: avatarLifelikeTalkingPresence 2.4s ease-in-out infinite alternate !important;
 }
 
 /* --- Neural Brain Synaptic Energy & Cranial Wave Aura (Disabled for Pure Natural Realism) --- */

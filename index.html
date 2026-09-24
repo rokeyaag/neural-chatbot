@@ -24,8 +24,8 @@
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- Custom Stylesheet (v30.0 with Cache-Bust) -->
-  <link rel="stylesheet" href="css/style.css?v=30.0">
+  <!-- Custom Stylesheet (v32.0 with Cache-Bust) -->
+  <link rel="stylesheet" href="css/style.css?v=32.0">
 </head>
 <body>
 
@@ -64,8 +64,12 @@
           </p>
         </div>
 
-        <!-- Right Side: User Login Auth & Live Neural AI Badge -->
+        <!-- Right Side: User Login Auth, Knowledge Base & Live Neural AI Badge -->
         <div class="hero-header-right">
+          <button class="stage-action-btn" id="openKnowledgeModalBtn" style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px; background: linear-gradient(135deg, rgba(0, 242, 254, 0.18), rgba(79, 172, 254, 0.12)); border: 1px solid rgba(0, 242, 254, 0.45); border-radius: 99px; color: #00f2fe; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease;" title="Open Knowledge Base & Memory Store">
+            <i class="fa-solid fa-brain" style="color: #00f2fe;"></i>
+            <span>Knowledge Base</span>
+          </button>
           <button class="user-auth-btn" id="userAuthHeaderBtn" onclick="openUserAuthModal();" title="Site User Login / Profile" aria-label="User Login and Profile">
             <span class="user-auth-avatar-dot" id="userAuthAvatarDot"><i class="fa-solid fa-user"></i></span>
             <span class="user-auth-name-text" id="userAuthHeaderName">Guest (Login)</span>
@@ -147,18 +151,9 @@
           <!-- VIEW 1: Interactive Neural Talking Avatar Stage (Full Face View) -->
           <div class="avatar-stage-container" id="avatarStageView" style="display: flex;">
             <div class="avatar-visual-box" id="avatarVisualBox">
-              <!-- Head Motion Wrapper: 100% Stationary - ONLY Eyes & Mouth Animate -->
-              <div class="avatar-head-motion-wrap" id="avatarHeadMotionWrap">
-                <!-- Base Direct Front-Facing Cyber Neural AI Avatar -->
-                <img src="images/avatar_face.jpg?v=28.0" alt="Neural AI Avatar Idle" class="avatar-face-layer avatar-idle-layer active" id="avatarImgIdle">
-                <!-- Glowing Synaptic Energy Thinking Layer -->
-                <img src="images/avatar_cyber_thinking.png?v=28.0" alt="Neural AI Avatar Thinking" class="avatar-face-layer avatar-thinking-layer" id="avatarImgThinking">
-                <!-- Photorealistic Speaking Mouth Layers (Seamlessly Feathered on Cyber Avatar) -->
-                <img src="images/avatar_cyber_mouth_subtle.png?v=28.0" alt="Neural AI Avatar Mouth Subtle" class="avatar-face-layer avatar-mouth-layer avatar-mouth-subtle" id="avatarMouthSubtle">
-                <img src="images/avatar_cyber_mouth_open.png?v=28.0" alt="Neural AI Avatar Mouth Open" class="avatar-face-layer avatar-mouth-layer avatar-speaking-layer" id="avatarImgSpeaking">
-                <img src="images/avatar_cyber_mouth_o.png?v=28.0" alt="Neural AI Avatar Mouth O" class="avatar-face-layer avatar-mouth-layer avatar-mouth-o" id="avatarMouthO">
-                <!-- Natural Eye Blinking Layer (Exact Eyelid Alignment on Cyber Avatar) -->
-                <img src="images/avatar_cyber_eyes_blink.png?v=28.0" alt="Neural AI Avatar Eyes" class="avatar-face-layer avatar-eyes-layer" id="avatarImgEyes">
+              <!-- 60 FPS HTML5 Canvas Neural Lip Warp & Face Engine -->
+              <div class="avatar-canvas-wrapper" id="avatarCanvasWrapper">
+                <canvas id="avatarCanvas" width="1024" height="1024"></canvas>
               </div>
 
               <!-- HUD Cyber Overlay Badges -->
@@ -220,7 +215,10 @@
                   <span>Live AI</span>
                 </span>
               </div>
-              <div class="chat-header-tools">
+              <div class="chat-header-tools" style="display: flex; align-items: center; gap: 6px;">
+                <button type="button" class="chat-tool-btn" onclick="if(typeof openKnowledgeStoreModal === 'function') openKnowledgeStoreModal();" title="Open Knowledge Base / Memory Store" aria-label="Open Knowledge Base" style="color: #00f2fe; border-color: rgba(0,242,254,0.3);">
+                  <i class="fa-solid fa-brain"></i>
+                </button>
                 <button type="button" class="chat-tool-btn" id="heroClearChatBtn" title="Clear Conversation" aria-label="Clear Conversation">
                   <i class="fa-solid fa-trash-can"></i>
                 </button>
@@ -1327,6 +1325,6 @@
   </div>
 
   <!-- Javascript -->
-  <script src="js/app.js?v=30.0"></script>
+  <script src="js/app.js?v=32.0"></script>
 </body>
 </html>

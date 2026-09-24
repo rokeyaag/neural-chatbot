@@ -952,92 +952,245 @@ function initVideoController() {
 }
 
 /* ==========================================================================
-   4. NEURAL TALKING AVATAR CONTROLLER & LIP-SYNC ENGINE
+   4. 60 FPS NEURAL CANVAS LIP WARP & AVATAR ENGINE
    ========================================================================== */
 function initNeuralAvatarController(switchToAvatarCallback) {
+  const canvas = document.getElementById('avatarCanvas');
   const stageContainer = document.getElementById('avatarStageView');
-  const imgIdle = document.getElementById('avatarImgIdle');
-  const imgThinking = document.getElementById('avatarImgThinking');
-  const imgMouthSubtle = document.getElementById('avatarMouthSubtle');
-  const imgMouthOpen = document.getElementById('avatarImgSpeaking');
-  const imgMouthO = document.getElementById('avatarMouthO');
-  const imgEyes = document.getElementById('avatarImgEyes');
   const statusPill = document.getElementById('avatarStatusPill');
   const statusLabel = document.getElementById('avatarStatusLabel');
   const subtitlesText = document.getElementById('avatarSubtitlesText');
   const repeatBtn = document.getElementById('avatarRepeatBtn');
 
+  if (!canvas) {
+    console.warn('Avatar canvas element not found');
+    return;
+  }
+  const ctx = canvas.getContext('2d', { alpha: true });
+
+  // Load high-resolution facial assets
+  const imgIdle = new Image();
+  imgIdle.src = 'images/avatar_face.jpg?v=31.0';
+
+  const imgThinking = new Image();
+  imgThinking.src = 'images/avatar_cyber_thinking.png?v=31.0';
+
+  const imgMouthSubtle = new Image();
+  imgMouthSubtle.src = 'images/avatar_cyber_mouth_subtle.png?v=31.0';
+
+  const imgMouthOpen = new Image();
+  imgMouthOpen.src = 'images/avatar_cyber_mouth_open.png?v=31.0';
+
+  const imgMouthO = new Image();
+  imgMouthO.src = 'images/avatar_cyber_mouth_o.png?v=31.0';
+
+  const imgEyes = new Image();
+  imgEyes.src = 'images/avatar_cyber_eyes_blink.png?v=31.0';
+
+  // State & Physics Registers
+  let currentState = 'idle'; // 'idle' | 'listening' | 'thinking' | 'talking'
+  let isSpeaking = false;
+  let lastSpokenText = 'Welcome! I am NeuralBot. How can I assist you with deep learning or this project today?';
+
+  // Smooth Spring-Damped Lip & Jaw Physics Registers
+  let currentOpen = 0.0;
+  let targetOpen = 0.0;
+  let currentSubtle = 0.0;
+  let targetSubtle = 0.0;
+  let currentO = 0.0;
+  let targetO = 0.0;
+  let currentJawDrop = 0.0;
+  let targetJawDrop = 0.0;
+
+  // Eye Physics Registers
+  let blinkProgress = 0.0;
+  let isBlinking = false;
+  let blinkTimeout = null;
+
+  // Thinking State Holographic Glow
+  let thinkingAlpha = 0.0;
+  let targetThinkingAlpha = 0.0;
+
+  // Speech Timers
   let mouthTimeout = null;
   let wordTimeout = null;
-  let blinkTimeout = null;
-  let isBlinking = false;
-  let lastSpokenText = 'Welcome! I am NeuralBot. How can I assist you with deep learning or this project today?';
-  let isSpeaking = false;
+  let animTime = 0.0;
 
-  // --- Photorealistic Mouth Viseme Controller ---
-  function setMouthViseme(shape) {
-    // shape: 'closed', 'subtle', 'open', 'o'
-    if (imgMouthSubtle) imgMouthSubtle.classList.toggle('active', shape === 'subtle');
-    if (imgMouthOpen) imgMouthOpen.classList.toggle('active', shape === 'open');
-    if (imgMouthO) imgMouthO.classList.toggle('active', shape === 'o');
-  }
-
-  // --- Natural Human Eye Blinking Engine ---
+  // --- Natural Eye Blinking Physics Engine ---
   function triggerBlink(forceDouble = false) {
-    if (!imgEyes || isBlinking) return;
+    if (isBlinking) return;
     isBlinking = true;
+    const startT = performance.now();
+    const duration = 135; // 135ms natural human eyelid drop & rise
 
-    // Smooth natural eyelid drop (150ms total closed duration)
-    imgEyes.classList.add('blinking');
-
-    setTimeout(() => {
-      if (imgEyes) imgEyes.classList.remove('blinking');
-
-      const shouldDouble = forceDouble || (Math.random() < 0.15);
-      if (shouldDouble) {
-        // Natural quick double blink
-        setTimeout(() => {
-          if (imgEyes) imgEyes.classList.add('blinking');
-          setTimeout(() => {
-            if (imgEyes) imgEyes.classList.remove('blinking');
-            isBlinking = false;
-          }, 110);
-        }, 130);
+    function stepBlink(now) {
+      const elapsed = now - startT;
+      const progress = elapsed / duration;
+      if (progress < 1.0) {
+        blinkProgress = Math.sin(progress * Math.PI);
+        requestAnimationFrame(stepBlink);
       } else {
-        isBlinking = false;
+        blinkProgress = 0.0;
+        const shouldDouble = forceDouble || (Math.random() < 0.16);
+        if (shouldDouble) {
+          setTimeout(() => {
+            isBlinking = false;
+            triggerBlink(false);
+          }, 110);
+        } else {
+          isBlinking = false;
+        }
       }
-    }, 150);
+    }
+    requestAnimationFrame(stepBlink);
   }
 
   function scheduleNextBlink() {
     if (blinkTimeout) clearTimeout(blinkTimeout);
-    // Speaking blinks are calm and conversational (4.0s - 7.5s), idle blinks (3.8s - 7.0s)
-    const baseMin = isSpeaking ? 4000 : 3800;
-    const baseRange = isSpeaking ? 3500 : 3200;
-    const nextDelay = baseMin + Math.random() * baseRange;
-
+    const delay = isSpeaking ? (3600 + Math.random() * 3200) : (4000 + Math.random() * 3400);
     blinkTimeout = setTimeout(() => {
       triggerBlink();
       scheduleNextBlink();
-    }, nextDelay);
+    }, delay);
+  }
+
+  // --- 60 FPS Real-Time Neural Lip Warp & Deformation Renderer ---
+  function render(timestamp) {
+    animTime += 0.025;
+
+    // 1. Spring Physics Interpolation (Gentle, Soft, Damped Motion)
+    const lipEase = 0.14;   // Soft, smooth lip morphing
+    const jawEase = 0.10;   // Subtle organic jaw breathing
+    const thinkEase = 0.10; // Smooth holographic fade
+
+    currentOpen += (targetOpen - currentOpen) * lipEase;
+    currentSubtle += (targetSubtle - currentSubtle) * lipEase;
+    currentO += (targetO - currentO) * lipEase;
+    currentJawDrop += (targetJawDrop - currentJawDrop) * jawEase;
+    thinkingAlpha += (targetThinkingAlpha - thinkingAlpha) * thinkEase;
+
+    // Clear Canvas Frame
+    ctx.clearRect(0, 0, 1024, 1024);
+
+    // 2. Gentle Micro-Breathing
+    const breathY = isSpeaking ? Math.sin(animTime * 1.8) * 0.8 : Math.sin(animTime * 0.9) * 0.5;
+    const breathScale = 1.0;
+
+    ctx.save();
+    // Center-origin transformation for organic face breathing
+    ctx.translate(512, 512 + breathY);
+    ctx.scale(breathScale, breathScale);
+    ctx.translate(-512, -512);
+
+    // Render Base High-Definition Idle Face
+    if (imgIdle.complete && imgIdle.naturalWidth > 0) {
+      ctx.drawImage(imgIdle, 0, 0, 1024, 1024);
+    }
+
+    // Render Synaptic Thinking Hologram
+    if (thinkingAlpha > 0.01 && imgThinking.complete && imgThinking.naturalWidth > 0) {
+      ctx.save();
+      ctx.globalAlpha = Math.min(Math.max(thinkingAlpha, 0), 1.0);
+      ctx.drawImage(imgThinking, 0, 0, 1024, 1024);
+      ctx.restore();
+    }
+
+    // 3. Subtle & Natural Lip Warp & Soft Jaw Movement
+    // Anatomy Coordinates: Center (X: 495, Y: 630)
+    const mouthX = 495;
+    const mouthY = 630;
+    const jawShift = currentJawDrop * 2.8; // Soft, realistic 2.8px maximum micro-displacement
+
+    // A. Subtle / Half-Open Lip Layer
+    if (currentSubtle > 0.02 && imgMouthSubtle.complete && imgMouthSubtle.naturalWidth > 0) {
+      ctx.save();
+      ctx.globalAlpha = Math.min(currentSubtle, 0.75);
+      ctx.translate(0, jawShift * 0.4);
+      ctx.drawImage(imgMouthSubtle, 0, 0, 1024, 1024);
+      ctx.restore();
+    }
+
+    // B. Soft Open Lip Layer
+    if (currentOpen > 0.02 && imgMouthOpen.complete && imgMouthOpen.naturalWidth > 0) {
+      ctx.save();
+      ctx.globalAlpha = Math.min(currentOpen, 0.70);
+      ctx.translate(mouthX, mouthY + jawShift);
+      const scaleV = 1.0 + currentOpen * 0.012;
+      const scaleH = 1.0 + currentOpen * 0.006;
+      ctx.scale(scaleH, scaleV);
+      ctx.translate(-mouthX, -mouthY);
+      ctx.drawImage(imgMouthOpen, 0, 0, 1024, 1024);
+      ctx.restore();
+    }
+
+    // C. Soft Round O-Lip Layer
+    if (currentO > 0.02 && imgMouthO.complete && imgMouthO.naturalWidth > 0) {
+      ctx.save();
+      ctx.globalAlpha = Math.min(currentO, 0.65);
+      ctx.translate(mouthX, mouthY + jawShift * 0.6);
+      const scaleO_H = 1.0 - currentO * 0.010;
+      const scaleO_V = 1.0 + currentO * 0.010;
+      ctx.scale(scaleO_H, scaleO_V);
+      ctx.translate(-mouthX, -mouthY);
+      ctx.drawImage(imgMouthO, 0, 0, 1024, 1024);
+      ctx.restore();
+    }
+
+    // 4. Smooth Eyelid Blinking
+    if (blinkProgress > 0.015 && imgEyes.complete && imgEyes.naturalWidth > 0) {
+      ctx.save();
+      ctx.globalAlpha = Math.min(blinkProgress, 1.0);
+      ctx.drawImage(imgEyes, 0, 0, 1024, 1024);
+      ctx.restore();
+    }
+
+    ctx.restore(); // Restore breathing transform
+
+    requestAnimationFrame(render);
+  }
+
+  // Start 60 FPS Loop
+  requestAnimationFrame(render);
+
+  // --- Dynamic Phoneme Viseme Shape Setter (Gentle & Controlled) ---
+  function setMouthTargets(shape, intensity = 1.0) {
+    // shape: 'closed', 'subtle', 'open', 'o'
+    if (shape === 'open') {
+      targetOpen = 0.55 * intensity;
+      targetSubtle = 0.30 * intensity;
+      targetO = 0.0;
+      targetJawDrop = 0.35 * intensity;
+    } else if (shape === 'subtle') {
+      targetOpen = 0.0;
+      targetSubtle = 0.60 * intensity;
+      targetO = 0.0;
+      targetJawDrop = 0.18 * intensity;
+    } else if (shape === 'o') {
+      targetOpen = 0.12 * intensity;
+      targetSubtle = 0.0;
+      targetO = 0.50 * intensity;
+      targetJawDrop = 0.25 * intensity;
+    } else {
+      // closed / rest
+      targetOpen = 0.0;
+      targetSubtle = 0.0;
+      targetO = 0.0;
+      targetJawDrop = 0.0;
+    }
   }
 
   function setIdle() {
+    currentState = 'idle';
     isSpeaking = false;
     if (mouthTimeout) clearTimeout(mouthTimeout);
     if (wordTimeout) clearTimeout(wordTimeout);
     mouthTimeout = null;
     wordTimeout = null;
-    setMouthViseme('closed');
+    setMouthTargets('closed');
+    targetThinkingAlpha = 0.0;
 
     if (stageContainer) {
       stageContainer.classList.remove('talking', 'thinking', 'listening');
-    }
-    if (imgIdle) {
-      imgIdle.classList.add('active');
-    }
-    if (imgThinking) {
-      imgThinking.classList.remove('active');
     }
 
     if (statusPill) {
@@ -1050,19 +1203,16 @@ function initNeuralAvatarController(switchToAvatarCallback) {
 
   function setListening() {
     if (switchToAvatarCallback) switchToAvatarCallback();
+    currentState = 'listening';
     isSpeaking = false;
-    if (mouthInterval) clearInterval(mouthInterval);
-    setMouthViseme('closed');
+    if (mouthTimeout) clearTimeout(mouthTimeout);
+    if (wordTimeout) clearTimeout(wordTimeout);
+    setMouthTargets('closed');
+    targetThinkingAlpha = 0.0;
 
     if (stageContainer) {
       stageContainer.classList.remove('talking', 'thinking');
       stageContainer.classList.add('listening');
-    }
-    if (imgIdle) {
-      imgIdle.classList.add('active');
-    }
-    if (imgThinking) {
-      imgThinking.classList.remove('active');
     }
 
     if (statusPill) {
@@ -1079,22 +1229,18 @@ function initNeuralAvatarController(switchToAvatarCallback) {
 
   function setThinking() {
     if (switchToAvatarCallback) switchToAvatarCallback();
+    currentState = 'thinking';
     isSpeaking = false;
     if (mouthTimeout) clearTimeout(mouthTimeout);
     if (wordTimeout) clearTimeout(wordTimeout);
     mouthTimeout = null;
     wordTimeout = null;
-    setMouthViseme('closed');
+    setMouthTargets('closed');
+    targetThinkingAlpha = 0.88;
 
     if (stageContainer) {
       stageContainer.classList.remove('talking', 'listening');
       stageContainer.classList.add('thinking');
-    }
-    if (imgIdle) {
-      imgIdle.classList.add('active');
-    }
-    if (imgThinking) {
-      imgThinking.classList.add('active');
     }
 
     if (statusPill) {
@@ -1105,85 +1251,101 @@ function initNeuralAvatarController(switchToAvatarCallback) {
       subtitlesText.innerHTML = '<i class="fa-solid fa-bolt"></i> <em>Processing tensor calculation...</em>';
     }
 
-    // Contemplative blink on thinking state transition
     triggerBlink(true);
     scheduleNextBlink();
   }
 
-  // --- Natural Syllable & Human Speech Cadence Generator ---
+  // --- Calm, Gentle & Natural Speech Cadence Generator ---
   function generateSpeechCadence(text) {
     if (!text || typeof text !== 'string') {
       return [
-        { shape: 'subtle', duration: 300 },
-        { shape: 'open', duration: 360 },
-        { shape: 'subtle', duration: 260 },
-        { shape: 'closed', duration: 200 }
+        { shape: 'subtle', duration: 200, intensity: 0.8 },
+        { shape: 'open', duration: 220, intensity: 0.9 },
+        { shape: 'subtle', duration: 180, intensity: 0.7 },
+        { shape: 'o', duration: 210, intensity: 0.85 },
+        { shape: 'subtle', duration: 190, intensity: 0.7 },
+        { shape: 'closed', duration: 250, intensity: 0.0 }
       ];
     }
     const clean = text.replace(/<[^>]*>/g, '').trim();
     const words = clean.split(/\s+/);
     const steps = [];
 
-    const oVowels = new Set(['o', 'u', 'w', 'O', 'U', 'W', 'ও', 'উ', 'ঊ', 'ো', 'ৌ']);
+    const roundVowels = new Set([
+      'o', 'u', 'w', 'O', 'U', 'W', 
+      'ও', 'উ', 'ঊ', 'ো', 'ৌ', 'ু', 'ূ',
+      'তু', 'মু', 'কু', 'গো', 'পো', 'বো', 'নো', 'দো', 'সো', 'হো', 'রু', 'লু'
+    ]);
+    const openVowels = new Set([
+      'a', 'A', 'ah', 'ha', 
+      'আ', 'অ', 'া', 'হ্য', 
+      'কা', 'গা', 'চা', 'জা', 'তা', 'দা', 'না', 'পা', 'ফা', 'বা', 'ভা', 'মা', 'যা', 'রা', 'লা', 'শা', 'সা', 'হা'
+    ]);
 
     for (let w = 0; w < words.length; w++) {
       const word = words[w];
       if (!word) continue;
 
       const hasPunctuation = /[.,!?;:।\-–]/.test(word);
+      const isMajorPause = /[.!?।]/.test(word);
       const cleanWord = word.replace(/[.,!?;:।\-–]/g, '');
+      if (!cleanWord) continue;
 
-      let hasO = false;
+      let hasRound = false;
+      let hasOpen = false;
+
       for (let c of cleanWord) {
-        if (oVowels.has(c)) { hasO = true; break; }
+        if (roundVowels.has(c)) hasRound = true;
+        if (openVowels.has(c)) hasOpen = true;
       }
 
       const len = cleanWord.length;
 
       if (len <= 3) {
-        // Short word: calm, gentle single syllable
-        steps.push({ shape: hasO ? 'o' : 'subtle', duration: 320 });
-        steps.push({ shape: 'closed', duration: 180 });
+        // Short word: calm subtle syllable
+        const primaryShape = hasRound ? 'o' : (hasOpen ? 'open' : 'subtle');
+        steps.push({ shape: primaryShape, duration: 190 + Math.floor(Math.random() * 30), intensity: 0.85 });
+        steps.push({ shape: 'subtle', duration: 160 + Math.floor(Math.random() * 20), intensity: 0.65 });
       } else if (len <= 7) {
-        // Medium word: 2 relaxed natural speech phonemes
-        steps.push({ shape: hasO ? 'o' : 'open', duration: 360 });
-        steps.push({ shape: 'subtle', duration: 260 });
-        steps.push({ shape: 'closed', duration: 190 });
+        // Medium word: 2 soft calm phonemes
+        steps.push({ shape: 'subtle', duration: 160 + Math.floor(Math.random() * 20), intensity: 0.70 });
+        steps.push({ shape: hasOpen ? 'open' : (hasRound ? 'o' : 'subtle'), duration: 210 + Math.floor(Math.random() * 30), intensity: 0.90 });
+        steps.push({ shape: 'subtle', duration: 170 + Math.floor(Math.random() * 20), intensity: 0.65 });
       } else {
-        // Long multi-syllabic word: fluid, unhurried articulation
-        steps.push({ shape: 'subtle', duration: 280 });
-        steps.push({ shape: hasO ? 'o' : 'open', duration: 380 });
-        steps.push({ shape: 'subtle', duration: 260 });
-        steps.push({ shape: 'closed', duration: 200 });
+        // Longer word: gentle wave
+        steps.push({ shape: 'subtle', duration: 150 + Math.floor(Math.random() * 20), intensity: 0.70 });
+        steps.push({ shape: hasOpen ? 'open' : 'subtle', duration: 200 + Math.floor(Math.random() * 30), intensity: 0.88 });
+        steps.push({ shape: 'subtle', duration: 150 + Math.floor(Math.random() * 20), intensity: 0.60 });
+        steps.push({ shape: hasRound ? 'o' : 'open', duration: 190 + Math.floor(Math.random() * 30), intensity: 0.85 });
+        steps.push({ shape: 'subtle', duration: 160 + Math.floor(Math.random() * 20), intensity: 0.65 });
       }
 
-      // Natural breathing / speech pause at punctuation
+      // Natural conversational breath/pause at punctuation
       if (hasPunctuation) {
-        steps.push({ shape: 'closed', duration: /[.!?।]/.test(word) ? 580 : 380 });
+        steps.push({ shape: 'closed', duration: isMajorPause ? (300 + Math.floor(Math.random() * 60)) : (180 + Math.floor(Math.random() * 40)), intensity: 0.0 });
       }
     }
 
     return steps.length > 0 ? steps : [
-      { shape: 'subtle', duration: 300 },
-      { shape: 'open', duration: 360 },
-      { shape: 'closed', duration: 200 }
+      { shape: 'subtle', duration: 190, intensity: 0.75 },
+      { shape: 'open', duration: 210, intensity: 0.85 },
+      { shape: 'subtle', duration: 170, intensity: 0.65 },
+      { shape: 'o', duration: 200, intensity: 0.80 },
+      { shape: 'subtle', duration: 170, intensity: 0.65 },
+      { shape: 'closed', duration: 240, intensity: 0.0 }
     ];
   }
 
   function startSpeaking(text) {
     if (switchToAvatarCallback) switchToAvatarCallback();
+    currentState = 'talking';
     isSpeaking = true;
     lastSpokenText = text;
+    targetThinkingAlpha = 0.0;
 
     if (stageContainer) {
       stageContainer.classList.remove('thinking', 'listening');
       stageContainer.classList.add('talking');
-    }
-    if (imgIdle) {
-      imgIdle.classList.add('active');
-    }
-    if (imgThinking) {
-      imgThinking.classList.remove('active');
     }
 
     if (statusPill) {
@@ -1203,34 +1365,42 @@ function initNeuralAvatarController(switchToAvatarCallback) {
 
     function runCadence() {
       if (!isSpeaking) {
-        setMouthViseme('closed');
+        setMouthTargets('closed');
         return;
       }
       const step = cadenceSteps[cadenceIndex];
-      setMouthViseme(step.shape);
+      setMouthTargets(step.shape, step.intensity !== undefined ? step.intensity : 1.0);
       cadenceIndex = (cadenceIndex + 1) % cadenceSteps.length;
       mouthTimeout = setTimeout(runCadence, step.duration);
     }
 
-    // Start natural cadence
+    // Begin fluid cadence
     runCadence();
 
-    // Natural attentive initial blink after speech begins (~650ms)
+    // Natural conversational blink after speech starts
     setTimeout(() => {
       if (isSpeaking) triggerBlink();
-    }, 650);
+    }, 600);
 
     scheduleNextBlink();
   }
 
-  function triggerWordSyllable() {
+  function triggerWordSyllable(token) {
     if (!isSpeaking) return;
-    // Word boundary cue from TTS speech engine
-    setMouthViseme('open');
+    let targetShape = 'open';
+    if (token && typeof token === 'string') {
+      const lower = token.toLowerCase();
+      if (/[ouwoওউঊোৌ]/.test(lower)) {
+        targetShape = 'o';
+      } else if (/[eisyইঈএঐ]/.test(lower)) {
+        targetShape = 'subtle';
+      }
+    }
+    setMouthTargets(targetShape, 0.75);
     if (wordTimeout) clearTimeout(wordTimeout);
     wordTimeout = setTimeout(() => {
-      if (isSpeaking) setMouthViseme('subtle');
-    }, 260);
+      if (isSpeaking) setMouthTargets('subtle', 0.50);
+    }, 160 + Math.floor(Math.random() * 30));
   }
 
   function stopSpeaking() {
@@ -3737,9 +3907,13 @@ function initVoiceAndChatEngine() {
           utterance.rate = 0.92; // Clear, articulate, distinct Bengali pronunciation
           utterance.pitch = 1.15; // Natural sweet female tone
 
-          utterance.onboundary = () => {
+          utterance.onboundary = (e) => {
             if (globalAvatarController && typeof globalAvatarController.triggerWordSyllable === 'function') {
-              globalAvatarController.triggerWordSyllable();
+              let wordToken = '';
+              if (e && typeof e.charIndex === 'number' && spokenText) {
+                wordToken = spokenText.slice(e.charIndex, e.charIndex + (e.charLength || 6));
+              }
+              globalAvatarController.triggerWordSyllable(wordToken);
             }
           };
 
@@ -3810,9 +3984,13 @@ function initVoiceAndChatEngine() {
         }
       };
 
-      utterance.onboundary = () => {
+      utterance.onboundary = (e) => {
         if (globalAvatarController && typeof globalAvatarController.triggerWordSyllable === 'function') {
-          globalAvatarController.triggerWordSyllable();
+          let wordToken = '';
+          if (e && typeof e.charIndex === 'number' && spokenText) {
+            wordToken = spokenText.slice(e.charIndex, e.charIndex + (e.charLength || 6));
+          }
+          globalAvatarController.triggerWordSyllable(wordToken);
         }
       };
 
