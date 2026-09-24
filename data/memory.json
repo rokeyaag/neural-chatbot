@@ -284,5 +284,89 @@
     "responses_bn": [
       "👑 <strong>King of the Hill (KotH) মাল্টিপ্লেয়ার হ্যাকিং গেম:</strong><br><br><strong>King of the Hill (KotH)</strong> হলো TryHackMe প্ল্যাটফর্মের একটি রোমাঞ্চকর <strong>রিয়েল-টাইম মাল্টিপ্লেয়ার অ্যাটাক ও ডিফেন্স হ্যাকিং প্রতিযোগিতা</strong> (সাধারণত ৪-৮ জন প্রতিযোগী থাকে)।<br><br>🎯 <strong>গেমের নিয়ম ও কার্যপদ্ধতি:</strong><br>১. <strong>রুট অ্যাক্সেস (Root Access):</strong> প্রতিযোগীরা একই দুর্বল সার্ভার হ্যাক করার চেষ্টা করে এবং দ্রুততম সময়ে রুট বা অ্যাডমিন প্রিভিলেজ নেয়।<br>২. <strong>কিং হওয়া (King Status):</strong> সার্ভারের <code>/root/king.txt</code> ফাইলে নিজের ইউজারনেম লিখতে হয়। যতক্ষণ আপনার নাম থাকবে, প্রতি ১ মিনিটে আপনি ১০ পয়েন্ট করে পেতে থাকবেন।<br>৩. <strong>প্যাচিং ও ডিফেন্স (Defense/Patching):</strong> রুট অ্যাক্সেস নেওয়ার পর সিস্টেমের দুর্বলতাগুলো বন্ধ বা প্যাচ করতে হয় এবং ব্যাকডোর মুছে ফেলতে হয়, যাতে অন্য হ্যাকাররা ঢুকে আপনার নাম সরাতে না পারে।<br>৪. <strong>ফ্ল্যাগ হান্টিং:</strong> সার্ভারের ভেতরে বিভিন্ন জায়গায় লুকানো গোপন ফ্ল্যাগ খুঁজে বের করে অতিরিক্ত বোনাস পয়েন্ট নেওয়া যায়।<br><br>💡 <strong>উপকারিতা:</strong> এটি একই সাথে আক্রমণাত্মক (Red Team) এবং প্রতিরক্ষামূলক (Blue Team) দক্ষতার অসাধারণ সংমিশ্রণ শেখায়।"
     ]
+  },
+  {
+    "id": "mem_ostad_overview",
+    "category": "tech",
+    "title": "Ostad (ostad.app) পরিচিতি ও বিশেষত্ব (Ostad Overview & Features)",
+    "keywords_en": [
+      "ostad app",
+      "what is ostad",
+      "ostad bangladesh",
+      "ostad live learning",
+      "ostad platform",
+      "ostad.app",
+      "about ostad"
+    ],
+    "keywords_bn": [
+      "ostad app কি",
+      "ওস্তাদ অ্যাপ কি",
+      "ostad কি",
+      "ostad.app সম্পর্কে বলো",
+      "ostad প্ল্যাটফর্ম কি",
+      "ওস্তাদ কি",
+      "ostad সম্পর্কে বলো",
+      "ostad bangladesh"
+    ],
+    "responses_en": [
+      "🎓 <strong>Ostad (ostad.app) - Live Interactive Skill Development Platform:</strong><br><br><strong>Ostad</strong> is one of Bangladesh's premier live-learning EdTech platforms focused on building job-ready tech and digital skills through structured bootcamps.<br><br>🌟 <strong>Key Features:</strong><br>• <strong>Live Interactive Classes:</strong> Real-time coding and instruction with industry experts instead of just recorded videos.<br>• <strong>Weekly Streaks & Tasks:</strong> In-app assignments, code reviews, and streak-based milestone tracking.<br>• <strong>Mentorship Support:</strong> Dedicated teaching assistants and mentor guidance for doubt clearing.<br>• <strong>Official Website:</strong> <a href='https://ostad.app' target='_blank' style='color:#00f2fe;'>ostad.app</a>"
+    ],
+    "responses_bn": [
+      "🎓 <strong>Ostad (ostad.app) - লাইভ ইন্টারঅ্যাক্টিভ স্কিল ডেভেলপমেন্ট প্ল্যাটফর্ম:</strong><br><br><strong>Ostad</strong> হলো বাংলাদেশের শীর্ষস্থানীয় লাইভ লার্নিং এডটেক প্ল্যাটফর্ম, যা শিক্ষার্থীদের চাকরি ও ক্যারিয়ার উপযোগী টেকনিক্যাল স্কিল তৈরিতে কাজ করে।<br><br>🌟 <strong>মূল সুবিধাসমূহ:</strong><br>• <strong>লাইভ ইন্টারঅ্যাক্টিভ ক্লাস:</strong> শুধু রেকর্ডেড ভিডিও নয়, সরাসরি ইন্ডাস্ট্রির অভিজ্ঞ মেন্টরদের সাথে লাইভ ক্লাস ও প্রজেক্ট প্র্যাকটিস।<br>• <strong>টাস্ক ও উইকলি স্ট্রিক:</strong> নিয়মিত অ্যাসাইনমেন্ট সাবমিশন, লাইভ কোড রিভিউ এবং স্ট্রিক ধরে রাখার মাধ্যমে নিয়মানুবর্তিতা তৈরি।<br>• <strong>মেন্টর ও টিএ সাপোর্ট:</strong> যেকোনো সমস্যা সমাধানে সার্বক্ষণিক ডেডিকেটেড টিচিং অ্যাসিস্ট্যান্ট সাপোর্ট।<br>• <strong>অফিসিয়াল ওয়েবসাইট:</strong> <a href='https://ostad.app' target='_blank' style='color:#00f2fe;'>ostad.app</a>"
+    ]
+  },
+  {
+    "id": "mem_ostad_courses_bootcamps",
+    "category": "tech",
+    "title": "Ostad এ কি কি কোর্স ও বুটক্যাম্প শেখানো হয় (Ostad Courses & Tracks)",
+    "keywords_en": [
+      "ostad courses",
+      "what courses in ostad",
+      "ostad bootcamps",
+      "ostad web development",
+      "ostad python mern",
+      "ostad flutter cybersecurity",
+      "what can i learn on ostad"
+    ],
+    "keywords_bn": [
+      "ostad এ কি কি কোর্স শেখানো হয়",
+      "ostad এর কোর্স সমূহ",
+      "ওস্তাদে কি কি কোর্স আছে",
+      "ostad bootcamps কি কি",
+      "ostad এ কি কি শেখা যায়",
+      "ওস্তাদ কোর্স লিস্ট",
+      "ostad courses কি কি"
+    ],
+    "responses_en": [
+      "🚀 <strong>Popular Bootcamps & Courses on Ostad (ostad.app):</strong><br><br>Ostad offers structured industry-curated tracks across major technology domains:<br><br>🔹 <strong>Software & Web Development:</strong><br>• Full-Stack MERN (MongoDB, Express, React, Node.js)<br>• Python & Django Web Development<br>• PHP & Laravel Framework<br>• Frontend Engineering (React.js, Next.js)<br><br>🔹 <strong>AI, Data Science & Machine Learning:</strong><br>• AI & ML Engineering, LLMs & Automation<br>• Data Science with Python & PowerBI<br>• Data Engineering Bootcamp<br><br>🔹 <strong>Mobile & Quality Engineering:</strong><br>• Flutter Mobile App Development<br>• SQA (Software Quality Assurance & Automation)<br>• DevOps & Cloud Infrastructure<br><br>🔹 <strong>Cyber Security & Design:</strong><br>• Cyber Security & Ethical Hacking<br>• UI/UX Design & Product Management"
+    ],
+    "responses_bn": [
+      "🚀 <strong>Ostad-এ শেখানো প্রধান কোর্স ও ক্যারিয়ার বুটক্যাম্পসমূহ:</strong><br><br>Ostad প্ল্যাটফর্মে ইন্ডাস্ট্রির চাহিদা অনুযায়ী বিভিন্ন হাই-ডিমান্ড ট্র্যাক শেখানো হয়:<br><br>🔹 <strong>ওয়েব ও সফটওয়্যার ডেভেলপমেন্ট:</strong><br>• Full-Stack MERN (React, Node.js, Express, MongoDB)<br>• Python & Django ফুল-স্ট্যাক ডেভেলপমেন্ট<br>• PHP & Laravel ওয়েব ডেভেলপমেন্ট<br>• Frontend Development (React.js, Next.js)<br><br>🔹 <strong>এআই, মেশিন লার্নিং ও ডেটা সায়েন্স:</strong><br>• AI & Machine Learning Engineering (LLMs, Automation)<br>• Data Science & Analytics (Python, SQL, PowerBI)<br>• Data Engineering Bootcamp<br><br>🔹 <strong>মোবাইল অ্যাপ ও ইঞ্জিনিয়ারিং:</strong><br>• Flutter Mobile App Development<br>• SQA (Software Quality Assurance ও অটোমেশন টেস্ট)<br>• DevOps & Cloud Computing<br><br>🔹 <strong>সাইবার সিকিউরিটি ও ডিজাইন:</strong><br>• Cyber Security & Ethical Hacking<br>• UI/UX Design & Product Management"
+    ]
+  },
+  {
+    "id": "mem_ostad_job_placement_certificate",
+    "category": "tech",
+    "title": "Ostad এর জব প্লেসমেন্ট সাপোর্ট ও সার্টিফিকেট (Job Placement & Certificate)",
+    "keywords_en": [
+      "ostad job placement",
+      "ostad certificate",
+      "does ostad provide jobs",
+      "ostad career support",
+      "is ostad certificate valid"
+    ],
+    "keywords_bn": [
+      "ostad এর জব সাপোর্ট কেমন",
+      "ostad সার্টিফিকেট কি কার্যকর",
+      "ওস্তাদ কি চাকরি দেয়",
+      "ostad job placement কি",
+      "ostad ক্যারিয়ার সাপোর্ট"
+    ],
+    "responses_en": [
+      "🏆 <strong>Ostad Job Placement & Career Support Ecosystem:</strong><br><br>• <strong>Verified Certificates:</strong> Shareable accredited digital credentials for LinkedIn, resumes, and portfolios.<br>• <strong>Ostad Talent Pool:</strong> Top-performing graduates get recommended directly to partner software firms and corporate hiring teams.<br>• <strong>Career Coaching:</strong> Resume building, GitHub/portfolio audit, and technical mock interviews by senior engineers."
+    ],
+    "responses_bn": [
+      "🏆 <strong>Ostad-এর জব প্লেসমেন্ট সাপোর্ট ও সার্টিফিকেশন সুবিধা:</strong><br><br>• <strong>ভেরিফায়েড সার্টিফিকেট:</strong> সফলভাবে বুটক্যাম্প সম্পন্ন করলে আন্তর্জাতিকভাবে লিঙ্কডইন ও সিভিতে প্রদর্শনযোগ্য ডিজিটাল সার্টিফিকেট প্রদান করা হয়।<br>• <strong>ট্যালেন্ট নেটওয়ার্ক ও রিকমেন্ডেশন:</strong> শীর্ষ পারফর্মারদের Ostad Talent Pool-এর মাধ্যমে সরাসরি বিভিন্ন দেশি-বিদেশি পার্টনার প্রতিষ্ঠানে ইন্টারভিউ ও চাকরির সুযোগ দেওয়া হয়।<br>• <strong>ক্যারিয়ার গ্রুমিং:</strong> সিভি মেকিং, গিটহাব/পোর্টফোলিও রিভিউ এবং টেকনিক্যাল মক ইন্টারভিউ প্রস্তুতি।"
+    ]
   }
 ]
