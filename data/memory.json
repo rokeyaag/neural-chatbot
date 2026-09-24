@@ -206,5 +206,44 @@
     "responses_bn": [
       "🏆 <strong>সাইবার সিকিউরিটি ক্যারিয়ারে TryHackMe যেভাবে সাহায্য করে:</strong><br><br>• <strong>প্র্যাকটিক্যাল অভিজ্ঞতা:</strong> বই পড়ে মুখস্থ করার বদলে সরাসরি হ্যাকিং ও সিকিউরিটি টুলস ব্যবহারের অভিজ্ঞতা অর্জন।<br>• <strong>সার্টিফিকেশন প্রস্তুতি:</strong> CompTIA Security+, CEH, eJPT এবং OSCP-এর মতো আন্তর্জাতিক পরীক্ষার জন্য উপযুক্ত প্রস্তুতি।<br>• <strong>সিভি ও পোর্টফোলিও:</strong> আপনার TryHackMe প্রোফাইল লিঙ্ক ও সার্টিফিকেট লিঙ্কডইন (LinkedIn) এবং সিভিতে যুক্ত করে নিয়োগদাতাদের দৃষ্টি আকর্ষণ করা যায়।"
     ]
+  },
+  {
+    "id": "mem_tryhackme_pricing_subscription",
+    "category": "tech",
+    "title": "TryHackMe ফ্রি ও প্রিমিয়াম সাবস্ক্রিপশন (Pricing & VIP Subscription)",
+    "keywords_en": ["tryhackme pricing", "thm subscription", "is tryhackme free", "tryhackme vip cost", "free vs premium thm"],
+    "keywords_bn": ["tryhackme এর খরচ কেমন", "tryhackme কি ফ্রি", "tryhackme subscription", "tryhackme vip", "ফ্রি বনাম প্রিমিয়াম"],
+    "responses_en": [
+      "💳 <strong>TryHackMe Free vs. VIP Premium:</strong><br><br>• <strong>Free Tier:</strong> Access to hundreds of free walkthrough rooms, foundational modules, and limited in-browser AttackBox access.<br>• <strong>VIP / Premium ($14/month or $126/year):</strong> Unlimited AttackBox hours, faster dedicated VMs, access to all premium Learning Paths (e.g. SOC Level 1, Red Teaming), private networks, and King of the Hill games."
+    ],
+    "responses_bn": [
+      "💳 <strong>TryHackMe ফ্রি বনাম ভিআইপি প্রিমিয়াম (Pricing):</strong><br><br>• <strong>ফ্রি সুবিধা:</strong> শত শত ফ্রি রুম, বেসিক নেটওয়ার্কিং ও সিকিউরিটি মডিউল সম্পূর্ণ বিনামূল্যে প্র্যাকটিস করা যায়।<br>• <strong>VIP / প্রিমিয়াম ($14/মাস বা $126/বছর):</strong> আনলিমিটেড AttackBox সময়, ফাস্ট ডেডিকেটেড ভার্চুয়াল মেশিন, সমস্ত অ্যাডভান্সড লার্নিং পাথ (SOC Level 1, Red Teaming) এবং অফিসিয়াল সার্টিফিকেট।"
+    ]
+  },
+  {
+    "id": "mem_tryhackme_topics_modules",
+    "category": "tech",
+    "title": "TryHackMe তে শেখানো বিষয় ও টুলস (Topics & Modules Covered)",
+    "keywords_en": ["tryhackme topics", "what can i learn on tryhackme", "thm tools", "wireshark burpsuite nmap on thm"],
+    "keywords_bn": ["tryhackme তে কি কি শেখা যায়", "tryhackme topics কি কি", "কি কি টুলস শেখায়", "লিনাক্স ওয়্যারশার্ক বার্প স্যুট"],
+    "responses_en": [
+      "🛠️ <strong>Topics & Tools Covered on TryHackMe:</strong><br><br>• <strong>Core Disciplines:</strong> Penetration Testing, SOC Analysis, Digital Forensics, Incident Response, Cryptography, Reverse Engineering, and Active Directory Hacking.<br>• <strong>Standard Security Tools:</strong> Nmap, Burp Suite, Metasploit, Wireshark, Splunk, Ghidra, John the Ripper, Hydra, and Hashcat."
+    ],
+    "responses_bn": [
+      "🛠️ <strong>TryHackMe-তে শেখানো প্রধান বিষয় ও সিকিউরিটি টুলস:</strong><br><br>• <strong>মূল বিষয়সমূহ:</strong> পেনিট্রেশন টেস্টিং, ব্লু-টিম ডিফেন্স, ডিজিটাল ফরেনসিক্স, ম্যালওয়্যার অ্যানালাইসিস, ক্রিপ্টোগ্রাফি এবং অ্যাক্টিভ ডিরেক্টরি সিকিউরিটি।<br>• <strong>প্রয়োজনীয় টুলস:</strong> Nmap, Burp Suite, Metasploit, Wireshark, Splunk, Ghidra, John the Ripper এবং Hydra।"
+    ]
+  },
+  {
+    "id": "mem_tryhackme_koth_multiplayer",
+    "category": "tech",
+    "title": "King of the Hill (KotH) মাল্টিপ্লেয়ার হ্যাকিং গেম (Competitive Hacking)",
+    "keywords_en": ["king of the hill thm", "koth tryhackme", "multiplayer hacking game", "competitive ctf tryhackme"],
+    "keywords_bn": ["king of the hill কি", "koth tryhackme", "মাল্টিপ্লেয়ার হ্যাকিং", "tryhackme গেম"],
+    "responses_en": [
+      "👑 <strong>TryHackMe King of the Hill (KotH):</strong> A fast-paced, real-time multiplayer competitive hacking battle where multiple players attack a target machine, compromise root access, patch vulnerabilities, and defend their king status against other hackers to earn points!"
+    ],
+    "responses_bn": [
+      "👑 <strong>King of the Hill (KotH):</strong> এটি TryHackMe-এর একটি রোমাঞ্চকর রিয়েল-টাইম মাল্টিপ্লেয়ার হ্যাকিং প্রতিযোগিতা। এখানে একাধিক প্রতিযোগী একটি সার্ভার হ্যাক করার চেষ্টা করে, রুট অ্যাক্সেস নিয়ে সার্ভারের নিরাপত্তা প্যাচ করে এবং অন্য হ্যাকারদের প্রতিহত করে পয়েন্ট অর্জন করে!"
+    ]
   }
 ]
