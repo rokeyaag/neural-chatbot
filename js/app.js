@@ -2172,6 +2172,71 @@ function initVoiceAndChatEngine() {
         responses_bn: [
           "<strong>Microservices API &amp; IMX Trading:</strong> হাই-স্কেলেবল মাইক্রোসার্ভিস আর্কিটেকচার এবং ফিনান্সিয়াল মার্কেট ট্রেডিং অ্যানালিটিক্স প্রজেক্ট।<br>• <strong>মাইক্রোসার্ভিস:</strong> <a href=\"https://github.com/rokeyaag/microservices-api-system\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/microservices-api-system</a><br>• <strong>ট্রেডিং:</strong> <a href=\"https://github.com/rokeyaag/imx-trading\" target=\"_blank\" style=\"color:#00f2fe;\">github.com/rokeyaag/imx-trading</a>"
         ]
+      },
+      {
+        id: 'mem_tryhackme_topics_modules',
+        category: 'tech',
+        title: 'TryHackMe তে শেখানো বিষয় ও টুলস (Topics & Security Tools Covered)',
+        keywords_en: [
+          'tryhackme topics',
+          'what can i learn on tryhackme',
+          'thm tools',
+          'tryhackme tools',
+          'tryhackme security tools',
+          'security tools in tryhackme',
+          'tools taught in tryhackme',
+          'wireshark burpsuite nmap on thm',
+          'what tools are on tryhackme'
+        ],
+        keywords_bn: [
+          'tryhackme তে কি কি শেখা যায়',
+          'tryhackme topics কি কি',
+          'কি কি টুলস শেখায়',
+          'tryhackme তে কি কি সিকিউরিটি টুলস শেখানো হয়',
+          'tryhackme তে কি কি টুলস শেখানো হয়',
+          'tryhackme সিকিউরিটি টুলস',
+          'ট্রাইহ্যাকমি টুলস',
+          'সিকিউরিটি টুলস কি কি',
+          'লিনাক্স ওয়্যারশার্ক বার্প স্যুট'
+        ],
+        responses_en: [
+          '🛠️ <strong>Security & Hacking Tools Covered on TryHackMe:</strong><br><br>TryHackMe teaches end-to-end hands-on usage of industry-standard cybersecurity tools across Offensive & Defensive security:<br><br>🔹 <strong>Network Scanning & Reconnaissance:</strong><br>• <strong>Nmap:</strong> Port scanning, service enumeration, and OS detection.<br>• <strong>Wireshark:</strong> Packet capture and live network traffic analysis.<br>• <strong>Gobuster & Dirb:</strong> Web directory and subdomain brute-forcing.<br><br>🔹 <strong>Web Application Security (Web Pentesting):</strong><br>• <strong>Burp Suite & OWASP ZAP:</strong> Intercepting HTTP traffic, testing for OWASP Top 10 flaws (SQLi, XSS, SSRF).<br>• <strong>SQLmap:</strong> Automated SQL injection exploitation and database extraction.<br>• <strong>Nikto:</strong> Web server security vulnerability and misconfiguration scanning.<br><br>🔹 <strong>Exploitation & Password Cracking:</strong><br>• <strong>Metasploit Framework (MSF):</strong> Exploit execution, payload crafting, and Meterpreter shells.<br>• <strong>John the Ripper & Hashcat:</strong> High-speed cryptographic hash and password cracking.<br>• <strong>Hydra:</strong> Online login portal brute-force attacks (SSH, FTP, HTTP, RDP).<br><br>🔹 <strong>SOC, Blue Team & Forensics:</strong><br>• <strong>Splunk:</strong> SIEM log monitoring, threat hunting, and detection rule development.<br>• <strong>Snort & Suricata:</strong> Network intrusion detection systems (NIDS).<br>• <strong>Volatility & Autopsy:</strong> Memory forensics and disk artifact analysis.<br>• <strong>Ghidra:</strong> Reverse engineering binary executables and malware analysis.'
+        ],
+        responses_bn: [
+          '🛠️ <strong>TryHackMe প্ল্যাটফর্মে শেখানো প্রধান সিকিউরিটি ও হ্যাকিং টুলস:</strong><br><br>TryHackMe-তে থিওরির পাশাপাশি ল্যাবভিত্তিক প্র্যাকটিক্যাল পরিবেশে ইন্ডাস্ট্রির সেরা টুলসগুলোর ব্যবহার শেখানো হয়:<br><br>🔹 <strong>নেটওয়ার্ক স্ক্যানিং ও রিকন (Reconnaissance):</strong><br>• <strong>Nmap:</strong> পোর্ট স্ক্যানিং, ওএস এবং ওপেন সার্ভিস ডিটেকশন।<br>• <strong>Wireshark:</strong> নেটওয়ার্ক প্যাকেট ক্যাপচার ও লাইভ ট্র্যাফিক অ্যানালাইসিস।<br>• <strong>Gobuster & Dirb:</strong> ডিরেক্টরি এবং সাবডোমেন ব্রুটফোর্সিং।<br><br>🔹 <strong>ওয়েব সিকিউরিটি (Web Pentesting):</strong><br>• <strong>Burp Suite & OWASP ZAP:</strong> এইচটিটিপি রিকোয়েস্ট ইন্টারসেপ্ট ও ওয়েব দুর্বলতা (SQLi, XSS, CSRF) টেস্ট।<br>• <strong>SQLmap:</strong> স্বয়ংক্রিয় এসকিউএল ইনজেকশন ডিটেকশন ও ডেটাবেজ এক্সপ্লয়েটেশন।<br>• <strong>Nikto:</strong> ওয়েব সার্ভার মিসকনফিগারেশন ও দুর্বলতা স্ক্যানিং।<br><br>🔹 <strong>এক্সপ্লয়টেশন ও পাসওয়ার্ড ক্র্যাকিং:</strong><br>• <strong>Metasploit Framework:</strong> সিস্টেমে দুর্বলতা কাজে লাগিয়ে রিমোট শেল ও পেলোড এক্সিকিউশন।<br>• <strong>John the Ripper & Hashcat:</strong> অফলাইন পাসওয়ার্ড ও ক্রিপ্টোগ্রাফিক হ্যাশ ক্র্যাকিং।<br>• <strong>Hydra:</strong> অনলাইন লগইন পোর্টাল ব্রুটফোর্স (SSH, FTP, HTTP)।<br><br>🔹 <strong>ব্লু টিম, এসওসি ও ফরেনসিক্স (SOC & Blue Team):</strong><br>• <strong>Splunk:</strong> এসআইইএম (SIEM) লগ অ্যানালাইসিস ও থ্রেট ডিটেকশন।<br>• <strong>Snort:</strong> নেটওয়ার্ক ইন্ট্রুশন ডিটেকশন সিস্টেম (NIDS)।<br>• <strong>Autopsy & Volatility:</strong> ডিজিটাল মেমোরি ও ডিস্ক ফরেনসিক্স।<br>• <strong>Ghidra:</strong> রিভার্স ইঞ্জিনিয়ারিং এবং ম্যালওয়্যার অ্যানালাইসিস।'
+        ]
+      },
+      {
+        id: 'mem_tryhackme_koth_multiplayer',
+        category: 'tech',
+        title: 'King of the Hill (KotH) মাল্টিপ্লেয়ার হ্যাকিং গেম (Competitive Hacking)',
+        keywords_en: [
+          'king of the hill',
+          'koth',
+          'king of the hill thm',
+          'koth tryhackme',
+          'multiplayer hacking game',
+          'competitive ctf tryhackme',
+          'how does king of the hill work',
+          'tryhackme koth rules'
+        ],
+        keywords_bn: [
+          'king of the hill কি',
+          'king of the hill হ্যাকিং গেম কি',
+          'koth কি',
+          'koth tryhackme',
+          'মাল্টিপ্লেয়ার হ্যাকিং',
+          'tryhackme গেম',
+          'কিং অফ দ্য হিল কি',
+          'tryhackme koth কিভাবে খেলে',
+          'king of the hill গেম কি'
+        ],
+        responses_en: [
+          '👑 <strong>TryHackMe King of the Hill (KotH) Multiplayer Battle:</strong><br><br><strong>King of the Hill (KotH)</strong> is a fast-paced, real-time multiplayer competitive hacking battle on TryHackMe where 4 to 8 players simultaneously compete on the same vulnerable target machine.<br><br>🎯 <strong>How It Works & Game Mechanics:</strong><br>1. <strong>Compromise & Root:</strong> Players race to discover vulnerabilities, exploit them, and gain root/admin access on the target server.<br>2. <strong>Claim the King:</strong> Write your username into <code>/root/king.txt</code>. As long as your name remains written there, you earn 10 points every single minute.<br>3. <strong>Defense & Patching:</strong> Once inside, you must patch vulnerabilities, remove rival backdoors, and defend root access to keep others from overwriting your name.<br>4. <strong>Flag Hunting:</strong> Find and submit hidden flags across the system for bonus points.<br><br>💡 <strong>Benefit:</strong> Builds intense real-time Red Teaming (Exploitation) and Blue Teaming (Hardening/Patching) skills under pressure.'
+        ],
+        responses_bn: [
+          '👑 <strong>King of the Hill (KotH) মাল্টিপ্লেয়ার হ্যাকিং গেম:</strong><br><br><strong>King of the Hill (KotH)</strong> হলো TryHackMe প্ল্যাটফর্মের একটি রোমাঞ্চকর <strong>রিয়েল-টাইম মাল্টিপ্লেয়ার অ্যাটাক ও ডিফেন্স হ্যাকিং প্রতিযোগিতা</strong> (সাধারণত ৪-৮ জন প্রতিযোগী থাকে)।<br><br>🎯 <strong>গেমের নিয়ম ও কার্যপদ্ধতি:</strong><br>১. <strong>রুট অ্যাক্সেস (Root Access):</strong> প্রতিযোগীরা একই দুর্বল সার্ভার হ্যাক করার চেষ্টা করে এবং দ্রুততম সময়ে রুট বা অ্যাডমিন প্রিভিলেজ নেয়।<br>২. <strong>কিং হওয়া (King Status):</strong> সার্ভারের <code>/root/king.txt</code> ফাইলে নিজের ইউজারনেম লিখতে হয়। যতক্ষণ আপনার নাম থাকবে, প্রতি ১ মিনিটে আপনি ১০ পয়েন্ট করে পেতে থাকবেন।<br>৩. <strong>প্যাচিং ও ডিফেন্স (Defense/Patching):</strong> রুট অ্যাক্সেস নেওয়ার পর সিস্টেমের দুর্বলতাগুলো বন্ধ বা প্যাচ করতে হয় এবং ব্যাকডোর মুছে ফেলতে হয়, যাতে অন্য হ্যাকাররা ঢুকে আপনার নাম সরাতে না পারে।<br>৪. <strong>ফ্ল্যাগ হান্টিং:</strong> সার্ভারের ভেতরে বিভিন্ন জায়গায় লুকানো গোপন ফ্ল্যাগ খুঁজে বের করে অতিরিক্ত বোনাস পয়েন্ট নেওয়া যায়।<br><br>💡 <strong>উপকারিতা:</strong> এটি একই সাথে আক্রমণাত্মক (Red Team) এবং প্রতিরক্ষামূলক (Blue Team) দক্ষতার অসাধারণ সংমিশ্রণ শেখায়।'
+        ]
       }
     ],
 
