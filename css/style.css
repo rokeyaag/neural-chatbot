@@ -493,12 +493,12 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0 24px;
 }
 
-/* Hero Layout: 80% Avatar Stage & 20% Interactive Chat Box */
+/* Hero Layout: 60% Avatar Stage & 40% Interactive Chat Box */
 .hero-primary-grid {
   display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(280px, 1fr);
+  grid-template-columns: minmax(0, 60fr) minmax(0, 40fr);
   align-items: stretch;
-  gap: 16px;
+  gap: 18px;
   width: 100%;
   max-width: 1680px;
   margin: 0 auto;
@@ -2570,7 +2570,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .hero-primary-grid {
-    grid-template-columns: minmax(0, 3.8fr) minmax(260px, 1.2fr);
+    grid-template-columns: minmax(0, 60fr) minmax(0, 40fr);
     width: 100%;
     max-width: 100%;
     gap: 14px;
