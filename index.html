@@ -988,7 +988,12 @@
             <p>Bilingual Intent Matrix, Kusol Binimoy (কুশল), Unique Answers &amp; Live Custom Memory</p>
           </div>
         </div>
-        <button class="knowledge-modal-close" id="knowledgeModalClose" aria-label="Close Knowledge Store">&times;</button>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button id="toggleIngestWebBtnHeader" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, rgba(0,242,254,0.25), rgba(79,172,254,0.35)); border: 1px solid #00f2fe; color: #fff; font-weight: 700; box-shadow: 0 0 15px rgba(0,242,254,0.35); border-radius: 99px; padding: 6px 15px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" title="Ingest Knowledge from any Website URL">
+            <i class="fa-solid fa-globe" style="color: #00f2fe;"></i> <span>Ingest Web URL 🌐</span>
+          </button>
+          <button class="knowledge-modal-close" id="knowledgeModalClose" aria-label="Close Knowledge Store">&times;</button>
+        </div>
       </div>
 
       <!-- Modal Search & Filter Toolbar -->
@@ -1000,6 +1005,7 @@
         </div>
         <div class="knowledge-category-tabs" id="knowledgeCategoryTabs">
           <button class="kb-tab-btn active" data-cat="all">All (<span id="kbCountAll">0</span>)</button>
+          <button class="kb-tab-btn" data-cat="web" style="border: 1px solid #00f2fe; color: #00f2fe; font-weight: 600; background: rgba(0, 242, 254, 0.1);"><i class="fa-solid fa-globe" style="color: #00f2fe;"></i> Web Ingested (<span id="kbCountWeb">0</span>)</button>
           <button class="kb-tab-btn" data-cat="file_memory" style="border-color: rgba(0, 242, 254, 0.4);"><i class="fa-solid fa-file-code" style="color: #00f2fe;"></i> File Memory (<span id="kbCountFile">0</span>)</button>
           <button class="kb-tab-btn" data-cat="github"><i class="fa-brands fa-github"></i> GitHub Repos (<span id="kbCountGithub">0</span>)</button>
           <button class="kb-tab-btn" data-cat="kusol"><i class="fa-solid fa-hand-holding-heart"></i> Kusol Binimoy</button>
@@ -1009,7 +1015,6 @@
           <button class="kb-tab-btn" data-cat="entertainment"><i class="fa-solid fa-music"></i> Songs &amp; Jokes</button>
           <button class="kb-tab-btn" data-cat="ai"><i class="fa-solid fa-microchip"></i> General AI</button>
           <button class="kb-tab-btn" data-cat="custom"><i class="fa-solid fa-floppy-disk"></i> Custom Saved (<span id="kbCountCustom">0</span>)</button>
-          <button class="kb-tab-btn" data-cat="web" style="border-color: rgba(0, 242, 254, 0.3);"><i class="fa-solid fa-globe" style="color: #00f2fe;"></i> Web Ingested (<span id="kbCountWeb">0</span>)</button>
           <button class="kb-tab-btn" data-cat="qa_memory"><i class="fa-solid fa-comments"></i> Learned Q&amp;A (<span id="kbCountQa">0</span>)</button>
         </div>
       </div>
@@ -1022,8 +1027,8 @@
             <span id="knowledgeListStatus">Loading neural knowledge matrix...</span>
           </div>
           <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-            <button id="toggleIngestWebBtn" class="btn btn-secondary btn-sm" title="Fetch and ingest knowledge from any website URL">
-              <i class="fa-solid fa-globe" style="color: #00f2fe;"></i> Ingest Web URL
+            <button id="toggleIngestWebBtn" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, rgba(0, 242, 254, 0.25), rgba(79, 172, 254, 0.2)); border: 1px solid #00f2fe; color: #00f2fe; font-weight: 700; box-shadow: 0 0 12px rgba(0,242,254,0.25);" title="Fetch and ingest knowledge from any website URL">
+              <i class="fa-solid fa-globe"></i> Ingest Web URL 🌐
             </button>
             <button id="syncFileMemoryBtn" class="btn btn-secondary btn-sm" title="Reload memory from data/memory.json">
               <i class="fa-solid fa-rotate" style="color: #00f2fe;"></i> Reload memory.json

@@ -4959,6 +4959,11 @@ function initKnowledgeStoreModal() {
       categoryTabs.forEach((t) => t.classList.remove('active'));
       tab.classList.add('active');
       activeCategory = tab.getAttribute('data-cat') || 'all';
+      if (activeCategory === 'web' && ingestWebPanel) {
+        ingestWebPanel.style.display = 'block';
+        if (addPanel) addPanel.style.display = 'none';
+        setTimeout(() => document.getElementById('webIngestUrl')?.focus(), 100);
+      }
       renderKnowledgeGrid();
     });
   });
@@ -5058,10 +5063,19 @@ function initKnowledgeStoreModal() {
 
   // Web Ingestion Panel Controls
   const toggleIngestWebBtn = document.getElementById('toggleIngestWebBtn');
+  const toggleIngestWebBtnHeader = document.getElementById('toggleIngestWebBtnHeader');
   const ingestWebPanel = document.getElementById('ingestWebPanel');
   const cancelIngestWebBtn = document.getElementById('cancelIngestWebBtn');
   const ingestWebForm = document.getElementById('ingestWebForm');
   const submitWebIngestBtn = document.getElementById('submitWebIngestBtn');
+
+  if (toggleIngestWebBtnHeader && ingestWebPanel) {
+    toggleIngestWebBtnHeader.addEventListener('click', () => {
+      ingestWebPanel.style.display = 'block';
+      if (addPanel) addPanel.style.display = 'none';
+      setTimeout(() => document.getElementById('webIngestUrl')?.focus(), 100);
+    });
+  }
 
   if (toggleIngestWebBtn && ingestWebPanel) {
     toggleIngestWebBtn.addEventListener('click', () => {
