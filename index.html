@@ -259,8 +259,8 @@
                 <button class="quick-chip" data-prompt="একটি সুন্দর হিন্দি গান শোনাও">Hindi Song 🇮🇳</button>
                 <button class="quick-chip" data-prompt="Can you sing a song?">Sing a song 🎵</button>
                 <button class="quick-chip" data-prompt="Tell me a joke">Tell a joke 😄</button>
-                <button class="quick-chip" data-prompt="PyTorch Neural Network architecture">Architecture ⚡</button>
                 <button class="quick-chip open-kb-chip" id="openKbChipHero" data-action="open-kb">Knowledge Base 🧠</button>
+                <button class="quick-chip" id="openWebIngestChipHero" data-action="open-web-ingest" style="border-color: rgba(0, 242, 254, 0.5); color: #00f2fe;"><i class="fa-solid fa-globe"></i> Ingest URL 🌐</button>
               </div>
 
               <!-- Main Input Box with Send Button & Mic Button -->
@@ -1009,6 +1009,7 @@
           <button class="kb-tab-btn" data-cat="entertainment"><i class="fa-solid fa-music"></i> Songs &amp; Jokes</button>
           <button class="kb-tab-btn" data-cat="ai"><i class="fa-solid fa-microchip"></i> General AI</button>
           <button class="kb-tab-btn" data-cat="custom"><i class="fa-solid fa-floppy-disk"></i> Custom Saved (<span id="kbCountCustom">0</span>)</button>
+          <button class="kb-tab-btn" data-cat="web" style="border-color: rgba(0, 242, 254, 0.3);"><i class="fa-solid fa-globe" style="color: #00f2fe;"></i> Web Ingested (<span id="kbCountWeb">0</span>)</button>
           <button class="kb-tab-btn" data-cat="qa_memory"><i class="fa-solid fa-comments"></i> Learned Q&amp;A (<span id="kbCountQa">0</span>)</button>
         </div>
       </div>
@@ -1020,7 +1021,10 @@
             <span class="status-indicator-dot"></span>
             <span id="knowledgeListStatus">Loading neural knowledge matrix...</span>
           </div>
-          <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <button id="toggleIngestWebBtn" class="btn btn-secondary btn-sm" title="Fetch and ingest knowledge from any website URL">
+              <i class="fa-solid fa-globe" style="color: #00f2fe;"></i> Ingest Web URL
+            </button>
             <button id="syncFileMemoryBtn" class="btn btn-secondary btn-sm" title="Reload memory from data/memory.json">
               <i class="fa-solid fa-rotate" style="color: #00f2fe;"></i> Reload memory.json
             </button>
@@ -1031,6 +1035,29 @@
               <i class="fa-solid fa-circle-plus"></i> Store New Knowledge
             </button>
           </div>
+        </div>
+
+        <!-- Ingest Web URL Knowledge Panel (Collapsible) -->
+        <div class="add-knowledge-panel" id="ingestWebPanel" style="display: none; border-color: rgba(0, 242, 254, 0.4); background: rgba(0, 242, 254, 0.03); margin-bottom: 16px;">
+          <div class="add-panel-header">
+            <h4><i class="fa-solid fa-globe gradient-text"></i> Ingest Knowledge from Any Website URL</h4>
+            <span class="badge-tag" style="padding: 2px 8px; font-size: 0.7rem; background: rgba(0, 242, 254, 0.2); color: #00f2fe;">AUTO-READ &amp; MEMORIZE</span>
+          </div>
+          <form id="ingestWebForm" class="add-knowledge-form">
+            <div class="form-group">
+              <label for="webIngestUrl"><i class="fa-solid fa-link" style="color: #00f2fe;"></i> Website URL (Article, Wikipedia, Documentation, Tech Blog, etc.)</label>
+              <input type="url" id="webIngestUrl" class="kb-form-input" placeholder="https://en.wikipedia.org/wiki/Artificial_intelligence" required>
+              <small class="form-hint">NeuralBot will extract content, key concepts, generate keywords, and store it into memory.</small>
+            </div>
+            <div class="form-group">
+              <label for="webIngestCustomTitle"><i class="fa-solid fa-heading"></i> Custom Topic Title (Optional)</label>
+              <input type="text" id="webIngestCustomTitle" class="kb-form-input" placeholder="Leave blank to auto-detect title from webpage">
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-sm" id="submitWebIngestBtn"><i class="fa-solid fa-cloud-arrow-down"></i> Read &amp; Store Web Knowledge</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="cancelIngestWebBtn">Cancel</button>
+            </div>
+          </form>
         </div>
 
         <!-- Add Custom Knowledge Panel (Collapsible) -->

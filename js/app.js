@@ -2260,6 +2260,154 @@ function initVoiceAndChatEngine() {
       return [];
     },
 
+    // Web Ingested Memory stored in localStorage
+    getWebKnowledge() {
+      try {
+        const stored = localStorage.getItem('neural_bot_web_kb');
+        return stored ? JSON.parse(stored) : [];
+      } catch (e) {
+        return [];
+      }
+    },
+
+    saveWebKnowledge(item) {
+      const webList = this.getWebKnowledge();
+      const filtered = webList.filter(w => w.sourceUrl !== item.sourceUrl && w.id !== item.id);
+      filtered.unshift(item);
+      localStorage.setItem('neural_bot_web_kb', JSON.stringify(filtered));
+      return filtered;
+    },
+
+    deleteWebKnowledge(id) {
+      let webList = this.getWebKnowledge();
+      webList = webList.filter(item => item.id !== id);
+      localStorage.setItem('neural_bot_web_kb', JSON.stringify(webList));
+      return webList;
+    },
+
+    async ingestFromWebUrl(rawUrl, manualTitle = '') {
+      let targetUrl = (rawUrl || '').trim();
+      if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
+        targetUrl = 'https://' + targetUrl;
+      }
+
+      let parsedUrl;
+      try {
+        parsedUrl = new URL(targetUrl);
+      } catch (e) {
+        throw new Error('অনুগ্রহ করে একটি সঠিক ও বৈধ Website URL দিন (যেমন: https://example.com/page)');
+      }
+
+      let rawContent = '';
+      let pageTitle = manualTitle ? manualTitle.trim() : '';
+
+      // Try Jina AI Reader API (Fast, clean markdown extraction of public web page)
+      try {
+        const jinaUrl = `https://r.jina.ai/${targetUrl}`;
+        const response = await fetch(jinaUrl, {
+          headers: {
+            'Accept': 'text/plain, text/markdown, application/json'
+          }
+        });
+        if (response.ok) {
+          rawContent = await response.text();
+        }
+      } catch (err) {
+        console.warn('Jina reader attempt failed, trying fallback proxy:', err);
+      }
+
+      // Fallback proxy (allorigins) if Jina was empty
+      if (!rawContent || rawContent.length < 50) {
+        try {
+          const fallbackRes = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`);
+          if (fallbackRes.ok) {
+            const data = await fallbackRes.json();
+            if (data && data.contents) {
+              const doc = new DOMParser().parseFromString(data.contents, 'text/html');
+              if (!pageTitle) {
+                pageTitle = doc.title || '';
+              }
+              const paragraphs = Array.from(doc.querySelectorAll('p, h1, h2, h3, article, main')).map(el => el.textContent.trim()).filter(t => t.length > 20);
+              rawContent = paragraphs.slice(0, 15).join('\n\n');
+            }
+          }
+        } catch (fbErr) {
+          console.warn('Fallback proxy failed:', fbErr);
+        }
+      }
+
+      if (!rawContent || rawContent.trim().length < 30) {
+        throw new Error('ওয়েবসাইট থেকে তথ্য লোড করা সম্ভব হয়নি। লিংকটি পাবলিক ও অ্যাক্সেসিবল কিনা যাচাই করুন।');
+      }
+
+      // Extract title from markdown if not found
+      if (!pageTitle) {
+        const titleMatch = rawContent.match(/^Title:\s*(.+)$/m) || rawContent.match(/^#\s+(.+)$/m);
+        if (titleMatch) {
+          pageTitle = titleMatch[1].trim();
+        } else {
+          pageTitle = parsedUrl.hostname + (parsedUrl.pathname.length > 1 ? parsedUrl.pathname : '');
+        }
+      }
+
+      // Clean up markdown noise
+      let cleanText = rawContent
+        .replace(/\[Image:[^\]]*\]/g, '')
+        .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')
+        .replace(/^URL Source:.*$/gm, '')
+        .replace(/^Markdown Content:.*$/gm, '')
+        .replace(/[\*\#\_\`\~]/g, '')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
+
+      const summarySnippets = cleanText.split('\n').filter(s => s.trim().length > 30).slice(0, 4);
+      const summaryText = summarySnippets.join(' ').substring(0, 500);
+
+      const titleTokens = pageTitle.toLowerCase().replace(/[^a-zA-Z0-9\u0980-\u09FF\s]/g, ' ').split(/\s+/).filter(t => t.length > 2);
+      
+      const keywords_en = Array.from(new Set([
+        pageTitle.toLowerCase(),
+        parsedUrl.hostname.toLowerCase(),
+        targetUrl.toLowerCase(),
+        ...titleTokens,
+        `${pageTitle.toLowerCase()} summary`,
+        `about ${pageTitle.toLowerCase()}`,
+        `what is ${pageTitle.toLowerCase()}`
+      ]));
+
+      const keywords_bn = Array.from(new Set([
+        pageTitle.toLowerCase(),
+        `${pageTitle} কি`,
+        `${pageTitle} সম্পর্কে বলো`,
+        `${pageTitle} ওয়েবসাইটের তথ্য`,
+        `${pageTitle} এর সারসংক্ষেপ`,
+        ...titleTokens
+      ]));
+
+      const itemId = 'web_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+
+      const newItem = {
+        id: itemId,
+        category: 'web',
+        title: pageTitle,
+        sourceUrl: targetUrl,
+        hostname: parsedUrl.hostname,
+        ingestedAt: new Date().toISOString(),
+        keywords_en: keywords_en,
+        keywords_bn: keywords_bn,
+        responses_en: [
+          `🌐 <strong>Web Knowledge: ${pageTitle}</strong><br>• <strong>Source:</strong> <a href="${targetUrl}" target="_blank" style="color:#00f2fe;">${targetUrl}</a><br>• <strong>Summary:</strong> ${summaryText}...<br><br><span style="font-size:0.85rem;color:rgba(255,255,255,0.7);">💡 Stored in Neural Memory from live web ingestion.</span>`
+        ],
+        responses_bn: [
+          `🌐 <strong>ওয়েব মেমোরি: ${pageTitle}</strong><br>• <strong>মূল লিংক:</strong> <a href="${targetUrl}" target="_blank" style="color:#00f2fe;">${targetUrl}</a><br>• <strong>সারসংক্ষেপ:</strong> ${summaryText}...<br><br><span style="font-size:0.85rem;color:rgba(255,255,255,0.7);">💡 এই তথ্যটি ওয়েবসাইট থেকে সরাসরি নিউরাল মেমোরিতে সংরক্ষণ করা হয়েছে।</span>`
+        ],
+        isWebIngested: true
+      };
+
+      this.saveWebKnowledge(newItem);
+      return newItem;
+    },
+
     saveCustomKnowledge(item) {
       const customList = this.getCustomKnowledge();
       customList.unshift(item);
@@ -2279,9 +2427,10 @@ function initVoiceAndChatEngine() {
         ? window.NeuralDialogueMemory.getLearnedQA()
         : [];
       const custom = this.getCustomKnowledge();
+      const web = this.getWebKnowledge();
       const file = this.fileMemory || [];
       const github = this.getGitHubKnowledge();
-      return [...learned, ...custom, ...file, ...github, ...this.defaultStore];
+      return [...learned, ...custom, ...web, ...file, ...github, ...this.defaultStore];
     },
 
     // Dynamic non-repeating selector strictly filtered by language
@@ -4367,6 +4516,49 @@ function initVoiceAndChatEngine() {
       launchSocialDirectly(directSocial.targetUrl);
     }
 
+    // Auto-detect URL Web Ingestion Intent directly in Chat
+    const isYt = /(?:youtube\.com|youtu\.be)/i.test(userText);
+    const urlMatch = !isYt && userText.match(/(https?:\/\/[^\s]+)/i);
+    const isIngestIntent = urlMatch && (/ingest|learn|read|import|store|save|লিংক|ওয়েবসাইট|পড়ো|শেখো|মেমোরি/i.test(userText) || userText.trim().startsWith('http'));
+
+    if (urlMatch && isIngestIntent) {
+      const targetUrl = urlMatch[1];
+      const isBengali = isBengaliQuery(userText);
+      
+      if (globalAvatarController) {
+        globalAvatarController.setThinking();
+      }
+      const typingElem = showHeroTypingIndicator();
+
+      (async () => {
+        try {
+          if (!window.NeuralKnowledgeStore || typeof window.NeuralKnowledgeStore.ingestFromWebUrl !== 'function') {
+            throw new Error('Web Ingest engine not available.');
+          }
+          const ingested = await window.NeuralKnowledgeStore.ingestFromWebUrl(targetUrl);
+          if (typingElem) typingElem.remove();
+
+          const resp = isBengali
+            ? `🌐 <strong>ওয়েবসাইট সফলভাবে মেমোরিতে যুক্ত হয়েছে! 🧠✨</strong><br><br>• <strong>টপিক:</strong> ${escapeHtml(ingested.title)}<br>• <strong>মূল লিংক:</strong> <a href="${ingested.sourceUrl}" target="_blank" style="color:#00f2fe;">${ingested.sourceUrl}</a><br><br>${ingested.responses_bn[0]}<br><br>💡 <em>আপনি এখন এই ওয়েবসাইট সম্পর্কিত যেকোনো প্রশ্ন করতে পারেন!</em>`
+            : `🌐 <strong>Website Ingested into Neural Memory! 🧠✨</strong><br><br>• <strong>Topic:</strong> ${escapeHtml(ingested.title)}<br>• <strong>Source:</strong> <a href="${ingested.sourceUrl}" target="_blank" style="color:#00f2fe;">${ingested.sourceUrl}</a><br><br>${ingested.responses_en[0]}<br><br>💡 <em>You can now ask me any question about this web source!</em>`;
+
+          appendMessageToHero(resp, true);
+          speakText(isBengali ? `${ingested.title} ওয়েবসাইট থেকে তথ্য মেমোরিতে সংরক্ষণ করা হয়েছে।` : `Successfully learned and stored ${ingested.title} into memory.`);
+          if (typeof window.refreshKnowledgeStoreUI === 'function') {
+            window.refreshKnowledgeStoreUI();
+          }
+        } catch (err) {
+          if (typingElem) typingElem.remove();
+          const errResp = isBengali
+            ? `⚠️ ওয়েবসাইট থেকে তথ্য পড়তে সমস্যা হয়েছে: ${escapeHtml(err.message || 'অনুগ্রহ করে সঠিক URL দিন।')}`
+            : `⚠️ Failed to ingest website: ${escapeHtml(err.message || 'Please verify the URL.')}`;
+          appendMessageToHero(errResp, true);
+          speakText(errResp);
+        }
+      })();
+      return;
+    }
+
     // Switch avatar to thinking state with synaptic firing
     if (globalAvatarController) {
       globalAvatarController.setThinking();
@@ -4453,6 +4645,16 @@ function initVoiceAndChatEngine() {
       if (action === 'open-kb') {
         if (typeof window.openKnowledgeStoreModal === 'function') {
           window.openKnowledgeStoreModal();
+        }
+        return;
+      }
+      if (action === 'open-web-ingest') {
+        if (typeof window.openKnowledgeStoreModal === 'function') {
+          window.openKnowledgeStoreModal();
+          const webPanel = document.getElementById('ingestWebPanel');
+          if (webPanel) webPanel.style.display = 'block';
+          const webUrlIn = document.getElementById('webIngestUrl');
+          if (webUrlIn) webUrlIn.focus();
         }
         return;
       }
@@ -4850,8 +5052,77 @@ function initKnowledgeStoreModal() {
   const countGithub = document.getElementById('kbCountGithub');
   const countQa = document.getElementById('kbCountQa');
   const countFile = document.getElementById('kbCountFile');
+  const countWeb = document.getElementById('kbCountWeb');
   const syncGithubBtn = document.getElementById('syncGithubKbBtn');
   const syncFileMemoryBtn = document.getElementById('syncFileMemoryBtn');
+
+  // Web Ingestion Panel Controls
+  const toggleIngestWebBtn = document.getElementById('toggleIngestWebBtn');
+  const ingestWebPanel = document.getElementById('ingestWebPanel');
+  const cancelIngestWebBtn = document.getElementById('cancelIngestWebBtn');
+  const ingestWebForm = document.getElementById('ingestWebForm');
+  const submitWebIngestBtn = document.getElementById('submitWebIngestBtn');
+
+  if (toggleIngestWebBtn && ingestWebPanel) {
+    toggleIngestWebBtn.addEventListener('click', () => {
+      const isHidden = ingestWebPanel.style.display === 'none';
+      ingestWebPanel.style.display = isHidden ? 'block' : 'none';
+      if (addPanel && isHidden) addPanel.style.display = 'none';
+      if (isHidden) {
+        document.getElementById('webIngestUrl')?.focus();
+      }
+    });
+  }
+
+  if (cancelIngestWebBtn && ingestWebPanel) {
+    cancelIngestWebBtn.addEventListener('click', () => {
+      ingestWebPanel.style.display = 'none';
+    });
+  }
+
+  if (ingestWebForm) {
+    ingestWebForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const urlInput = document.getElementById('webIngestUrl');
+      const titleInput = document.getElementById('webIngestCustomTitle');
+      const rawUrl = urlInput ? urlInput.value.trim() : '';
+      const customTitle = titleInput ? titleInput.value.trim() : '';
+
+      if (!rawUrl) {
+        showToast('Please provide a valid Website URL.', true);
+        return;
+      }
+
+      if (submitWebIngestBtn) {
+        submitWebIngestBtn.disabled = true;
+        submitWebIngestBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Reading & Analyzing Web Content...';
+      }
+
+      try {
+        if (!window.NeuralKnowledgeStore || typeof window.NeuralKnowledgeStore.ingestFromWebUrl !== 'function') {
+          throw new Error('Web Ingest engine is not ready.');
+        }
+
+        const ingested = await window.NeuralKnowledgeStore.ingestFromWebUrl(rawUrl, customTitle);
+        showToast(`Successfully ingested "${ingested.title}" into Neural Memory! 🌐🧠`);
+        ingestWebForm.reset();
+        if (ingestWebPanel) ingestWebPanel.style.display = 'none';
+        activeCategory = 'web';
+        categoryTabs.forEach(t => {
+          t.classList.toggle('active', t.getAttribute('data-cat') === 'web');
+        });
+        renderKnowledgeGrid();
+      } catch (err) {
+        console.error('Web Ingest failed:', err);
+        showToast(err.message || 'Failed to ingest web content. Please check URL.', true);
+      } finally {
+        if (submitWebIngestBtn) {
+          submitWebIngestBtn.disabled = false;
+          submitWebIngestBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-down"></i> Read & Store Web Knowledge';
+        }
+      }
+    });
+  }
 
   if (syncFileMemoryBtn) {
     syncFileMemoryBtn.addEventListener('click', async () => {
@@ -4894,6 +5165,10 @@ function initKnowledgeStoreModal() {
       if (stored) customItems.push(...JSON.parse(stored));
     } catch(e) {}
 
+    const webItems = (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.getWebKnowledge === 'function')
+      ? window.NeuralKnowledgeStore.getWebKnowledge()
+      : [];
+
     const githubItems = [];
     try {
       const storedGh = localStorage.getItem('neural_bot_github_kb');
@@ -4910,15 +5185,17 @@ function initKnowledgeStoreModal() {
 
     const allItems = (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.getAllKnowledge === 'function')
       ? window.NeuralKnowledgeStore.getAllKnowledge()
-      : [...learnedQAItems, ...customItems, ...fileItems, ...githubItems];
+      : [...learnedQAItems, ...customItems, ...webItems, ...fileItems, ...githubItems];
 
     const githubCount = allItems.filter(i => i.category === 'github' || i.isGitHub).length;
     const customCount = allItems.filter(i => i.isCustom || i.category === 'custom').length;
+    const webCount = allItems.filter(i => i.isWebIngested || i.category === 'web').length;
     const qaCount = allItems.filter(i => i.isLearnedQA || i.category === 'qa_memory').length;
     const fileCount = fileItems.length;
 
     if (countAll) countAll.textContent = String(allItems.length);
     if (countCustom) countCustom.textContent = String(customCount);
+    if (countWeb) countWeb.textContent = String(webCount);
     if (countGithub) countGithub.textContent = String(githubCount);
     if (countQa) countQa.textContent = String(qaCount);
     if (countFile) countFile.textContent = String(fileCount);
@@ -4928,6 +5205,8 @@ function initKnowledgeStoreModal() {
       filtered = filtered.filter((i) => i.isFileMemory || i.category === 'file_memory' || fileItems.some(f => f.id === i.id));
     } else if (activeCategory === 'custom') {
       filtered = filtered.filter((i) => i.isCustom || i.category === 'custom' || customItems.some(c => c.id === i.id));
+    } else if (activeCategory === 'web') {
+      filtered = filtered.filter((i) => i.isWebIngested || i.category === 'web' || webItems.some(w => w.id === i.id));
     } else if (activeCategory === 'github') {
       filtered = filtered.filter((i) => i.category === 'github' || i.isGitHub || githubItems.some(g => g.id === i.id));
     } else if (activeCategory === 'qa_memory') {
@@ -4969,6 +5248,7 @@ function initKnowledgeStoreModal() {
     cardsGrid.innerHTML = filtered.map((item) => {
       const isFileItem = item.isFileMemory || fileItems.some(f => f.id === item.id);
       const isCustomItem = item.isCustom || customItems.some(c => c.id === item.id);
+      const isWebItem = item.isWebIngested || item.category === 'web' || webItems.some(w => w.id === item.id);
       const isGhItem = item.category === 'github' || item.isGitHub;
       const isQaItem = item.isLearnedQA || item.category === 'qa_memory';
       const catBadgeText = (item.category || 'GENERAL').toUpperCase();
@@ -4985,8 +5265,8 @@ function initKnowledgeStoreModal() {
         <div class="kb-card" data-cat="${item.category}">
           <div class="kb-card-header">
             <h4 class="kb-card-title">${item.title}</h4>
-            <span class="kb-card-cat-badge ${isFileItem ? 'file-memory' : (isQaItem ? 'qa' : (isCustomItem ? 'custom' : (isGhItem ? 'github' : '')))}" ${isFileItem ? 'style="background:rgba(0,242,254,0.15); color:#00f2fe; border:1px solid rgba(0,242,254,0.3);"' : ''}>
-              ${isFileItem ? '<i class="fa-solid fa-file-code"></i> MEMORY.JSON' : (isQaItem ? '<i class="fa-solid fa-brain"></i> LEARNED Q&amp;A' : (isCustomItem ? '<i class="fa-solid fa-database"></i> CUSTOM' : (isGhItem ? '<i class="fa-brands fa-github"></i> GITHUB' : catBadgeText)))}
+            <span class="kb-card-cat-badge ${isFileItem ? 'file-memory' : (isQaItem ? 'qa' : (isWebItem ? 'web' : (isCustomItem ? 'custom' : (isGhItem ? 'github' : ''))))}" ${isFileItem ? 'style="background:rgba(0,242,254,0.15); color:#00f2fe; border:1px solid rgba(0,242,254,0.3);"' : (isWebItem ? 'style="background:rgba(0,242,254,0.15); color:#00f2fe; border:1px solid rgba(0,242,254,0.3);"' : '')}>
+              ${isFileItem ? '<i class="fa-solid fa-file-code"></i> MEMORY.JSON' : (isQaItem ? '<i class="fa-solid fa-brain"></i> LEARNED Q&amp;A' : (isWebItem ? '<i class="fa-solid fa-globe"></i> WEB INGESTED' : (isCustomItem ? '<i class="fa-solid fa-database"></i> CUSTOM' : (isGhItem ? '<i class="fa-brands fa-github"></i> GITHUB' : catBadgeText))))}
             </span>
           </div>
 
@@ -5008,6 +5288,11 @@ function initKnowledgeStoreModal() {
               <button class="kb-action-btn try-prompt-btn" data-prompt="${firstKeyword}" title="Test this prompt in Chat">
                 <i class="fa-solid fa-play"></i> Try Prompt
               </button>
+              ${item.sourceUrl ? `
+                <a href="${item.sourceUrl}" target="_blank" class="kb-action-btn" title="Open Source Webpage">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Link
+                </a>
+              ` : ''}
               ${item.homepageUrl ? `
                 <a href="${item.homepageUrl}" target="_blank" class="kb-action-btn" title="Open Live Demo">
                   <i class="fa-solid fa-arrow-up-right-from-square"></i> Demo
@@ -5018,8 +5303,8 @@ function initKnowledgeStoreModal() {
                   <i class="fa-brands fa-github"></i>
                 </a>
               ` : ''}
-              ${(isCustomItem || isQaItem) ? `
-                <button class="kb-action-btn delete delete-kb-btn" data-id="${item.id}" data-type="${isQaItem ? 'qa' : 'custom'}" title="Delete memory">
+              ${(isCustomItem || isQaItem || isWebItem) ? `
+                <button class="kb-action-btn delete delete-kb-btn" data-id="${item.id}" data-type="${isQaItem ? 'qa' : (isWebItem ? 'web' : 'custom')}" title="Delete memory">
                   <i class="fa-solid fa-trash-can"></i>
                 </button>
               ` : ''}
@@ -5059,6 +5344,12 @@ function initKnowledgeStoreModal() {
             if (window.NeuralDialogueMemory && typeof window.NeuralDialogueMemory.deleteLearnedQA === 'function') {
               window.NeuralDialogueMemory.deleteLearnedQA(id);
               showToast('Learned Q&A memory deleted.');
+              renderKnowledgeGrid();
+            }
+          } else if (type === 'web') {
+            if (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.deleteWebKnowledge === 'function') {
+              window.NeuralKnowledgeStore.deleteWebKnowledge(id);
+              showToast('Web Ingested knowledge deleted.');
               renderKnowledgeGrid();
             }
           } else {
