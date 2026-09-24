@@ -2531,7 +2531,8 @@ function initVoiceAndChatEngine() {
       let rawContent = '';
       let pageTitle = manualTitle ? manualTitle.trim() : '';
 
-      // Try Jina AI Reader API (Fast, clean markdown extraction of public web page)
+      // Multi-Tier Reader Proxy Pipeline
+      // Tier 1: Jina AI Markdown Reader (Fast & Clean Markdown)
       try {
         const jinaUrl = `https://r.jina.ai/${targetUrl}`;
         const response = await fetch(jinaUrl, {
@@ -2540,14 +2541,17 @@ function initVoiceAndChatEngine() {
           }
         });
         if (response.ok) {
-          rawContent = await response.text();
+          const txt = await response.text();
+          if (txt && txt.length > 80 && !txt.includes('429: Too Many Requests')) {
+            rawContent = txt;
+          }
         }
       } catch (err) {
-        console.warn('Jina reader attempt failed, trying fallback proxy:', err);
+        console.warn('[WebIngest] Jina reader attempt failed, trying Tier 2 proxy:', err);
       }
 
-      // Fallback proxy (allorigins) if Jina was empty
-      if (!rawContent || rawContent.length < 50) {
+      // Tier 2: AllOrigins JSON proxy
+      if (!rawContent || rawContent.length < 80) {
         try {
           const fallbackRes = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`);
           if (fallbackRes.ok) {
@@ -2557,69 +2561,155 @@ function initVoiceAndChatEngine() {
               if (!pageTitle) {
                 pageTitle = doc.title || '';
               }
-              const paragraphs = Array.from(doc.querySelectorAll('p, h1, h2, h3, article, main')).map(el => el.textContent.trim()).filter(t => t.length > 20);
-              rawContent = paragraphs.slice(0, 15).join('\n\n');
+              const elements = Array.from(doc.querySelectorAll('h1, h2, h3, h4, p, li, article, section'));
+              const pieces = [];
+              elements.forEach(el => {
+                const tag = el.tagName.toLowerCase();
+                const text = el.textContent.trim();
+                if (text.length > 15) {
+                  if (tag.startsWith('h')) pieces.push(`\n### ${text}`);
+                  else if (tag === 'li') pieces.push(`• ${text}`);
+                  else pieces.push(text);
+                }
+              });
+              rawContent = pieces.slice(0, 35).join('\n\n');
             }
           }
         } catch (fbErr) {
-          console.warn('Fallback proxy failed:', fbErr);
+          console.warn('[WebIngest] AllOrigins proxy failed, trying Tier 3 proxy:', fbErr);
         }
       }
 
-      if (!rawContent || rawContent.trim().length < 30) {
-        throw new Error('ওয়েবসাইট থেকে তথ্য লোড করা সম্ভব হয়নি। লিংকটি পাবলিক ও অ্যাক্সেসিবল কিনা যাচাই করুন।');
+      // Tier 3: CORSProxy.io fallback
+      if (!rawContent || rawContent.length < 80) {
+        try {
+          const corsRes = await fetch(`https://corsproxy.io/?url=${encodeURIComponent(targetUrl)}`);
+          if (corsRes.ok) {
+            const html = await corsRes.text();
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+            if (!pageTitle) {
+              pageTitle = doc.title || '';
+            }
+            const elements = Array.from(doc.querySelectorAll('h1, h2, h3, h4, p, li'));
+            const pieces = [];
+            elements.forEach(el => {
+              const tag = el.tagName.toLowerCase();
+              const text = el.textContent.trim();
+              if (text.length > 15) {
+                if (tag.startsWith('h')) pieces.push(`\n### ${text}`);
+                else if (tag === 'li') pieces.push(`• ${text}`);
+                else pieces.push(text);
+              }
+            });
+            rawContent = pieces.slice(0, 35).join('\n\n');
+          }
+        } catch (corsErr) {
+          console.warn('[WebIngest] Corsproxy fallback failed:', corsErr);
+        }
       }
 
-      // Check if the response was a rate-limit/login/checkpoint error
+      if (!rawContent || rawContent.trim().length < 40) {
+        throw new Error('ওয়েবসাইট থেকে তথ্য লোড করা সম্ভব হয়নি। লিংকটি পাবলিক ও লাইভ কিনা যাচাই করুন।');
+      }
+
+      // Check if response was blocked or checkpointed
       if (rawContent.includes('429: Too Many Requests') ||
           rawContent.includes('Vercel Security Checkpoint') ||
           rawContent.includes('Security Checkpoint Warning') ||
           (rawContent.includes('Cloudflare') && rawContent.includes('Just a moment'))) {
-        throw new Error('এই ওয়েবসাইটটিতে লগইন প্রয়োজন অথবা অ্যাক্সেস রেট-লিমিট রয়েছে। দয়া করে কোনো পাবলিক পেজ বা ডকুমেন্টেশন লিংক দিন।');
+        throw new Error('এই ওয়েবসাইটটিতে অ্যাক্সেস সিকিউরিটি/রেট-লিমিট রয়েছে। দয়া করে কোনো পাবলিক পেজ বা ডকুমেন্টেশন লিংক দিন।');
       }
 
-      // Extract title from markdown if not found
+      // Extract title from markdown headers if not already detected
       if (!pageTitle) {
-        const titleMatch = rawContent.match(/^Title:\s*(.+)$/m) || rawContent.match(/^#\s+(.+)$/m);
+        const titleMatch = rawContent.match(/^Title:\s*(.+)$/im) || rawContent.match(/^#\s+(.+)$/m) || rawContent.match(/###\s+(.+)$/m);
         if (titleMatch) {
           pageTitle = titleMatch[1].trim();
         } else {
-          pageTitle = parsedUrl.hostname + (parsedUrl.pathname.length > 1 ? parsedUrl.pathname : '');
+          pageTitle = parsedUrl.hostname.replace(/^www\./i, '') + (parsedUrl.pathname.length > 1 ? parsedUrl.pathname : '');
         }
       }
 
-      // Clean up markdown noise
-      let cleanText = rawContent
-        .replace(/\[Image:[^\]]*\]/g, '')
-        .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')
-        .replace(/^URL Source:.*$/gm, '')
-        .replace(/^Markdown Content:.*$/gm, '')
-        .replace(/[\*\#\_\`\~]/g, '')
-        .replace(/\n{3,}/g, '\n\n')
-        .trim();
+      // Deep parsing: Extract clean paragraphs, headings, and bullet points
+      const lines = rawContent.split('\n').map(l => l.trim()).filter(Boolean);
+      let overviewParagraphs = [];
+      let keyPoints = [];
+      let subtopicHeaders = [];
 
-      const summarySnippets = cleanText.split('\n').filter(s => s.trim().length > 30).slice(0, 4);
-      const summaryText = summarySnippets.join(' ').substring(0, 500);
+      for (const line of lines) {
+        // Skip metadata noise
+        if (/^URL Source:|^Markdown Content:|^Published:|^Author:|^Images:|^\[Image/i.test(line)) continue;
+        if (line.startsWith('###') || line.startsWith('##') || line.startsWith('#')) {
+          const hText = line.replace(/^[#\s]+/, '').replace(/[\*\_\`]/g, '').trim();
+          if (hText.length > 3 && hText.length < 90 && !subtopicHeaders.includes(hText)) {
+            subtopicHeaders.push(hText);
+          }
+          continue;
+        }
 
-      const titleTokens = pageTitle.toLowerCase().replace(/[^a-zA-Z0-9\u0980-\u09FF\s]/g, ' ').split(/\s+/).filter(t => t.length > 2);
+        const cleanLine = line.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1').replace(/[\*\_\`\~]/g, '').trim();
+        if (cleanLine.length < 25) continue;
+
+        if (line.startsWith('•') || line.startsWith('-') || line.startsWith('*') || /^\d+\./.test(line)) {
+          if (keyPoints.length < 10) {
+            keyPoints.push(cleanLine.replace(/^[•\-\*\d\.\s]+/, '').trim());
+          }
+        } else if (overviewParagraphs.length < 3) {
+          overviewParagraphs.push(cleanLine);
+        } else if (keyPoints.length < 10) {
+          keyPoints.push(cleanLine);
+        }
+      }
+
+      const overviewText = overviewParagraphs.slice(0, 2).join(' ').substring(0, 450) || 'Official web information extracted directly from the live page.';
       
+      let formattedKeyPointsHtml = '';
+      if (keyPoints.length > 0) {
+        formattedKeyPointsHtml = keyPoints.slice(0, 6).map(pt => `• <strong>${escapeHtml(pt.slice(0, 50))}${pt.length > 50 ? '...' : ''}</strong> ${escapeHtml(pt.slice(50, 250))}`).join('<br>');
+      } else {
+        formattedKeyPointsHtml = `• ${overviewText}`;
+      }
+
+      let subtopicsHtml = '';
+      if (subtopicHeaders.length > 0) {
+        subtopicsHtml = `<br><br><strong>🏷️ প্রধান টপিক ও সেকশনসমূহ:</strong><br>` + subtopicHeaders.slice(0, 6).map(h => `<span style="display:inline-block; margin:3px 4px; padding:3px 10px; background:rgba(0,242,254,0.1); border:1px solid rgba(0,242,254,0.3); border-radius:15px; font-size:0.8rem; color:#00f2fe;">${escapeHtml(h)}</span>`).join('');
+      }
+
+      let subtopicsHtmlEn = '';
+      if (subtopicHeaders.length > 0) {
+        subtopicsHtmlEn = `<br><br><strong>🏷️ Key Topics & Sections:</strong><br>` + subtopicHeaders.slice(0, 6).map(h => `<span style="display:inline-block; margin:3px 4px; padding:3px 10px; background:rgba(0,242,254,0.1); border:1px solid rgba(0,242,254,0.3); border-radius:15px; font-size:0.8rem; color:#00f2fe;">${escapeHtml(h)}</span>`).join('');
+      }
+
+      // Keyword generation for high-accuracy scoring
+      const titleTokens = pageTitle.toLowerCase().replace(/[^a-zA-Z0-9\u0980-\u09FF\s]/g, ' ').split(/\s+/).filter(t => t.length > 2);
+      const subtopicTokens = subtopicHeaders.join(' ').toLowerCase().replace(/[^a-zA-Z0-9\u0980-\u09FF\s]/g, ' ').split(/\s+/).filter(t => t.length > 3);
+      const hostClean = parsedUrl.hostname.replace(/^www\./i, '').toLowerCase();
+
       const keywords_en = Array.from(new Set([
         pageTitle.toLowerCase(),
+        hostClean,
         parsedUrl.hostname.toLowerCase(),
         targetUrl.toLowerCase(),
         ...titleTokens,
-        `${pageTitle.toLowerCase()} summary`,
+        ...subtopicTokens.slice(0, 15),
+        ...subtopicHeaders.map(h => h.toLowerCase()).slice(0, 8),
+        `${pageTitle.toLowerCase()} overview`,
+        `${pageTitle.toLowerCase()} details`,
+        `what is ${pageTitle.toLowerCase()}`,
         `about ${pageTitle.toLowerCase()}`,
-        `what is ${pageTitle.toLowerCase()}`
+        `${hostClean} information`
       ]));
 
       const keywords_bn = Array.from(new Set([
         pageTitle.toLowerCase(),
         `${pageTitle} কি`,
         `${pageTitle} সম্পর্কে বলো`,
-        `${pageTitle} ওয়েবসাইটের তথ্য`,
-        `${pageTitle} এর সারসংক্ষেপ`,
-        ...titleTokens
+        `${pageTitle} এর বিস্তারিত তথ্য`,
+        `${pageTitle} এর সুবিধাসমূহ`,
+        `${pageTitle} ওয়েবসাইট কি`,
+        `${hostClean} কি`,
+        ...titleTokens,
+        ...subtopicTokens.slice(0, 15)
       ]));
 
       const itemId = 'web_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
@@ -2634,10 +2724,10 @@ function initVoiceAndChatEngine() {
         keywords_en: keywords_en,
         keywords_bn: keywords_bn,
         responses_en: [
-          `🌐 <strong>Web Knowledge: ${pageTitle}</strong><br>• <strong>Source:</strong> <a href="${targetUrl}" target="_blank" style="color:#00f2fe;">${targetUrl}</a><br>• <strong>Summary:</strong> ${summaryText}...<br><br><span style="font-size:0.85rem;color:rgba(255,255,255,0.7);">💡 Stored in Neural Memory from live web ingestion.</span>`
+          `🌐 <strong>Web Knowledge: ${escapeHtml(pageTitle)}</strong><br>• <strong>Source Link:</strong> <a href="${targetUrl}" target="_blank" rel="noopener noreferrer" style="color:#00f2fe;font-weight:600;">${parsedUrl.hostname} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a><br><br><strong>📌 Overview & Details:</strong><br>${escapeHtml(overviewText)}<br><br><strong>✨ Key Points & Insights:</strong><br>${formattedKeyPointsHtml}${subtopicsHtmlEn}<br><br><span style="font-size:0.8rem;color:rgba(255,255,255,0.65);">💡 Ingested with deep-structured extraction into Neural Memory.</span>`
         ],
         responses_bn: [
-          `🌐 <strong>ওয়েব মেমোরি: ${pageTitle}</strong><br>• <strong>মূল লিংক:</strong> <a href="${targetUrl}" target="_blank" style="color:#00f2fe;">${targetUrl}</a><br>• <strong>সারসংক্ষেপ:</strong> ${summaryText}...<br><br><span style="font-size:0.85rem;color:rgba(255,255,255,0.7);">💡 এই তথ্যটি ওয়েবসাইট থেকে সরাসরি নিউরাল মেমোরিতে সংরক্ষণ করা হয়েছে।</span>`
+          `🌐 <strong>ওয়েব জ্ঞানভাণ্ডার: ${escapeHtml(pageTitle)}</strong><br>• <strong>মূল লিংক:</strong> <a href="${targetUrl}" target="_blank" rel="noopener noreferrer" style="color:#00f2fe;font-weight:600;">${parsedUrl.hostname} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a><br><br><strong>📌 মূল বিবরণ:</strong><br>${escapeHtml(overviewText)}<br><br><strong>✨ গুরুত্বপূর্ণ পয়েন্ট ও বিস্তারিত তথ্য:</strong><br>${formattedKeyPointsHtml}${subtopicsHtml}<br><br><span style="font-size:0.8rem;color:rgba(255,255,255,0.65);">💡 এই বিস্তারিত তথ্যটি ওয়েবসাইট থেকে সরাসরি নিউরাল মেমোরিতে সংরক্ষণ করা হয়েছে।</span>`
         ],
         isWebIngested: true
       };
