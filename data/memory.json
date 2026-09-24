@@ -368,5 +368,68 @@
     "responses_bn": [
       "🏆 <strong>Ostad-এর জব প্লেসমেন্ট সাপোর্ট ও সার্টিফিকেশন সুবিধা:</strong><br><br>• <strong>ভেরিফায়েড সার্টিফিকেট:</strong> সফলভাবে বুটক্যাম্প সম্পন্ন করলে আন্তর্জাতিকভাবে লিঙ্কডইন ও সিভিতে প্রদর্শনযোগ্য ডিজিটাল সার্টিফিকেট প্রদান করা হয়।<br>• <strong>ট্যালেন্ট নেটওয়ার্ক ও রিকমেন্ডেশন:</strong> শীর্ষ পারফর্মারদের Ostad Talent Pool-এর মাধ্যমে সরাসরি বিভিন্ন দেশি-বিদেশি পার্টনার প্রতিষ্ঠানে ইন্টারভিউ ও চাকরির সুযোগ দেওয়া হয়।<br>• <strong>ক্যারিয়ার গ্রুমিং:</strong> সিভি মেকিং, গিটহাব/পোর্টফোলিও রিভিউ এবং টেকনিক্যাল মক ইন্টারভিউ প্রস্তুতি।"
     ]
+  },
+  {
+    "id": "mem_learn_python_guidance",
+    "category": "tech",
+    "title": "পাইথন ও প্রোগ্রামিং শেখা (Python Programming Learning & Guidance)",
+    "keywords_en": [
+      "can you teach me python",
+      "teach me python",
+      "learn python",
+      "how to learn python",
+      "python programming tutorial",
+      "python guide",
+      "teach python"
+    ],
+    "keywords_bn": [
+      "তুমি কি আমাকে পাইথন শেখাতে পারবে",
+      "পাইথন শিখতে চাই",
+      "পাইথন শেখাও",
+      "পাইথন কিভাবে শিখব",
+      "পাইথন প্রোগ্রামিং",
+      "tomi ki amake python shekhate parbe",
+      "tumi ki amake python shekhate parbe",
+      "python shekhate parba",
+      "python shekhao",
+      "python kivabe shikhte pari",
+      "python shikhte chai"
+    ],
+    "responses_en": [
+      "🐍 <strong>Yes, absolutely! I can teach and guide you in Python programming from scratch to advanced!</strong><br><br>💡 <strong>Key Topics We Can Explore:</strong><br>1. <strong>Fundamentals:</strong> Variables, Data Types (Lists, Tuples, Dictionaries), Loops, and Functions.<br>2. <strong>Object-Oriented Programming (OOP):</strong> Classes, Inheritance, Encapsulation, and Polymorphism.<br>3. <strong>Data Science & AI:</strong> NumPy, Pandas, Matplotlib, and PyTorch Deep Learning.<br>4. <strong>Web & Automation:</strong> Django, Flask, FastAPI, and Script Automation.<br><br>👉 Let me know where you'd like to start: <em>'Basic Python'</em> or <em>'AI & Machine Learning'</em>?"
+    ],
+    "responses_bn": [
+      "🐍 <strong>হ্যাঁ, অবশ্যই! আমি আপনাকে পাইথন (Python) একদম শুরু থেকে অ্যাডভান্সড লেভেল পর্যন্ত শেখাতে পারব!</strong><br><br>💡 <strong>পাইথনে আমরা যেসব বিষয় ধাপে ধাপে শিখতে পারি:</strong><br>১. <strong>মৌলিক ভিত্তি (Basics):</strong> ভ্যারিয়েবল, ডেটা স্ট্রাকচার (List, Dict, Set, Tuple), লুপ এবং ফাংশন।<br>২. <strong>অবজেক্ট ওরিয়েন্টেড প্রোগ্রামিং (OOP):</strong> Class, Inheritance, Encapsulation ও Methods।<br>৩. <strong>ডাটা সায়েন্স ও এআই:</strong> NumPy, Pandas, Matplotlib, Scikit-Learn ও PyTorch ডিপ লার্নিং।<br>৪. <strong>ওয়েব ও অটোমেশন:</strong> Django, Flask, FastAPI এবং ফাইল অটোমেশন স্ক্রিপ্ট।<br><br>👉 আপনি কোন লেভেল থেকে শুরু করতে চান বলুন — <em>'বেসিক পাইথন'</em>, নাকি <em>'এআই/মেশিন লার্নিং'</em>?"
+    ]
+  },
+  {
+    "id": "mem_multilingual_chat_support",
+    "category": "ai",
+    "title": "বহুভাষিক চ্যাট সুবিধা — বাংলা, বাংলিশ ও ইংরেজি (Multilingual Chat: Bangla, Banglish & English)",
+    "keywords_en": [
+      "can you speak banglish",
+      "multilingual chat",
+      "chat in banglish",
+      "all language chat",
+      "can you understand bangla and english"
+    ],
+    "keywords_bn": [
+      "সব ভাষায় চ্যাট",
+      "বাংলিশ চ্যাট",
+      "সব ভাষায় কথা বলো",
+      "বাংলা এবং ইংরেজি চ্যাট",
+      "chat box e sob koya vashay jeno chat korte pari",
+      "sob vashay chat",
+      "banglish kotha bolo",
+      "tomi ki banglish jano",
+      "banglish ki tomi jano",
+      "banglish jano"
+    ],
+    "responses_en": [
+      "✨ <strong>Yes! You can chat freely in Pure Bengali, Banglish, or English!</strong><br><br>• <strong>Banglish:</strong> e.g., <em>\"tomi ki amake help korte parbe?\"</em><br>• <strong>Bangla (বাংলা):</strong> e.g., <em>\"তুমি কি আমাকে সাহায্য করতে পারবে?\"</em><br>• <strong>English:</strong> e.g., <em>\"Can you assist me with Python?\"</em><br><br>Our neural natural language engine automatically detects your input dialect and answers in the exact matching language! 🧠💬"
+    ],
+    "responses_bn": [
+      "✨ <strong>হ্যাঁ! আপনি এই চ্যাটবক্সে বাংলা, বাংলিশ এবং ইংরেজি — যেকোনো ভাষায় স্বাচ্ছন্দ্যে চ্যাট করতে পারবেন!</strong><br><br>• <strong>বাংলিশ (Banglish):</strong> যেমন — <em>\"tomi ki amake python shekhate parbe?\"</em><br>• <strong>শুদ্ধ বাংলা (Bangla):</strong> যেমন — <em>\"তুমি কি আমাকে পাইথন শেখাতে পারবে?\"</em><br>• <strong>ইংরেজি (English):</strong> যেমন — <em>\"Can you teach me Python?\"</em><br><br>আমাদের নিউরাল ইঞ্জিন স্বয়ংক্রিয়ভাবে আপনার লেখার ভাষা ও ভঙ্গি বুঝে তাৎক্ষণিক যথাযথ উত্তর দেয়! 🧠💬"
+    ]
   }
 ]
