@@ -89,5 +89,57 @@
     "responses_bn": [
       "💻 <strong>আইসিটি ও এআই সমাধান:</strong> আমরা আধুনিক ফুল-স্ট্যাক ওয়েব অ্যাপ্লিকেশন, ডিপ লার্নিং মডেল, রিয়েল-টাইম ভয়েস চ্যাটবট এবং ক্লাউড এপিআই তৈরি করি। যেকোনো প্রজেক্ট নিয়ে সরাসরি আমাদের সাথে যোগাযোগ করতে পারেন!"
     ]
+  },
+  {
+    "id": "mem_mitre_attack_overview",
+    "category": "tech",
+    "title": "MITRE ATT&CK পরিচিতি ও ফ্রেমওয়ার্ক ওভারভিউ (Overview)",
+    "keywords_en": ["mitre attack", "what is mitre attack", "mitre", "attack.mitre.org", "adversarial tactics", "cyber security framework", "threat intelligence"],
+    "keywords_bn": ["mitre attack কি", "মাইট্রে অ্যাটাক কি", "mitre attack সম্পর্কে বলো", "attack.mitre.org", "সাইবার সিকিউরিটি ফ্রেমওয়ার্ক", "থ্রেট ইন্টেলিজেন্স"],
+    "responses_en": [
+      "🛡️ <strong>MITRE ATT&CK®</strong> (Adversarial Tactics, Techniques, and Common Knowledge) is a globally accessible, curated knowledge base of cyber adversary behaviors based on real-world observations.<br><br>• <strong>Core Purpose:</strong> Used as a standard foundation for threat modeling, security architecture, SOC threat hunting, and defense testing.<br>• <strong>Matrices:</strong> Enterprise (Windows, Linux, macOS, Cloud, Identity), Mobile (Android, iOS), and ICS (Industrial Control Systems).<br>• <strong>Official Portal:</strong> <a href='https://attack.mitre.org/' target='_blank' style='color:#00f2fe;'>attack.mitre.org</a>"
+    ],
+    "responses_bn": [
+      "🛡️ <strong>MITRE ATT&CK®</strong> (Adversarial Tactics, Techniques, and Common Knowledge) হলো বিশ্বব্যাপী ব্যবহৃত একটি উন্মুক্ত সাইবার সিকিউরিটি জ্ঞানভাণ্ডার ও ফ্রেমওয়ার্ক।<br><br>• <strong>মূল উদ্দেশ্য:</strong> হ্যাকাররা বাস্তব জগতে কীভাবে সিস্টেমে আক্রমণ করে তা ধাপে ধাপে পর্যবেক্ষণ ও শ্রেণীবদ্ধ করে প্রতিরক্ষামূলক ব্যবস্থা তৈরি করা।<br>• <strong>প্রধান ম্যাট্রিক্স:</strong> Enterprise (Windows, Linux, macOS, Cloud), Mobile (Android, iOS) এবং ICS (শিল্প নিয়ন্ত্রণ ব্যবস্থা)।<br>• <strong>ওয়েবসাইট:</strong> <a href='https://attack.mitre.org/' target='_blank' style='color:#00f2fe;'>attack.mitre.org</a>"
+    ]
+  },
+  {
+    "id": "mem_mitre_tactics_list",
+    "category": "tech",
+    "title": "MITRE ATT&CK এর ১৪টি ট্যাকটিক্স (14 Enterprise Tactics)",
+    "keywords_en": ["mitre tactics", "14 tactics", "what are the tactics", "attack tactics", "tactics list", "enterprise tactics"],
+    "keywords_bn": ["mitre tactics কি কি", "১৪টি ট্যাকটিক্স", "ট্যাকটিক্সগুলো কি কি", "অ্যাটাকের ধাপ", "ট্যাকটিক্স লিস্ট"],
+    "responses_en": [
+      "⚔️ <strong>The 14 Enterprise MITRE ATT&CK Tactics (Attack Lifecycle):</strong><br><br>1. <strong>Reconnaissance:</strong> Gathering target information<br>2. <strong>Resource Development:</strong> Building attack infrastructure & tools<br>3. <strong>Initial Access:</strong> Getting into your network (e.g. Phishing)<br>4. <strong>Execution:</strong> Running malicious code (PowerShell, Scripts)<br>5. <strong>Persistence:</strong> Maintaining access across reboots<br>6. <strong>Privilege Escalation:</strong> Gaining higher access (Admin/Root)<br>7. <strong>Defense Evasion:</strong> Avoiding detection & disabling Antivirus<br>8. <strong>Credential Access:</strong> Stealing passwords, hashes, tokens<br>9. <strong>Discovery:</strong> Exploring victim system & environment<br>10. <strong>Lateral Movement:</strong> Moving across connected network machines<br>11. <strong>Collection:</strong> Gathering sensitive files & data<br>12. <strong>Command & Control (C2):</strong> Remote communication with attacker server<br>13. <strong>Exfiltration:</strong> Stealing data out of the network<br>14. <strong>Impact:</strong> Disrupting, encrypting (Ransomware), or destroying systems."
+    ],
+    "responses_bn": [
+      "⚔️ <strong>MITRE ATT&CK-এর প্রধান ১৪টি ট্যাকটিক্স (আক্রমণের ধারাবাহিক ধাপ):</strong><br><br>১. <strong>Reconnaissance:</strong> টার্গেট সম্পর্কে তথ্য সংগ্রহ করা<br>২. <strong>Resource Development:</strong> আক্রমণ চালানোর অবকাঠামো প্রস্তুত করা<br>৩. <strong>Initial Access:</strong> ভিকটিমের নেটওয়ার্কে প্রথম প্রবেশ (যেমন ফিশিং)<br>৪. <strong>Execution:</strong> সিস্টেমে ক্ষতিকর কোড বা স্ক্রিপ্ট চালানো<br>৫. <strong>Persistence:</strong> সিস্টেমে স্থায়ীভাবে জায়গা দখল করে থাকা<br>৬. <strong>Privilege Escalation:</strong> অ্যাডমিন বা রুট পারমিশন নেওয়া<br>৭. <strong>Defense Evasion:</strong> অ্যান্টিভাইরাস ফাঁকি দেওয়া<br>৮. <strong>Credential Access:</strong> পাসওয়ার্ড ও সিক্রেট কি চুরি করা<br>৯. <strong>Discovery:</strong> সিস্টেমের ভেতরের তথ্য পরীক্ষা করা<br>১০. <strong>Lateral Movement:</strong> নেটওয়ার্কের এক কম্পিউটার থেকে অন্য কম্পিউটারে ছড়ানো<br>১১. <strong>Collection:</strong> প্রয়োজনীয় ফাইল ও ডাটা একত্র করা<br>১২. <strong>Command & Control (C2):</strong> অ্যাটাকারের নিজস্ব সার্ভারের সাথে সংযোগ তৈরি করা<br>১৩. <strong>Exfiltration:</strong> টার্গেট ডেটা বাইরে পাচার করা<br>১৪. <strong>Impact:</strong> সিস্টেম ধ্বংস বা র‍্যানসমওয়্যার দিয়ে ডাটা এনক্রিপ্ট করা।"
+    ]
+  },
+  {
+    "id": "mem_mitre_techniques_top",
+    "category": "tech",
+    "title": "জনপ্রিয় টেকনিক ও থ্রেটস (Techniques: Phishing, Scripting, Ransomware)",
+    "keywords_en": ["mitre techniques", "phishing technique", "credential dumping", "privilege escalation", "command and scripting", "ransomware technique", "initial access technique"],
+    "keywords_bn": ["mitre techniques কি", "ফিশিং টেকনিক", "পাসওয়ার্ড চুরি টেকনিক", "র‍্যানসমওয়্যার টেকনিক", "হ্যাকিং টেকনিক", "টেকনিক উদাহরণ"],
+    "responses_en": [
+      "🔍 <strong>Key MITRE ATT&CK Techniques & Sub-Techniques:</strong><br><br>• <strong>T1566 (Phishing):</strong> Sending malicious email attachments or links to gain Initial Access.<br>• <strong>T1059 (Command & Scripting):</strong> Using PowerShell, Bash, Python, or VBScript to execute exploits.<br>• <strong>T1003 (OS Credential Dumping):</strong> Extracting plaintext passwords or NTLM hashes using tools like Mimikatz.<br>• <strong>T1078 (Valid Accounts):</strong> Using compromised employee credentials to blend in with legitimate users.<br>• <strong>T1486 (Data Encrypted for Impact):</strong> Ransomware encrypting company data to demand extortion payments."
+    ],
+    "responses_bn": [
+      "🔍 <strong>MITRE ATT&CK-এর বহুল প্রচলিত কিছু গুরুত্বপূর্ণ টেকনিক:</strong><br><br>• <strong>T1566 (Phishing):</strong> ক্ষতিকর ইমেইল ও লিংকের মাধ্যমে Initial Access পাওয়া।<br>• <strong>T1059 (Command & Scripting Interpreter):</strong> পাওয়ারশেল, ব্যাশ বা পাইথন স্ক্রিপ্ট ব্যবহার করে ম্যালিশিয়াস কোড চালানো।<br>• <strong>T1003 (Credential Dumping):</strong> মেমোরি থেকে পাসওয়ার্ড ও হ্যাশ চুরি করা (যেমন Mimikatz দিয়ে)।<br>• <strong>T1078 (Valid Accounts):</strong> চুরি করা বৈধ ইউজার একাউন্ট দিয়ে নেটওয়ার্কে ঘোরাঘুরি করা।<br>• <strong>T1486 (Data Encrypted for Impact):</strong> র‍্যানসমওয়্যার দিয়ে ফাইল লক করে মুক্তিপণ দাবি করা।"
+    ]
+  },
+  {
+    "id": "mem_mitre_defense_mitigation",
+    "category": "tech",
+    "title": "ডিফেন্স, মিটিগেশন ও থ্রেট হান্টিং (Cyber Defense & Mitigations)",
+    "keywords_en": ["mitre defense", "mitigations", "threat hunting", "soc detection", "how to prevent attacks with mitre", "cyber defense"],
+    "keywords_bn": ["mitre defense কি", "মিটিগেশন কিভাবে করে", "থ্রেট হান্টিং", "সাইবার প্রতিরোধ", "অ্যাটাক প্রতিরোধ"],
+    "responses_en": [
+      "🛡️ <strong>Using MITRE ATT&CK for Cyber Defense & Threat Hunting:</strong><br><br>1. <strong>M1032 (Multi-Factor Authentication - MFA):</strong> Prevents Valid Accounts (T1078) and Credential Access.<br>2. <strong>M1026 (Privileged Account Management):</strong> Restricts admin rights to stop Privilege Escalation.<br>3. <strong>Detection Rules (SIGMA & SIEM):</strong> Writing detection rules based on technique IDs to catch adversaries early in the SOC lifecycle.<br>4. <strong>Purple Teaming & Red Teaming:</strong> Simulating real ATT&CK procedures to test defenses and train analysts."
+    ],
+    "responses_bn": [
+      "🛡️ <strong>MITRE ATT&CK ব্যবহার করে সাইবার ডিফেন্স ও থ্রেট হান্টিং:</strong><br><br>১. <strong>মাল্টি-ফ্যাক্টর অথেনটিকেশন (MFA):</strong> পাসওয়ার্ড চুরি হলেও অ্যাকাউন্টে হ্যাকার প্রবেশ রোধ করে।<br>২. <strong>লিস্ট প্রিভিলেজ (Privilege Management):</strong> ইউজারদের অপ্রয়োজনীয় অ্যাডমিন পাওয়ার না দিয়ে অ্যাক্সেস নিয়ন্ত্রণ।<br>৩. <strong>SOC ও SIEM ডিটেকশন রুল:</strong> টেকনিক আইডির উপর ভিত্তি করে স্বয়ংক্রিয় এলার্ট ও লগ অ্যানালাইসিস করা।<br>৪. <strong>রেড টিম ও পার্পল টিম টেস্ট:</strong> নিয়মিত ATT&CK পদ্ধতি দিয়ে নিজস্ব সিস্টেমের নিরাপত্তা দুর্বলতা যাচাই করা।"
+    ]
   }
 ]

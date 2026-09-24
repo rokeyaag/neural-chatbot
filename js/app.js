@@ -3753,6 +3753,18 @@ function initVoiceAndChatEngine() {
         }
       }
 
+      // Content body text keyword matching (ensures specific subtopic questions match accurately)
+      const allResps = [...(item.responses_bn || []), ...(item.responses_en || []), ...(item.responses || [])].join(' ').toLowerCase();
+      let bodyMatchCount = 0;
+      for (const qt of queryTokens) {
+        if (qt.length >= 4 && allResps.includes(qt)) {
+          bodyMatchCount++;
+        }
+      }
+      if (bodyMatchCount > 0) {
+        score += (bodyMatchCount * 14);
+      }
+
       // Boost specific GitHub projects if user asks for projects
       if (isProjectQuery && item.id === 'kb_github_all') {
         score += 30;
