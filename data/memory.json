@@ -63,5 +63,31 @@
     "responses_bn": [
       "এটি <code>data/memory.json</code> ফাইল থেকে লোড হওয়া একটি নমুনা উত্তর। আপনি এই ফাইলে যত খুশি নতুন প্রশ্ন এবং উত্তর লিখে যুক্ত করতে পারেন!"
     ]
+  },
+  {
+    "id": "mem_special_custom_knowledge",
+    "category": "custom",
+    "title": "কাস্টম জ্ঞান ও ইউজার মেমোরি (Custom Knowledge Bank)",
+    "keywords_en": ["custom knowledge", "what do you know", "user memory", "tell me something special", "extra information"],
+    "keywords_bn": ["কাস্টম জ্ঞান", "বিশেষ তথ্য", "তোমার মেমোরি কি", "নতুন কি জানো", "অতিরিক্ত তথ্য বলো"],
+    "responses_en": [
+      "🧠 <strong>Neural Knowledge Active:</strong> I have access to a dynamic memory database where Lutfor Rahman can store custom knowledge, tutorials, project details, and personalized neural responses in real time!"
+    ],
+    "responses_bn": [
+      "🧠 <strong>নিউরাল মেমোরি সক্রিয়:</strong> আমার কাছে একটি ডাইনামিক নলেজবেস ডাটাবেস রয়েছে, যেখানে লুৎফর রহমান তাঁর প্রয়োজনীয় সকল তথ্য, প্রজেক্টের বিবরণ ও কাস্টম প্রশ্ন-উত্তর সংরক্ষণ ও আপডেট করতে পারেন!"
+    ]
+  },
+  {
+    "id": "mem_ict_software_solutions",
+    "category": "services",
+    "title": "সফটওয়্যার ও এআই সমাধান (ICT & Software Solutions)",
+    "keywords_en": ["software solutions", "web app development", "ai integration", "python projects"],
+    "keywords_bn": ["সফটওয়্যার সমাধান", "ওয়েবসাইট তৈরি", "এআই ইন্টিগ্রেশন", "পাইথন প্রজেক্ট", "কিভাবে সাহায্য করবে"],
+    "responses_en": [
+      "💻 <strong>ICT & AI Solutions:</strong> We design full-stack web platforms, PyTorch deep learning models, natural voice chatbots, and cloud APIs. Feel free to discuss your tech ideas with us!"
+    ],
+    "responses_bn": [
+      "💻 <strong>আইসিটি ও এআই সমাধান:</strong> আমরা আধুনিক ফুল-স্ট্যাক ওয়েব অ্যাপ্লিকেশন, ডিপ লার্নিং মডেল, রিয়েল-টাইম ভয়েস চ্যাটবট এবং ক্লাউড এপিআই তৈরি করি। যেকোনো প্রজেক্ট নিয়ে সরাসরি আমাদের সাথে যোগাযোগ করতে পারেন!"
+    ]
   }
 ]
