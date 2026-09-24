@@ -146,8 +146,8 @@
     "id": "mem_tryhackme_overview",
     "category": "tech",
     "title": "TryHackMe ও ড্যাশবোর্ড পরিচিতি (TryHackMe Overview)",
-    "keywords_en": ["tryhackme", "what is tryhackme", "tryhackme dashboard", "thm", "tryhackme.com"],
-    "keywords_bn": ["tryhackme কি", "ট্রাইহ্যাকমি কি", "tryhackme dashboard কি", "ট্রাইহ্যাকমি পরিচিতি", "tryhackme সম্পর্কে বলো"],
+    "keywords_en": ["tryhackme", "what is tryhackme", "tryhackme dashboard", "thm", "tryhackme.com", "tryhackme overview"],
+    "keywords_bn": ["tryhackme কি", "ট্রাইহ্যাকমি কি", "tryhackme dashboard কি", "ট্রাইহ্যাকমি পরিচিতি", "tryhackme সম্পর্কে বলো", "tryhackme কি এবং এর ড্যাশবোর্ডে কি কি দেখা যায়", "ড্যাশবোর্ডে কি কি দেখা যায়", "tryhackme", "ট্রাইহ্যাকমি"],
     "responses_en": [
       "🎯 <strong>TryHackMe (THM):</strong> A premier hands-on online platform for learning cybersecurity and ethical hacking through gamified, browser-based virtual labs.<br><br>• <strong>Dashboard Features:</strong> Shows daily learning streaks, active Learning Paths, completed rooms, total points, global rank, and recommended modules.<br>• <strong>Official Website:</strong> <a href='https://tryhackme.com' target='_blank' style='color:#00f2fe;'>tryhackme.com</a>"
     ],
@@ -159,8 +159,8 @@
     "id": "mem_tryhackme_learning_paths",
     "category": "tech",
     "title": "TryHackMe এর প্রধান লার্নিং পাথসমূহ (Learning Paths)",
-    "keywords_en": ["tryhackme learning paths", "thm learning path", "pre security", "jr penetration tester", "soc level 1", "cyber defense path"],
-    "keywords_bn": ["tryhackme এর লার্নিং পাথ কি কি", "ট্রাইহ্যাকমির কোর্স কি কি", "লার্নিং পাথসমূহ", "tryhackme কোর্স"],
+    "keywords_en": ["tryhackme learning paths", "thm learning path", "pre security", "jr penetration tester", "soc level 1", "cyber defense path", "what are tryhackme paths"],
+    "keywords_bn": ["tryhackme এর লার্নিং পাথ কি কি", "tryhackme এর প্রধান লার্নিং পাথগুলো কি কি", "ট্রাইহ্যাকমির কোর্স কি কি", "লার্নিং পাথসমূহ", "tryhackme কোর্স", "লার্নিং পাথ"],
     "responses_en": [
       "🚀 <strong>Key TryHackMe Learning Paths:</strong><br><br>1. <strong>Pre-Security:</strong> Basics of Networking, Linux, Windows & Web Fundamentals.<br>2. <strong>Complete Beginner:</strong> Foundational offensive and defensive security concepts.<br>3. <strong>Jr Penetration Tester:</strong> Vulnerability scanning, Burp Suite, Metasploit, Privilege Escalation.<br>4. <strong>SOC Level 1:</strong> Incident response, Wireshark, Splunk, Snort, and SIEM monitoring.<br>5. <strong>Web Fundamentals:</strong> OWASP Top 10, SQL Injection, XSS, and Web Hacking.<br>6. <strong>Red Teaming:</strong> Advanced adversary emulation and enterprise defense bypassing."
     ],
@@ -172,8 +172,8 @@
     "id": "mem_tryhackme_attackbox_rooms",
     "category": "tech",
     "title": "TryHackMe রুম ও AttackBox এর কাজ (Rooms & AttackBox)",
-    "keywords_en": ["tryhackme attackbox", "thm rooms", "how does tryhackme work", "virtual machines", "openvpn thm"],
-    "keywords_bn": ["tryhackme attackbox কি", "ট্রাইহ্যাকমি রুম কি", "attackbox কিভাবে কাজ করে", "tryhackme কিভাবে কাজ করে"],
+    "keywords_en": ["tryhackme attackbox", "thm rooms", "how does tryhackme work", "virtual machines", "openvpn thm", "how does attackbox work"],
+    "keywords_bn": ["tryhackme attackbox কি", "ট্রাইহ্যাকমি রুম কি", "tryhackme রুম এবং attackbox কিভাবে কাজ করে", "attackbox কিভাবে কাজ করে", "tryhackme কিভাবে কাজ করে", "attackbox"],
     "responses_en": [
       "💻 <strong>TryHackMe Rooms & In-Browser AttackBox:</strong><br><br>• <strong>Walkthrough Rooms:</strong> Step-by-step interactive lessons explaining specific tools and vulnerabilities.<br>• <strong>Challenge Rooms (CTF):</strong> Real vulnerable machines where you must find hidden flags to submit.<br>• <strong>AttackBox:</strong> A cloud-based Kali Linux instance running right inside your browser without installing anything locally, or accessible via OpenVPN configuration."
     ],
@@ -185,8 +185,8 @@
     "id": "mem_tryhackme_streaks_badges",
     "category": "tech",
     "title": "TryHackMe স্ট্রিক, ব্যাজ ও র‍্যাঙ্কিং (Streaks & Badges)",
-    "keywords_en": ["tryhackme streaks", "thm badges", "tryhackme ranking", "how to level up on tryhackme"],
-    "keywords_bn": ["tryhackme streak কি", "ট্রাইহ্যাকমি ব্যাজ কি", "tryhackme ranking কিভাবে বাড়ে", "স্ট্রিক এবং ব্যাজ"],
+    "keywords_en": ["tryhackme streaks", "thm badges", "tryhackme ranking", "how to level up on tryhackme", "tryhackme streak"],
+    "keywords_bn": ["tryhackme streak কি", "ট্রাইহ্যাকমি ব্যাজ কি", "tryhackme তে streak এবং ব্যাজ কি কাজে লাগে", "tryhackme ranking কিভাবে বাড়ে", "স্ট্রিক এবং ব্যাজ", "streak", "ব্যাজ"],
     "responses_en": [
       "🔥 <strong>TryHackMe Gamification: Streaks, Badges & Points:</strong><br><br>• <strong>Daily Streak:</strong> Answering at least one question every 24 hours maintains your streak score.<br>• <strong>Badges & Certificates:</strong> Awarded upon finishing Learning Paths or solving milestones (e.g., Cat Linux, Burp Specialist).<br>• <strong>Leaderboards:</strong> Earn points with each solved room to climb monthly and global leaderboards!"
     ],
@@ -198,8 +198,8 @@
     "id": "mem_tryhackme_career_benefit",
     "category": "tech",
     "title": "সাইবার সিকিউরিটি ক্যারিয়ারে TryHackMe এর সুবিধা (Career Impact)",
-    "keywords_en": ["tryhackme for career", "why use tryhackme", "job preparation cybersecurity", "tryhackme certifications"],
-    "keywords_bn": ["সাইবার সিকিউরিটি ক্যারিয়ারে tryhackme এর সুবিধা", "tryhackme কেন শিখব", "চাকরি পাওয়ার জন্য tryhackme", "tryhackme এর লাভ কি"],
+    "keywords_en": ["tryhackme for career", "why use tryhackme", "job preparation cybersecurity", "tryhackme certifications", "why learn tryhackme"],
+    "keywords_bn": ["সাইবার সিকিউরিটি ক্যারিয়ারে tryhackme এর সুবিধা", "সাইবার সিকিউরিটি ক্যারিয়ার এবং চাকরির জন্য tryhackme কেন দরকার", "tryhackme কেন শিখব", "চাকরি পাওয়ার জন্য tryhackme", "tryhackme এর লাভ কি"],
     "responses_en": [
       "🏆 <strong>How TryHackMe Helps Your Cybersecurity Career:</strong><br><br>• <strong>Practical Experience:</strong> Real hands-on experience demanded by cybersecurity employers and SOC teams.<br>• <strong>Certification Prep:</strong> Great preparation for industry certifications like CompTIA Security+, CEH, eJPT, and OSCP.<br>• <strong>Portfolio Showcase:</strong> You can link your public TryHackMe profile and certificate badges on LinkedIn and your resume!"
     ],

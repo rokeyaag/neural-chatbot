@@ -2264,7 +2264,23 @@ function initVoiceAndChatEngine() {
     getWebKnowledge() {
       try {
         const stored = localStorage.getItem('neural_bot_web_kb');
-        return stored ? JSON.parse(stored) : [];
+        if (!stored) return [];
+        let list = JSON.parse(stored);
+        if (Array.isArray(list)) {
+          const valid = list.filter(item => {
+            const title = (item.title || '').toLowerCase();
+            const resp = ((item.responses_en && item.responses_en[0]) || (item.responses && item.responses[0]) || '').toLowerCase();
+            return !title.includes('vercel security checkpoint') &&
+                   !title.includes('too many requests') &&
+                   !resp.includes('target url returned error 429') &&
+                   !resp.includes('security checkpoint');
+          });
+          if (valid.length !== list.length) {
+            localStorage.setItem('neural_bot_web_kb', JSON.stringify(valid));
+          }
+          return valid;
+        }
+        return [];
       } catch (e) {
         return [];
       }
@@ -2338,6 +2354,14 @@ function initVoiceAndChatEngine() {
 
       if (!rawContent || rawContent.trim().length < 30) {
         throw new Error('ওয়েবসাইট থেকে তথ্য লোড করা সম্ভব হয়নি। লিংকটি পাবলিক ও অ্যাক্সেসিবল কিনা যাচাই করুন।');
+      }
+
+      // Check if the response was a rate-limit/login/checkpoint error
+      if (rawContent.includes('429: Too Many Requests') ||
+          rawContent.includes('Vercel Security Checkpoint') ||
+          rawContent.includes('Security Checkpoint Warning') ||
+          (rawContent.includes('Cloudflare') && rawContent.includes('Just a moment'))) {
+        throw new Error('এই ওয়েবসাইটটিতে লগইন প্রয়োজন অথবা অ্যাক্সেস রেট-লিমিট রয়েছে। দয়া করে কোনো পাবলিক পেজ বা ডকুমেন্টেশন লিংক দিন।');
       }
 
       // Extract title from markdown if not found
@@ -3662,7 +3686,7 @@ function initVoiceAndChatEngine() {
     const rawText = userText.trim();
     const isBengali = isBengaliQuery(userText);
 
-    const cleanText = rawText.toLowerCase().replace(/[?!.,;:()]/g, ' ').replace(/\s+/g, ' ').trim();
+    const cleanText = rawText.toLowerCase().replace(/["'“”‘’«»`?!.,;:()\[\]{}]/g, ' ').replace(/\s+/g, ' ').trim();
     const queryTokens = cleanText.split(' ').filter(t => t.length > 0);
 
     // 1. Process Personal User Memory, Q&A Learning, and Dialogue Turns
