@@ -1848,6 +1848,99 @@ function initVoiceAndChatEngine() {
   }
   window.normalizeSearchText = normalizeSearchText;
 
+  // --- REGEX & BOUNDARY HELPERS (PREVENTS FALSE POSITIVE SUBSTRING HITS LIKE 'hey' IN 'achey') ---
+  function escapeRegex(s) {
+    return String(s).replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+  }
+  window.escapeRegex = escapeRegex;
+
+  function hasWordOrPhrase(text, target) {
+    if (!text || !target) return false;
+    const t = String(target).trim();
+    if (!t) return false;
+    const pattern = '(?:^|\\s)' + escapeRegex(t) + '(?=\\s|$)';
+    return new RegExp(pattern, 'i').test(text);
+  }
+  window.hasWordOrPhrase = hasWordOrPhrase;
+
+  // --- DYNAMIC BANGLISH & TECHNICAL SYNONYMS EXPANSION DICTIONARY ---
+  const BANGLISH_SYNONYMS = {
+    'course': ['কোর্স', 'কোর্সসমূহ', 'বুটক্যাম্প', 'courses', 'bootcamp', 'ট্র্যাক', 'কোর্সের'],
+    'courses': ['কোর্স', 'কোর্সসমূহ', 'বুটক্যাম্প', 'courses', 'bootcamp', 'ট্র্যাক', 'কোর্সের'],
+    'kors': ['কোর্স', 'কোর্সসমূহ', 'বুটক্যাম্প', 'কোর্সের'],
+    'bootcamp': ['বুটক্যাম্প', 'কোর্স', 'ট্র্যাক', 'bootcamps'],
+    'bootcamps': ['বুটক্যাম্প', 'কোর্স', 'ট্র্যাক', 'bootcamp'],
+    'shikhano': ['শেখানো', 'শেখা', 'লার্নিং', 'ট্রেনিং', 'পড়াশোনা'],
+    'shekhano': ['শেখানো', 'শেখা', 'লার্নিং', 'ট্রেনিং'],
+    'shekha': ['শেখানো', 'শেখা', 'লার্নিং'],
+    'shikhte': ['শিখতে', 'শেখানো', 'শেখা'],
+    'sikhte': ['শিখতে', 'শেখানো', 'শেখা'],
+    'learn': ['শেখা', 'শেখানো', 'লার্নিং', 'কোর্স'],
+    'vorti': ['ভর্তি', 'অ্যাডমিশন', 'admission', 'রেজিস্ট্রেশন'],
+    'admission': ['ভর্তি', 'অ্যাডমিশন', 'registration', 'রেজিস্ট্রেশন'],
+    'fee': ['ফি', 'খরচ', 'টাকা', 'কোর্স ফি', 'price', 'cost'],
+    'fees': ['ফি', 'খরচ', 'টাকা', 'কোর্স ফি', 'price', 'cost'],
+    'cost': ['ফি', 'খরচ', 'টাকা', 'মূল্য', 'দাম'],
+    'khoroch': ['ফি', 'খরচ', 'টাকা', 'কোর্স ফি'],
+    'taka': ['টাকা', 'ফি', 'খরচ'],
+    'price': ['মূল্য', 'ফি', 'খরচ', 'টাকা'],
+    'chakri': ['চাকরি', 'জব', 'ক্যারিয়ার', 'job', 'career', 'প্লেসমেন্ট'],
+    'chakori': ['চাকরি', 'জব', 'ক্যারিয়ার', 'job', 'career', 'প্লেসমেন্ট'],
+    'chakorir': ['চাকরি', 'জব', 'ক্যারিয়ার', 'job', 'career', 'প্লেসমেন্ট'],
+    'subidha': ['সুবিধা', 'সুবিধাসমূহ', 'বেনিফিট', 'ফিচার', 'সুযোগ', 'support'],
+    'benefit': ['সুবিধা', 'সুবিধাসমূহ', 'বেনিফিট', 'benefits', 'support'],
+    'benefits': ['সুবিধা', 'সুবিধাসমূহ', 'বেনিফিট', 'benefit', 'support'],
+    'support': ['সাপোর্ট', 'সাহায্য', 'হেল্প', 'সহায়তা', 'help', 'assist', 'assistance', 'সুবিধা'],
+    'sahajjo': ['সাহায্য', 'সাপোর্ট', 'help', 'সহায়তা'],
+    'help': ['সাহায্য', 'সাপোর্ট', 'help', 'সহায়তা', 'support'],
+    'security': ['সিকিউরিটি', 'নিরাপত্তা', 'সাইবার সিকিউরিটি', 'cybersecurity'],
+    'cybersecurity': ['সাইবার সিকিউরিটি', 'সিকিউরিটি', 'নিরাপত্তা', 'security'],
+    'tools': ['টুলস', 'টুল', 'tool', 'টুলগুলো', 'সফটওয়্যার', 'software'],
+    'tool': ['টুলস', 'টুল', 'tools', 'টুলগুলো', 'সফটওয়্যার', 'software'],
+    'parbe': ['পারবে', 'পারবেন', 'parbey', 'parbo'],
+    'parbey': ['পারবে', 'পারবেন', 'parbe', 'parbo'],
+    'dite': ['দিতে', 'দেয়', 'দিবে', 'দেওয়া'],
+    'dibe': ['দিবে', 'দিতে', 'দেয়', 'দেবে'],
+    'job': ['চাকরি', 'জব', 'ক্যারিয়ার', 'career', 'প্লেসমেন্ট'],
+    'placement': ['প্লেসমেন্ট', 'জব প্লেসমেন্ট', 'চাকরি', 'ক্যারিয়ার'],
+    'certificate': ['সার্টিফিকেট', 'সনদ', 'সনদপত্র', 'certification', 'সার্টিফিকেশন'],
+    'live': ['লাইভ', 'সরাসরি', 'লাইভ ক্লাস'],
+    'class': ['ক্লাস', 'লাইভ ক্লাস', 'সেশন'],
+    'batch': ['ব্যাচ', 'নতুন ব্যাচ']
+  };
+
+  function expandSearchTokens(tokens) {
+    if (!tokens || !Array.isArray(tokens)) return [];
+    const set = new Set(tokens.map(t => String(t).toLowerCase().trim()).filter(Boolean));
+    for (const t of tokens) {
+      const lower = String(t).toLowerCase().trim();
+      if (BANGLISH_SYNONYMS[lower]) {
+        for (const s of BANGLISH_SYNONYMS[lower]) {
+          set.add(s.toLowerCase());
+        }
+      }
+    }
+    return Array.from(set);
+  }
+  window.expandSearchTokens = expandSearchTokens;
+
+  // Context Referral words (Referring to last discussed website / entity)
+  const CONTEXT_REFERRAL_TOKENS = new Set([
+    'ekhane', 'eikhane', 'eta', 'etay', 'eitar', 'eita', 'oikhane', 'oita', 'oitar',
+    'here', 'site', 'website', 'platform', 'app', 'link'
+  ]);
+
+  function isContextReferralQuery(text) {
+    if (!text) return false;
+    const lower = text.toLowerCase();
+    // Direct token hits
+    const words = lower.split(/\s+/);
+    if (words.some(w => CONTEXT_REFERRAL_TOKENS.has(w))) return true;
+    // Regex phrases
+    return /(?:এখানে|এই সাইটে|এই ওয়েবসাইটে|এটিতে|এর মধ্যে|ওখানে|ঐখানে|here|in this site|on this site|in this website|about it|what does it offer)/i.test(text);
+  }
+  window.isContextReferralQuery = isContextReferralQuery;
+
   // --- NEURAL KNOWLEDGE STORE & DYNAMIC BILINGUAL RESPONSE MATRIX ---
   const NeuralKnowledgeStore = {
     // Built-in Categorized Knowledge Matrix with Dedicated English & Bengali Responses
@@ -2473,6 +2566,19 @@ function initVoiceAndChatEngine() {
         ]
       },
       {
+        id: 'mem_tryhackme_overview',
+        category: 'tech',
+        title: 'TryHackMe ও ড্যাশবোর্ড পরিচিতি (TryHackMe Overview)',
+        keywords_en: ['tryhackme', 'tryhack me', 'what is tryhackme', 'what is tryhack me', 'tryhackme dashboard', 'thm', 'tryhackme.com', 'tryhackme overview', 'about tryhackme', 'tell me about tryhackme'],
+        keywords_bn: ['tryhackme কি', 'tryhack me কি', 'tryhackme ki', 'tryhack me ki', 'ট্রাইহ্যাকমি কি', 'tryhackme dashboard কি', 'ট্রাইহ্যাকমি পরিচিতি', 'tryhackme সম্পর্কে বলো', 'tryhackme somporke bolo', 'try hack me somporke bolo', 'tryhackme somporkey idea daow', 'tryhackme somporkey idea daow', 'tryhackme somporke idea daow', 'try hack me somporke idea daow', 'tryhackme idea', 'tryhackme কি এবং এর ড্যাশবোর্ডে কি কি দেখা যায়', 'ড্যাশবোর্ডে কি কি দেখা যায়'],
+        responses_en: [
+          "🎯 <strong>TryHackMe (THM):</strong> A premier hands-on online platform for learning cybersecurity and ethical hacking through gamified, browser-based virtual labs.<br><br>• <strong>Dashboard Features:</strong> Shows daily learning streaks, active Learning Paths, completed rooms, total points, global rank, and recommended modules.<br>• <strong>Official Website:</strong> <a href='https://tryhackme.com' target='_blank' style='color:#00f2fe;'>tryhackme.com</a>"
+        ],
+        responses_bn: [
+          "🎯 <strong>TryHackMe (THM):</strong> সাইবার সিকিউরিটি ও এথিক্যাল হ্যাকিং শেখার জন্য বিশ্বের অন্যতম সেরা ও জনপ্রিয় প্র্যাকটিক্যাল ল্যাব প্ল্যাটফর্ম।<br><br>• <strong>ড্যাশবোর্ডের সুবিধা:</strong> আপনার দৈনিক প্র্যাকটিস স্ট্রিক (Streak), বর্তমান লার্নিং পাথ, কমপ্লিট করা রুমের সংখ্যা, অর্জিত পয়েন্ট এবং গ্লোবাল র‍্যাঙ্ক দেখা যায়।<br>• <strong>অফিসিয়াল ওয়েবসাইট:</strong> <a href='https://tryhackme.com' target='_blank' style='color:#00f2fe;'>tryhackme.com</a>"
+        ]
+      },
+      {
         id: 'mem_tryhackme_topics_modules',
         category: 'tech',
         title: 'TryHackMe তে শেখানো বিষয় ও টুলস (Topics & Security Tools Covered)',
@@ -2484,10 +2590,17 @@ function initVoiceAndChatEngine() {
           'tryhackme security tools',
           'security tools in tryhackme',
           'tools taught in tryhackme',
+          'what security tools are taught in tryhackme',
           'wireshark burpsuite nmap on thm',
           'what tools are on tryhackme'
         ],
         keywords_bn: [
+          'tryhackme te ki ki security tools sekhano hoy',
+          'try hack me te ki ki security tools sekhano hoy',
+          'tryhackme te ki ki tools sekhano hoy',
+          'tryhackme security tools sekhano hoy',
+          'tryhackme te ki ki security tools ache',
+          'tryhackme tools sekhano hoy',
           'tryhackme তে কি কি শেখা যায়',
           'tryhackme topics কি কি',
           'কি কি টুলস শেখায়',
@@ -2538,6 +2651,61 @@ function initVoiceAndChatEngine() {
         ]
       },
       {
+        id: 'mem_tryhackme_career_benefit',
+        category: 'tech',
+        title: 'TryHackMe সাপোর্ট ও সাইবার সিকিউরিটি ক্যারিয়ারের সুবিধা (Support & Career Benefits)',
+        keywords_en: [
+          'tryhackme support',
+          'how does tryhackme support me',
+          'what support does tryhackme give',
+          'tryhackme benefits',
+          'tryhackme for career',
+          'why use tryhackme',
+          'job preparation cybersecurity',
+          'tryhackme certifications',
+          'why learn tryhackme',
+          'try hack me support',
+          'tryhackme student support',
+          'career support in tryhackme'
+        ],
+        keywords_bn: [
+          'try hack me amake ki support dite parbey',
+          'tryhack me amake ki support dite parbey',
+          'tryhackme amake ki support dite parbey',
+          'tryhackme amake ki support dite parbe',
+          'try hack me amake ki support dite parbe',
+          'tryhackme amake ki support dibe',
+          'try hack me amake ki support dibe',
+          'tryhackme কি সাপোর্ট দিতে পারবে',
+          'ট্রাইহ্যাকমি আমাকে কি সাপোর্ট দিতে পারবে',
+          'tryhackme ki support dite parbe',
+          'tryhackme ki support dite parbey',
+          'tryhackme ki support dibe',
+          'tryhackme কি সাপোর্ট দেয়',
+          'tryhackme support',
+          'try hack me support',
+          'tryhackme er subidha ki',
+          'tryhackme er subidha',
+          'tryhackme কিভাবে সাহায্য করে',
+          'tryhackme kivabe help korbe',
+          'tryhackme ki vabe sahajjo korbe',
+          'সাইবার সিকিউরিটি ক্যারিয়ারে tryhackme এর সুবিধা',
+          'tryhackme এর সুবিধা',
+          'tryhackme সাপোর্ট',
+          'tryhackme কেন শিখব',
+          'চাকরি পাওয়ার জন্য tryhackme',
+          'tryhackme এর লাভ কি',
+          'tryhackme ক্যারিয়ার সাপোর্ট',
+          'tryhackme career support'
+        ],
+        responses_en: [
+          '🎯 <strong>How TryHackMe Supports You & Your Cybersecurity Career (Deep Research):</strong><br><br>1. <strong>In-Browser AttackBox & Zero-Setup Labs:</strong> Practice ethical hacking and cyber defense directly in your browser with cloud Kali Linux without installing local virtual machines.<br>2. <strong>Structured Learning Paths:</strong> Step-by-step career tracks from foundational to advanced (Pre-Security, Jr Penetration Tester, SOC Level 1 & 2, Web Fundamentals, Red Teaming).<br>3. <strong>Verifiable Industry Certificates & Live Portfolio:</strong> Earn verifiable digital certificates upon path completion to showcase on LinkedIn and tech resumes.<br>4. <strong>Gamified Milestones & Global Ranking:</strong> Build daily learning streaks, solve CTF rooms, earn badges, and climb competitive global leaderboards.<br>5. <strong>24/7 Community & Problem-Solving Support:</strong> Access in-room hints, step-by-step walkthroughs, and collaborate with 300,000+ peers in the official TryHackMe Discord and forum.'
+        ],
+        responses_bn: [
+          '🎯 <strong>TryHackMe (THM) আপনাকে যেসব ক্ষেত্রে পূর্ণাঙ্গ সাপোর্ট ও ক্যারিয়ার সুবিধা প্রদান করে:</strong><br><br>১. <strong>জিরো-সেটআপ ল্যাব ও AttackBox সাপোর্ট:</strong> পিসিতে কোনো ভারী ভার্চুয়াল মেশিন বা Kali Linux ইনস্টল না করেই সরাসরি ব্রাউজারে ওয়ান-ক্লিকে ক্লাউড লিনাক্স চালিয়ে রিয়েল টার্গেট সার্ভার হ্যাকিং ও ডিফেন্ডিং প্র্যাকটিস করার সুবিধা।<br>২. <strong>গাইডেড লার্নিং পাথ সাপোর্ট:</strong> শূন্য থেকে শুরু করে প্রফেশনাল হওয়া পর্যন্ত সুনির্দিষ্ট কারিকুলাম—যেমন <em>Pre-Security, Complete Beginner, Jr Penetration Tester, SOC Level 1 & 2, Web Fundamentals, এবং Red Teaming</em>।<br>৩. <strong>ভেরিফায়েবল সার্টিফিকেট ও প্র্যাকটিক্যাল পোর্টফোলিও:</strong> প্রতিটি লার্নিং পাথ ও চ্যালেঞ্জ সম্পন্ন করলে অফিসিয়াল ডিজিটাল সার্টিফিকেট প্রদান করে, যা সরাসরি LinkedIn এবং জবের সিভিতে যুক্ত করে ইন্টারভিউয়ারদের সামনে প্র্যাকটিক্যাল স্কিল প্রমাণ করা যায়।<br>৪. <strong>গ্লোবাল র‍্যাঙ্ক, স্ট্রিক ও ব্যাজ:</strong> প্রতিদিনের স্ট্রিক (Streak) ট্র্যাকিং এবং বিশ্বব্যাপী লিডারবোর্ডে র‍্যাঙ্কিংয়ের মাধ্যমে আন্তর্জাতিক প্ল্যাটফর্মে নিজের অবস্থান যাচাইয়ের সুযোগ।<br>৫. <strong>কমিউনিটি ও মেন্টরশিপ সাপোর্ট:</strong> প্রতিটি রুমে আটকে গেলে বিল্ট-ইন হিন্টস (Hints) এবং অফিশিয়াল ৩ লক্ষ+ মেম্বারের ডিসকর্ড/ফোরামে সরাসরি অন্য হ্যাকার ও মেন্টরদের কাছ থেকে যেকোনো প্রবলেম সলভিং সাপোর্ট।'
+        ]
+      },
+      {
         id: 'mem_ostad_overview',
         category: 'tech',
         title: 'Ostad (ostad.app) পরিচিতি ও বিশেষত্ব (Ostad Overview & Features)',
@@ -2578,7 +2746,14 @@ function initVoiceAndChatEngine() {
           'ostad web development',
           'ostad python mern',
           'ostad flutter cybersecurity',
-          'what can i learn on ostad'
+          'what can i learn on ostad',
+          'course',
+          'courses',
+          'bootcamp',
+          'bootcamps',
+          'ki ki course',
+          'course list',
+          'all courses'
         ],
         keywords_bn: [
           'ostad এ কি কি কোর্স শেখানো হয়',
@@ -2587,7 +2762,18 @@ function initVoiceAndChatEngine() {
           'ostad bootcamps কি কি',
           'ostad এ কি কি শেখা যায়',
           'ওস্তাদ কোর্স লিস্ট',
-          'ostad courses কি কি'
+          'ostad courses কি কি',
+          'কোর্স',
+          'কোর্সসমূহ',
+          'বুটক্যাম্প',
+          'কি কি কোর্স',
+          'কি কোর্স আছে',
+          'কি কি কোর্স শেখানো হয়',
+          'কোর্স লিস্ট',
+          'ki ki course',
+          'ki ki course achey',
+          'ki ki course ache',
+          'course ache'
         ],
         responses_en: [
           '🚀 <strong>Popular Bootcamps & Courses on Ostad (ostad.app):</strong><br><br>Ostad offers structured industry-curated tracks across major technology domains:<br><br>🔹 <strong>Software & Web Development:</strong><br>• Full-Stack MERN (MongoDB, Express, React, Node.js)<br>• Python & Django Web Development<br>• PHP & Laravel Framework<br>• Frontend Engineering (React.js, Next.js)<br><br>🔹 <strong>AI, Data Science & Machine Learning:</strong><br>• AI & ML Engineering, LLMs & Automation<br>• Data Science with Python & PowerBI<br>• Data Engineering Bootcamp<br><br>🔹 <strong>Mobile & Quality Engineering:</strong><br>• Flutter Mobile App Development<br>• SQA (Software Quality Assurance & Automation)<br>• DevOps & Cloud Infrastructure<br><br>🔹 <strong>Cyber Security & Design:</strong><br>• Cyber Security & Ethical Hacking<br>• UI/UX Design & Product Management'
@@ -2605,14 +2791,32 @@ function initVoiceAndChatEngine() {
           'ostad certificate',
           'does ostad provide jobs',
           'ostad career support',
-          'is ostad certificate valid'
+          'is ostad certificate valid',
+          'certificate',
+          'certification',
+          'job placement',
+          'career support',
+          'job support'
         ],
         keywords_bn: [
           'ostad এর জব সাপোর্ট কেমন',
           'ostad সার্টিফিকেট কি কার্যকর',
           'ওস্তাদ কি চাকরি দেয়',
           'ostad job placement কি',
-          'ostad ক্যারিয়ার সাপোর্ট'
+          'ostad ক্যারিয়ার সাপোর্ট',
+          'সার্টিফিকেট',
+          'সনদ',
+          'সার্টিফিকেশন',
+          'চাকরি',
+          'চাকরির সুবিধা',
+          'জব সুবিধা',
+          'প্লেসমেন্ট',
+          'ক্যারিয়ার',
+          'certificate ki pabo',
+          'certificate pabo',
+          'chakorir subidha',
+          'chakri pabo',
+          'job pabo'
         ],
         responses_en: [
           '🏆 <strong>Ostad Job Placement & Career Support Ecosystem:</strong><br><br>• <strong>Verified Certificates:</strong> Shareable accredited digital credentials for LinkedIn, resumes, and portfolios.<br>• <strong>Ostad Talent Pool:</strong> Top-performing graduates get recommended directly to partner software firms and corporate hiring teams.<br>• <strong>Career Coaching:</strong> Resume building, GitHub/portfolio audit, and technical mock interviews by senior engineers.'
@@ -3114,20 +3318,62 @@ function initVoiceAndChatEngine() {
       return [...learned, ...custom, ...web, ...file, ...github, ...this.defaultStore];
     },
 
-    // Search semantic chunks across all ingested websites (In-Browser RAG Retrieval)
-    searchWebChunks(rawQuery, limit = 4) {
+    // Multi-turn Active Topic Context Tracker
+    lastActiveTopic: null,
+
+    setLastActiveTopic(topicObj) {
+      if (!topicObj) return;
+      this.lastActiveTopic = {
+        id: topicObj.id || null,
+        title: topicObj.title || '',
+        name: topicObj.name || (topicObj.title ? topicObj.title.split(/[\s\-–—(]/)[0].toLowerCase().trim() : ''),
+        hostname: topicObj.hostname || null,
+        sourceUrl: topicObj.sourceUrl || null,
+        category: topicObj.category || 'web',
+        isWeb: Boolean(topicObj.isWebIngested || topicObj.category === 'web'),
+        timestamp: Date.now()
+      };
+      try {
+        sessionStorage.setItem('neural_bot_last_active_topic', JSON.stringify(this.lastActiveTopic));
+      } catch (e) {}
+    },
+
+    getLastActiveTopic() {
+      if (this.lastActiveTopic) return this.lastActiveTopic;
+      try {
+        const stored = sessionStorage.getItem('neural_bot_last_active_topic');
+        if (stored) {
+          this.lastActiveTopic = JSON.parse(stored);
+          return this.lastActiveTopic;
+        }
+      } catch (e) {}
+      return null;
+    },
+
+    // Search semantic chunks across all ingested websites (Deep In-Browser RAG Retrieval)
+    searchWebChunks(rawQuery, limit = 4, targetTopic = null) {
       if (!rawQuery || !rawQuery.trim()) return [];
       const cleanQ = normalizeSearchText(rawQuery);
-      const qTokens = cleanQ.split(' ').filter(t => t.length > 1 && !COMMON_STOPWORDS.has(t));
-      if (qTokens.length === 0 && cleanQ.length < 3) return [];
+      const rawTokens = cleanQ.split(' ').filter(t => t.length > 1 && !COMMON_STOPWORDS.has(t));
+      if (rawTokens.length === 0 && cleanQ.length < 3) return [];
 
+      // Expand tokens with Banglish <-> Bengali synonyms
+      const qTokens = expandSearchTokens(rawTokens);
+
+      const activeTopic = targetTopic || this.getLastActiveTopic();
       const webList = this.getWebKnowledge();
       const scoredChunks = [];
 
       for (const item of webList) {
         const pTitle = (item.title || '').toLowerCase();
         const pUrl = (item.sourceUrl || '').toLowerCase();
+        const pHost = (item.hostname || '').toLowerCase();
         const chunks = item.chunks || [];
+        const isFocusedItem = activeTopic && (
+          (activeTopic.id && activeTopic.id === item.id) ||
+          (activeTopic.sourceUrl && activeTopic.sourceUrl === item.sourceUrl) ||
+          (activeTopic.name && (pTitle.includes(activeTopic.name) || pHost.includes(activeTopic.name)))
+        );
 
         // If item doesn't have chunks yet (older saved items), create synthetic chunk from responses
         const effectiveChunks = chunks.length > 0 ? chunks : [
@@ -3140,10 +3386,16 @@ function initVoiceAndChatEngine() {
           }
         ];
 
+        // 1. Scan semantic chunks
         for (const chk of effectiveChunks) {
           let score = 0;
           const hText = (chk.heading || '').toLowerCase();
           const bText = (chk.text || '').toLowerCase();
+
+          // Focused topic boost
+          if (isFocusedItem) {
+            score += 35;
+          }
 
           // Full normalized phrase match
           if (cleanQ.length >= 4) {
@@ -3152,12 +3404,16 @@ function initVoiceAndChatEngine() {
             if (pTitle.includes(cleanQ)) score += 50;
           }
 
-          // Individual substantive token matching
+          // Individual substantive token matching (with synonyms)
           for (const tok of qTokens) {
-            if (tok.length < 3) continue;
-            if (hText.includes(tok)) score += 35;
+            if (tok.length < 2) continue;
+            if (hasWordOrPhrase(hText, tok)) score += 40;
+            else if (hText.includes(tok)) score += 25;
+
+            if (hasWordOrPhrase(bText, tok)) score += 28;
+            else if (bText.includes(tok)) score += 18;
+
             if (pTitle.includes(tok)) score += 25;
-            if (bText.includes(tok)) score += 18;
           }
 
           if (score > 0) {
@@ -3166,6 +3422,35 @@ function initVoiceAndChatEngine() {
               score,
               pageTitle: item.title,
               sourceUrl: item.sourceUrl
+            });
+          }
+        }
+
+        // 2. Deep RawText Keyword Extraction: If chunks missed specific lists (e.g. courses list, bullet points)
+        if (item.rawText && (isFocusedItem || qTokens.some(t => ['course', 'কোর্স', 'বুটক্যাম্প', 'ফি', 'ভর্তি'].includes(t)))) {
+          const rawLines = item.rawText.split('\n').map(l => l.trim()).filter(Boolean);
+          const relevantSnippetLines = [];
+          for (const line of rawLines) {
+            const lLower = line.toLowerCase();
+            const hit = qTokens.some(tok => tok.length >= 3 && lLower.includes(tok));
+            if (hit) {
+              const cleanL = line.replace(/^[#\*\-•\s]+/, '').trim();
+              if (cleanL.length > 15 && cleanL.length < 350 && !relevantSnippetLines.includes(cleanL)) {
+                relevantSnippetLines.push(cleanL);
+              }
+            }
+          }
+
+          if (relevantSnippetLines.length > 0) {
+            const snippetText = relevantSnippetLines.slice(0, 8).map(l => `• ${l}`).join('\n');
+            scoredChunks.push({
+              id: 'raw_snippet_' + item.id,
+              heading: 'ওয়েবসাইট থেকে সরাসরি বিস্তারিত এক্সট্রাকশন (Extracted Highlights)',
+              text: snippetText,
+              score: isFocusedItem ? 110 : 85,
+              pageTitle: item.title,
+              sourceUrl: item.sourceUrl,
+              isRawExtracted: true
             });
           }
         }
@@ -4406,7 +4691,6 @@ function initVoiceAndChatEngine() {
 
     // Normalize text and resolve compound words (e.g. "tryhack me" -> "tryhackme")
     const cleanText = normalizeSearchText(rawText);
-    const queryTokens = cleanText.split(' ').filter(t => t.length > 0);
 
     // 1. Process Personal User Memory, Q&A Learning, and Dialogue Turns
     const dialogueResponse = NeuralDialogueMemory.processUserTurn(cleanText, rawText, isBengali);
@@ -4443,14 +4727,40 @@ function initVoiceAndChatEngine() {
         `<br><br><a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background:${platform.color};color:#fff;border-radius:20px;padding:6px 16px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-weight:600;box-shadow:0 4px 15px ${platform.color}40;"><i class="${platform.icon}"></i> ${btnText}</a>`;
     }
 
+    // Subtopic Intent Token Set for Disambiguation
+    const SUBTOPIC_INTENT_TOKENS = new Set([
+      'course', 'courses', 'kors', 'bootcamp', 'bootcamps', 'কোর্স', 'কোর্সসমূহ', 'বুটক্যাম্প',
+      'fee', 'fees', 'cost', 'ফি', 'খরচ', 'টাকা',
+      'admission', 'ভর্তি', 'রেজিস্ট্রেশন',
+      'certificate', 'certification', 'সার্টিফিকেট', 'সনদ', 'সার্টিফিকেশন',
+      'job', 'placement', 'career', 'চাকরি', 'ক্যারিয়ার', 'প্লেসমেন্ট', 'chakori', 'chakorir', 'subidha',
+      'support', 'sahajjo', 'সাহায্য', 'সহায়তা', 'help', 'সুবিধা', 'উপকারিতা', 'benefit', 'benefits', 'বেনিফিট',
+      'contact', 'phone', 'email', 'যোগাযোগ', 'ফোন', 'ইমেইল', 'ঠিকানা',
+      'tool', 'tools', 'টুলস', 'টুল', 'সিকিউরিটি', 'security', 'koth'
+    ]);
+
+    // Contextual Multi-Turn Query Augmentation (e.g. "ki ki course achey ekhane?" -> refers to Ostad / active site)
+    const activeTopic = window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.getLastActiveTopic === 'function'
+      ? window.NeuralKnowledgeStore.getLastActiveTopic()
+      : null;
+
+    let searchTargetText = cleanText;
+    const isContextual = isContextReferralQuery(cleanText);
+
+    if (isContextual && activeTopic) {
+      const topicName = activeTopic.name || (activeTopic.title ? activeTopic.title.split(/[\s\-–—(]/)[0].toLowerCase().trim() : '');
+      searchTargetText = `${cleanText} ${topicName}`.trim();
+    }
+
+    const queryTokens = searchTargetText.split(' ').filter(t => t.length > 0);
+    const expandedTokens = expandSearchTokens(queryTokens);
+
     // 2. High-Accuracy In-Browser Web RAG Retrieval (across all ingested websites)
+    let topWebChunk = null;
     if (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.searchWebChunks === 'function') {
-      const webChunks = window.NeuralKnowledgeStore.searchWebChunks(cleanText, 2);
-      if (webChunks.length > 0 && webChunks[0].score >= 35) {
-        const topChunk = webChunks[0];
-        const headingPart = topChunk.heading ? ` — <em>${escapeHtml(topChunk.heading)}</em>` : '';
-        const linkPart = `<br><br><span style="font-size:0.8rem;color:#94a3b8;">🔗 সূত্র: <a href="${topChunk.sourceUrl}" target="_blank" rel="noopener noreferrer" style="color:#00f2fe;font-weight:600;">${topChunk.pageTitle}</a></span>`;
-        return `🌐 <strong>${escapeHtml(topChunk.pageTitle)}</strong>${headingPart}:<br><br>${escapeHtml(topChunk.text)}${linkPart}`;
+      const webChunks = window.NeuralKnowledgeStore.searchWebChunks(searchTargetText, 2, activeTopic);
+      if (webChunks.length > 0) {
+        topWebChunk = webChunks[0];
       }
     }
 
@@ -4459,71 +4769,106 @@ function initVoiceAndChatEngine() {
     let highestScore = 0;
 
     // Check for general project/portfolio intent boost
-    const isProjectQuery = /project|github|repo|গিটহাব|প্রজেক্ট|রিপো|রিপোজিটরি|কাজ|portfolio|পোর্টফোলিও/i.test(cleanText);
+    const isProjectQuery = /project|github|repo|গিটহাব|প্রজেক্ট|রিপো|রিপোজিটরি|কাজ|portfolio|পোর্টফোলিও/i.test(searchTargetText);
 
     for (const item of allKnowledge) {
       let score = 0;
+      const isFocusedTopicItem = activeTopic && (
+        (activeTopic.id && activeTopic.id === item.id) ||
+        (activeTopic.name && (item.id.toLowerCase().includes(activeTopic.name) || (item.title || '').toLowerCase().includes(activeTopic.name)))
+      );
+
+      if (isContextual && isFocusedTopicItem) {
+        score += 35;
+      }
       
       // Select keyword list based on language
       const keywords = isBengali 
         ? [...(item.keywords_bn || []), ...(item.keywords || []), ...(item.keywords_en || [])]
         : [...(item.keywords_en || []), ...(item.keywords || []), ...(item.keywords_bn || [])];
 
-      // Match item title directly
-      const cleanTitle = (item.title || '').toLowerCase().replace(/[?!.,;:()]/g, ' ').trim();
-      if (cleanText.includes(cleanTitle) || cleanTitle.includes(cleanText)) {
+      // Match item title directly with whole phrase/word boundary
+      const cleanTitle = normalizeSearchText(item.title || '');
+      if (hasWordOrPhrase(searchTargetText, cleanTitle) || hasWordOrPhrase(cleanTitle, searchTargetText)) {
         score += 80;
       }
 
+      // Track the single highest matching keyword score for this item (prevents keyword repetition bloat)
+      let bestKwScore = 0;
+
       for (const kw of keywords) {
-        const cleanKw = kw.toLowerCase().trim();
+        const cleanKw = normalizeSearchText(kw);
+        if (!cleanKw) continue;
         const isBnKw = (item.keywords_bn || []).includes(kw) || /[\u0980-\u09FF]/.test(kw);
+        let kwScore = 0;
 
         // Exact match
-        if (cleanText === cleanKw) {
-          score += ((isBengali && isBnKw) || (!isBengali && !isBnKw)) ? 150 : 80;
-          break;
-        }
-
-        // Substring / Phrase match
-        if (cleanText.includes(cleanKw)) {
-          score += (cleanKw.length * 3.5) + ((isBengali && isBnKw) ? 40 : 20);
-        } else if (cleanKw.includes(cleanText) && cleanText.length >= 3) {
-          score += (cleanText.length * 2.5) + 15;
+        if (searchTargetText === cleanKw) {
+          kwScore = ((isBengali && isBnKw) || (!isBengali && !isBnKw)) ? 160 : 100;
+        } else if (hasWordOrPhrase(searchTargetText, cleanKw)) {
+          // Substring / Phrase match with word boundaries
+          // If keyword is a generic single entity name (e.g. "tryhackme", "ostad"), don't let it overpower multi-word queries
+          const kwWords = cleanKw.split(' ').filter(Boolean);
+          if (kwWords.length === 1 && ['tryhackme', 'thm', 'tryhack', 'ostad', 'mitre'].includes(cleanKw) && queryTokens.length > 2) {
+            kwScore = 15;
+          } else {
+            kwScore = (cleanKw.length * 3.5) + ((isBengali && isBnKw) ? 45 : 25);
+          }
+        } else if (hasWordOrPhrase(cleanKw, searchTargetText) && searchTargetText.length >= 3) {
+          kwScore = (searchTargetText.length * 2.5) + 15;
         } else {
-          // Token overlap matching with strict Stopword Guard
+          // Token overlap matching with strict Stopword Guard and Synonyms
           const kwTokens = cleanKw.split(' ').filter(t => t.length > 0);
           let tokenMatches = 0;
           let substantiveMatches = 0;
 
           for (const kt of kwTokens) {
-            if (queryTokens.includes(kt)) {
+            if (expandedTokens.includes(kt)) {
               tokenMatches++;
-              if (!COMMON_STOPWORDS.has(kt) && kt.length >= 3) {
+              if (!COMMON_STOPWORDS.has(kt) && kt.length >= 2) {
                 substantiveMatches++;
               }
             }
           }
 
           // Crucial: only award overlap score if at least ONE non-stopword substantive token matched!
-          // Prevents common words like "ki" or "me" from triggering false categories like Kusol!
           if (substantiveMatches > 0) {
-            const overlap = (tokenMatches / kwTokens.length) * ((isBengali && isBnKw) ? 35 : 20);
-            score = Math.max(score, overlap);
+            const overlap = (tokenMatches / kwTokens.length) * ((isBengali && isBnKw) ? 50 : 30);
+            kwScore = Math.max(kwScore, overlap);
           }
+        }
+
+        if (kwScore > bestKwScore) {
+          bestKwScore = kwScore;
         }
       }
 
-      // Content body text keyword matching (ensures specific subtopic questions match accurately)
+      score += bestKwScore;
+
+      // Content body text keyword matching (expanded tokens with synonyms)
       const allResps = [...(item.responses_bn || []), ...(item.responses_en || []), ...(item.responses || [])].join(' ').toLowerCase();
       let bodyMatchCount = 0;
-      for (const qt of queryTokens) {
-        if (qt.length >= 4 && !COMMON_STOPWORDS.has(qt) && allResps.includes(qt)) {
+      for (const qt of expandedTokens) {
+        if (qt.length >= 3 && !COMMON_STOPWORDS.has(qt) && allResps.includes(qt)) {
           bodyMatchCount++;
         }
       }
       if (bodyMatchCount > 0) {
         score += (bodyMatchCount * 14);
+      }
+
+      // Subtopic Intent Precision Boost:
+      // If user asks for courses/fees/jobs/tools/support, prioritize items whose title/keywords specifically target that intent
+      const hasSubtopicIntent = queryTokens.some(t => SUBTOPIC_INTENT_TOKENS.has(t)) ||
+                                expandedTokens.some(t => SUBTOPIC_INTENT_TOKENS.has(t));
+      if (hasSubtopicIntent) {
+        const itemTitleLower = (item.title || '').toLowerCase();
+        const hasTitleSubtopic = Array.from(SUBTOPIC_INTENT_TOKENS).some(tok => tok.length >= 3 && itemTitleLower.includes(tok));
+        if (hasTitleSubtopic) {
+          score += 65;
+        } else if (item.category === 'web' || item.id.endsWith('_overview')) {
+          score -= 50; // Generic landing page overview shouldn't overshadow a specific subtopic question
+        }
       }
 
       // Boost specific GitHub projects if user asks for projects
@@ -4539,16 +4884,55 @@ function initVoiceAndChatEngine() {
 
     const currentProfile = NeuralDialogueMemory.getProfile();
 
-    // Match found with confident score
-    if (bestMatch && highestScore >= 12) {
+    // Unified Intelligent Selection:
+    // Compares bestMatch (curated/saved memory) vs topWebChunk (scraped RAG chunk)
+    const hasCuratedMatch = bestMatch && highestScore >= 12;
+    const hasSubtopicIntentQuery = queryTokens.some(t => SUBTOPIC_INTENT_TOKENS.has(t)) ||
+                                  expandedTokens.some(t => SUBTOPIC_INTENT_TOKENS.has(t));
+    const hasWebMatch = topWebChunk && (
+      (hasSubtopicIntentQuery && topWebChunk.score >= 50 && highestScore < 40) ||
+      (!hasSubtopicIntentQuery && topWebChunk.score >= 25 && (!hasCuratedMatch || topWebChunk.score > highestScore))
+    );
+
+    if (hasCuratedMatch && (!hasWebMatch || highestScore >= topWebChunk.score)) {
+      if (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.setLastActiveTopic === 'function') {
+        window.NeuralKnowledgeStore.setLastActiveTopic(bestMatch);
+      }
+      return NeuralKnowledgeStore.getRandomResponse(bestMatch, isBengali);
+    }
+
+    if (hasWebMatch) {
+      if (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.setLastActiveTopic === 'function') {
+        window.NeuralKnowledgeStore.setLastActiveTopic({
+          title: topWebChunk.pageTitle,
+          sourceUrl: topWebChunk.sourceUrl,
+          category: 'web'
+        });
+      }
+      const headingPart = topWebChunk.heading ? ` — <em>${escapeHtml(topWebChunk.heading)}</em>` : '';
+      const linkPart = `<br><br><span style="font-size:0.8rem;color:#94a3b8;">🔗 সূত্র: <a href="${topWebChunk.sourceUrl}" target="_blank" rel="noopener noreferrer" style="color:#00f2fe;font-weight:600;">${topWebChunk.pageTitle}</a></span>`;
+      return `🌐 <strong>${escapeHtml(topWebChunk.pageTitle)}</strong>${headingPart}:<br><br>${escapeHtml(topWebChunk.text)}${linkPart}`;
+    }
+
+    if (hasCuratedMatch) {
+      if (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.setLastActiveTopic === 'function') {
+        window.NeuralKnowledgeStore.setLastActiveTopic(bestMatch);
+      }
       return NeuralKnowledgeStore.getRandomResponse(bestMatch, isBengali);
     }
 
     // Secondary fallback to any partially matching web chunk
     if (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.searchWebChunks === 'function') {
-      const fallbackChunks = window.NeuralKnowledgeStore.searchWebChunks(cleanText, 1);
+      const fallbackChunks = window.NeuralKnowledgeStore.searchWebChunks(searchTargetText, 1, activeTopic);
       if (fallbackChunks.length > 0 && fallbackChunks[0].score >= 18) {
         const chk = fallbackChunks[0];
+        if (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.setLastActiveTopic === 'function') {
+          window.NeuralKnowledgeStore.setLastActiveTopic({
+            title: chk.pageTitle,
+            sourceUrl: chk.sourceUrl,
+            category: 'web'
+          });
+        }
         return `🌐 <strong>${escapeHtml(chk.pageTitle)}:</strong><br><br>${escapeHtml(chk.text)}<br><br><span style="font-size:0.8rem;color:#94a3b8;">🔗 উৎস: <a href="${chk.sourceUrl}" target="_blank" rel="noopener noreferrer" style="color:#00f2fe;">${chk.sourceUrl}</a></span>`;
       }
     }
@@ -5379,6 +5763,10 @@ function initVoiceAndChatEngine() {
           }
           const ingested = await window.NeuralKnowledgeStore.ingestFromWebUrl(targetUrl);
           if (typingElem) typingElem.remove();
+
+          if (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.setLastActiveTopic === 'function') {
+            window.NeuralKnowledgeStore.setLastActiveTopic(ingested);
+          }
 
           const resp = isBengali
             ? `🌐 <strong>ওয়েবসাইট সফলভাবে মেমোরিতে যুক্ত হয়েছে! 🧠✨</strong><br><br>• <strong>টপিক:</strong> ${escapeHtml(ingested.title)}<br>• <strong>মূল লিংক:</strong> <a href="${ingested.sourceUrl}" target="_blank" style="color:#00f2fe;">${ingested.sourceUrl}</a><br><br>${ingested.responses_bn[0]}<br><br>💡 <em>আপনি এখন এই ওয়েবসাইট সম্পর্কিত যেকোনো প্রশ্ন করতে পারেন!</em>`

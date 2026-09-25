@@ -146,8 +146,8 @@
     "id": "mem_tryhackme_overview",
     "category": "tech",
     "title": "TryHackMe ও ড্যাশবোর্ড পরিচিতি (TryHackMe Overview)",
-    "keywords_en": ["tryhackme", "tryhack me", "what is tryhackme", "what is tryhack me", "tryhackme dashboard", "thm", "tryhackme.com", "tryhackme overview"],
-    "keywords_bn": ["tryhackme কি", "tryhack me কি", "tryhackme ki", "tryhack me ki", "ট্রাইহ্যাকমি কি", "tryhackme dashboard কি", "ট্রাইহ্যাকমি পরিচিতি", "tryhackme সম্পর্কে বলো", "tryhackme কি এবং এর ড্যাশবোর্ডে কি কি দেখা যায়", "ড্যাশবোর্ডে কি কি দেখা যায়", "tryhackme", "tryhack me", "ট্রাইহ্যাকমি"],
+    "keywords_en": ["tryhackme", "tryhack me", "what is tryhackme", "what is tryhack me", "tryhackme dashboard", "thm", "tryhackme.com", "tryhackme overview", "about tryhackme", "tell me about tryhackme"],
+    "keywords_bn": ["tryhackme কি", "tryhack me কি", "tryhackme ki", "tryhack me ki", "ট্রাইহ্যাকমি কি", "tryhackme dashboard কি", "ট্রাইহ্যাকমি পরিচিতি", "tryhackme সম্পর্কে বলো", "tryhackme somporke bolo", "try hack me somporke bolo", "tryhackme somporkey idea daow", "tryhackme somporkey idea daow", "tryhackme somporke idea daow", "try hack me somporke idea daow", "tryhackme idea", "tryhackme কি এবং এর ড্যাশবোর্ডে কি কি দেখা যায়", "ড্যাশবোর্ডে কি কি দেখা যায়"],
     "responses_en": [
       "🎯 <strong>TryHackMe (THM):</strong> A premier hands-on online platform for learning cybersecurity and ethical hacking through gamified, browser-based virtual labs.<br><br>• <strong>Dashboard Features:</strong> Shows daily learning streaks, active Learning Paths, completed rooms, total points, global rank, and recommended modules.<br>• <strong>Official Website:</strong> <a href='https://tryhackme.com' target='_blank' style='color:#00f2fe;'>tryhackme.com</a>"
     ],
@@ -197,14 +197,56 @@
   {
     "id": "mem_tryhackme_career_benefit",
     "category": "tech",
-    "title": "সাইবার সিকিউরিটি ক্যারিয়ারে TryHackMe এর সুবিধা (Career Impact)",
-    "keywords_en": ["tryhackme for career", "why use tryhackme", "job preparation cybersecurity", "tryhackme certifications", "why learn tryhackme"],
-    "keywords_bn": ["সাইবার সিকিউরিটি ক্যারিয়ারে tryhackme এর সুবিধা", "সাইবার সিকিউরিটি ক্যারিয়ার এবং চাকরির জন্য tryhackme কেন দরকার", "tryhackme কেন শিখব", "চাকরি পাওয়ার জন্য tryhackme", "tryhackme এর লাভ কি"],
+    "title": "TryHackMe সাপোর্ট ও সাইবার সিকিউরিটি ক্যারিয়ারের সুবিধা (Support & Career Benefits)",
+    "keywords_en": [
+      "tryhackme support",
+      "how does tryhackme support me",
+      "what support does tryhackme give",
+      "tryhackme benefits",
+      "tryhackme for career",
+      "why use tryhackme",
+      "job preparation cybersecurity",
+      "tryhackme certifications",
+      "why learn tryhackme",
+      "try hack me support",
+      "tryhackme student support",
+      "career support in tryhackme"
+    ],
+    "keywords_bn": [
+      "try hack me amake ki support dite parbey",
+      "tryhack me amake ki support dite parbey",
+      "tryhackme amake ki support dite parbey",
+      "tryhackme amake ki support dite parbe",
+      "try hack me amake ki support dite parbe",
+      "tryhackme amake ki support dibe",
+      "try hack me amake ki support dibe",
+      "tryhackme কি সাপোর্ট দিতে পারবে",
+      "ট্রাইহ্যাকমি আমাকে কি সাপোর্ট দিতে পারবে",
+      "tryhackme ki support dite parbe",
+      "tryhackme ki support dite parbey",
+      "tryhackme ki support dibe",
+      "tryhackme কি সাপোর্ট দেয়",
+      "tryhackme support",
+      "try hack me support",
+      "tryhackme er subidha ki",
+      "tryhackme er subidha",
+      "tryhackme কিভাবে সাহায্য করে",
+      "tryhackme kivabe help korbe",
+      "tryhackme ki vabe sahajjo korbe",
+      "সাইবার সিকিউরিটি ক্যারিয়ারে tryhackme এর সুবিধা",
+      "tryhackme এর সুবিধা",
+      "tryhackme সাপোর্ট",
+      "tryhackme কেন শিখব",
+      "চাকরি পাওয়ার জন্য tryhackme",
+      "tryhackme এর লাভ কি",
+      "tryhackme ক্যারিয়ার সাপোর্ট",
+      "tryhackme career support"
+    ],
     "responses_en": [
-      "🏆 <strong>How TryHackMe Helps Your Cybersecurity Career:</strong><br><br>• <strong>Practical Experience:</strong> Real hands-on experience demanded by cybersecurity employers and SOC teams.<br>• <strong>Certification Prep:</strong> Great preparation for industry certifications like CompTIA Security+, CEH, eJPT, and OSCP.<br>• <strong>Portfolio Showcase:</strong> You can link your public TryHackMe profile and certificate badges on LinkedIn and your resume!"
+      "🎯 <strong>How TryHackMe Supports You & Your Cybersecurity Career (Deep Research):</strong><br><br>1. <strong>In-Browser AttackBox & Zero-Setup Labs:</strong> Practice ethical hacking and cyber defense directly in your browser with cloud Kali Linux without installing local virtual machines.<br>2. <strong>Structured Learning Paths:</strong> Step-by-step career tracks from foundational to advanced (Pre-Security, Jr Penetration Tester, SOC Level 1 & 2, Web Fundamentals, Red Teaming).<br>3. <strong>Verifiable Industry Certificates & Live Portfolio:</strong> Earn verifiable digital certificates upon path completion to showcase on LinkedIn and tech resumes.<br>4. <strong>Gamified Milestones & Global Ranking:</strong> Build daily learning streaks, solve CTF rooms, earn badges, and climb competitive global leaderboards.<br>5. <strong>24/7 Community & Problem-Solving Support:</strong> Access in-room hints, step-by-step walkthroughs, and collaborate with 300,000+ peers in the official TryHackMe Discord and forum."
     ],
     "responses_bn": [
-      "🏆 <strong>সাইবার সিকিউরিটি ক্যারিয়ারে TryHackMe যেভাবে সাহায্য করে:</strong><br><br>• <strong>প্র্যাকটিক্যাল অভিজ্ঞতা:</strong> বই পড়ে মুখস্থ করার বদলে সরাসরি হ্যাকিং ও সিকিউরিটি টুলস ব্যবহারের অভিজ্ঞতা অর্জন।<br>• <strong>সার্টিফিকেশন প্রস্তুতি:</strong> CompTIA Security+, CEH, eJPT এবং OSCP-এর মতো আন্তর্জাতিক পরীক্ষার জন্য উপযুক্ত প্রস্তুতি।<br>• <strong>সিভি ও পোর্টফোলিও:</strong> আপনার TryHackMe প্রোফাইল লিঙ্ক ও সার্টিফিকেট লিঙ্কডইন (LinkedIn) এবং সিভিতে যুক্ত করে নিয়োগদাতাদের দৃষ্টি আকর্ষণ করা যায়।"
+      "🎯 <strong>TryHackMe (THM) আপনাকে যেসব ক্ষেত্রে পূর্ণাঙ্গ সাপোর্ট ও ক্যারিয়ার সুবিধা প্রদান করে:</strong><br><br>১. <strong>জিরো-সেটআপ ল্যাব ও AttackBox সাপোর্ট:</strong> পিসিতে কোনো ভারী ভার্চুয়াল মেশিন বা Kali Linux ইনস্টল না করেই সরাসরি ব্রাউজারে ওয়ান-ক্লিকে ক্লাউড লিনাক্স চালিয়ে রিয়েল টার্গেট সার্ভার হ্যাকিং ও ডিফেন্ডিং প্র্যাকটিস করার সুবিধা।<br>২. <strong>গাইডেড লার্নিং পাথ সাপোর্ট:</strong> শূন্য থেকে শুরু করে প্রফেশনাল হওয়া পর্যন্ত সুনির্দিষ্ট কারিকুলাম—যেমন <em>Pre-Security, Complete Beginner, Jr Penetration Tester, SOC Level 1 & 2, Web Fundamentals, এবং Red Teaming</em>।<br>৩. <strong>ভেরিফায়েবল সার্টিফিকেট ও প্র্যাকটিক্যাল পোর্টফোলিও:</strong> প্রতিটি লার্নিং পাথ ও চ্যালেঞ্জ সম্পন্ন করলে অফিসিয়াল ডিজিটাল সার্টিফিকেট প্রদান করে, যা সরাসরি LinkedIn এবং জবের সিভিতে যুক্ত করে ইন্টারভিউয়ারদের সামনে প্র্যাকটিক্যাল স্কিল প্রমাণ করা যায়।<br>৪. <strong>গ্লোবাল র‍্যাঙ্ক, স্ট্রিক ও ব্যাজ:</strong> প্রতিদিনের স্ট্রিক (Streak) ট্র্যাকিং এবং বিশ্বব্যাপী লিডারবোর্ডে র‍্যাঙ্কিংয়ের মাধ্যমে আন্তর্জাতিক প্ল্যাটফর্মে নিজের অবস্থান যাচাইয়ের সুযোগ।<br>৫. <strong>কমিউনিটি ও মেন্টরশিপ সাপোর্ট:</strong> প্রতিটি রুমে আটকে গেলে বিল্ট-ইন হিন্টস (Hints) এবং অফিশিয়াল ৩ লক্ষ+ মেম্বারের ডিসকর্ড/ফোরামে সরাসরি অন্য হ্যাকার ও মেন্টরদের কাছ থেকে যেকোনো প্রবলেম সলভিং সাপোর্ট।"
     ]
   },
   {
@@ -232,10 +274,17 @@
       "tryhackme security tools",
       "security tools in tryhackme",
       "tools taught in tryhackme",
+      "what security tools are taught in tryhackme",
       "wireshark burpsuite nmap on thm",
       "what tools are on tryhackme"
     ],
     "keywords_bn": [
+      "tryhackme te ki ki security tools sekhano hoy",
+      "try hack me te ki ki security tools sekhano hoy",
+      "tryhackme te ki ki tools sekhano hoy",
+      "tryhackme security tools sekhano hoy",
+      "tryhackme te ki ki security tools ache",
+      "tryhackme tools sekhano hoy",
       "tryhackme তে কি কি শেখা যায়",
       "tryhackme topics কি কি",
       "কি কি টুলস শেখায়",
@@ -430,6 +479,126 @@
     ],
     "responses_bn": [
       "✨ <strong>হ্যাঁ! আপনি এই চ্যাটবক্সে বাংলা, বাংলিশ এবং ইংরেজি — যেকোনো ভাষায় স্বাচ্ছন্দ্যে চ্যাট করতে পারবেন!</strong><br><br>• <strong>বাংলিশ (Banglish):</strong> যেমন — <em>\"tomi ki amake python shekhate parbe?\"</em><br>• <strong>শুদ্ধ বাংলা (Bangla):</strong> যেমন — <em>\"তুমি কি আমাকে পাইথন শেখাতে পারবে?\"</em><br>• <strong>ইংরেজি (English):</strong> যেমন — <em>\"Can you teach me Python?\"</em><br><br>আমাদের নিউরাল ইঞ্জিন স্বয়ংক্রিয়ভাবে আপনার লেখার ভাষা ও ভঙ্গি বুঝে তাৎক্ষণিক যথাযথ উত্তর দেয়! 🧠💬"
+    ]
+  },
+  {
+    "id": "mem_ostad_overview",
+    "category": "tech",
+    "title": "Ostad (ostad.app) পরিচিতি ও বিশেষত্ব (Ostad Overview & Features)",
+    "keywords_en": [
+      "ostad app",
+      "what is ostad",
+      "ostad bangladesh",
+      "ostad live learning",
+      "ostad platform",
+      "ostad.app",
+      "about ostad"
+    ],
+    "keywords_bn": [
+      "ostad app কি",
+      "ওস্তাদ অ্যাপ কি",
+      "ostad কি",
+      "ostad.app সম্পর্কে বলো",
+      "ostad প্ল্যাটফর্ম কি",
+      "ওস্তাদ কি",
+      "ostad সম্পর্কে বলো",
+      "ostad bangladesh"
+    ],
+    "responses_en": [
+      "🎓 <strong>Ostad (ostad.app) - Live Interactive Skill Development Platform:</strong><br><br><strong>Ostad</strong> is one of Bangladesh's premier live-learning EdTech platforms focused on building job-ready tech and digital skills through structured bootcamps.<br><br>🌟 <strong>Key Features:</strong><br>• <strong>Live Interactive Classes:</strong> Real-time coding and instruction with industry experts instead of just recorded videos.<br>• <strong>Weekly Streaks & Tasks:</strong> In-app assignments, code reviews, and streak-based milestone tracking.<br>• <strong>Mentorship Support:</strong> Dedicated teaching assistants and mentor guidance for doubt clearing.<br>• <strong>Official Website:</strong> <a href='https://ostad.app' target='_blank' style='color:#00f2fe;'>ostad.app</a>"
+    ],
+    "responses_bn": [
+      "🎓 <strong>Ostad (ostad.app) - লাইভ ইন্টারঅ্যাক্টিভ স্কিল ডেভেলপমেন্ট প্ল্যাটফর্ম:</strong><br><br><strong>Ostad</strong> হলো বাংলাদেশের শীর্ষস্থানীয় লাইভ লার্নিং এডটেক প্ল্যাটফর্ম, যা শিক্ষার্থীদের চাকরি ও ক্যারিয়ার উপযোগী টেকনিক্যাল স্কিল তৈরিতে কাজ করে।<br><br>🌟 <strong>মূল সুবিধাসমূহ:</strong><br>• <strong>লাইভ ইন্টারঅ্যাক্টিভ ক্লাস:</strong> শুধু রেকর্ডেড ভিডিও নয়, সরাসরি ইন্ডাস্ট্রির অভিজ্ঞ মেন্টরদের সাথে লাইভ ক্লাস ও প্রজেক্ট প্র্যাকটিস।<br>• <strong>টাস্ক ও উইকলি স্ট্রিক:</strong> নিয়মিত অ্যাসাইনমেন্ট সাবমিশন, লাইভ কোড রিভিউ এবং স্ট্রিক ধরে রাখার মাধ্যমে নিয়মানুবর্তিতা তৈরি।<br>• <strong>মেন্টর ও টিএ সাপোর্ট:</strong> যেকোনো সমস্যা সমাধানে সার্বক্ষণিক ডেডিকেটেড টিচিং অ্যাসিস্ট্যান্ট সাপোর্ট।<br>• <strong>অফিসিয়াল ওয়েবসাইট:</strong> <a href='https://ostad.app' target='_blank' style='color:#00f2fe;'>ostad.app</a>"
+    ]
+  },
+  {
+    "id": "mem_ostad_courses_bootcamps",
+    "category": "tech",
+    "title": "Ostad এ কি কি কোর্স ও বুটক্যাম্প শেখানো হয় (Ostad Courses & Tracks)",
+    "keywords_en": [
+      "ostad courses",
+      "what courses in ostad",
+      "ostad bootcamps",
+      "ostad web development",
+      "ostad python mern",
+      "ostad flutter cybersecurity",
+      "what can i learn on ostad",
+      "course",
+      "courses",
+      "bootcamp",
+      "bootcamps",
+      "ki ki course",
+      "course list",
+      "all courses"
+    ],
+    "keywords_bn": [
+      "ostad এ কি কি কোর্স শেখানো হয়",
+      "ostad এর কোর্স সমূহ",
+      "ওস্তাদে কি কি কোর্স আছে",
+      "ostad bootcamps কি কি",
+      "ostad এ কি কি শেখা যায়",
+      "ওস্তাদ কোর্স লিস্ট",
+      "ostad courses কি কি",
+      "কোর্স",
+      "কোর্সসমূহ",
+      "বুটক্যাম্প",
+      "কি কি কোর্স",
+      "কি কোর্স আছে",
+      "কি কি কোর্স শেখানো হয়",
+      "কোর্স লিস্ট",
+      "ki ki course",
+      "ki ki course achey",
+      "ki ki course ache",
+      "course ache"
+    ],
+    "responses_en": [
+      "🚀 <strong>Popular Bootcamps & Courses on Ostad (ostad.app):</strong><br><br>Ostad offers structured industry-curated tracks across major technology domains:<br><br>🔹 <strong>Software & Web Development:</strong><br>• Full-Stack MERN (MongoDB, Express, React, Node.js)<br>• Python & Django Web Development<br>• PHP & Laravel Framework<br>• Frontend Engineering (React.js, Next.js)<br><br>🔹 <strong>AI, Data Science & Machine Learning:</strong><br>• AI & ML Engineering, LLMs & Automation<br>• Data Science with Python & PowerBI<br>• Data Engineering Bootcamp<br><br>🔹 <strong>Mobile & Quality Engineering:</strong><br>• Flutter Mobile App Development<br>• SQA (Software Quality Assurance & Automation)<br>• DevOps & Cloud Infrastructure<br><br>🔹 <strong>Cyber Security & Design:</strong><br>• Cyber Security & Ethical Hacking<br>• UI/UX Design & Product Management"
+    ],
+    "responses_bn": [
+      "🚀 <strong>Ostad-এ শেখানো প্রধান কোর্স ও ক্যারিয়ার বুটক্যাম্পসমূহ:</strong><br><br>Ostad প্ল্যাটফর্মে ইন্ডাস্ট্রির চাহিদা অনুযায়ী বিভিন্ন হাই-ডিমান্ড ট্র্যাক শেখানো হয়:<br><br>🔹 <strong>ওয়েব ও সফটওয়্যার ডেভেলপমেন্ট:</strong><br>• Full-Stack MERN (React, Node.js, Express, MongoDB)<br>• Python & Django ফুল-স্ট্যাক ডেভেলপমেন্ট<br>• PHP & Laravel ওয়েব ডেভেলপমেন্ট<br>• Frontend Development (React.js, Next.js)<br><br>🔹 <strong>এআই, মেশিন লার্নিং ও ডেটা সায়েন্স:</strong><br>• AI & Machine Learning Engineering (LLMs, Automation)<br>• Data Science & Analytics (Python, SQL, PowerBI)<br>• Data Engineering Bootcamp<br><br>🔹 <strong>মোবাইল অ্যাপ ও ইঞ্জিনিয়ারিং:</strong><br>• Flutter Mobile App Development<br>• SQA (Software Quality Assurance ও অটোমেশন টেস্ট)<br>• DevOps & Cloud Computing<br><br>🔹 <strong>সাইবার সিকিউরিটি ও ডিজাইন:</strong><br>• Cyber Security & Ethical Hacking<br>• UI/UX Design & Product Management"
+    ]
+  },
+  {
+    "id": "mem_ostad_job_placement_certificate",
+    "category": "tech",
+    "title": "Ostad এর জব প্লেসমেন্ট সাপোর্ট ও সার্টিফিকেট (Job Placement & Certificate)",
+    "keywords_en": [
+      "ostad job placement",
+      "ostad certificate",
+      "does ostad provide jobs",
+      "ostad career support",
+      "is ostad certificate valid",
+      "certificate",
+      "certification",
+      "job placement",
+      "career support",
+      "job support"
+    ],
+    "keywords_bn": [
+      "ostad এর জব সাপোর্ট কেমন",
+      "ostad সার্টিফিকেট কি কার্যকর",
+      "ওস্তাদ কি চাকরি দেয়",
+      "ostad job placement কি",
+      "ostad ক্যারিয়ার সাপোর্ট",
+      "সার্টিফিকেট",
+      "সনদ",
+      "সার্টিফিকেশন",
+      "চাকরি",
+      "চাকরির সুবিধা",
+      "জব সুবিধা",
+      "প্লেসমেন্ট",
+      "ক্যারিয়ার",
+      "certificate ki pabo",
+      "certificate pabo",
+      "chakorir subidha",
+      "chakri pabo",
+      "job pabo"
+    ],
+    "responses_en": [
+      "🏆 <strong>Ostad Job Placement & Career Support Ecosystem:</strong><br><br>• <strong>Verified Certificates:</strong> Shareable accredited digital credentials for LinkedIn, resumes, and portfolios.<br>• <strong>Ostad Talent Pool:</strong> Top-performing graduates get recommended directly to partner software firms and corporate hiring teams.<br>• <strong>Career Coaching:</strong> Resume building, GitHub/portfolio audit, and technical mock interviews by senior engineers."
+    ],
+    "responses_bn": [
+      "🏆 <strong>Ostad-এর জব প্লেসমেন্ট সাপোর্ট ও সার্টিফিকেশন সুবিধা:</strong><br><br>• <strong>ভেরিফায়েড সার্টিফিকেট:</strong> সফলভাবে বুটক্যাম্প সম্পন্ন করলে আন্তর্জাতিকভাবে লিঙ্কডইন ও সিভিতে প্রদর্শনযোগ্য ডিজিটাল সার্টিফিকেট প্রদান করা হয়।<br>• <strong>ট্যালেন্ট নেটওয়ার্ক ও রিকমেন্ডেশন:</strong> শীর্ষ পারফর্মারদের Ostad Talent Pool-এর মাধ্যমে সরাসরি বিভিন্ন দেশি-বিদেশি পার্টনার প্রতিষ্ঠানে ইন্টারভিউ ও চাকরির সুযোগ দেওয়া হয়।<br>• <strong>ক্যারিয়ার গ্রুমিং:</strong> সিভি মেকিং, গিটহাব/পোর্টফোলিও রিভিউ এবং টেকনিক্যাল মক ইন্টারভিউ প্রস্তুতি।"
     ]
   }
 ]
