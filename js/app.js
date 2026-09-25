@@ -1906,7 +1906,25 @@ function initVoiceAndChatEngine() {
     'certificate': ['সার্টিফিকেট', 'সনদ', 'সনদপত্র', 'certification', 'সার্টিফিকেশন'],
     'live': ['লাইভ', 'সরাসরি', 'লাইভ ক্লাস'],
     'class': ['ক্লাস', 'লাইভ ক্লাস', 'সেশন'],
-    'batch': ['ব্যাচ', 'নতুন ব্যাচ']
+    'batch': ['ব্যাচ', 'নতুন ব্যাচ'],
+    'konta': ['কোনটা', 'which', 'kon'],
+    'bhalo': ['ভালো', 'better', 'good', 'valo', 'সেরা', 'best'],
+    'valo': ['ভালো', 'better', 'good', 'bhalo', 'সেরা', 'best'],
+    'shuru': ['শুরু', 'start', 'begin', 'suru'],
+    'suru': ['শুরু', 'start', 'begin', 'shuru'],
+    'lage': ['লাগে', 'দরকার', 'প্রয়োজন', 'need', 'require', 'lagbe'],
+    'lagbe': ['লাগবে', 'দরকার', 'প্রয়োজন', 'need', 'require', 'lage'],
+    'kivabe': ['কিভাবে', 'how', 'kivabhe'],
+    'kivabhe': ['কিভাবে', 'how', 'kivabe'],
+    'korbo': ['করব', 'করবো', 'korte'],
+    'korte': ['করতে', 'করব', 'korbo'],
+    'htb': ['hackthebox', 'hack the box'],
+    'hackthebox': ['htb', 'hack the box'],
+    'vs': ['বনাম', 'versus', 'তুলনা', 'পার্থক্য', 'compare', 'difference'],
+    'openvpn': ['vpn', 'ovpn', 'ভিপিএন', 'কানেক্ট'],
+    'vpn': ['openvpn', 'ovpn', 'ভিপিএন'],
+    'soc': ['blueteam', 'blue team', 'অ্যানালিস্ট', 'analyst', 'ডিফেন্স', 'defense'],
+    'roadmap': ['রোডম্যাপ', 'গাইডলাইন', 'guideline', 'পাথ', 'path']
   };
 
   function expandSearchTokens(tokens) {
@@ -2703,6 +2721,156 @@ function initVoiceAndChatEngine() {
         ],
         responses_bn: [
           '🎯 <strong>TryHackMe (THM) আপনাকে যেসব ক্ষেত্রে পূর্ণাঙ্গ সাপোর্ট ও ক্যারিয়ার সুবিধা প্রদান করে:</strong><br><br>১. <strong>জিরো-সেটআপ ল্যাব ও AttackBox সাপোর্ট:</strong> পিসিতে কোনো ভারী ভার্চুয়াল মেশিন বা Kali Linux ইনস্টল না করেই সরাসরি ব্রাউজারে ওয়ান-ক্লিকে ক্লাউড লিনাক্স চালিয়ে রিয়েল টার্গেট সার্ভার হ্যাকিং ও ডিফেন্ডিং প্র্যাকটিস করার সুবিধা।<br>২. <strong>গাইডেড লার্নিং পাথ সাপোর্ট:</strong> শূন্য থেকে শুরু করে প্রফেশনাল হওয়া পর্যন্ত সুনির্দিষ্ট কারিকুলাম—যেমন <em>Pre-Security, Complete Beginner, Jr Penetration Tester, SOC Level 1 & 2, Web Fundamentals, এবং Red Teaming</em>।<br>৩. <strong>ভেরিফায়েবল সার্টিফিকেট ও প্র্যাকটিক্যাল পোর্টফোলিও:</strong> প্রতিটি লার্নিং পাথ ও চ্যালেঞ্জ সম্পন্ন করলে অফিসিয়াল ডিজিটাল সার্টিফিকেট প্রদান করে, যা সরাসরি LinkedIn এবং জবের সিভিতে যুক্ত করে ইন্টারভিউয়ারদের সামনে প্র্যাকটিক্যাল স্কিল প্রমাণ করা যায়।<br>৪. <strong>গ্লোবাল র‍্যাঙ্ক, স্ট্রিক ও ব্যাজ:</strong> প্রতিদিনের স্ট্রিক (Streak) ট্র্যাকিং এবং বিশ্বব্যাপী লিডারবোর্ডে র‍্যাঙ্কিংয়ের মাধ্যমে আন্তর্জাতিক প্ল্যাটফর্মে নিজের অবস্থান যাচাইয়ের সুযোগ।<br>৫. <strong>কমিউনিটি ও মেন্টরশিপ সাপোর্ট:</strong> প্রতিটি রুমে আটকে গেলে বিল্ট-ইন হিন্টস (Hints) এবং অফিশিয়াল ৩ লক্ষ+ মেম্বারের ডিসকর্ড/ফোরামে সরাসরি অন্য হ্যাকার ও মেন্টরদের কাছ থেকে যেকোনো প্রবলেম সলভিং সাপোর্ট।'
+        ]
+      },
+      {
+        id: 'mem_tryhackme_vs_hackthebox',
+        category: 'tech',
+        title: 'TryHackMe বনাম Hack The Box (THM vs Hack The Box Comparison)',
+        keywords_en: [
+          'tryhackme vs hack the box',
+          'thm vs htb',
+          'tryhackme vs htb',
+          'which is better tryhackme or htb',
+          'hack the box vs tryhackme',
+          'difference between tryhackme and hack the box',
+          'is tryhackme better than hack the box'
+        ],
+        keywords_bn: [
+          'tryhackme vs hack the box',
+          'tryhackme vs hackthebox',
+          'tryhackme vs htb',
+          'tryhackme এবং hack the box এর মধ্যে কোনটা ভালো',
+          'tryhackme আর hack the box এর পার্থক্য',
+          'tryhackme vs hack the box konta bhalo',
+          'tryhackme naki hack the box',
+          'tryhackme নাকি hackthebox কোনটা ভালো',
+          'নতুনদের জন্য কোনটা ভালো tryhackme নাকি htb',
+          'htb vs thm',
+          'হ্যাকিং শেখার জন্য কোনটা সেরা tryhackme নাকি htb'
+        ],
+        responses_en: [
+          '⚔️ <strong>TryHackMe (THM) vs. Hack The Box (HTB) Comparison:</strong><br><br>• <strong>TryHackMe (Best for Beginners & Intermediates):</strong><br>1. <em>Guided Learning:</em> Bite-sized, step-by-step rooms with theory, hints, and immediate practice.<br>2. <em>Browser AttackBox:</em> Complete in-browser cloud Kali Linux with zero setup.<br>3. <em>Covers Both Offense & Defense:</em> Outstanding dedicated Blue Team / SOC paths alongside Red Teaming.<br><br>• <strong>Hack The Box (Best for Advanced Penetration Testers):</strong><br>1. <em>Unguided Real-world CTF:</em> Gives an IP with minimal instructions—requires strong independent research.<br>2. <em>Offensive Focus:</em> Highly tailored towards OSCP preparation and deep privilege escalation.<br><br>💡 <strong>Best Strategy:</strong> Start with TryHackMe to build solid fundamentals across Linux, Networking, and Web vulnerabilities, then advance to Hack The Box for intense CTF challenges!'
+        ],
+        responses_bn: [
+          '⚔️ <strong>TryHackMe (THM) বনাম Hack The Box (HTB) এর তুলনামূলক বিশ্লেষণ:</strong><br><br>• <strong>TryHackMe (নতুন ও ইন্টারমিডিয়েটদের জন্য সেরা):</strong><br>১. <em>গাইডেড লার্নিং:</em> প্রতিটি রুমে থিওরি পড়ার পাশাপাশি সাথে সাথে হাতে-কলমে প্র্যাকটিস করার প্রশ্ন ও হিন্টস দেওয়া থাকে।<br>২. <em>জিরো সেটআপ:</em> ব্রাউজারের ভেতরে সরাসরি ক্লাউড Kali Linux (AttackBox) পাওয়া যায়।<br>৩. <em>অফেন্সিভ ও ডিফেন্সিভ উভয় ফিল্ড:</em> পেন্টেস্টিংয়ের পাশাপাশি অসাধারণ SOC ও ব্লু-টিম লার্নিং পাথ রয়েছে।<br><br>• <strong>Hack The Box (অ্যাডভান্সড পেন্টাস্টারদের জন্য সেরা):</strong><br>১. <em>আন-গাইডেড বাস্তবসম্মত চ্যালেঞ্জ:</em> কোনো থিওরি বা হিন্টস ছাড়া সরাসরি টার্গেট আইপি দেওয়া হয়, যা রিয়েল-ওয়ার্ল্ড পেন্টেস্টিং ও OSCP পরীক্ষার প্রস্তুতির মতো।<br>২. <em>মূলত আক্রমণাত্মক (Offensive Focus):</em> ডিপ প্রিভিলেজ এসকেলেশন ও হার্ডকোর এক্সপ্লয়েটেশনে জোর দেয়।<br><br>💡 <strong>সেরা পরামর্শ:</strong> সাইবার সিকিউরিটির প্রাথমিক ভিত্তি ও টুলসের ব্যবহার শেখার জন্য প্রথমে <strong>TryHackMe</strong> শেষ করুন, এরপর অ্যাডভান্সড চ্যালেঞ্জের জন্য <strong>Hack The Box</strong>-এ যান।'
+        ]
+      },
+      {
+        id: 'mem_tryhackme_certificate_value',
+        category: 'tech',
+        title: 'TryHackMe সার্টিফিকেটের গ্রহণযোগ্যতা ও ক্যারিয়ার ভ্যালু (Certificate Value & Job Impact)',
+        keywords_en: [
+          'tryhackme certificate value',
+          'is tryhackme certificate recognized',
+          'does tryhackme certificate help get a job',
+          'thm certificates on resume',
+          'are thm certificates accredited',
+          'tryhackme certificate worth it'
+        ],
+        keywords_bn: [
+          'tryhackme certificate কি জবে কাজে লাগে',
+          'tryhackme certificate er value kemon',
+          'tryhackme সার্টিফিকেট এর মান কেমন',
+          'tryhackme সার্টিফিকেট কি চাকরির জন্য সাহায্য করে',
+          'tryhackme certificate কি ভ্যালিড',
+          'tryhackme সার্টিফিকেট',
+          'tryhackme সার্টিফিকেট দিয়ে কি চাকরি পাওয়া যায়'
+        ],
+        responses_en: [
+          '🏆 <strong>TryHackMe Certificate Value & Industry Recognition:</strong><br><br>• <strong>Hands-on Proof of Work:</strong> While THM certificates are non-proctored (unlike formal exams such as CompTIA Security+ or OSCP), they demonstrate verified, verifiable lab hours and hands-on competence on LinkedIn and tech resumes.<br>• <strong>Valued by Hiring Managers:</strong> Tech recruiters and SOC hiring managers value candidates who complete foundational tracks (e.g. <em>SOC Level 1, Jr Penetration Tester</em>) and maintain consistent streak rankings, as it proves discipline, self-learning capability, and practical tool mastery.<br>• <strong>How to Showcase:</strong> Add your verified badge links, THM profile URL, and write up detailed walkthrough blogs for challenging rooms on GitHub/Medium to build a standout portfolio.'
+        ],
+        responses_bn: [
+          '🏆 <strong>TryHackMe সার্টিফিকেটের মান ও চাকরি পাওয়ার ক্ষেত্রে ভূমিকা:</strong><br><br>• <strong>প্র্যাকটিক্যাল প্রুফ অব স্কিল:</strong> যদিও এটি প্রোভেড এক্সাম (যেমন OSCP বা Security+) এর বিকল্প নয়, তবুও এটি নিয়োগকর্তাদের সামনে প্রমাণ করে যে আপনি শত শত ঘণ্টা হ্যান্ডস-অন ল্যাব প্র্যাকটিস করেছেন এবং লিনাক্স/টুলস ব্যবহারে দক্ষ।<br>• <strong>জব ইন্টারভিউতে সুবিধা:</strong> বিশেষ করে এন্ট্রি-লেভেল <em>Junior Penetration Tester</em> বা <em>SOC Analyst</em> পদের জন্য THM-এর লার্নিং পাথ সার্টিফিকেট, প্রোফাইল র‍্যাঙ্ক এবং স্ট্রিক রিক্রুটারদের কাছে অত্যন্ত ইতিবাচক প্রভাব ফেলে।<br>• <strong>সর্বোত্তম ব্যবহার:</strong> সার্টিফিকেটের সাথে আপনার THM পাবলিক প্রোফাইল লিংক সিভিতে দিন এবং বিভিন্ন চ্যালেঞ্জ রুমের টেকনিক্যাল রাইট-আপ (Write-up) গিটহাব বা ব্লগে শেয়ার করে পোর্টফোলিও তৈরি করুন।'
+        ]
+      },
+      {
+        id: 'mem_tryhackme_prerequisites',
+        category: 'tech',
+        title: 'TryHackMe শুরু করার পূর্বপ্রস্তুতি ও প্রয়োজনীয় জ্ঞান (Prerequisites to Start TryHackMe)',
+        keywords_en: [
+          'tryhackme prerequisites',
+          'what is required to start tryhackme',
+          'prerequisites for tryhackme',
+          'what to know before tryhackme',
+          'can a beginner start tryhackme',
+          'do i need coding for tryhackme',
+          'how to start tryhackme',
+          'skills needed for tryhackme'
+        ],
+        keywords_bn: [
+          'tryhackme shuru korte ki lage',
+          'tryhackme shuru korte ki ki lage',
+          'tryhackme suru korte ki lage',
+          'tryhackme suru korte ki ki lage',
+          'tryhackme শুরু করতে কি লাগে',
+          'tryhackme শুরু করতে কি কি লাগে',
+          'tryhackme শুরু করতে কি কি জানা দরকার',
+          'হ্যাকিং শেখার আগে কি জানা দরকার',
+          'tryhackme কি একদম নতুনদের জন্য',
+          'কোডিং না জানলে কি tryhackme করা যায়',
+          'tryhackme prerequisites কি',
+          'tryhackme কিভাবে শুরু করব'
+        ],
+        responses_en: [
+          '🌱 <strong>Prerequisites to Start Learning on TryHackMe:</strong><br><br>1. <strong>No Advanced Coding Required:</strong> You don\'t need to be a software developer to start. Basic scripting (Bash or Python) helps later, but is not mandatory at the beginning.<br>2. <strong>Basic Computer & OS Literacy:</strong> Familiarity with Windows and basic Linux command-line operations (<code>ls, cd, cat, grep, chmod</code>).<br>3. <strong>Networking Fundamentals:</strong> Basic understanding of how the internet works—IP addresses, Ports, Protocols (HTTP, DNS, TCP/UDP), and Routers.<br>4. <strong>Recommended Starting Paths:</strong> If you are starting from complete zero, begin directly with THM\'s <strong>Pre-Security</strong> path followed by <strong>Complete Beginner</strong>. Everything is taught interactively inside the browser!'
+        ],
+        responses_bn: [
+          '🌱 <strong>TryHackMe শুরু করার জন্য প্রয়োজনীয় প্রাথমিক জ্ঞান ও প্রস্তুতি:</strong><br><br>১. <strong>কোডিং কি জানা বাধ্যতামূলক?</strong> একদমই না! শুরুতে কোনো প্রোগ্রামিং বা কোডিং না জেনেও শুরু করা যায়। পরবর্তীতে ব্যাশ (Bash) বা পাইথনের বেসিক জানলে সুবিধা হয়।<br>২. <strong>বেসিক লিনাক্স কমান্ড:</strong> লিনাক্স টার্মিনালের প্রাথমিক কিছু কমান্ড (যেমন: <code>ls, cd, cat, grep, chmod</code>) জানা থাকলে ল্যাবগুলো সহজে সমাধান করা যায়।<br>৩. <strong>নেটওয়ার্কিংয়ের সাধারণ ধারণা:</strong> আইপি অ্যাড্রেস (IP), পোর্ট (Port), ডিএনএস (DNS) এবং HTTP কীভাবে কাজ করে তা বোঝার কৌতূহল।<br>৪. <strong>কোথা থেকে শুরু করবেন:</strong> আপনি একদম নতুন হলে TryHackMe-এর <strong>Pre-Security</strong> এবং <strong>Complete Beginner</strong> লার্নিং পাথ দিয়ে শুরু করুন—এখানে শূন্য থেকে প্রতিটি বিষয় ধাপে ধাপে শেখানো হয়।'
+        ]
+      },
+      {
+        id: 'mem_tryhackme_openvpn_setup',
+        category: 'tech',
+        title: 'TryHackMe তে OpenVPN দিয়ে Kali Linux কানেক্ট করার নিয়ম (OpenVPN Connection Guide)',
+        keywords_en: [
+          'how to connect openvpn tryhackme',
+          'tryhackme vpn connection',
+          'connect kali linux to thm openvpn',
+          'thm openvpn configuration',
+          'openvpn setup tryhackme',
+          'how to connect to tryhackme network'
+        ],
+        keywords_bn: [
+          'tryhackme তে openvpn কিভাবে কানেক্ট করব',
+          'tryhackme openvpn kivabe connect korbo',
+          'kali linux এ tryhackme vpn কানেক্ট করার নিয়ম',
+          'thm vpn কানেক্ট',
+          'tryhackme vpn সেটআপ',
+          'openvpn দিয়ে tryhackme ল্যাব কানেক্ট করার নিয়ম'
+        ],
+        responses_en: [
+          '🔌 <strong>How to Connect to TryHackMe Labs via OpenVPN (Kali Linux / Local VM):</strong><br><br>1. <strong>Download Config:</strong> Log in to TryHackMe, navigate to <a href=\'https://tryhackme.com/access\' target=\'_blank\' style=\'color:#00f2fe;\'>tryhackme.com/access</a>, select your nearest VPN server region, and click <strong>Download My Configuration File</strong> (e.g. <code>yourname.ovpn</code>).<br>2. <strong>Open Terminal:</strong> Open terminal in Kali Linux and go to the directory where the file was saved (e.g., <code>cd ~/Downloads</code>).<br>3. <strong>Run OpenVPN:</strong> Execute <code>sudo openvpn yourname.ovpn</code>.<br>4. <strong>Verify Connection:</strong> Look for the message <code>Initialization Sequence Completed</code>. Keep this terminal window open.<br>5. <strong>Check THM Access:</strong> Refresh the Access page; you should see a green checkmark showing your assigned THM internal IP (typically <code>10.x.x.x</code>).'
+        ],
+        responses_bn: [
+          '🔌 <strong>OpenVPN দিয়ে নিজের Kali Linux থেকে TryHackMe কানেক্ট করার সহজ ৫ ধাপ:</strong><br><br>১. <strong>কনফিগ ফাইল ডাউনলোড:</strong> ব্রাউজারে TryHackMe-তে লগইন করে <a href=\'https://tryhackme.com/access\' target=\'_blank\' style=\'color:#00f2fe;\'>tryhackme.com/access</a> পেজে যান এবং নিকটবর্তী রিজিয়ন নির্বাচন করে <strong>Download My Configuration File</strong> বাটনে ক্লিক করে <code>.ovpn</code> ফাইলটি ডাউনলোড করুন।<br>২. <strong>টার্মিনাল ওপেন করুন:</strong> Kali Linux-এ টার্মিনাল খুলে যেখানে ফাইলটি ডাউনলোড হয়েছে সেই ফোল্ডারে যান (যেমন: <code>cd ~/Downloads</code>)।<br>৩. <strong>কমান্ড চালান:</strong> টার্মিনালে লিখুন <code>sudo openvpn yourname.ovpn</code> এবং এন্টার দিন।<br>৪. <strong>সফল কানেকশন:</strong> টার্মিনালে <code>Initialization Sequence Completed</code> লেখা আসলে বুঝবেন ভিপিএন সফলভাবে কানেক্ট হয়েছে (এই টার্মিনালটি বন্ধ করবেন না)।<br>৫. <strong>যাচাই করুন:</strong> THM Access পেজে রিলোড দিলে সবুজ টিকচিহ্ন সহ আপনার ভার্চুয়াল প্রাইভেট আইপি (<code>10.x.x.x</code>) দেখতে পাবেন।'
+        ]
+      },
+      {
+        id: 'mem_tryhackme_soc_analyst_roadmap',
+        category: 'tech',
+        title: 'TryHackMe দিয়ে SOC Analyst ও Blue Team ক্যারিয়ার রোডম্যাপ (SOC Analyst Roadmap)',
+        keywords_en: [
+          'how to become a soc analyst using tryhackme',
+          'tryhackme soc analyst roadmap',
+          'thm blue team career path',
+          'soc level 1 on tryhackme',
+          'defensive security on thm',
+          'learn blue team tryhackme'
+        ],
+        keywords_bn: [
+          'tryhackme দিয়ে soc analyst কিভাবে হব',
+          'tryhackme soc analyst roadmap',
+          'tryhackme দিয়ে ব্লু টিম ক্যারিয়ার',
+          'soc level 1 লার্নিং পাথ',
+          'ডিফেন্সিভ সিকিউরিটি কিভাবে শিখব',
+          'soc analyst হতে tryhackme তে কি কি শিখব'
+        ],
+        responses_en: [
+          '🛡️ <strong>Step-by-Step SOC Analyst / Blue Team Career Roadmap on TryHackMe:</strong><br><br>1. <strong>Core Foundations:</strong> Complete <em>Pre-Security</em> and <em>Linux Fundamentals</em> to master networking layers, packet flow, and system logs.<br>2. <strong>Cyber Defense Path:</strong> Learn foundational offensive techniques to understand how attackers breach networks.<br>3. <strong>SOC Level 1 Track (The Core):</strong><br>• <strong>Packet Analysis:</strong> Master Wireshark and NetworkMiner to detect malicious payloads.<br>• <strong>SIEM Log Monitoring:</strong> Learn hands-on threat hunting and rule writing in <strong>Splunk</strong> and <strong>ELK / Elastic</strong>.<br>• <strong>Intrusion Detection:</strong> Write and analyze rules in <strong>Snort</strong> and <strong>Suricata</strong>.<br>4. <strong>Digital Forensics & Incident Response (DFIR):</strong> Practice memory forensics with Volatility and disk forensics with Autopsy.<br>5. <strong>Threat Intelligence & MITRE ATT&CK:</strong> Map real adversary techniques to defensive countermeasures.'
+        ],
+        responses_bn: [
+          '🛡️ <strong>TryHackMe ব্যবহার করে SOC Analyst ও ব্লু-টিম ক্যারিয়ার গড়ার রোডম্যাপ:</strong><br><br>১. <strong>প্রাথমিক ভিত্তি:</strong> প্রথমে <em>Pre-Security</em> এবং <em>Linux Fundamentals</em> রুমগুলো শেষ করে নেটওয়ার্ক প্রোটোকল ও ওএস লগ স্ট্রাকচার বুঝুন।<br>২. <strong>Cyber Defense পাথ:</strong> আক্রমণকারীরা কীভাবে সিস্টেমে প্রবেশ করে তা বুঝতে প্রাথমিক অ্যাটাক মেকানিজম শিখুন।<br>৩. <strong>SOC Level 1 লার্নিং পাথ (সবচেয়ে গুরুত্বপূর্ণ):</strong><br>• <strong>প্যাকেট অ্যানালাইসিস:</strong> Wireshark ব্যবহার করে ক্ষতিকর নেটওয়ার্ক ট্র্যাফিক সনাক্তকরণ।<br>• <strong>SIEM লগ অ্যানালাইসিস:</strong> <strong>Splunk</strong> এবং <strong>Elastic SIEM</strong> দিয়ে লাইভ সার্ভারের সন্দেহজনক লগ মনিটরিং ও থ্রেট হান্টিং।<br>• <strong>ইন্ট্রুশন ডিটেকশন (NIDS):</strong> <strong>Snort</strong> এবং <strong>Suricata</strong> দিয়ে স্বয়ংক্রিয় অ্যাটাক ডিটেকশন রুল তৈরি।<br>৪. <strong>ফরেনসিক্স ও ইনসিডেন্ট রেসপন্স (DFIR):</strong> Autopsy দিয়ে ডিস্ক ফরেনসিক্স এবং Volatility দিয়ে মেমোরি ইনভেস্টিগেশন।<br>৫. <strong>MITRE ATT&CK ফ্রেমওয়ার্ক:</strong> অ্যাডভার্সারির আচরণ ট্র্যাক করে কার্যকর সাইবার ডিফেন্স স্ট্র্যাটেজি তৈরি।'
         ]
       },
       {
@@ -4736,7 +4904,11 @@ function initVoiceAndChatEngine() {
       'job', 'placement', 'career', 'চাকরি', 'ক্যারিয়ার', 'প্লেসমেন্ট', 'chakori', 'chakorir', 'subidha',
       'support', 'sahajjo', 'সাহায্য', 'সহায়তা', 'help', 'সুবিধা', 'উপকারিতা', 'benefit', 'benefits', 'বেনিফিট',
       'contact', 'phone', 'email', 'যোগাযোগ', 'ফোন', 'ইমেইল', 'ঠিকানা',
-      'tool', 'tools', 'টুলস', 'টুল', 'সিকিউরিটি', 'security', 'koth'
+      'tool', 'tools', 'টুলস', 'টুল', 'সিকিউরিটি', 'security', 'koth',
+      'vs', 'versus', 'তুলনা', 'পার্থক্য', 'konta', 'bhalo', 'ভালো', 'htb', 'hackthebox',
+      'prerequisite', 'prerequisites', 'shuru', 'suru', 'lage', 'lagbe', 'প্রস্তুতি', 'শুরু', 'পূর্বশর্ত',
+      'openvpn', 'vpn', 'ovpn', 'connect', 'কানেক্ট', 'setup',
+      'soc', 'roadmap', 'রোডম্যাপ', 'blueteam'
     ]);
 
     // Contextual Multi-Turn Query Augmentation (e.g. "ki ki course achey ekhane?" -> refers to Ostad / active site)
