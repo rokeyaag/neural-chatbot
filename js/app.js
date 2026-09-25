@@ -1924,7 +1924,15 @@ function initVoiceAndChatEngine() {
     'openvpn': ['vpn', 'ovpn', 'ভিপিএন', 'কানেক্ট'],
     'vpn': ['openvpn', 'ovpn', 'ভিপিএন'],
     'soc': ['blueteam', 'blue team', 'অ্যানালিস্ট', 'analyst', 'ডিফেন্স', 'defense'],
-    'roadmap': ['রোডম্যাপ', 'গাইডলাইন', 'guideline', 'পাথ', 'path']
+    'roadmap': ['রোডম্যাপ', 'গাইডলাইন', 'guideline', 'পাথ', 'path'],
+    'attackbox': ['অ্যাটাকবক্স', 'linux', 'লিনাক্স', 'কালী', 'kali'],
+    'streak': ['স্ট্রিক', 'ধারাবাহিকতা', 'freeze'],
+    'freeze': ['ফ্রিজ', 'ফ্রীজ', 'shield', 'সুরক্ষা', 'streak'],
+    'wireshark': ['ওয়্যারশার্ক', 'প্যাকেট', 'packet', 'traffic', 'pcap'],
+    'privesc': ['privilege escalation', 'প্রিভিলেজ', 'রুট', 'root', 'escalation'],
+    'escalation': ['privesc', 'privilege', 'প্রিভিলেজ', 'রুট', 'root'],
+    'vip': ['premium', 'প্রিমিয়াম', 'subscription', 'সাবস্ক্রিপশন', 'paid'],
+    'premium': ['vip', 'প্রিমিয়াম', 'subscription', 'সাবস্ক্রিপশন', 'paid']
   };
 
   function expandSearchTokens(tokens) {
@@ -2871,6 +2879,146 @@ function initVoiceAndChatEngine() {
         ],
         responses_bn: [
           '🛡️ <strong>TryHackMe ব্যবহার করে SOC Analyst ও ব্লু-টিম ক্যারিয়ার গড়ার রোডম্যাপ:</strong><br><br>১. <strong>প্রাথমিক ভিত্তি:</strong> প্রথমে <em>Pre-Security</em> এবং <em>Linux Fundamentals</em> রুমগুলো শেষ করে নেটওয়ার্ক প্রোটোকল ও ওএস লগ স্ট্রাকচার বুঝুন।<br>২. <strong>Cyber Defense পাথ:</strong> আক্রমণকারীরা কীভাবে সিস্টেমে প্রবেশ করে তা বুঝতে প্রাথমিক অ্যাটাক মেকানিজম শিখুন।<br>৩. <strong>SOC Level 1 লার্নিং পাথ (সবচেয়ে গুরুত্বপূর্ণ):</strong><br>• <strong>প্যাকেট অ্যানালাইসিস:</strong> Wireshark ব্যবহার করে ক্ষতিকর নেটওয়ার্ক ট্র্যাফিক সনাক্তকরণ।<br>• <strong>SIEM লগ অ্যানালাইসিস:</strong> <strong>Splunk</strong> এবং <strong>Elastic SIEM</strong> দিয়ে লাইভ সার্ভারের সন্দেহজনক লগ মনিটরিং ও থ্রেট হান্টিং।<br>• <strong>ইন্ট্রুশন ডিটেকশন (NIDS):</strong> <strong>Snort</strong> এবং <strong>Suricata</strong> দিয়ে স্বয়ংক্রিয় অ্যাটাক ডিটেকশন রুল তৈরি।<br>৪. <strong>ফরেনসিক্স ও ইনসিডেন্ট রেসপন্স (DFIR):</strong> Autopsy দিয়ে ডিস্ক ফরেনসিক্স এবং Volatility দিয়ে মেমোরি ইনভেস্টিগেশন।<br>৫. <strong>MITRE ATT&CK ফ্রেমওয়ার্ক:</strong> অ্যাডভার্সারির আচরণ ট্র্যাক করে কার্যকর সাইবার ডিফেন্স স্ট্র্যাটেজি তৈরি।'
+        ]
+      },
+      {
+        id: 'mem_tryhackme_attackbox',
+        category: 'tech',
+        title: 'TryHackMe AttackBox কি এবং এটি ব্যবহারের নিয়ম (What is AttackBox & How to Use)',
+        keywords_en: [
+          'what is tryhackme attackbox',
+          'how to use attackbox',
+          'tryhackme attackbox setup',
+          'start attackbox tryhackme',
+          'in-browser kali linux tryhackme',
+          'attackbox features and usage'
+        ],
+        keywords_bn: [
+          'tryhackme attackbox কি',
+          'attackbox kivabe use korbo',
+          'attackbox কিভাবে ব্যবহার করব',
+          'tryhackme তে attackbox কিভাবে চালু করব',
+          'attackbox কি এবং এর কাজ কি',
+          'ব্রাউজারে kali linux চালানো',
+          'tryhackme attackbox'
+        ],
+        responses_en: [
+          '🖥️ <strong>What is TryHackMe AttackBox & How to Use It:</strong><br><br>• <strong>Overview:</strong> AttackBox is a customized, cloud-hosted Linux machine (based on Ubuntu/Kali) running directly inside your browser without needing local VirtualBox or VMware.<br>• <strong>Pre-installed Tools:</strong> Packed with essential pentesting tools including <em>Burp Suite, Nmap, Metasploit, Gobuster, Nikto, Wireshark, and John the Ripper</em>.<br>• <strong>How to Start:</strong><br>1. Open any active room (e.g. <em>Starting Out In Cyber</em>).<br>2. Click the blue <strong>Start AttackBox</strong> button at the top of the room.<br>3. Wait ~60 seconds for the split-screen browser terminal to load.<br>4. You get an assigned IP address to target the vulnerable machine directly.<br>💡 <strong>Usage Limit:</strong> Free users get 1 hour of AttackBox per day; VIP/Premium subscribers get unlimited daily access.'
+        ],
+        responses_bn: [
+          '🖥️ <strong>TryHackMe AttackBox কি এবং এটি যেভাবে ব্যবহার করবেন:</strong><br><br>• <strong>সংক্ষিপ্ত পরিচিতি:</strong> AttackBox হলো ব্রাউজার-ভিত্তিক একটি রেডিমেড ক্লাউড লিনাক্স (Ubuntu/Kali) সিস্টেম। আপনার কম্পিউটারে ভারী কোনো ভার্চুয়াল বক্স বা কালী লিনাক্স ইনস্টল ছাড়াই ব্রাউজারে এটি চালানো যায়।<br>• <strong>বিল্ট-ইন টুলস:</strong> এর ভেতর সব প্রয়োজনীয় হ্যাকিং টুলস যেমন—<em>Burp Suite, Nmap, Metasploit, Gobuster, Nikto, Wireshark, John the Ripper</em> ইত্যাদি প্রি-ইনস্টল করা থাকে।<br>• <strong>চালু করার নিয়ম:</strong><br>১. যেকোনো প্র্যাকটিস রুমে গিয়ে উপরের নীল রঙের <strong>Start AttackBox</strong> বাটনে ক্লিক করুন।<br>২. প্রায় ১ মিনিটের মধ্যে একই ব্রাউজার ট্যাবে স্প্লিট-স্ক্রিন মোডে লিনাক্স ডেস্কটপ চালু হয়ে যাবে।<br>৩. টার্মিনাল খুলে সরাসরি টার্গেট আইপিতে কমান্ড ও এক্সপ্লয়েট চালাতে পারবেন।<br>💡 <strong>ব্যবহারের সীমা:</strong> ফ্রি ইউজাররা প্রতিদিন ১ ঘণ্টা AttackBox ব্যবহার করতে পারেন; আর Premium সাবস্ক্রাইবাররা আনলিমিটেড ব্যবহার করতে পারেন।'
+        ]
+      },
+      {
+        id: 'mem_tryhackme_free_vs_premium',
+        category: 'tech',
+        title: 'TryHackMe Free বনাম Premium সাবস্ক্রিপশনের পার্থক্য ও খরচ (Free vs VIP Subscription)',
+        keywords_en: [
+          'is tryhackme free or paid',
+          'tryhackme premium cost',
+          'tryhackme subscription price',
+          'difference between tryhackme free and vip',
+          'tryhackme vip benefits',
+          'is tryhackme premium worth it'
+        ],
+        keywords_bn: [
+          'tryhackme free naki taka lage',
+          'tryhackme premium subscription er cost koto',
+          'tryhackme ফ্রি নাকি টাকা লাগে',
+          'tryhackme প্রিমিয়াম সাবস্ক্রিপশন ফি কত',
+          'tryhackme vip এর সুবিধা কি',
+          'tryhackme পেইড নাকি ফ্রি',
+          'tryhackme প্রিমিয়াম কি কেনা উচিত'
+        ],
+        responses_en: [
+          '💎 <strong>TryHackMe Free vs. Premium (VIP) Subscription Comparison:</strong><br><br>• <strong>Free Tier (80% Content Accessible):</strong><br>1. Access to hundreds of free introductory & intermediate rooms.<br>2. 1 hour of in-browser AttackBox per day.<br>3. Unlimited OpenVPN access to free machines.<br><br>• <strong>Premium / VIP Tier ($14/month or $126/year — $10.50/mo with student discount):</strong><br>1. <em>Unlimited AttackBox Time:</em> Run in-browser hacking machines without daily limits.<br>2. <em>Full Path Access:</em> Unlocks advanced paths like <em>Offensive Pentesting, Red Teaming, and SOC Level 2</em>.<br>3. <em>Fast Dedicated VPN:</em> Faster private VPN servers with faster scan times.<br>4. <em>Official Path Certificates:</em> Verified downloadable certificates for completed tracks.<br><br>💡 <strong>Recommendation:</strong> Complete the free rooms (Pre-Security, Intro to Cyber) first; subscribe to Premium once you need advanced Active Directory and buffer overflow labs!'
+        ],
+        responses_bn: [
+          '💎 <strong>TryHackMe ফ্রি বনাম প্রিমিয়াম (VIP) সাবস্ক্রিপশনের পার্থক্য ও খরচের হিসাব:</strong><br><br>• <strong>ফ্রি সুবিধা (৮০% কনটেন্ট উন্মুক্ত):</strong><br>১. শত শত বেসিক ও ইন্টারমিডিয়েট রুম ফ্রিতে সমাধান করা যায়।<br>২. প্রতিদিন ১ ঘণ্টা ব্রাউজার AttackBox ব্যবহারের সুবিধা।<br>৩. নিজের কম্পিউটারের OpenVPN দিয়ে ফ্রি মেশিনে আনলিমিটেড প্র্যাকটিস।<br><br>• <strong>প্রিমিয়াম / VIP সুবিধা (খরচ: মাসে ~$১৪ ডলার বা বছরে ~$১২৬ ডলার; স্টুডেন্ট ডিসকাউন্টে মাসে ~$১০.৫০ ডলার):</strong><br>১. <em>আনলিমিটেড AttackBox:</em> ব্রাউজারে যত ইচ্ছা সময় কালী লিনাক্স চালানোর সুবিধা।<br>২. <em>লকড ভিআইপি রুম আনলক:</em> অ্যাডভান্সড পাথ (Offensive Pentesting, Red Teaming, Active Directory) সম্পূর্ণ অ্যাক্সেস।<br>৩. <em>ফাস্ট ডেডিকেটেড ভিপিএন:</em> দ্রুত স্ক্যানিংয়ের জন্য ভিআইপি ভিপিএন সার্ভার।<br>৪. <em>অফিসিয়াল সার্টিফিকেট:</em> লার্নিং পাথ শেষ করলে ভেরিফায়েড ডিজিটাল সার্টিফিকেট ডাউনলোড সুবিধা।<br><br>💡 <strong>পরামর্শ:</strong> শুরুতে টাকা খরচ করার প্রয়োজন নেই; আগে ফ্রি রুমগুলো শেষ করুন, এরপর অ্যাডভান্সড ল্যাবের জন্য প্রিমিয়াম নিতে পারেন।'
+        ]
+      },
+      {
+        id: 'mem_tryhackme_streak_freeze',
+        category: 'tech',
+        title: 'TryHackMe Streak কি এবং Streak Freeze কিভাবে কাজ করে (Streak System & Streak Freeze)',
+        keywords_en: [
+          'what is streak in tryhackme',
+          'how does streak freeze work tryhackme',
+          'tryhackme streak rules',
+          'how to buy streak freeze',
+          'maintain streak on tryhackme',
+          'tryhackme streak badges'
+        ],
+        keywords_bn: [
+          'tryhackme streak ki',
+          'streak freeze kivabe use kore',
+          'tryhackme তে streak কি এবং কিভাবে বাড়াব',
+          'tryhackme streak freeze কিভাবে কাজ করে',
+          'tryhackme স্ট্রিক ধরে রাখার নিয়ম',
+          'tryhackme streak freeze কেনার নিয়ম',
+          'স্ট্রিক ভেঙে গেলে কি করব tryhackme'
+        ],
+        responses_en: [
+          '🔥 <strong>TryHackMe Streak System & How Streak Freeze Works:</strong><br><br>• <strong>What is a Streak?</strong> A streak represents the number of consecutive days you have answered at least one question in any THM room (resets daily at 00:00 UTC).<br>• <strong>Why Maintain It?</strong> Builds disciplined daily learning habits and unlocks exclusive milestone badges (7 days, 30 days, 100 days, 365 days).<br>• <strong>What is a Streak Freeze?</strong> A shield that automatically protects your streak if you miss a day due to exams, travel, power outages, or illness.<br>• <strong>How to Get It:</strong><br>1. Go to your THM Profile or the Swag/Badges section.<br>2. You can purchase a Streak Freeze using accumulated THM points/badges earned by solving rooms.<br>3. Once active, if you miss a day, 1 Streak Freeze is consumed and your counter continues uninterrupted!'
+        ],
+        responses_bn: [
+          '🔥 <strong>TryHackMe Streak কি এবং Streak Freeze যেভাবে কাজ করে:</strong><br><br>• <strong>স্ট্রিক (Streak) কি?</strong> প্রতিদিন অন্তত একটি প্রশ্নের সঠিক উত্তর দিলে আপনার স্ট্রিক ১ দিন করে বাড়ে (প্রতিদিন রাত 00:00 UTC-তে দিন গণনা হয়)।<br>• <strong>উপকারিতা:</strong> এটি নিয়মিত শেখার অভ্যাস তৈরি করে এবং মাইলস্টোন ব্যাজ (৭ দিন, ৩০ দিন, ১০০ দিন, ৩৬৫ দিনের এক্সক্লুসিভ ব্যাজ) আনলক করে।<br>• <strong>Streak Freeze কি?</strong> এটি একটি সুরক্ষা ঢাল (Shield)। কোনোদিন অসুস্থতা, পরীক্ষা বা ব্যস্ততার কারণে ল্যাব সলভ করতে না পারলে এটি স্বয়ংক্রিয়ভাবে আপনার স্ট্রিক নষ্ট হওয়া থেকে বাঁচায়।<br>• <strong>কেনার নিয়ম:</strong><br>১. প্রোফাইল বা ব্যাজ/রিওয়ার্ড সেকশনে যান।<br>২. ল্যাব সলভ করে অর্জিত THM পয়েন্ট বা ব্যাজ দিয়ে <strong>Streak Freeze</strong> সক্রিয় করে রাখা যায়।<br>৩. স্ট্রিক ফ্রীজ অন থাকলে কোনোদিন মিস হলেও আপনার পুরো স্ট্রিক কাউন্টার অক্ষত থাকে।'
+        ]
+      },
+      {
+        id: 'mem_tryhackme_wireshark_tutorial',
+        category: 'tech',
+        title: 'TryHackMe তে Wireshark ও প্যাকেট অ্যানালাইসিস শেখার উপায় (Wireshark & Packet Analysis)',
+        keywords_en: [
+          'how to learn wireshark on tryhackme',
+          'wireshark rooms on tryhackme',
+          'packet analysis tryhackme',
+          'learn network traffic analysis thm',
+          'wireshark filters tryhackme',
+          'pcap file analysis tryhackme'
+        ],
+        keywords_bn: [
+          'tryhackme te wireshark kivabe shikhbo',
+          'wireshark packet analysis tryhackme',
+          'tryhackme তে wireshark কিভাবে শিখব',
+          'wireshark প্যাকেট অ্যানালাইসিস শেখার নিয়ম',
+          'tryhackme wireshark রুমসমূহ',
+          'নেটওয়ার্ক ট্র্যাফিক অ্যানালাইসিস tryhackme',
+          'wireshark দিয়ে হ্যাকিং সনাক্তকরণ'
+        ],
+        responses_en: [
+          '🦈 <strong>Learning Wireshark & Packet Analysis on TryHackMe:</strong><br><br>• <strong>Recommended Rooms on THM:</strong><br>1. <em>Wireshark: The Basics</em> (GUI overview, packet capture, protocol dissection)<br>2. <em>Wireshark: Packet Operations</em> (Display filters, statistics, stream graphing)<br>3. <em>Wireshark: Traffic Analysis</em> (Detecting ARP poisoning, Nmap port scans, and malware C2 beacons)<br><br>• <strong>Key Practical Skills You Learn:</strong><br>• <strong>Display Filters:</strong> Master precise filtering (e.g. <code>ip.addr == 10.10.10.5</code>, <code>http.request.method == \"POST\"</code>, <code>tcp.flags.syn == 1 && tcp.flags.ack == 0</code>).<br>• <strong>Follow TCP Stream:</strong> Reconstruct unencrypted credentials sent over HTTP, FTP, or Telnet.<br>• <strong>Export Objects:</strong> Extract malicious files transferred over network protocols (<code>File -> Export Objects -> HTTP</code>).'
+        ],
+        responses_bn: [
+          '🦈 <strong>TryHackMe-তে Wireshark ও নেটওয়ার্ক প্যাকেট অ্যানালাইসিস শেখার গাইড:</strong><br><br>• <strong>সেরা প্র্যাকটিস রুমসমূহ:</strong><br>১. <em>Wireshark: The Basics</em> — ওয়্যারশার্ক ইন্টারফেস, প্যাকেট ক্যাপচার ও প্রোটোকল পরিচিতি।<br>২. <em>Wireshark: Packet Operations</em> — ডিসপ্লে ফিল্টার, আইও গ্রাফ ও ট্র্যাফিক পরিসংখ্যান।<br>৩. <em>Wireshark: Traffic Analysis</em> — ARP স্পুফিং, Nmap স্ক্যান ও ম্যালওয়্যার ট্র্যাফিক সনাক্তকরণ।<br><br>• <strong>বাস্তব যেসব দক্ষতা শিখবেন:</strong><br>• <strong>ডিসপ্লে ফিল্টারিং:</strong> নির্দিষ্ট আইপি বা প্রোটোকল ফিল্টার করা (যেমন: <code>ip.addr == 10.10.10.5</code>, <code>http.request.method == \"POST\"</code>)।<br>• <strong>Follow TCP Stream:</strong> HTTP বা FTP দিয়ে যাওয়া প্লেইনটেক্সট ইউজারনেম ও পাসওয়ার্ড রিভার্স করে পড়া।<br>• <strong>ফাইল এক্সট্রাক্ট করা:</strong> নেটওয়ার্ক দিয়ে আসা ক্ষতিকর ফাইল বা ইমেজ সরাসরি ওয়্যারশার্ক থেকে বের করা (<code>File -> Export Objects -> HTTP</code>)।'
+        ]
+      },
+      {
+        id: 'mem_tryhackme_privilege_escalation',
+        category: 'tech',
+        title: 'TryHackMe তে Privilege Escalation শেখার গাইডলাইন (Linux & Windows PrivEsc)',
+        keywords_en: [
+          'how to learn privilege escalation on tryhackme',
+          'linux privesc tryhackme',
+          'windows privilege escalation thm',
+          'privesc rooms tryhackme',
+          'linpeas winpeas tryhackme',
+          'suid gtfobins tryhackme'
+        ],
+        keywords_bn: [
+          'tryhackme te privilege escalation kivabe shikhbo',
+          'linux privesc tryhackme',
+          'tryhackme তে privilege escalation কিভাবে শিখব',
+          'লিনাক্স প্রিভিলেজ এসকেলেশন শেখার উপায়',
+          'উইন্ডোজ প্রিভিলেজ এসকেলেশন tryhackme',
+          'লো-প্রিভিলেজ থেকে রুট হওয়ার নিয়ম tryhackme',
+          'tryhackme privesc গাইড'
+        ],
+        responses_en: [
+          '⚡ <strong>How to Learn Privilege Escalation (PrivEsc) on TryHackMe:</strong><br><br>• <strong>What is PrivEsc?</strong> Moving from an initial low-privilege shell (e.g. <code>www-data</code>) to highest authority (<code>root</code> on Linux or <code>NT AUTHORITY\\SYSTEM</code> on Windows).<br><br>• <strong>Top Rooms by Industry Legend Tib3rius:</strong><br>1. <em>Linux PrivEsc</em> & <em>Linux PrivEsc Arena</em><br>2. <em>Windows PrivEsc</em> & <em>Windows PrivEsc Arena</em><br><br>• <strong>Core Techniques Covered:</strong><br>• <strong>Linux:</strong> SUID binaries (<code>find / -perm -u=s -type f 2>/dev/null</code>), <code>sudo -l</code> misconfigurations leveraging GTFOBins, writable <code>/etc/passwd</code>, and vulnerable cron jobs.<br>• <strong>Windows:</strong> Unquoted service paths, AlwaysInstallElevated, Token Impersonation (PrintSpoofer), and automated tools like <em>LinPEAS / WinPEAS</em>.'
+        ],
+        responses_bn: [
+          '⚡ <strong>TryHackMe-তে Privilege Escalation (রুট প্রিভিলেজ নেওয়া) শেখার উপায়:</strong><br><br>• <strong>Privilege Escalation কি?</strong> কোনো সার্ভারে প্রাথমিক প্রবেশ পাওয়ার পর সাধারণ ইউজার (যেমন: <code>www-data</code>) থেকে সর্বোচ্চ অ্যাডমিন বা <code>root</code> (Linux) অথবা <code>NT AUTHORITY\\SYSTEM</code> (Windows) প্রিভিলেজ দখল করা।<br><br>• <strong>সবচেয়ে জনপ্রিয় প্র্যাকটিস রুমসমূহ (Tib3rius-এর কোর্স):</strong><br>১. <em>Linux PrivEsc</em> এবং <em>Linux PrivEsc Arena</em><br>২. <em>Windows PrivEsc</em> এবং <em>Windows PrivEsc Arena</em><br><br>• <strong>প্রধান যেসব টেকনিক শিখবেন:</strong><br>• <strong>Linux PrivEsc:</strong> SUID বাইনারিজ এক্সপ্লয়েট, <code>sudo -l</code> পারমিশন ও GTFOBins ব্যবহার, দুর্বল ক্রনজব (Cronjobs) এবং কার্নেল এক্সপ্লয়েট।<br>• <strong>Windows PrivEsc:</strong> আনকোটেড সার্ভিস পাথ (Unquoted Service Path), AlwaysInstallElevated, টোকেন ইমপারসোনেশন (PrintSpoofer/JuicyPotato) এবং LinPEAS/WinPEAS স্ক্রিপ্টের ব্যবহার।'
         ]
       },
       {
@@ -4908,7 +5056,12 @@ function initVoiceAndChatEngine() {
       'vs', 'versus', 'তুলনা', 'পার্থক্য', 'konta', 'bhalo', 'ভালো', 'htb', 'hackthebox',
       'prerequisite', 'prerequisites', 'shuru', 'suru', 'lage', 'lagbe', 'প্রস্তুতি', 'শুরু', 'পূর্বশর্ত',
       'openvpn', 'vpn', 'ovpn', 'connect', 'কানেক্ট', 'setup',
-      'soc', 'roadmap', 'রোডম্যাপ', 'blueteam'
+      'soc', 'roadmap', 'রোডম্যাপ', 'blueteam',
+      'attackbox', 'অ্যাটাকবক্স',
+      'streak', 'স্ট্রিক', 'freeze', 'ফ্রিজ', 'ফ্রীজ',
+      'wireshark', 'ওয়্যারশার্ক', 'packet', 'প্যাকেট', 'pcap',
+      'privilege', 'privesc', 'escalation', 'প্রিভিলেজ', 'এসকেলেশন',
+      'vip', 'premium', 'প্রিমিয়াম', 'subscription', 'সাবস্ক্রিপশন', 'free', 'ফ্রি'
     ]);
 
     // Contextual Multi-Turn Query Augmentation (e.g. "ki ki course achey ekhane?" -> refers to Ostad / active site)
