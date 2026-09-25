@@ -66,6 +66,10 @@
 
         <!-- Right Side: User Login Auth, Knowledge Base & Live Neural AI Badge -->
         <div class="hero-header-right">
+          <button class="stage-action-btn ai-brain-header-btn" id="openAiSettingsBtn" onclick="openAiBrainModal();" style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 16px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.35), rgba(0, 242, 254, 0.2)); border: 1.5px solid #c084fc; border-radius: 99px; color: #f5f3ff; font-size: 0.86rem; font-weight: 700; cursor: pointer; box-shadow: 0 0 16px rgba(168, 85, 247, 0.4); transition: all 0.25s ease;" title="Configure Real AI Brain (Google Gemini & RAG)">
+            <i class="fa-solid fa-wand-magic-sparkles" style="color: #ffd700;"></i>
+            <span id="aiBrainBtnLabel">AI Brain</span>
+          </button>
           <button class="stage-action-btn" id="openKnowledgeModalBtn" style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px; background: linear-gradient(135deg, rgba(0, 242, 254, 0.18), rgba(79, 172, 254, 0.12)); border: 1px solid rgba(0, 242, 254, 0.45); border-radius: 99px; color: #00f2fe; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease;" title="Open Knowledge Base & Memory Store">
             <i class="fa-solid fa-brain" style="color: #00f2fe;"></i>
             <span>Knowledge Base</span>
@@ -133,6 +137,9 @@
             
             <!-- Dynamic Avatar Status & Header Action Controls -->
             <div class="stage-header-actions">
+              <button class="stage-action-btn" id="stageAiBrainBtn" onclick="openAiBrainModal();" style="display: inline-flex; align-items: center; gap: 6px; color: #d8b4fe; border-color: rgba(168, 85, 247, 0.45); background: rgba(168, 85, 247, 0.15);" title="Configure Real AI Brain (Google Gemini & RAG)">
+                <i class="fa-solid fa-wand-magic-sparkles" style="color: #c084fc;"></i> <span class="hide-on-mobile">AI Brain</span>
+              </button>
               <button class="lang-switch-btn stage-action-btn" id="voiceLangToggleBtn" title="Switch Voice Language (English / বাংলা)">
                 <i class="fa-solid fa-language"></i> <span id="voiceLangLabel">EN</span>
               </button>
@@ -216,6 +223,10 @@
                 </span>
               </div>
               <div class="chat-header-tools" style="display: flex; align-items: center; gap: 6px;">
+                <button type="button" class="chat-tool-btn" id="chatAiBrainBtn" onclick="openAiBrainModal();" title="AI Brain & Gemini Key Settings (গুগল জেমিনাই এআই কী)" aria-label="AI Brain Settings" style="color: #c084fc; border-color: rgba(168,85,247,0.55); background: rgba(168,85,247,0.15); display: inline-flex; align-items: center; gap: 4px; padding: 4px 9px; width: auto; border-radius: 99px;">
+                  <i class="fa-solid fa-wand-magic-sparkles" style="color: #ffd700;"></i>
+                  <span style="font-size: 0.72rem; font-weight: 700; color: #f3e8ff;">AI Brain</span>
+                </button>
                 <button type="button" class="chat-tool-btn" onclick="if(typeof openKnowledgeStoreModal === 'function') openKnowledgeStoreModal();" title="Open Knowledge Base / Memory Store" aria-label="Open Knowledge Base" style="color: #00f2fe; border-color: rgba(0,242,254,0.3);">
                   <i class="fa-solid fa-brain"></i>
                 </button>
@@ -248,6 +259,9 @@
             <!-- Chat Quick Prompt Chips & Input Form (Docked at Bottom Right) -->
             <div class="chat-input-area">
               <div class="quick-prompts">
+                <button class="quick-chip" id="openAiBrainChip" data-action="open-ai-brain" style="border-color: rgba(168, 85, 247, 0.7); background: rgba(168, 85, 247, 0.2); color: #f3e8ff; font-weight: 700;">
+                  <i class="fa-solid fa-wand-magic-sparkles" style="color: #ffd700;"></i> AI Brain (Gemini Key) ⚡
+                </button>
                 <button class="quick-chip" data-prompt="YouTube ওপেন করো">YouTube 🎬</button>
                 <button class="quick-chip" data-prompt="How are you today?">How are you? 😊</button>
                 <button class="quick-chip" data-prompt="কেমন আছো তুমি?">কেমন আছো? 🇧🇩</button>
@@ -1345,6 +1359,72 @@
     </div>
   </div>
 
+  <!-- ================= AI BRAIN & GEMINI SETTINGS MODAL ================= -->
+  <div class="user-auth-modal" id="aiBrainSettingsModal" style="display: none;">
+    <div class="user-auth-modal-backdrop" id="aiBrainModalBackdrop" onclick="closeAiBrainModal();"></div>
+    <div class="user-auth-modal-card" style="max-width: 540px;">
+      <div class="user-auth-header">
+        <div class="user-auth-title-wrap">
+          <div class="user-auth-icon-badge" style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(0, 242, 254, 0.25)); border-color: rgba(168, 85, 247, 0.5);"><i class="fa-solid fa-wand-magic-sparkles" style="color: #c084fc;"></i></div>
+          <div>
+            <h3 class="user-auth-title">Hybrid AI Brain &amp; Gemini Key</h3>
+            <p class="user-auth-subtitle">রিয়েল এআই (Gemini LLM) + অফলাইন স্মার্ট আরএজি ইঞ্জিন</p>
+          </div>
+        </div>
+        <button class="user-auth-close" id="aiBrainCloseBtn" onclick="closeAiBrainModal();" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="user-auth-body">
+        <div class="user-auth-current-card">
+          <div class="user-auth-current-header">
+            <span class="user-auth-status-tag" id="aiEngineStatusTag" style="background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.4); color: #d8b4fe;">⚡ Smart Hybrid Engine Active</span>
+            <span class="hud-mono-tag"><i class="fa-solid fa-microchip"></i> GEMINI 1.5 FLASH + RAG</span>
+          </div>
+          <h4 id="aiEngineDisplayName" class="gradient-text">Google Gemini + In-Browser RAG</h4>
+          <p id="aiEngineDisplayInfo" style="font-size: 0.84rem; color: #cbd5e1; line-height: 1.5; margin-top: 6px;">
+            যেকোনো ওয়েবসাইট আপলোড করলে এআই পুরো বিষয়বস্তু বিশ্লেষণ করে যেকোনো প্রশ্নের ১০০% সঠিক উত্তর দেবে। এপিআই কি না থাকলেও লোকাল স্মার্ট আরএজি কাজ করবে!
+          </p>
+        </div>
+
+        <form id="aiBrainSettingsForm" onsubmit="event.preventDefault(); saveAiBrainConfig();">
+          <div class="user-auth-input-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label for="geminiApiKeyInput" style="margin-bottom: 0;"><i class="fa-solid fa-key" style="color: #c084fc;"></i> Google Gemini API Key:</label>
+              <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" style="font-size: 0.78rem; color: #00f2fe; text-decoration: underline; font-weight: 600;">
+                Get Free API Key <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i>
+              </a>
+            </div>
+            <input type="password" id="geminiApiKeyInput" placeholder="AQ... or AIzaSy... (Paste Gemini Key here)" autocomplete="off" />
+            <small style="display: block; font-size: 0.75rem; color: #94a3b8; margin-top: 5px;">
+              💡 সম্পূর্ণ ফ্রি! <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: #38bdf8;">Google AI Studio</a> থেকে ১ ক্লিকে ফ্রি Key নেওয়া যায়।
+            </small>
+          </div>
+
+          <div class="user-auth-input-group" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 12px 14px; border-radius: 12px;">
+            <label style="display: flex; align-items: center; justify-content: space-between; cursor: pointer; margin-bottom: 0;">
+              <span style="font-size: 0.88rem; font-weight: 600; color: #f1f5f9;">
+                <i class="fa-solid fa-bolt" style="color: #00f5a0; margin-right: 6px;"></i> Enable Generative AI (LLM)
+              </span>
+              <input type="checkbox" id="enableGeminiToggle" checked style="width: 18px; height: 18px; accent-color: #a855f7; cursor: pointer;" />
+            </label>
+            <p style="font-size: 0.76rem; color: #94a3b8; margin-top: 6px; margin-bottom: 0;">
+              অন থাকলে গুগল জেমিনাই ওয়েবসাইট ও মেমোরি থেকে নিখুঁত বিশ্লেষণমূলক উত্তর জেনারেট করবে।
+            </p>
+          </div>
+
+          <div class="user-auth-actions" style="margin-top: 18px;">
+            <button type="button" class="btn btn-primary" id="saveAiBrainBtn" onclick="saveAiBrainConfig();" style="background: linear-gradient(135deg, #a855f7, #00f2fe); border: none;">
+              <i class="fa-solid fa-floppy-disk"></i> Save AI Settings
+            </button>
+            <button type="button" class="btn btn-secondary" id="testAiBrainBtn" onclick="testGeminiConnection();">
+              <i class="fa-solid fa-vial"></i> Test Connection
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- ================= LIGHTBOX MODAL ================= -->
   <div class="lightbox-modal" id="lightboxModal">
     <button class="lightbox-close" id="lightboxClose" aria-label="Close modal">&times;</button>
@@ -1357,6 +1437,6 @@
   </div>
 
   <!-- Javascript -->
-  <script src="js/app.js?v=32.0"></script>
+  <script src="js/app.js?v=34.0"></script>
 </body>
 </html>

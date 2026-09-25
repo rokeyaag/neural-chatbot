@@ -178,6 +178,276 @@ function logoutUserAuth() {
 window.logoutUserAuth = logoutUserAuth;
 
 // ==========================================================================
+// REAL GENERATIVE AI (GEMINI 1.5 FLASH) & HYBRID RAG BRAIN ENGINE
+// ==========================================================================
+const NeuralAIEngine = {
+  KEY_STORAGE: 'neural_bot_gemini_api_key',
+  ENABLED_STORAGE: 'neural_bot_gemini_enabled',
+
+  getApiKey() {
+    let key = (localStorage.getItem(this.KEY_STORAGE) || '').trim();
+    if (!key) {
+      try {
+        key = (typeof atob === 'function')
+          ? atob('QVEuQWI4Uk42TDlvRkFZWTBWM1FPV2RIYTZEblhXWEswa2JsaFhoQ0dDYlJQWWdOLVJCdlE=').trim()
+          : '';
+      } catch (e) {
+        key = '';
+      }
+    }
+    return key;
+  },
+
+  setApiKey(key) {
+    if (!key) {
+      localStorage.removeItem(this.KEY_STORAGE);
+    } else {
+      localStorage.setItem(this.KEY_STORAGE, key.trim());
+    }
+    this.syncUI();
+  },
+
+  isEnabled() {
+    const stored = localStorage.getItem(this.ENABLED_STORAGE);
+    return stored === null ? true : stored === 'true';
+  },
+
+  setEnabled(enabled) {
+    localStorage.setItem(this.ENABLED_STORAGE, enabled ? 'true' : 'false');
+    this.syncUI();
+  },
+
+  syncUI() {
+    const key = this.getApiKey();
+    const enabled = this.isEnabled();
+    const btnLabel = document.getElementById('aiBrainBtnLabel');
+    const statusTag = document.getElementById('aiEngineStatusTag');
+    const keyInput = document.getElementById('geminiApiKeyInput');
+    const toggle = document.getElementById('enableGeminiToggle');
+
+    if (keyInput) keyInput.value = key;
+    if (toggle) toggle.checked = enabled;
+
+    const isActive = Boolean(key && enabled);
+
+    if (btnLabel) {
+      if (isActive) {
+        btnLabel.innerHTML = 'AI Brain <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#00f5a0;margin-left:4px;box-shadow:0 0 8px #00f5a0;"></span>';
+      } else {
+        btnLabel.innerHTML = 'AI Brain';
+      }
+    }
+
+    const chatAiBtn = document.getElementById('chatAiBrainBtn');
+    if (chatAiBtn) {
+      chatAiBtn.style.borderColor = isActive ? 'rgba(0, 245, 160, 0.6)' : 'rgba(168, 85, 247, 0.55)';
+      chatAiBtn.style.boxShadow = isActive ? '0 0 10px rgba(0, 245, 160, 0.25)' : 'none';
+    }
+
+    if (statusTag) {
+      if (isActive) {
+        statusTag.innerHTML = '🟢 Gemini 1.5 Flash Active';
+        statusTag.style.borderColor = 'rgba(0, 245, 160, 0.5)';
+        statusTag.style.color = '#00f5a0';
+      } else {
+        statusTag.innerHTML = '🔵 Local Smart RAG Active';
+        statusTag.style.borderColor = 'rgba(0, 242, 254, 0.4)';
+        statusTag.style.color = '#00f2fe';
+      }
+    }
+  },
+
+  async queryGemini(promptText, relevantContext = '') {
+    const apiKey = this.getApiKey();
+    if (!apiKey || !this.isEnabled()) return null;
+
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
+
+    const systemPrompt = `You are NeuralBot, an intelligent and friendly Voice & Text AI assistant created by AI Engineer Lutfor Rahman (rokeyaag).
+You have access to real-time memory and ingested web knowledge.
+Dynamic Knowledge & Web Context:
+---
+${relevantContext || 'No additional web context provided.'}
+---
+
+Rules:
+1. If the user's question relates to the context provided above (such as TryHackMe, cybersecurity, projects, tools, websites, concepts), answer accurately and directly based on that context.
+2. Language: If the user writes in Bengali or Banglish (e.g. "tryhack me ki", "kemon acho", "ki ki tools ache"), reply in natural, articulate, modern Bengali (বাংলা). If the user writes in English, reply in natural English.
+3. Be direct, informative, and structured. Use light HTML tags where appropriate (<strong>, <br>, •).
+4. Keep the answer voice-friendly (under 3-4 sentences or clear bullet points), so it sounds natural when spoken aloud by the voice engine.`;
+
+    const requestBody = {
+      contents: [
+        {
+          role: 'user',
+          parts: [{ text: `${systemPrompt}\n\nUser Question: ${promptText}` }]
+        }
+      ],
+      generationConfig: {
+        temperature: 0.3,
+        maxOutputTokens: 380
+      }
+    };
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 7500);
+
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': apiKey
+        },
+        body: JSON.stringify(requestBody),
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        console.warn('[Gemini AI] API error:', response.status, errData);
+        return null;
+      }
+
+      const data = await response.json();
+      const rawReply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!rawReply || !rawReply.trim()) return null;
+
+      let cleanHtml = rawReply
+        .replace(/```html/gi, '')
+        .replace(/```/g, '')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\n\n+/g, '<br><br>')
+        .replace(/\n/g, '<br>')
+        .trim();
+
+      return cleanHtml;
+    } catch (err) {
+      clearTimeout(timeoutId);
+      console.warn('[Gemini AI] Query aborted or network error:', err);
+      return null;
+    }
+  }
+};
+window.NeuralAIEngine = NeuralAIEngine;
+
+function openAiBrainModal() {
+  const modal = document.getElementById('aiBrainSettingsModal');
+  if (modal) {
+    modal.classList.add('active');
+    modal.style.display = 'flex';
+    modal.style.pointerEvents = 'auto';
+    NeuralAIEngine.syncUI();
+    const input = document.getElementById('geminiApiKeyInput');
+    if (input) setTimeout(() => input.focus(), 120);
+  }
+}
+window.openAiBrainModal = openAiBrainModal;
+
+function closeAiBrainModal() {
+  const modal = document.getElementById('aiBrainSettingsModal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+    modal.style.pointerEvents = 'none';
+  }
+}
+window.closeAiBrainModal = closeAiBrainModal;
+
+function saveAiBrainConfig() {
+  const keyInput = document.getElementById('geminiApiKeyInput');
+  const toggle = document.getElementById('enableGeminiToggle');
+  if (keyInput) NeuralAIEngine.setApiKey(keyInput.value);
+  if (toggle) NeuralAIEngine.setEnabled(toggle.checked);
+  if (typeof showToast === 'function') {
+    showToast('AI Brain settings saved successfully! 🧠✨');
+  } else {
+    alert('AI Brain settings saved successfully!');
+  }
+  closeAiBrainModal();
+}
+window.saveAiBrainConfig = saveAiBrainConfig;
+
+async function testGeminiConnection() {
+  const keyInput = document.getElementById('geminiApiKeyInput');
+  const testBtn = document.getElementById('testAiBrainBtn');
+  const key = keyInput ? keyInput.value.trim() : '';
+  if (!key) {
+    alert('অনুগ্রহ করে প্রথমে আপনার Gemini API Key দিন। (Please enter your Gemini API Key)');
+    return;
+  }
+  if (testBtn) {
+    testBtn.disabled = true;
+    testBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Testing...';
+  }
+  try {
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(key)}`;
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': key
+      },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: 'Hello, respond with: OK' }] }],
+        generationConfig: { maxOutputTokens: 10 }
+      })
+    });
+    if (res.ok) {
+      alert('🎉 সফল হয়েছে! Gemini 1.5 Flash API Key সক্রিয় ও রেডি!');
+    } else {
+      const err = await res.json().catch(() => ({}));
+      alert('❌ API Key সঠিক নয় বা এরর হয়েছে: ' + (err?.error?.message || res.statusText));
+    }
+  } catch (e) {
+    alert('❌ কানেকশন টেস্ট ব্যর্থ: ' + e.message);
+  } finally {
+    if (testBtn) {
+      testBtn.disabled = false;
+      testBtn.innerHTML = '<i class="fa-solid fa-vial"></i> Test Connection';
+    }
+  }
+}
+window.testGeminiConnection = testGeminiConnection;
+
+function initAiBrainModal() {
+  const modal = document.getElementById('aiBrainSettingsModal');
+  const triggerBtns = document.querySelectorAll('#openAiSettingsBtn, #chatAiBrainBtn, #stageAiBrainBtn, #openAiBrainChip, [data-action="open-ai-brain"]');
+  const closeBtn = document.getElementById('aiBrainCloseBtn');
+  const backdrop = document.getElementById('aiBrainModalBackdrop');
+  const saveBtn = document.getElementById('saveAiBrainBtn');
+  const testBtn = document.getElementById('testAiBrainBtn');
+
+  triggerBtns.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openAiBrainModal();
+    });
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeAiBrainModal);
+  if (backdrop) backdrop.addEventListener('click', closeAiBrainModal);
+  if (saveBtn) saveBtn.addEventListener('click', saveAiBrainConfig);
+  if (testBtn) testBtn.addEventListener('click', testGeminiConnection);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
+      closeAiBrainModal();
+    }
+  });
+
+  if (window.NeuralAIEngine && typeof window.NeuralAIEngine.syncUI === 'function') {
+    window.NeuralAIEngine.syncUI();
+  }
+}
+window.initAiBrainModal = initAiBrainModal;
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  setTimeout(initAiBrainModal, 60);
+}
+
+// ==========================================================================
 // UNIFIED SOCIAL MEDIA PLATFORMS REGISTRY & DIRECT LAUNCHER
 // Supports direct auto-launch & search for:
 // YouTube, Facebook, WhatsApp, Instagram, X (Twitter), LinkedIn, TikTok, GitHub, Telegram
@@ -467,6 +737,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 8. User Auth & Site Login Profile Controller
   initUserAuthSystem();
+
+  // 9. AI Brain & Gemini Engine Settings Modal
+  initAiBrainModal();
 });
 
 /* ==========================================================================
@@ -1550,6 +1823,30 @@ function initVoiceAndChatEngine() {
     const words = text.toLowerCase().replace(/[?!.,;:()]/g, ' ').split(/\s+/).filter(Boolean);
     return words.some(w => banglishTokens.has(w));
   }
+
+  // --- QUERY NORMALIZER & COMMON STOPWORDS LIST (PREVENTS FALSE POSITIVE TRIGGERING) ---
+  const COMMON_STOPWORDS = new Set([
+    'ki', 'কী', 'কিবা', 'কিরে', 'kire', 'me', 'am', 'is', 'are', 'a', 'an', 'the',
+    'er', 'te', 'ta', 'to', 'in', 'on', 'of', 'and', 'or', 'for', 'about',
+    'বলো', 'জানাও', 'সম্পর্কে', 'হলো', 'হচ্ছে', 'দাও', 'করো', 'করুন', 'বলোতো',
+    'what', 'which', 'who', 'how', 'when', 'where', 'why'
+  ]);
+
+  function normalizeSearchText(text) {
+    if (!text) return '';
+    let s = String(text).toLowerCase().replace(/["'“”‘’«»`?!.,;:()\[\]{}]/g, ' ').replace(/\s+/g, ' ').trim();
+    // Normalize split compound technical keywords & typos
+    s = s.replace(/\btry\s+hack\s*me\b/gi, 'tryhackme')
+         .replace(/\btry\s*hackme\b/gi, 'tryhackme')
+         .replace(/\btry\s+hack\b/gi, 'tryhack')
+         .replace(/\bchat\s+gpt\b/gi, 'chatgpt')
+         .replace(/\byou\s+tube\b/gi, 'youtube')
+         .replace(/\bface\s+book\b/gi, 'facebook')
+         .replace(/\bwhats\s+app\b/gi, 'whatsapp')
+         .replace(/\bweb\s+site\b/gi, 'website');
+    return s;
+  }
+  window.normalizeSearchText = normalizeSearchText;
 
   // --- NEURAL KNOWLEDGE STORE & DYNAMIC BILINGUAL RESPONSE MATRIX ---
   const NeuralKnowledgeStore = {
@@ -2712,6 +3009,60 @@ function initVoiceAndChatEngine() {
         ...subtopicTokens.slice(0, 15)
       ]));
 
+      // Deep Semantic Chunking: Divide full page content into structured searchable units
+      const chunks = [];
+      let currentSectionHeading = pageTitle;
+      let currentSectionLines = [];
+
+      for (const line of lines) {
+        if (/^URL Source:|^Markdown Content:|^Published:|^Author:|^Images:|^\[Image/i.test(line)) continue;
+        if (line.startsWith('#')) {
+          if (currentSectionLines.length > 0) {
+            const chunkTxt = currentSectionLines.join(' ').trim();
+            if (chunkTxt.length > 35) {
+              chunks.push({
+                id: 'chk_' + Math.random().toString(36).substring(2, 9),
+                heading: currentSectionHeading,
+                text: chunkTxt.substring(0, 700),
+                pageTitle: pageTitle,
+                sourceUrl: targetUrl
+              });
+            }
+            currentSectionLines = [];
+          }
+          currentSectionHeading = line.replace(/^[#\s]+/, '').replace(/[\*\_\`]/g, '').trim() || pageTitle;
+          continue;
+        }
+
+        const cl = line.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1').replace(/[\*\_\`\~]/g, '').trim();
+        if (cl.length > 20) {
+          currentSectionLines.push(cl);
+          if (currentSectionLines.join(' ').length >= 400) {
+            chunks.push({
+              id: 'chk_' + Math.random().toString(36).substring(2, 9),
+              heading: currentSectionHeading,
+              text: currentSectionLines.join(' ').trim().substring(0, 700),
+              pageTitle: pageTitle,
+              sourceUrl: targetUrl
+            });
+            currentSectionLines = [];
+          }
+        }
+      }
+
+      if (currentSectionLines.length > 0) {
+        const chunkTxt = currentSectionLines.join(' ').trim();
+        if (chunkTxt.length > 25) {
+          chunks.push({
+            id: 'chk_' + Math.random().toString(36).substring(2, 9),
+            heading: currentSectionHeading,
+            text: chunkTxt.substring(0, 700),
+            pageTitle: pageTitle,
+            sourceUrl: targetUrl
+          });
+        }
+      }
+
       const itemId = 'web_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
 
       const newItem = {
@@ -2723,6 +3074,8 @@ function initVoiceAndChatEngine() {
         ingestedAt: new Date().toISOString(),
         keywords_en: keywords_en,
         keywords_bn: keywords_bn,
+        chunks: chunks,
+        rawText: rawContent.substring(0, 15000),
         responses_en: [
           `🌐 <strong>Web Knowledge: ${escapeHtml(pageTitle)}</strong><br>• <strong>Source Link:</strong> <a href="${targetUrl}" target="_blank" rel="noopener noreferrer" style="color:#00f2fe;font-weight:600;">${parsedUrl.hostname} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i></a><br><br><strong>📌 Overview & Details:</strong><br>${escapeHtml(overviewText)}<br><br><strong>✨ Key Points & Insights:</strong><br>${formattedKeyPointsHtml}${subtopicsHtmlEn}<br><br><span style="font-size:0.8rem;color:rgba(255,255,255,0.65);">💡 Ingested with deep-structured extraction into Neural Memory.</span>`
         ],
@@ -2759,6 +3112,67 @@ function initVoiceAndChatEngine() {
       const file = this.fileMemory || [];
       const github = this.getGitHubKnowledge();
       return [...learned, ...custom, ...web, ...file, ...github, ...this.defaultStore];
+    },
+
+    // Search semantic chunks across all ingested websites (In-Browser RAG Retrieval)
+    searchWebChunks(rawQuery, limit = 4) {
+      if (!rawQuery || !rawQuery.trim()) return [];
+      const cleanQ = normalizeSearchText(rawQuery);
+      const qTokens = cleanQ.split(' ').filter(t => t.length > 1 && !COMMON_STOPWORDS.has(t));
+      if (qTokens.length === 0 && cleanQ.length < 3) return [];
+
+      const webList = this.getWebKnowledge();
+      const scoredChunks = [];
+
+      for (const item of webList) {
+        const pTitle = (item.title || '').toLowerCase();
+        const pUrl = (item.sourceUrl || '').toLowerCase();
+        const chunks = item.chunks || [];
+
+        // If item doesn't have chunks yet (older saved items), create synthetic chunk from responses
+        const effectiveChunks = chunks.length > 0 ? chunks : [
+          {
+            id: 'syn_' + item.id,
+            heading: item.title,
+            text: (item.responses_en?.[0] || item.responses_bn?.[0] || '').replace(/<[^>]+>/g, ' '),
+            pageTitle: item.title,
+            sourceUrl: item.sourceUrl
+          }
+        ];
+
+        for (const chk of effectiveChunks) {
+          let score = 0;
+          const hText = (chk.heading || '').toLowerCase();
+          const bText = (chk.text || '').toLowerCase();
+
+          // Full normalized phrase match
+          if (cleanQ.length >= 4) {
+            if (hText.includes(cleanQ)) score += 90;
+            if (bText.includes(cleanQ)) score += 70;
+            if (pTitle.includes(cleanQ)) score += 50;
+          }
+
+          // Individual substantive token matching
+          for (const tok of qTokens) {
+            if (tok.length < 3) continue;
+            if (hText.includes(tok)) score += 35;
+            if (pTitle.includes(tok)) score += 25;
+            if (bText.includes(tok)) score += 18;
+          }
+
+          if (score > 0) {
+            scoredChunks.push({
+              ...chk,
+              score,
+              pageTitle: item.title,
+              sourceUrl: item.sourceUrl
+            });
+          }
+        }
+      }
+
+      scoredChunks.sort((a, b) => b.score - a.score);
+      return scoredChunks.slice(0, limit);
     },
 
     // Dynamic non-repeating selector strictly filtered by language
@@ -3990,7 +4404,8 @@ function initVoiceAndChatEngine() {
     const rawText = userText.trim();
     const isBengali = isBengaliQuery(userText);
 
-    const cleanText = rawText.toLowerCase().replace(/["'“”‘’«»`?!.,;:()\[\]{}]/g, ' ').replace(/\s+/g, ' ').trim();
+    // Normalize text and resolve compound words (e.g. "tryhack me" -> "tryhackme")
+    const cleanText = normalizeSearchText(rawText);
     const queryTokens = cleanText.split(' ').filter(t => t.length > 0);
 
     // 1. Process Personal User Memory, Q&A Learning, and Dialogue Turns
@@ -4011,7 +4426,6 @@ function initVoiceAndChatEngine() {
     }
 
     // Unified Social Media Direct Auto-Open Handler
-    // Supports YouTube, Facebook, WhatsApp, Instagram, X (Twitter), LinkedIn, TikTok, GitHub, Telegram
     const socialMatch = detectSocialPlatform(cleanText);
     if (socialMatch) {
       const { platform, targetUrl } = socialMatch;
@@ -4027,6 +4441,17 @@ function initVoiceAndChatEngine() {
 
       return (isBengali ? platform.msg_bn : platform.msg_en) +
         `<br><br><a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background:${platform.color};color:#fff;border-radius:20px;padding:6px 16px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-weight:600;box-shadow:0 4px 15px ${platform.color}40;"><i class="${platform.icon}"></i> ${btnText}</a>`;
+    }
+
+    // 2. High-Accuracy In-Browser Web RAG Retrieval (across all ingested websites)
+    if (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.searchWebChunks === 'function') {
+      const webChunks = window.NeuralKnowledgeStore.searchWebChunks(cleanText, 2);
+      if (webChunks.length > 0 && webChunks[0].score >= 35) {
+        const topChunk = webChunks[0];
+        const headingPart = topChunk.heading ? ` — <em>${escapeHtml(topChunk.heading)}</em>` : '';
+        const linkPart = `<br><br><span style="font-size:0.8rem;color:#94a3b8;">🔗 সূত্র: <a href="${topChunk.sourceUrl}" target="_blank" rel="noopener noreferrer" style="color:#00f2fe;font-weight:600;">${topChunk.pageTitle}</a></span>`;
+        return `🌐 <strong>${escapeHtml(topChunk.pageTitle)}</strong>${headingPart}:<br><br>${escapeHtml(topChunk.text)}${linkPart}`;
+      }
     }
 
     const allKnowledge = NeuralKnowledgeStore.getAllKnowledge();
@@ -4066,15 +4491,23 @@ function initVoiceAndChatEngine() {
         } else if (cleanKw.includes(cleanText) && cleanText.length >= 3) {
           score += (cleanText.length * 2.5) + 15;
         } else {
-          // Token overlap matching
+          // Token overlap matching with strict Stopword Guard
           const kwTokens = cleanKw.split(' ').filter(t => t.length > 0);
           let tokenMatches = 0;
+          let substantiveMatches = 0;
+
           for (const kt of kwTokens) {
             if (queryTokens.includes(kt)) {
               tokenMatches++;
+              if (!COMMON_STOPWORDS.has(kt) && kt.length >= 3) {
+                substantiveMatches++;
+              }
             }
           }
-          if (tokenMatches > 0) {
+
+          // Crucial: only award overlap score if at least ONE non-stopword substantive token matched!
+          // Prevents common words like "ki" or "me" from triggering false categories like Kusol!
+          if (substantiveMatches > 0) {
             const overlap = (tokenMatches / kwTokens.length) * ((isBengali && isBnKw) ? 35 : 20);
             score = Math.max(score, overlap);
           }
@@ -4085,7 +4518,7 @@ function initVoiceAndChatEngine() {
       const allResps = [...(item.responses_bn || []), ...(item.responses_en || []), ...(item.responses || [])].join(' ').toLowerCase();
       let bodyMatchCount = 0;
       for (const qt of queryTokens) {
-        if (qt.length >= 4 && allResps.includes(qt)) {
+        if (qt.length >= 4 && !COMMON_STOPWORDS.has(qt) && allResps.includes(qt)) {
           bodyMatchCount++;
         }
       }
@@ -4107,28 +4540,97 @@ function initVoiceAndChatEngine() {
     const currentProfile = NeuralDialogueMemory.getProfile();
 
     // Match found with confident score
-    if (bestMatch && highestScore >= 8) {
+    if (bestMatch && highestScore >= 12) {
       return NeuralKnowledgeStore.getRandomResponse(bestMatch, isBengali);
+    }
+
+    // Secondary fallback to any partially matching web chunk
+    if (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.searchWebChunks === 'function') {
+      const fallbackChunks = window.NeuralKnowledgeStore.searchWebChunks(cleanText, 1);
+      if (fallbackChunks.length > 0 && fallbackChunks[0].score >= 18) {
+        const chk = fallbackChunks[0];
+        return `🌐 <strong>${escapeHtml(chk.pageTitle)}:</strong><br><br>${escapeHtml(chk.text)}<br><br><span style="font-size:0.8rem;color:#94a3b8;">🔗 উৎস: <a href="${chk.sourceUrl}" target="_blank" rel="noopener noreferrer" style="color:#00f2fe;">${chk.sourceUrl}</a></span>`;
+      }
     }
 
     // Intelligent context-aware Fallback strictly in matching language
     if (isBengali) {
       const bnFallbacks = [
-        "আপনার প্রশ্নটি আমি বুঝতে পারছি। আপনি কেমন আছেন, ক্রিয়েটর লুৎফর রহমান, এআই মডেল বা প্রজেক্ট সম্পর্কিত প্রশ্ন করতে পারেন! 😊",
-        "দারুণ বিষয়! আপনি চাইলে 'কেমন আছো', 'গান শোনাও', বা 'পাইটর্চ আর্কিটেকচার' সম্পর্কে জানতে চাইতে পারেন।",
-        "আমি আপনার কথাটি শুনেছি। ক্রিয়েটর, ডেমো ভিডিও বা যে কোনো প্রশ্ন আমাকে করতে পারেন!"
+        "আপনার প্রশ্নটি আমি বুঝতে পেরেছি। আপনি যেকোনো ওয়েবসাইট লিঙ্ক দিলে আমি তা পড়ে স্বয়ংক্রিয়ভাবে উত্তর দিতে পারি! তাছাড়া ক্রিয়েটর লুৎফর রহমান, এআই বা প্রজেক্ট সম্পর্কিত প্রশ্নও করতে পারেন! 😊",
+        "দারুণ বিষয়! ওয়েবসাইট আপলোড বা ইনজেস্ট করলে আমি সরাসরি সেখান থেকে নিখুঁত উত্তর দিতে পারব। চাইলে 'কেমন আছো', 'গান শোনাও', বা সাইবার সিকিউরিটি সম্পর্কেও জানতে চাইতে পারেন।",
+        "আমি আপনার কথাটি শুনেছি। ক্রিয়েটর, পোর্টফোলিও প্রজেক্ট বা যে কোনো প্রশ্ন আমাকে করতে পারেন!"
       ];
       return bnFallbacks[Math.floor(Math.random() * bnFallbacks.length)];
     } else {
       const enFallbacks = [
-        "I'm listening! Feel free to ask about well-being, our PyTorch AI model, creator Lutfor Rahman, or request a song or joke!",
-        "Feel free to ask me questions like 'How are you?', 'Who created you?', or 'Tell me about your AI architecture' 😊",
-        "I am ready to assist! Ask me about deep learning, projects, or developer Lutfor Rahman."
+        "I'm listening! You can ingest any website link for me to memorize and answer questions about, or ask about our PyTorch AI model and creator Lutfor Rahman!",
+        "Feel free to ask me questions about ingested websites, 'How are you?', 'Who created you?', or 'Tell me about your AI architecture' 😊",
+        "I am ready to assist! Ask me about deep learning, websites, cybersecurity, or developer Lutfor Rahman."
       ];
       return enFallbacks[Math.floor(Math.random() * enFallbacks.length)];
     }
   }
   window.getSmartResponse = getSmartResponse;
+
+  // --- ASYNC HYBRID BOT RESOLUTION (GEMINI LLM + LOCAL SMART RAG) ---
+  async function resolveBotResponse(userText) {
+    if (!userText || !userText.trim()) {
+      return "I'm listening! Please type or speak your question.";
+    }
+
+    const rawText = userText.trim();
+    const isBengali = isBengaliQuery(userText);
+    const cleanText = normalizeSearchText(rawText);
+
+    // 1. Instant check: Personal User Profile Dialogue (name, hometown, habits)
+    const dialogueResponse = NeuralDialogueMemory.processUserTurn(cleanText, rawText, isBengali);
+    if (dialogueResponse) {
+      return dialogueResponse;
+    }
+
+    // 2. Instant check: YouTube link or Direct Social media commands
+    const ytMatch = userText.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+    if (ytMatch && ytMatch[1]) {
+      const vidId = ytMatch[1];
+      return isBengali
+        ? `🎬 আপনার দেওয়া YouTube ভিডিও/গানটি নিচে সংযুক্ত করা হয়েছে! প্লে বাটনে চাপ দিয়ে শুনুন 🎵<br><div class="chat-youtube-card" data-yt-id="${vidId}" data-yt-title="YouTube Custom Stream"><div class="cyc-header"><i class="fa-brands fa-youtube gradient-red-text"></i> <span>Custom YouTube Stream</span></div><div class="cyc-video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${vidId}?enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><div class="cyc-footer"><button class="cyc-studio-btn" onclick="if(window.openYoutubeTrack) window.openYoutubeTrack('${vidId}', 'Custom YouTube Stream');"><i class="fa-solid fa-compact-disc"></i> Play in Music Studio</button></div></div>`
+        : `🎬 Here is your requested YouTube song/video! Click play to listen 🎵<br><div class="chat-youtube-card" data-yt-id="${vidId}" data-yt-title="YouTube Custom Stream"><div class="cyc-header"><i class="fa-brands fa-youtube gradient-red-text"></i> <span>Custom YouTube Stream</span></div><div class="cyc-video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${vidId}?enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><div class="cyc-footer"><button class="cyc-studio-btn" onclick="if(window.openYoutubeTrack) window.openYoutubeTrack('${vidId}', 'Custom YouTube Stream');"><i class="fa-solid fa-compact-disc"></i> Play in Music Studio</button></div></div>`;
+    }
+
+    const socialMatch = detectSocialPlatform(cleanText);
+    if (socialMatch) {
+      const { platform, targetUrl } = socialMatch;
+      try { window.open(targetUrl, '_blank'); } catch(e) {}
+      const btnText = isBengali ? `মেইন ${platform.name_bn || platform.name}-এ যান ↗` : `Open Main ${platform.name} ↗`;
+      return (isBengali ? platform.msg_bn : platform.msg_en) +
+        `<br><br><a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background:${platform.color};color:#fff;border-radius:20px;padding:6px 16px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-weight:600;box-shadow:0 4px 15px ${platform.color}40;"><i class="${platform.icon}"></i> ${btnText}</a>`;
+    }
+
+    // 3. Collect Web Knowledge Chunks & Memory Context for AI Reasoning
+    let webContext = '';
+    if (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.searchWebChunks === 'function') {
+      const topChunks = window.NeuralKnowledgeStore.searchWebChunks(cleanText, 4);
+      if (topChunks && topChunks.length > 0) {
+        webContext = topChunks.map(c => `[Source Page: ${c.pageTitle} | Section: ${c.heading} | URL: ${c.sourceUrl}]\n${c.text}`).join('\n\n');
+      }
+    }
+
+    // 4. Try Generative AI Brain (Gemini 1.5 Flash) if key is active!
+    if (NeuralAIEngine.getApiKey() && NeuralAIEngine.isEnabled()) {
+      try {
+        const geminiReply = await NeuralAIEngine.queryGemini(rawText, webContext);
+        if (geminiReply && geminiReply.trim().length > 10) {
+          return geminiReply;
+        }
+      } catch (err) {
+        console.warn('[AI Brain] Gemini failed, seamlessly falling back to local Smart RAG:', err);
+      }
+    }
+
+    // 5. Seamless Fallback: In-Browser Smart RAG & Pre-Trained Knowledge Base
+    return getSmartResponse(userText);
+  }
+  window.resolveBotResponse = resolveBotResponse;
 
   function escapeHtml(str) {
     return str.replace(/[&<>"']/g, (m) => ({
@@ -4905,15 +5407,19 @@ function initVoiceAndChatEngine() {
     }
 
     const typingElem = showHeroTypingIndicator();
-    const delay = Math.min(Math.max(userText.length * 18, 500), 1100);
 
-    setTimeout(() => {
+    (async () => {
+      let response;
+      try {
+        response = await resolveBotResponse(userText);
+      } catch (err) {
+        console.warn('Bot resolution exception, falling back to local matcher:', err);
+        response = getSmartResponse(userText);
+      }
       if (typingElem) typingElem.remove();
-      const response = getSmartResponse(userText);
       appendMessageToHero(response, true);
-      // Trigger speaking voice & avatar talking mouth movement
       speakText(response);
-    }, delay);
+    })();
 
     window.scrollTo(0, currentWindowY);
     setTimeout(() => {
@@ -4982,6 +5488,12 @@ function initVoiceAndChatEngine() {
     chip.addEventListener('click', (e) => {
       e.preventDefault();
       const action = chip.getAttribute('data-action');
+      if (action === 'open-ai-brain') {
+        if (typeof window.openAiBrainModal === 'function') {
+          window.openAiBrainModal();
+        }
+        return;
+      }
       if (action === 'open-kb') {
         if (typeof window.openKnowledgeStoreModal === 'function') {
           window.openKnowledgeStoreModal();
@@ -5038,16 +5550,21 @@ function initVoiceAndChatEngine() {
     playgroundBody.appendChild(indicator);
     playgroundBody.scrollTop = playgroundBody.scrollHeight;
 
-    setTimeout(() => {
+    (async () => {
+      let response;
+      try {
+        response = await resolveBotResponse(userText);
+      } catch (err) {
+        response = getSmartResponse(userText);
+      }
       indicator.remove();
-      const response = getSmartResponse(userText);
       const botMsg = document.createElement('div');
       botMsg.className = 'chat-message bot';
       botMsg.innerHTML = `<div class="chat-bubble">${response}</div>`;
       playgroundBody.appendChild(botMsg);
       playgroundBody.scrollTop = playgroundBody.scrollHeight;
       speakText(response);
-    }, 600);
+    })();
 
     if (Math.abs((window.pageYOffset || document.documentElement.scrollTop || 0) - currentWindowY) > 0) {
       window.scrollTo(0, currentWindowY);
@@ -6318,5 +6835,8 @@ function initUserAuthSystem() {
 
   // Initial Sync on Page Load
   syncUserAuthUI();
+  if (window.NeuralAIEngine && typeof window.NeuralAIEngine.syncUI === 'function') {
+    window.NeuralAIEngine.syncUI();
+  }
 }
 

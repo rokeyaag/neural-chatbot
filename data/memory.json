@@ -146,8 +146,8 @@
     "id": "mem_tryhackme_overview",
     "category": "tech",
     "title": "TryHackMe ও ড্যাশবোর্ড পরিচিতি (TryHackMe Overview)",
-    "keywords_en": ["tryhackme", "what is tryhackme", "tryhackme dashboard", "thm", "tryhackme.com", "tryhackme overview"],
-    "keywords_bn": ["tryhackme কি", "ট্রাইহ্যাকমি কি", "tryhackme dashboard কি", "ট্রাইহ্যাকমি পরিচিতি", "tryhackme সম্পর্কে বলো", "tryhackme কি এবং এর ড্যাশবোর্ডে কি কি দেখা যায়", "ড্যাশবোর্ডে কি কি দেখা যায়", "tryhackme", "ট্রাইহ্যাকমি"],
+    "keywords_en": ["tryhackme", "tryhack me", "what is tryhackme", "what is tryhack me", "tryhackme dashboard", "thm", "tryhackme.com", "tryhackme overview"],
+    "keywords_bn": ["tryhackme কি", "tryhack me কি", "tryhackme ki", "tryhack me ki", "ট্রাইহ্যাকমি কি", "tryhackme dashboard কি", "ট্রাইহ্যাকমি পরিচিতি", "tryhackme সম্পর্কে বলো", "tryhackme কি এবং এর ড্যাশবোর্ডে কি কি দেখা যায়", "ড্যাশবোর্ডে কি কি দেখা যায়", "tryhackme", "tryhack me", "ট্রাইহ্যাকমি"],
     "responses_en": [
       "🎯 <strong>TryHackMe (THM):</strong> A premier hands-on online platform for learning cybersecurity and ethical hacking through gamified, browser-based virtual labs.<br><br>• <strong>Dashboard Features:</strong> Shows daily learning streaks, active Learning Paths, completed rooms, total points, global rank, and recommended modules.<br>• <strong>Official Website:</strong> <a href='https://tryhackme.com' target='_blank' style='color:#00f2fe;'>tryhackme.com</a>"
     ],
