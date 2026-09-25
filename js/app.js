@@ -577,6 +577,15 @@ const SOCIAL_PLATFORMS = [
 // ==========================================================================
 const POPULAR_WEBSITES = [
   {
+    id: 'lutfor_portfolio',
+    keys: ['lutfor-portfolio.vercel.app', 'lutfor-portfolio', 'lutfor portfolio', 'lutfor website', 'লুৎফর পোর্টফোলিও', 'আমার পোর্টফোলিও', 'আমার ওয়েবসাইট', 'my portfolio', 'my website'],
+    name: 'Lutfor Rahman Portfolio',
+    name_bn: 'লুৎফর রহমান পোর্টফোলিও',
+    url: 'https://lutfor-portfolio.vercel.app',
+    icon: 'fa-solid fa-user-tie',
+    category: 'Portfolio'
+  },
+  {
     id: 'getintopc',
     keys: ['get into pc', 'get to pc', 'getintopc', 'getin to pc', 'get-to-pc', 'gettopc', 'get 2 pc', 'get2pc', 'গেটনপিসি', 'গেট ইনটু পিসি', 'গেট টু পিসি'],
     name: 'Get Into PC',
@@ -593,6 +602,15 @@ const POPULAR_WEBSITES = [
     url: 'https://devpost.com/hackathons',
     icon: 'fa-solid fa-code-fork',
     category: 'Competitions & Coding'
+  },
+  {
+    id: 'hackerone',
+    keys: ['hackerone.com', 'hackerone', 'হ্যাকারওয়ান'],
+    name: 'HackerOne',
+    name_bn: 'হ্যাকারওয়ান',
+    url: 'https://www.hackerone.com',
+    icon: 'fa-solid fa-bug',
+    category: 'Bug Bounty'
   },
   {
     id: 'mlh',
@@ -833,18 +851,96 @@ const POPULAR_WEBSITES = [
 function detectWebsiteNavigation(userText) {
   if (!userText || typeof userText !== 'string') return null;
   const raw = userText.trim();
+  if (raw.length < 2) return null;
+
+  // 1. Direct Full URL detection (e.g. "go to https://lutfor-portfolio.vercel.app/", 'open "https://example.com/path"')
+  const fullUrlMatch = raw.match(/(https?:\/\/[^\s"'>]+)/i);
+  if (fullUrlMatch) {
+    let targetUrl = fullUrlMatch[1].replace(/["'\)\],;.]+$/, '');
+    try {
+      const parsed = new URL(targetUrl);
+      const display = parsed.hostname + (parsed.pathname && parsed.pathname !== '/' ? parsed.pathname : '');
+      return {
+        id: parsed.hostname.replace(/[^a-z0-9]/gi, '_'),
+        name: display,
+        name_bn: display,
+        targetUrl: targetUrl,
+        icon: 'fa-solid fa-globe',
+        category: 'Web Portal',
+        isPopular: false
+      };
+    } catch(e) {
+      return {
+        id: 'direct_url',
+        name: targetUrl,
+        name_bn: targetUrl,
+        targetUrl: targetUrl,
+        icon: 'fa-solid fa-globe',
+        category: 'Web Portal',
+        isPopular: false
+      };
+    }
+  }
+
+  // 2. Subdomain & Domain detection (e.g. lutfor-portfolio.vercel.app, hackerone.com, sub.domain.com/path)
+  const domainMatch = raw.match(/(?:^|\s|"|'|\[|\()([a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)*(?:\.(?:com|app|org|net|io|dev|ai|edu|gov|bd|co|in|tech|me|xyz|info|tv|cloud|live|store|online|site|pro))(?:\/[^\s"'>]*)?)/i);
+  if (domainMatch) {
+    const rawDomain = domainMatch[1].replace(/["'\)\],;.]+$/, '');
+    const targetUrl = 'https://' + rawDomain;
+    try {
+      const parsed = new URL(targetUrl);
+      const display = parsed.hostname + (parsed.pathname && parsed.pathname !== '/' ? parsed.pathname : '');
+      return {
+        id: parsed.hostname.replace(/[^a-z0-9]/gi, '_'),
+        name: display,
+        name_bn: display,
+        targetUrl: targetUrl,
+        icon: 'fa-solid fa-globe',
+        category: 'Web Portal',
+        isPopular: false
+      };
+    } catch(e) {
+      return {
+        id: rawDomain.replace(/[^a-z0-9]/gi, '_'),
+        name: rawDomain,
+        name_bn: rawDomain,
+        targetUrl: targetUrl,
+        icon: 'fa-solid fa-globe',
+        category: 'Web Portal',
+        isPopular: false
+      };
+    }
+  }
+
   const clean = raw.toLowerCase().replace(/[?!,;:()]/g, ' ').replace(/\s+/g, ' ').trim();
-  if (clean.length < 2) return null;
 
   // Pre-clean noise prefixes like "open my website", "open website", "visit the website", "i want to go to", etc.
   const strippedClean = clean
     .replace(/^(?:open\s+(?:my\s+|the\s+)?(?:website|web|site)?|visit\s+(?:the\s+)?(?:website|web|site)?|go\s*to\s+(?:the\s+)?(?:website|web|site)?|goto\s+(?:the\s+)?(?:website|web|site)?|i\s*want\s*to\s*go\s*(?:to)?\s*(?:the\s*)?(?:website|web|site)?|browse\s+(?:the\s+)?(?:website|web|site)?)\s+/i, '')
     .trim();
 
-  // 1. Direct Popular Site matching
+  // 3. Direct Popular Site matching (check strippedClean first if available, then full clean)
+  if (strippedClean && strippedClean.length >= 2) {
+    for (const site of POPULAR_WEBSITES) {
+      for (const key of site.keys) {
+        if (strippedClean === key || strippedClean.includes(key)) {
+          return {
+            id: site.id,
+            name: site.name,
+            name_bn: site.name_bn,
+            targetUrl: site.url,
+            icon: site.icon,
+            category: site.category,
+            isPopular: true
+          };
+        }
+      }
+    }
+  }
+
   for (const site of POPULAR_WEBSITES) {
     for (const key of site.keys) {
-      if (clean === key || clean.includes(key) || strippedClean === key || strippedClean.includes(key)) {
+      if (clean === key || clean.includes(key)) {
         return {
           id: site.id,
           name: site.name,
@@ -858,22 +954,7 @@ function detectWebsiteNavigation(userText) {
     }
   }
 
-  // 2. Direct Domain matching (e.g. example.com, myapp.io, ostad.app)
-  const domainMatch = clean.match(/\b([a-z0-9][-a-z0-9]*\.(?:com|app|org|net|io|dev|ai|edu|gov|bd|co|in|tech|me|xyz|info))\b/i);
-  if (domainMatch) {
-    const domain = domainMatch[1];
-    return {
-      id: domain.replace(/[^a-z0-9]/gi, '_'),
-      name: domain,
-      name_bn: domain,
-      targetUrl: 'https://' + domain,
-      icon: 'fa-solid fa-globe',
-      category: 'Web Portal',
-      isPopular: false
-    };
-  }
-
-  // 3. Navigation Intent Patterns
+  // 4. Navigation Intent Patterns
   const navPatterns = [
     /(?:i\s*want\s*to\s*(?:go(?:\s*to)?|visit|run|open)|take\s*me\s*to|can\s*you\s*(?:go\s*to|open|visit)|go\s*to|goto|open|visit|launch|browse|run|kholo|jao|cholo|dhoko|dekhao|যাও|খোলো|ওপেন|দেখাও|ঢোকো)\s*(?:the\s*)?(?:website|web|site|ওয়েবসাইট|ওয়েবসাইটে?|ওয়েবসাইটে?|সাইটে?|পেজ)?\s*(?:of\s*|for\s*|to\s*)?([a-z0-9\u0980-\u09FF\s-]+?)(?:\s*(?:website|site|ওয়েবসাইট|ওয়েবসাইটে?|ওয়েবসাইটে?|সাইটে?|web|e\s*jao|kholo|open|visit|যাও|খোলো))?$/i,
     /([a-z0-9\u0980-\u09FF\s-]+?)\s*(?:website|site|ওয়েবসাইট|ওয়েবসাইটে?|ওয়েবসাইটে?|সাইটে?)(?:\s*(?:e\s*jao|e|te|kholo|open|visit|run|chalao|যাও|খোলো|ওপেন|চালাও))?$/i
