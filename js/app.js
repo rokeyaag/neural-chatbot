@@ -460,8 +460,8 @@ const SOCIAL_PLATFORMS = [
     icon: 'fa-brands fa-youtube',
     color: '#ff2a44',
     defaultUrl: 'https://www.youtube.com',
-    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|play|search|chalao|dekhao)\s*(?:on\s*)?(?:youtube|toutube|youtub|yt)|(?:youtube|toutube|youtub|yt)\s*(?:player|cinema|interface|video|open|chalao|dekhaw|dekhao|kholo|jao|chalu|play|stream)?)|(?:ইউটিউবে?|গান\s*(?:চালাও|দেখাও|শোনাও|শুনবো)|ভিডিও\s*(?:চালাও|দেখাও))/i,
-    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|play|search|find|stream|dekhao|dekhaw|kholo|jao|chalao|chalu)\s*|(?:on\s*youtube|in\s*youtube|from\s*youtube|youtube\s*e|youtube\s*te|youtube|toutube|youtub|yt)\s*|(?:ইউটিউবে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|প্লে|করো|চালাও|দেখাও|শোনাও|শুনবো|ঢোকো)/gi,
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|play|search|chalao|dekhao)\s*(?:on\s*)?(?:youtube|toutube|youtub|\byt\b)|(?:youtube|toutube|youtub)\s*(?:player|cinema|interface|video|open|chalao|dekhaw|dekhao|kholo|jao|chalu|play|stream)?|\byt\s+(?:video|player|stream)\b)|(?:ইউটিউবে?|গান\s*(?:চালাও|দেখাও|শোনাও|শুনবো)|ভিডিও\s*(?:চালাও|দেখাও))/i,
+    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|play|search|find|stream|dekhao|dekhaw|kholo|jao|chalao|chalu)\s*|(?:on\s*youtube|in\s*youtube|from\s*youtube|youtube\s*e|youtube\s*te|youtube|toutube|youtub|\byt\b)\s*|(?:ইউটিউবে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|প্লে|করো|চালাও|দেখাও|শোনাও|শুনবো|ঢোকো)/gi,
     getSearchUrl: (q) => `https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,
     msg_bn: '🎬 <strong>সরাসরি YouTube ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে YouTube পেজ ওপেন হয়েছে। আপনি সেখান থেকে সব ভিডিও ও গান সম্পূর্ণ উন্মুক্তভাবে ব্রাউজ ও সার্চ করতে পারবেন! 🎵✨',
     msg_en: '🎬 <strong>Directing to YouTube Main Page!</strong><br>YouTube has opened in a new tab for you to search, watch, and browse all videos freely! 🎵✨'
@@ -473,8 +473,8 @@ const SOCIAL_PLATFORMS = [
     icon: 'fa-brands fa-facebook',
     color: '#1877f2',
     defaultUrl: 'https://www.facebook.com',
-    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:facebook|fb)|(?:facebook|fb)\s*(?:open|kholo|jao|chalu|login|feed|page|group|profile)?)|(?:ফেসবুকে?)/i,
-    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*facebook|in\s*facebook|from\s*facebook|facebook\s*e|facebook\s*te|facebook|fb)\s*|(?:ফেসবুকে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|ব্রাউজ|দেখাও|ঢোকো|করো)/gi,
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:facebook|\bfb\b)|(?:facebook)\s*(?:open|kholo|jao|chalu|login|feed|page|group|profile)?|\bfb\s*(?:page|login|feed|group)\b)|(?:ফেসবুকে?)/i,
+    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*facebook|in\s*facebook|from\s*facebook|facebook\s*e|facebook\s*te|facebook|\bfb\b)\s*|(?:ফেসবুকে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|ব্রাউজ|দেখাও|ঢোকো|করো)/gi,
     getSearchUrl: (q) => `https://www.facebook.com/search/top?q=${encodeURIComponent(q)}`,
     msg_bn: '🌐 <strong>সরাসরি Facebook ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে মেইন Facebook ওপেন হয়েছে। আপনি সেখান থেকে আপনার ফিড, গ্রুপ ও বন্ধুদের সাথে সহজে যুক্ত হতে পারবেন! ✨',
     msg_en: '🌐 <strong>Directing to Facebook Main Page!</strong><br>Facebook has opened in a new tab for you to browse feeds, groups, and connect with friends! ✨'
@@ -486,8 +486,8 @@ const SOCIAL_PLATFORMS = [
     icon: 'fa-brands fa-whatsapp',
     color: '#25d366',
     defaultUrl: 'https://web.whatsapp.com',
-    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|chat|message)\s*(?:on\s*)?(?:whatsapp|whats\s*app|wa)|(?:whatsapp|whats\s*app|wa)\s*(?:web|open|kholo|jao|chalu|chat|msg)?)|(?:হোয়াটসঅ্যাপে?|হোয়াটসঅ্যাপে?|হোয়াটসএপে?|হোয়াটস\s*অ্যাপে?)/i,
-    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|chat|message|kholo|jao|chalu)\s*|(?:on\s*whatsapp|in\s*whatsapp|whatsapp|whats\s*app|wa)\s*|(?:হোয়াটসঅ্যাপে?|হোয়াটসঅ্যাপে?|হোয়াটসএপে?|হোয়াটস\s*অ্যাপে?)\s*|(?:যাও|চলো|খোলো|ওপেন|করো|দেখাও|ঢোকো)/gi,
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|chat|message)\s*(?:on\s*)?(?:whatsapp|whats\s*app|\bwa\b)|(?:whatsapp|whats\s*app)\s*(?:web|open|kholo|jao|chalu|chat|msg)?|\bwa\s*(?:web|chat|msg)\b)|(?:হোয়াটসঅ্যাপে?|হোয়াটসঅ্যাপে?|হোয়াটসএপে?|হোয়াটস\s*অ্যাপে?)/i,
+    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|chat|message|kholo|jao|chalu)\s*|(?:on\s*whatsapp|in\s*whatsapp|whatsapp|whats\s*app|\bwa\b)\s*|(?:হোয়াটসঅ্যাপে?|হোয়াটসঅ্যাপে?|হোয়াটসএপে?|হোয়াটস\s*অ্যাপে?)\s*|(?:যাও|চলো|খোলো|ওপেন|করো|দেখাও|ঢোকো)/gi,
     getSearchUrl: () => `https://web.whatsapp.com`,
     msg_bn: '💬 <strong>সরাসরি WhatsApp Web ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে WhatsApp Web ওপেন হয়েছে। আপনি সেখান থেকে সরাসরি চ্যাট ও মেসেজ করতে পারবেন! ✨',
     msg_en: '💬 <strong>Directing to WhatsApp Web!</strong><br>WhatsApp Web has opened in a new tab for you to chat and message freely! ✨'
@@ -499,8 +499,8 @@ const SOCIAL_PLATFORMS = [
     icon: 'fa-brands fa-instagram',
     color: '#e1306c',
     defaultUrl: 'https://www.instagram.com',
-    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:instagram|insta|ig)|(?:instagram|insta|ig)\s*(?:open|kholo|jao|chalu|reels|profile|explore)?)|(?:ইনস্টাগ্রামে?|ইন্সটাগ্রামে?|ইনস্টাতে?|ইন্সটাতে?)/i,
-    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*instagram|in\s*instagram|instagram|insta|ig)\s*|(?:ইনস্টাগ্রামে?|ইন্সটাগ্রামে?|ইনস্টাতে?|ইন্সটাতে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|দেখাও|ঢোকো|করো)/gi,
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:instagram|insta|\big\b)|(?:instagram|insta)\s*(?:open|kholo|jao|chalu|reels|profile|explore)?|\big\s*(?:reels|profile|feed)\b)|(?:ইনস্টাগ্রামে?|ইন্সটাগ্রামে?|ইনস্টাতে?|ইন্সটাতে?)/i,
+    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*instagram|in\s*instagram|instagram|insta|\big\b)\s*|(?:ইনস্টাগ্রামে?|ইন্সটাগ্রামে?|ইনস্টাতে?|ইন্সটাতে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|দেখাও|ঢোকো|করো)/gi,
     getSearchUrl: (q) => `https://www.instagram.com/explore/tags/${encodeURIComponent(q.replace(/\s+/g, ''))}/`,
     msg_bn: '📸 <strong>সরাসরি Instagram ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে Instagram ওপেন হয়েছে। আপনি সেখান থেকে ফটো, রিলস ও স্টোরিজ ব্রাউজ করতে পারবেন! ✨',
     msg_en: '📸 <strong>Directing to Instagram Main Page!</strong><br>Instagram has opened in a new tab for you to explore photos, reels, and stories! ✨'
@@ -512,8 +512,8 @@ const SOCIAL_PLATFORMS = [
     icon: 'fa-brands fa-x-twitter',
     color: '#1da1f2',
     defaultUrl: 'https://x.com',
-    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:twitter|x\.com|tweet)|(?:twitter|x\.com)\s*(?:open|kholo|jao|chalu|feed|trends)?)|(?:টুইটারে?|টুইটে?)/i,
-    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*twitter|in\s*twitter|twitter|x\.com|tweet)\s*|(?:টুইটারে?|টুইটে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|দেখাও|ঢোকো|করো)/gi,
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:twitter|x\.com|\btweet\b)|(?:twitter|x\.com)\s*(?:open|kholo|jao|chalu|feed|trends)?)|(?:টুইটারে?|টুইটে?)/i,
+    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*twitter|in\s*twitter|twitter|x\.com|\btweet\b)\s*|(?:টুইটারে?|টুইটে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|দেখাও|ঢোকো|করো)/gi,
     getSearchUrl: (q) => `https://x.com/search?q=${encodeURIComponent(q)}`,
     msg_bn: '🐦 <strong>সরাসরি X (Twitter) ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে X (Twitter) ওপেন হয়েছে। আপনি সেখান থেকে লেটেস্ট ট্রেন্ডস, নিউজ ও টুইট দেখতে পারবেন! ✨',
     msg_en: '🐦 <strong>Directing to X (Twitter) Main Page!</strong><br>X (Twitter) has opened in a new tab for you to see latest trends and tweets! ✨'
@@ -564,13 +564,377 @@ const SOCIAL_PLATFORMS = [
     icon: 'fa-brands fa-telegram',
     color: '#229ed9',
     defaultUrl: 'https://web.telegram.org',
-    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:telegram|tg)|(?:telegram|tg)\s*(?:open|kholo|jao|chalu|web|channel)?)|(?:টেলিগ্রামে?)/i,
-    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*telegram|in\s*telegram|telegram|tg)\s*|(?:টেলিগ্রামে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|দেখাও|ঢোকো|করো)/gi,
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:telegram|\btg\b)|(?:telegram)\s*(?:open|kholo|jao|chalu|web|channel)?|\btg\s*(?:web|channel|chat)\b)|(?:টেলিগ্রামে?)/i,
+    stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*telegram|in\s*telegram|telegram|\btg\b)\s*|(?:টেলিগ্রামে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|দেখাও|ঢোকো|করো)/gi,
     getSearchUrl: () => `https://web.telegram.org`,
     msg_bn: '✈️ <strong>সরাসরি Telegram Web ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে Telegram Web ওপেন হয়েছে। আপনি সেখান থেকে চ্যানেল ও মেসেজে যুক্ত হতে পারবেন! ✨',
     msg_en: '✈️ <strong>Directing to Telegram Web!</strong><br>Telegram Web has opened in a new tab for you to access channels and chats! ✨'
   }
 ];
+
+// ==========================================================================
+// POPULAR WEBSITES REGISTRY & DIRECT NAVIGATION MAP
+// ==========================================================================
+const POPULAR_WEBSITES = [
+  {
+    id: 'getintopc',
+    keys: ['get into pc', 'get to pc', 'getintopc', 'getin to pc', 'get-to-pc', 'gettopc', 'get 2 pc', 'get2pc', 'গেটনপিসি', 'গেট ইনটু পিসি', 'গেট টু পিসি'],
+    name: 'Get Into PC',
+    name_bn: 'গেট ইনটু পিসি (সফটওয়্যার ডাউনলোড)',
+    url: 'https://getintopc.com',
+    icon: 'fa-solid fa-download',
+    category: 'Software & Tools'
+  },
+  {
+    id: 'hackathon',
+    keys: ['hackathon', 'hackathons', 'hackathon website', 'হ্যাকথন', 'হ্যাকাথন'],
+    name: 'Hackathons (Devpost)',
+    name_bn: 'হ্যাকথন পোর্টাল (Devpost)',
+    url: 'https://devpost.com/hackathons',
+    icon: 'fa-solid fa-code-fork',
+    category: 'Competitions & Coding'
+  },
+  {
+    id: 'mlh',
+    keys: ['mlh', 'major league hacking'],
+    name: 'Major League Hacking (MLH)',
+    name_bn: 'মেজর লীগ হ্যাকিং (MLH)',
+    url: 'https://mlh.io',
+    icon: 'fa-solid fa-laptop-code',
+    category: 'Hackathons'
+  },
+  {
+    id: 'ostad',
+    keys: ['ostad app', 'ostad.app', 'ostad', 'ওস্তাদ'],
+    name: 'Ostad',
+    name_bn: 'ওস্তাদ (লাইভ লার্নিং)',
+    url: 'https://ostad.app',
+    icon: 'fa-solid fa-graduation-cap',
+    category: 'Live Learning'
+  },
+  {
+    id: 'w3schools',
+    keys: ['w3schools', 'w3school', 'ডব্লিউ থ্রি স্কুল', 'ডব্লিউ৩ স্কুল'],
+    name: 'W3Schools',
+    name_bn: 'ডব্লিউ৩ স্কুলস',
+    url: 'https://www.w3schools.com',
+    icon: 'fa-solid fa-code',
+    category: 'Web Tutorials'
+  },
+  {
+    id: 'stackoverflow',
+    keys: ['stackoverflow', 'stack overflow', 'স্ট্যাক ওভারফ্লো'],
+    name: 'Stack Overflow',
+    name_bn: 'স্ট্যাক ওভারফ্লো',
+    url: 'https://stackoverflow.com',
+    icon: 'fa-brands fa-stack-overflow',
+    category: 'Developer Community'
+  },
+  {
+    id: 'tryhackme',
+    keys: ['tryhackme', 'thm', 'ট্রাইহ্যাকমি'],
+    name: 'TryHackMe',
+    name_bn: 'ট্রাইহ্যাকমি',
+    url: 'https://tryhackme.com',
+    icon: 'fa-solid fa-shield-halved',
+    category: 'Cybersecurity'
+  },
+  {
+    id: 'hackthebox',
+    keys: ['hackthebox', 'htb', 'হ্যাক দ্য বক্স'],
+    name: 'Hack The Box',
+    name_bn: 'হ্যাক দ্য বক্স',
+    url: 'https://www.hackthebox.com',
+    icon: 'fa-solid fa-cube',
+    category: 'Cybersecurity'
+  },
+  {
+    id: 'kaggle',
+    keys: ['kaggle', 'ক্যাগল'],
+    name: 'Kaggle',
+    name_bn: 'ক্যাগল',
+    url: 'https://www.kaggle.com',
+    icon: 'fa-solid fa-chart-line',
+    category: 'Data Science & AI'
+  },
+  {
+    id: 'leetcode',
+    keys: ['leetcode', 'লিটকোর্ড'],
+    name: 'LeetCode',
+    name_bn: 'লিটকোর্ড',
+    url: 'https://leetcode.com',
+    icon: 'fa-solid fa-terminal',
+    category: 'Competitive Coding'
+  },
+  {
+    id: 'hackerrank',
+    keys: ['hackerrank', 'হ্যাকারর‌্যাঙ্ক'],
+    name: 'HackerRank',
+    name_bn: 'হ্যাকারর‌্যাঙ্ক',
+    url: 'https://www.hackerrank.com',
+    icon: 'fa-solid fa-code',
+    category: 'Coding Practice'
+  },
+  {
+    id: 'coursera',
+    keys: ['coursera', 'কোর্সসেরা'],
+    name: 'Coursera',
+    name_bn: 'কোর্সসেরা',
+    url: 'https://www.coursera.org',
+    icon: 'fa-solid fa-book-open-reader',
+    category: 'Online Courses'
+  },
+  {
+    id: 'udemy',
+    keys: ['udemy', 'উডেমি'],
+    name: 'Udemy',
+    name_bn: 'উডেমি',
+    url: 'https://www.udemy.com',
+    icon: 'fa-solid fa-chalkboard-user',
+    category: 'Online Courses'
+  },
+  {
+    id: 'canva',
+    keys: ['canva', 'ক্যানভা'],
+    name: 'Canva',
+    name_bn: 'ক্যানভা',
+    url: 'https://www.canva.com',
+    icon: 'fa-solid fa-palette',
+    category: 'Graphic Design'
+  },
+  {
+    id: 'daraz',
+    keys: ['daraz', 'দারাজ'],
+    name: 'Daraz Bangladesh',
+    name_bn: 'দারাজ বাংলাদেশ',
+    url: 'https://www.daraz.com.bd',
+    icon: 'fa-solid fa-cart-shopping',
+    category: 'E-Commerce'
+  },
+  {
+    id: 'chaldal',
+    keys: ['chaldal', 'চালডাল'],
+    name: 'Chaldal',
+    name_bn: 'চালডাল',
+    url: 'https://chaldal.com',
+    icon: 'fa-solid fa-basket-shopping',
+    category: 'Grocery'
+  },
+  {
+    id: 'rokomari',
+    keys: ['rokomari', 'রকমারি'],
+    name: 'Rokomari',
+    name_bn: 'রকমারি',
+    url: 'https://www.rokomari.com',
+    icon: 'fa-solid fa-book',
+    category: 'Bookstore'
+  },
+  {
+    id: 'chatgpt',
+    keys: ['chatgpt', 'openai', 'চ্যাটজিপিটি'],
+    name: 'ChatGPT',
+    name_bn: 'চ্যাটজিপিটি',
+    url: 'https://chatgpt.com',
+    icon: 'fa-solid fa-robot',
+    category: 'AI Assistant'
+  },
+  {
+    id: 'gemini',
+    keys: ['google gemini', 'gemini ai', 'gemini', 'গুগল জেমিনি'],
+    name: 'Google Gemini',
+    name_bn: 'গুগল জেমিনি',
+    url: 'https://gemini.google.com',
+    icon: 'fa-solid fa-brain',
+    category: 'AI Assistant'
+  },
+  {
+    id: 'claude',
+    keys: ['claude ai', 'claude', 'ক্লড'],
+    name: 'Claude AI',
+    name_bn: 'ক্লড এআই',
+    url: 'https://claude.ai',
+    icon: 'fa-solid fa-sparkles',
+    category: 'AI Assistant'
+  },
+  {
+    id: 'wikipedia',
+    keys: ['wikipedia', 'উইকিপিডিয়া'],
+    name: 'Wikipedia',
+    name_bn: 'উইকিপিডিয়া',
+    url: 'https://www.wikipedia.org',
+    icon: 'fa-brands fa-wikipedia-w',
+    category: 'Encyclopedia'
+  },
+  {
+    id: 'google',
+    keys: ['google search', 'google', 'গুগল'],
+    name: 'Google',
+    name_bn: 'গুগল সার্চ',
+    url: 'https://www.google.com',
+    icon: 'fa-brands fa-google',
+    category: 'Search Engine'
+  },
+  {
+    id: 'freecodecamp',
+    keys: ['freecodecamp', 'ফ্রিকোডক্যাম্প'],
+    name: 'freeCodeCamp',
+    name_bn: 'ফ্রিকোডক্যাম্প',
+    url: 'https://www.freecodecamp.org',
+    icon: 'fa-brands fa-free-code-camp',
+    category: 'Coding Education'
+  },
+  {
+    id: 'geeksforgeeks',
+    keys: ['geeksforgeeks', 'gfg', 'গীকসফরগীকস'],
+    name: 'GeeksforGeeks',
+    name_bn: 'গীকসফরগীকস',
+    url: 'https://www.geeksforgeeks.org',
+    icon: 'fa-solid fa-code',
+    category: 'Computer Science'
+  },
+  {
+    id: 'bdjobs',
+    keys: ['bdjobs', 'বিডিজবস'],
+    name: 'Bdjobs',
+    name_bn: 'বিডিজবস',
+    url: 'https://www.bdjobs.com',
+    icon: 'fa-solid fa-briefcase',
+    category: 'Jobs Portal'
+  },
+  {
+    id: 'prothomalo',
+    keys: ['prothom alo', 'prothomalo', 'প্রথম আলো'],
+    name: 'Prothom Alo',
+    name_bn: 'প্রথম আলো',
+    url: 'https://www.prothomalo.com',
+    icon: 'fa-solid fa-newspaper',
+    category: 'News Portal'
+  },
+  {
+    id: 'dailystar',
+    keys: ['the daily star', 'daily star', 'ডেইলি স্টার'],
+    name: 'The Daily Star',
+    name_bn: 'দ্য ডেইলি স্টার',
+    url: 'https://www.thedailystar.net',
+    icon: 'fa-solid fa-newspaper',
+    category: 'News Portal'
+  },
+  {
+    id: 'cricbuzz',
+    keys: ['cricbuzz', 'ক্রিকবাজ'],
+    name: 'Cricbuzz',
+    name_bn: 'ক্রিকবাজ',
+    url: 'https://www.cricbuzz.com',
+    icon: 'fa-solid fa-baseball-bat-ball',
+    category: 'Cricket Live Scores'
+  }
+];
+
+function detectWebsiteNavigation(userText) {
+  if (!userText || typeof userText !== 'string') return null;
+  const raw = userText.trim();
+  const clean = raw.toLowerCase().replace(/[?!,;:()]/g, ' ').replace(/\s+/g, ' ').trim();
+  if (clean.length < 2) return null;
+
+  // Pre-clean noise prefixes like "open my website", "open website", "visit the website", "i want to go to", etc.
+  const strippedClean = clean
+    .replace(/^(?:open\s+(?:my\s+|the\s+)?(?:website|web|site)?|visit\s+(?:the\s+)?(?:website|web|site)?|go\s*to\s+(?:the\s+)?(?:website|web|site)?|goto\s+(?:the\s+)?(?:website|web|site)?|i\s*want\s*to\s*go\s*(?:to)?\s*(?:the\s*)?(?:website|web|site)?|browse\s+(?:the\s+)?(?:website|web|site)?)\s+/i, '')
+    .trim();
+
+  // 1. Direct Popular Site matching
+  for (const site of POPULAR_WEBSITES) {
+    for (const key of site.keys) {
+      if (clean === key || clean.includes(key) || strippedClean === key || strippedClean.includes(key)) {
+        return {
+          id: site.id,
+          name: site.name,
+          name_bn: site.name_bn,
+          targetUrl: site.url,
+          icon: site.icon,
+          category: site.category,
+          isPopular: true
+        };
+      }
+    }
+  }
+
+  // 2. Direct Domain matching (e.g. example.com, myapp.io, ostad.app)
+  const domainMatch = clean.match(/\b([a-z0-9][-a-z0-9]*\.(?:com|app|org|net|io|dev|ai|edu|gov|bd|co|in|tech|me|xyz|info))\b/i);
+  if (domainMatch) {
+    const domain = domainMatch[1];
+    return {
+      id: domain.replace(/[^a-z0-9]/gi, '_'),
+      name: domain,
+      name_bn: domain,
+      targetUrl: 'https://' + domain,
+      icon: 'fa-solid fa-globe',
+      category: 'Web Portal',
+      isPopular: false
+    };
+  }
+
+  // 3. Navigation Intent Patterns
+  const navPatterns = [
+    /(?:i\s*want\s*to\s*(?:go(?:\s*to)?|visit|run|open)|take\s*me\s*to|can\s*you\s*(?:go\s*to|open|visit)|go\s*to|goto|open|visit|launch|browse|run|kholo|jao|cholo|dhoko|dekhao|যাও|খোলো|ওপেন|দেখাও|ঢোকো)\s*(?:the\s*)?(?:website|web|site|ওয়েবসাইট|ওয়েবসাইটে?|ওয়েবসাইটে?|সাইটে?|পেজ)?\s*(?:of\s*|for\s*|to\s*)?([a-z0-9\u0980-\u09FF\s-]+?)(?:\s*(?:website|site|ওয়েবসাইট|ওয়েবসাইটে?|ওয়েবসাইটে?|সাইটে?|web|e\s*jao|kholo|open|visit|যাও|খোলো))?$/i,
+    /([a-z0-9\u0980-\u09FF\s-]+?)\s*(?:website|site|ওয়েবসাইট|ওয়েবসাইটে?|ওয়েবসাইটে?|সাইটে?)(?:\s*(?:e\s*jao|e|te|kholo|open|visit|run|chalao|যাও|খোলো|ওপেন|চালাও))?$/i
+  ];
+
+  for (const pat of navPatterns) {
+    const match = clean.match(pat);
+    if (match && match[1]) {
+      let candidate = match[1].trim();
+      candidate = candidate.replace(/^(?:the|a|an|to|for|in|on)\s+/i, '').trim();
+      candidate = candidate.replace(/\s+(?:please|bhai|now|quick|fast)$/i, '').trim();
+      const ignoredTokens = ['it', 'this', 'that', 'there', 'home', 'page', 'site', 'website', 'ওয়েবসাইট', 'সাইট'];
+      if (candidate.length >= 2 && !ignoredTokens.includes(candidate)) {
+        for (const site of POPULAR_WEBSITES) {
+          for (const key of site.keys) {
+            if (candidate === key || candidate.includes(key)) {
+              return {
+                id: site.id,
+                name: site.name,
+                name_bn: site.name_bn,
+                targetUrl: site.url,
+                icon: site.icon,
+                category: site.category,
+                isPopular: true
+              };
+            }
+          }
+        }
+        return {
+          id: 'custom_search',
+          name: candidate,
+          name_bn: candidate,
+          targetUrl: 'https://www.google.com/search?q=' + encodeURIComponent(candidate + ' official website'),
+          icon: 'fa-solid fa-arrow-up-right-from-square',
+          category: 'Web Search',
+          isPopular: false
+        };
+      }
+    }
+  }
+
+  return null;
+}
+window.detectWebsiteNavigation = detectWebsiteNavigation;
+
+function formatWebsiteLaunchResponse(siteMatch, isBengali) {
+  const { name, name_bn, targetUrl, icon } = siteMatch;
+  const displayName = isBengali ? (name_bn || name) : name;
+  const btnText = isBengali ? `🚀 ${displayName}-এ সরাসরি যান ↗` : `🚀 Open ${displayName} ↗`;
+  let domainText = targetUrl;
+  try {
+    domainText = new URL(targetUrl).hostname;
+  } catch(e) {}
+
+  const msg = isBengali
+    ? `🌐 <strong>সরাসরি ${escapeHtml(displayName)} ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে ওয়েবসাইটটি চালু হয়েছে। আপনি সেখান থেকে সরাসরি ব্রাউজ ও ভিজিট করতে পারবেন! ✨`
+    : `🌐 <strong>Directing to ${escapeHtml(displayName)}!</strong><br>The website (${escapeHtml(domainText)}) has opened in a new tab for you to browse freely! ✨`;
+
+  return `${msg}<br><br><a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background:linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);color:#07101e;border-radius:20px;padding:7px 18px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;font-weight:700;box-shadow:0 4px 15px rgba(0,242,254,0.35);letter-spacing:0.3px;"><i class="${icon || 'fa-solid fa-globe'}"></i> ${btnText}</a>`;
+}
+window.formatWebsiteLaunchResponse = formatWebsiteLaunchResponse;
 
 function detectSocialPlatform(userText) {
   if (!userText || typeof userText !== 'string') return null;
@@ -618,15 +982,10 @@ window.detectSocialPlatform = detectSocialPlatform;
 
 function launchSocialDirectly(targetUrl) {
   if (!targetUrl) return;
-  let win = null;
   try {
-    win = window.open(targetUrl, '_blank');
+    window.open(targetUrl, '_blank');
   } catch (e) {
-    win = null;
-  }
-  if (!win || win.closed || typeof win.closed === 'undefined') {
-    // Automatically navigate current page directly if popup blocker interfered!
-    window.location.href = targetUrl;
+    console.log('Direct launch error:', e);
   }
 }
 window.launchSocialDirectly = launchSocialDirectly;
@@ -1816,7 +2175,7 @@ function initVoiceAndChatEngine() {
       'bhalobashi', 'prem', 'biye', 'bari', 'desh', 'bangladesh', 'bangla', 'banglish', 'vasha', 'bhasha', 'vashay', 'bhashay',
       'muk', 'mukh', 'chokh', 'kan', 'matha', 'kotha',
       // Particles & Negations
-      'na', 'nah', 'ha', 'haa', 'tai', 'to', 'naaki', 'naki', 'nki', 're', 'jeno', 'ar', 'aar',
+      'na', 'nah', 'ha', 'haa', 'tai', 'naaki', 'naki', 'nki', 're', 'jeno', 'ar', 'aar',
       'ekta', 'duto', 'egulo', 'ogulo', 'shegulo', 'jeh', 'onek', 'aro', 'shob', 'sob'
     ]);
 
@@ -5043,6 +5402,17 @@ function initVoiceAndChatEngine() {
         `<br><br><a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background:${platform.color};color:#fff;border-radius:20px;padding:6px 16px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-weight:600;box-shadow:0 4px 15px ${platform.color}40;"><i class="${platform.icon}"></i> ${btnText}</a>`;
     }
 
+    // Universal Website Direct Auto-Open & Navigation Handler
+    const websiteMatch = detectWebsiteNavigation(userText);
+    if (websiteMatch) {
+      try {
+        window.open(websiteMatch.targetUrl, '_blank');
+      } catch (e) {
+        console.log('Window open fallback:', e);
+      }
+      return formatWebsiteLaunchResponse(websiteMatch, isBengali);
+    }
+
     // Subtopic Intent Token Set for Disambiguation
     const SUBTOPIC_INTENT_TOKENS = new Set([
       'course', 'courses', 'kors', 'bootcamp', 'bootcamps', 'কোর্স', 'কোর্সসমূহ', 'বুটক্যাম্প',
@@ -5171,10 +5541,12 @@ function initVoiceAndChatEngine() {
       score += bestKwScore;
 
       // Content body text keyword matching (expanded tokens with synonyms)
-      const allResps = [...(item.responses_bn || []), ...(item.responses_en || []), ...(item.responses || [])].join(' ').toLowerCase();
+      const rawResps = [...(item.responses_bn || []), ...(item.responses_en || []), ...(item.responses || [])].join(' ').toLowerCase();
+      const cleanResps = rawResps.replace(/<[^>]+>/g, ' ');
+      const IGNORED_BODY_TOKENS = new Set(['open', 'website', 'web', 'site', 'page', 'link', 'apps', 'app', 'online', 'free', 'get', 'the', 'my', 'your', 'our']);
       let bodyMatchCount = 0;
       for (const qt of expandedTokens) {
-        if (qt.length >= 3 && !COMMON_STOPWORDS.has(qt) && allResps.includes(qt)) {
+        if (qt.length >= 3 && !COMMON_STOPWORDS.has(qt) && !IGNORED_BODY_TOKENS.has(qt) && hasWordOrPhrase(cleanResps, qt)) {
           bodyMatchCount++;
         }
       }
@@ -5313,6 +5685,12 @@ function initVoiceAndChatEngine() {
       const btnText = isBengali ? `মেইন ${platform.name_bn || platform.name}-এ যান ↗` : `Open Main ${platform.name} ↗`;
       return (isBengali ? platform.msg_bn : platform.msg_en) +
         `<br><br><a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background:${platform.color};color:#fff;border-radius:20px;padding:6px 16px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-weight:600;box-shadow:0 4px 15px ${platform.color}40;"><i class="${platform.icon}"></i> ${btnText}</a>`;
+    }
+
+    const websiteMatch = detectWebsiteNavigation(userText);
+    if (websiteMatch) {
+      try { window.open(websiteMatch.targetUrl, '_blank'); } catch(e) {}
+      return formatWebsiteLaunchResponse(websiteMatch, isBengali);
     }
 
     // 3. Collect Web Knowledge Chunks & Memory Context for AI Reasoning
@@ -6065,6 +6443,11 @@ function initVoiceAndChatEngine() {
     const directSocial = detectSocialPlatform(userText);
     if (directSocial) {
       launchSocialDirectly(directSocial.targetUrl);
+    } else {
+      const directSite = detectWebsiteNavigation(userText);
+      if (directSite) {
+        launchSocialDirectly(directSite.targetUrl);
+      }
     }
 
     // Auto-detect URL Web Ingestion Intent directly in Chat
