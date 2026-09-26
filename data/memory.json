@@ -1152,6 +1152,45 @@
     ]
   },
   {
+    "id": "mem_facebook_forgot_password",
+    "category": "social",
+    "title": "ফেসবুকের পাসওয়ার্ড ভুলে গেলে কি করতে হয় (Facebook Password Recovery)",
+    "keywords_en": [
+      "facebook password forgot",
+      "forgot facebook password",
+      "how to recover facebook password",
+      "facebook password reset",
+      "forgot password",
+      "password recovery",
+      "facebook password mone nai",
+      "facebook password vule gesi",
+      "password vule gechi"
+    ],
+    "keywords_bn": [
+      "বুকের পাসওয়ার্ড ভুলে গেলে কি করতে হয়",
+      "ফেসবুকের পাসওয়ার্ড ভুলে গেলে কি করতে হয়",
+      "ফেসবুক পাসওয়ার্ড ভুলে গেছি",
+      "পাসওয়ার্ড ভুলে গেলে কি করতে হয়",
+      "ফেসবুকের পাসওয়ার্ড রিসেট করার নিয়ম",
+      "পাসওয়ার্ড মনে নেই কি করব",
+      "ফেসবুকের পাসওয়ার্ড কিভাবে রিকভারি করব",
+      "পাসওয়ার্ড ভুলে গেছি",
+      "পাসওয়ার্ড ভুলে গেছি",
+      "ফেসবুক পাসওয়ার্ড রিকভারি",
+      "facebook password vule gesi",
+      "facebook password vule gechi",
+      "facebook er password mone nai",
+      "password vule geci",
+      "password kivabe pabo"
+    ],
+    "responses_en": [
+      "🔐 <strong>Step-by-Step Guide: How to Reset / Recover a Forgotten Facebook Password:</strong><br><br>1. <strong>Go to Login Screen:</strong> Visit <a href='https://facebook.com/login/identify' target='_blank' style='color:#00f2fe;'>facebook.com/login/identify</a> or click <strong>'Forgotten password?'</strong> on the Facebook app.<br>2. <strong>Enter Credentials:</strong> Type the <strong>Mobile Number</strong> or <strong>Email Address</strong> linked to your Facebook account.<br>3. <strong>Choose Verification Method:</strong> Select whether you want the 6-digit Security Code via <strong>Email</strong> or <strong>SMS</strong>.<br>4. <strong>Enter the Code:</strong> Check your inbox or message inbox, and type the 6-digit confirmation code.<br>5. <strong>Set a New Password:</strong> Create a strong, new password (mix of letters, numbers, and symbols) and click <strong>Continue</strong>.<br>6. <strong>Log Out of Other Devices:</strong> Select 'Log out of other devices' to ensure full account safety! ✨"
+    ],
+    "responses_bn": [
+      "🔐 <strong>ফেসবুকের পাসওয়ার্ড ভুলে গেলে যা করতে হবে (সহজ ও নির্ভুল পদ্ধতি):</strong><br><br>১. <strong>'Forgotten password?' অপশনে যান:</strong> ফেসবুক লগইন পেজে বা <a href='https://facebook.com/login/identify' target='_blank' style='color:#00f2fe;'>facebook.com/login/identify</a> লিংকে গিয়ে <strong>'Forgotten password?' (পাসওয়ার্ড ভুলে গেছেন?)</strong> লেখায় ক্লিক করুন।<br><br>২. <strong>ইমেইল বা মোবাইল নম্বর দিন:</strong> আপনার যে ফোন নম্বর বা ইমেইল দিয়ে অ্যাকাউন্ট খোলা হয়েছিল, তা লিখে সার্চ (Search) করুন।<br><br>৩. <strong>ভেরিফিকেশন কোড (OTP) নেওয়ার মাধ্যম বেছে নিন:</strong> কোডটি আপনার <strong>ইমেইলে</strong> পাঠাবেন নাকি <strong>এসএমএস (SMS)</strong>-এ পাঠাবেন তা সিলেক্ট করে Continue চাপুন।<br><br>৪. <strong>৬ ডিজিটের কোডটি দিন:</strong> আপনার ফোনে বা ইমেইলে আসা ৬ সংখ্যার সিকিউরিটি কোডটি নির্দিষ্ট বক্সে বসান।<br><br>৫. <strong>নতুন স্ট্রং পাসওয়ার্ড দিন:</strong> একটি নতুন ও শক্তিশালী পাসওয়ার্ড (অক্ষর, সংখ্যা ও চিহ্ন মিলিয়ে) লিখে সেভ করুন।<br><br>৬. <strong>লগইন নিশ্চিত করুন:</strong> 'Log out of other devices' অপশনটি বেছে নিয়ে লগইন করুন, এতে আপনার অ্যাকাউন্ট সম্পূর্ণ সুরক্ষিত থাকবে! ✨"
+    ]
+  },
+  {
     "id": "mem_facebook_create_page",
     "category": "social",
     "title": "ফেসবুক পেজ তৈরি করার নিয়ম (How to Create a Facebook Page)",

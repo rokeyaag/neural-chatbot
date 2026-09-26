@@ -5899,10 +5899,63 @@ function initVoiceAndChatEngine() {
       return `${prefix}<br><br>${escapeHtml(topPdfChunk.text)}`;
     }
 
-    // 5. Seamless Fallback: In-Browser Smart RAG & Pre-Trained Knowledge Base
-    return getSmartResponse(userText);
+    // 5. In-Browser Smart RAG & Curated Knowledge Search
+    const localSmartReply = getSmartResponse(userText);
+    
+    // Check if local response was a generic fallback (meaning no specific topic was matched in memory)
+    const isGenericFallback = localSmartReply.includes('আপনার প্রশ্নটি আমি বুঝতে পেরেছি') ||
+                              localSmartReply.includes('দারুণ বিষয়! ওয়েবসাইট আপলোড') ||
+                              localSmartReply.includes('আমি আপনার কথাটি শুনেছি') ||
+                              localSmartReply.includes('Listening to your query') ||
+                              localSmartReply.includes("I'm listening! You can ingest") ||
+                              localSmartReply.includes("Feel free to ask me questions") ||
+                              localSmartReply.includes("I am ready to assist! Ask me");
+
+    // If local memory did not have a high-confidence answer, query Free Online Neural AI Agent
+    if (isGenericFallback) {
+      const dynamicAiReply = await queryFreeAiAgent(rawText, isBengali, combinedRAGContext);
+      if (dynamicAiReply) {
+        return dynamicAiReply;
+      }
+    }
+
+    return localSmartReply;
   }
   window.resolveBotResponse = resolveBotResponse;
+
+  async function queryFreeAiAgent(prompt, isBengali, ragContext = '') {
+    try {
+      const sysPrompt = isBengali
+        ? "You are NeuralBot, an intelligent and helpful AI assistant created by Lutfor Rahman. Answer the user's question accurately, concisely, and naturally in Bengali. Use clear bullet points and bold headers if explaining steps. Do not use markdown code block wrappers. Output clean HTML with <strong> and <br>."
+        : "You are NeuralBot, an intelligent and helpful AI assistant created by Lutfor Rahman. Answer the user's question accurately, concisely, and clearly in English. Use bullet points and bold headers if explaining steps. Output clean HTML with <strong> and <br>.";
+
+      const queryUrl = `https://text.pollinations.ai/${encodeURIComponent(prompt)}?model=openai&system=${encodeURIComponent(sysPrompt)}`;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 9000);
+
+      const res = await fetch(queryUrl, { signal: controller.signal });
+      clearTimeout(timeoutId);
+
+      if (res.ok) {
+        const text = await res.text();
+        if (text && text.trim().length > 10 && !text.includes('<!DOCTYPE') && !text.includes('<html')) {
+          let clean = text.trim()
+            .replace(/```html/gi, '')
+            .replace(/```/g, '')
+            .replace(/\r\n|\r/g, '\n')
+            .replace(/\n{3,}/g, '\n\n')
+            .replace(/\n\n/g, '<br><br>')
+            .replace(/\n/g, '<br>')
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+          return clean;
+        }
+      }
+    } catch (err) {
+      console.log('[Free AI Agent Fallback]', err);
+    }
+    return null;
+  }
+  window.queryFreeAiAgent = queryFreeAiAgent;
 
   function escapeHtml(str) {
     return str.replace(/[&<>"']/g, (m) => ({
