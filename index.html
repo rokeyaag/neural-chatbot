@@ -24,8 +24,8 @@
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- Custom Stylesheet (v41.0 with Cache-Bust) -->
-  <link rel="stylesheet" href="css/style.css?v=41.0">
+  <!-- Custom Stylesheet (v42.0 with Cache-Bust) -->
+  <link rel="stylesheet" href="css/style.css?v=42.0">
 </head>
 <body>
 
@@ -256,8 +256,11 @@
                 <button class="quick-chip" id="openWebIngestChipHero" data-action="open-web-ingest" style="border-color: rgba(0, 242, 254, 0.5); color: #00f2fe;"><i class="fa-solid fa-globe"></i> Ingest URL 🌐</button>
               </div>
 
-              <!-- Main Input Box with Send Button & Mic Button -->
+              <!-- Main Input Box with Send Button, Mic Button & Plus Ingest Button -->
               <div class="chat-form" id="heroChatForm">
+                <button type="button" class="chat-attach-plus-btn" id="chatAttachPlusBtn" onclick="if(window.openKnowledgeModal) window.openKnowledgeModal();" title="Add Web Knowledge URL / PDF (+)">
+                  <i class="fa-solid fa-plus"></i>
+                </button>
                 <button type="button" class="voice-mic-btn" id="voiceMicBtn" title="Click to Speak (Voice Record)">
                   <i class="fa-solid fa-microphone"></i>
                 </button>
@@ -1465,6 +1468,6 @@
   <script src="js/pdf-rag.js?v=1.0"></script>
 
   <!-- Main Application Javascript -->
-  <script src="js/app.js?v=41.0"></script>
+  <script src="js/app.js?v=42.0"></script>
 </body>
 </html>

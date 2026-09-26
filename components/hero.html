@@ -218,8 +218,11 @@
                 <button class="quick-chip" id="openWebIngestChipHero" data-action="open-web-ingest" style="border-color: rgba(0, 242, 254, 0.5); color: #00f2fe;"><i class="fa-solid fa-globe"></i> Ingest URL 🌐</button>
               </div>
 
-              <!-- Main Input Box with Send Button & Mic Button -->
+              <!-- Main Input Box with Send Button, Mic Button & Plus Ingest Button -->
               <div class="chat-form" id="heroChatForm">
+                <button type="button" class="chat-attach-plus-btn" id="chatAttachPlusBtn" onclick="if(window.openKnowledgeModal) window.openKnowledgeModal();" title="Add Web Knowledge URL / PDF (+)">
+                  <i class="fa-solid fa-plus"></i>
+                </button>
                 <button type="button" class="voice-mic-btn" id="voiceMicBtn" title="Click to Speak (Voice Record)">
                   <i class="fa-solid fa-microphone"></i>
                 </button>

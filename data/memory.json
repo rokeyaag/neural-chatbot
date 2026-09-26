@@ -3,8 +3,24 @@
     "id": "mem_lutfor_profile",
     "category": "personal",
     "title": "লুৎফর রহমান (Lutfor Rahman) পরিচিতি ও স্কিল",
-    "keywords_en": ["who is lutfor", "about lutfor", "lutfor rahman", "creator", "developer", "founder", "author"],
-    "keywords_bn": ["লুৎফর কে", "লুৎফর রহমান কে", "লুৎফর রহমান সম্পর্কে বলো", "নির্মাতা", "ডেভেলপার", "কে বানিয়েছে", "প্রজেক্টের মালিক"],
+    "keywords_en": [
+      "who is lutfor",
+      "about lutfor",
+      "lutfor rahman",
+      "creator",
+      "developer",
+      "founder",
+      "author"
+    ],
+    "keywords_bn": [
+      "লুৎফর কে",
+      "লুৎফর রহমান কে",
+      "লুৎফর রহমান সম্পর্কে বলো",
+      "নির্মাতা",
+      "ডেভেলপার",
+      "কে বানিয়েছে",
+      "প্রজেক্টের মালিক"
+    ],
     "responses_en": [
       "<strong>Lutfor Rahman</strong> is an AI Engineer and Full-Stack Developer specializing in PyTorch Deep Learning, Neural Network architectures, real-time Voice AI, and high-performance Web Systems."
     ],
@@ -16,8 +32,23 @@
     "id": "mem_contact_info",
     "category": "contact",
     "title": "যোগাযোগের ঠিকানা ও তথ্য (Contact Info)",
-    "keywords_en": ["contact", "how to contact", "email", "phone", "reach you", "hire", "social links"],
-    "keywords_bn": ["যোগাযোগ", "কিভাবে যোগাযোগ করব", "ইমেইল", "ফোন নম্বর", "কন্টাক্ট", "হায়ার করতে চাই"],
+    "keywords_en": [
+      "contact",
+      "how to contact",
+      "email",
+      "phone",
+      "reach you",
+      "hire",
+      "social links"
+    ],
+    "keywords_bn": [
+      "যোগাযোগ",
+      "কিভাবে যোগাযোগ করব",
+      "ইমেইল",
+      "ফোন নম্বর",
+      "কন্টাক্ট",
+      "হায়ার করতে চাই"
+    ],
     "responses_en": [
       "You can connect directly with Lutfor Rahman via:<br>• <strong>GitHub:</strong> <a href='https://github.com/rokeyaag' target='_blank' style='color:#00f2fe;'>github.com/rokeyaag</a><br>• <strong>Facebook:</strong> <a href='https://facebook.com' target='_blank' style='color:#00f2fe;'>Official Facebook</a><br>• <strong>WhatsApp:</strong> Available via top WhatsApp button."
     ],
@@ -29,8 +60,20 @@
     "id": "mem_neural_bot_mission",
     "category": "ai",
     "title": "NeuralBot এর লক্ষ্য ও উদ্দেশ্য (Bot Mission)",
-    "keywords_en": ["what is neuralbot", "your purpose", "bot mission", "features", "what can you do"],
-    "keywords_bn": ["নিউরালবট কি", "তোমার উদ্দেশ্য কি", "তোমার ফিচার কি", "তুমি কি কি করতে পারো", "কাজের লক্ষ্য"],
+    "keywords_en": [
+      "what is neuralbot",
+      "your purpose",
+      "bot mission",
+      "features",
+      "what can you do"
+    ],
+    "keywords_bn": [
+      "নিউরালবট কি",
+      "তোমার উদ্দেশ্য কি",
+      "তোমার ফিচার কি",
+      "তুমি কি কি করতে পারো",
+      "কাজের লক্ষ্য"
+    ],
     "responses_en": [
       "<strong>NeuralBot</strong> is a state-of-the-art Neural AI assistant featuring real-time Voice-to-Voice dialogue, Bengali & English speech intelligence, neural avatar lip-sync, and dynamic knowledge memory."
     ],
@@ -42,8 +85,20 @@
     "id": "mem_custom_example_service",
     "category": "services",
     "title": "কাস্টম সার্ভিস / সেবা সংক্রান্ত তথ্য (Example Service)",
-    "keywords_en": ["services", "what services", "pricing", "ai development", "web development"],
-    "keywords_bn": ["কি কি সেবা দাও", "সার্ভিস কি কি", "খরচ কেমন", "ওয়েব ডেভেলপমেন্ট", "এআই প্রজেক্ট"],
+    "keywords_en": [
+      "services",
+      "what services",
+      "pricing",
+      "ai development",
+      "web development"
+    ],
+    "keywords_bn": [
+      "কি কি সেবা দাও",
+      "সার্ভিস কি কি",
+      "খরচ কেমন",
+      "ওয়েব ডেভেলপমেন্ট",
+      "এআই প্রজেক্ট"
+    ],
     "responses_en": [
       "We build modern AI-driven Web Applications, Deep Learning Neural Models, Custom Voice Chatbots, and Microservices APIs. Contact us for project collaborations!"
     ],
@@ -55,8 +110,16 @@
     "id": "mem_sample_template",
     "category": "general",
     "title": "নতুন প্রশ্ন ও উত্তরের নমুনা টেমপ্লেট (Sample Template)",
-    "keywords_en": ["sample question", "test memory", "template"],
-    "keywords_bn": ["নমুনা প্রশ্ন", "টেস্ট মেমোরি", "স্যাম্পল"],
+    "keywords_en": [
+      "sample question",
+      "test memory",
+      "template"
+    ],
+    "keywords_bn": [
+      "নমুনা প্রশ্ন",
+      "টেস্ট মেমোরি",
+      "স্যাম্পল"
+    ],
     "responses_en": [
       "This is an example answer loaded from <code>data/memory.json</code>. You can add as many questions and answers here as you like!"
     ],
@@ -68,8 +131,20 @@
     "id": "mem_special_custom_knowledge",
     "category": "custom",
     "title": "কাস্টম জ্ঞান ও ইউজার মেমোরি (Custom Knowledge Bank)",
-    "keywords_en": ["custom knowledge", "what do you know", "user memory", "tell me something special", "extra information"],
-    "keywords_bn": ["কাস্টম জ্ঞান", "বিশেষ তথ্য", "তোমার মেমোরি কি", "নতুন কি জানো", "অতিরিক্ত তথ্য বলো"],
+    "keywords_en": [
+      "custom knowledge",
+      "what do you know",
+      "user memory",
+      "tell me something special",
+      "extra information"
+    ],
+    "keywords_bn": [
+      "কাস্টম জ্ঞান",
+      "বিশেষ তথ্য",
+      "তোমার মেমোরি কি",
+      "নতুন কি জানো",
+      "অতিরিক্ত তথ্য বলো"
+    ],
     "responses_en": [
       "🧠 <strong>Neural Knowledge Active:</strong> I have access to a dynamic memory database where Lutfor Rahman can store custom knowledge, tutorials, project details, and personalized neural responses in real time!"
     ],
@@ -81,8 +156,19 @@
     "id": "mem_ict_software_solutions",
     "category": "services",
     "title": "সফটওয়্যার ও এআই সমাধান (ICT & Software Solutions)",
-    "keywords_en": ["software solutions", "web app development", "ai integration", "python projects"],
-    "keywords_bn": ["সফটওয়্যার সমাধান", "ওয়েবসাইট তৈরি", "এআই ইন্টিগ্রেশন", "পাইথন প্রজেক্ট", "কিভাবে সাহায্য করবে"],
+    "keywords_en": [
+      "software solutions",
+      "web app development",
+      "ai integration",
+      "python projects"
+    ],
+    "keywords_bn": [
+      "সফটওয়্যার সমাধান",
+      "ওয়েবসাইট তৈরি",
+      "এআই ইন্টিগ্রেশন",
+      "পাইথন প্রজেক্ট",
+      "কিভাবে সাহায্য করবে"
+    ],
     "responses_en": [
       "💻 <strong>ICT & AI Solutions:</strong> We design full-stack web platforms, PyTorch deep learning models, natural voice chatbots, and cloud APIs. Feel free to discuss your tech ideas with us!"
     ],
@@ -94,8 +180,23 @@
     "id": "mem_mitre_attack_overview",
     "category": "tech",
     "title": "MITRE ATT&CK পরিচিতি ও ফ্রেমওয়ার্ক ওভারভিউ (Overview)",
-    "keywords_en": ["mitre attack", "what is mitre attack", "mitre", "attack.mitre.org", "adversarial tactics", "cyber security framework", "threat intelligence"],
-    "keywords_bn": ["mitre attack কি", "মাইট্রে অ্যাটাক কি", "mitre attack সম্পর্কে বলো", "attack.mitre.org", "সাইবার সিকিউরিটি ফ্রেমওয়ার্ক", "থ্রেট ইন্টেলিজেন্স"],
+    "keywords_en": [
+      "mitre attack",
+      "what is mitre attack",
+      "mitre",
+      "attack.mitre.org",
+      "adversarial tactics",
+      "cyber security framework",
+      "threat intelligence"
+    ],
+    "keywords_bn": [
+      "mitre attack কি",
+      "মাইট্রে অ্যাটাক কি",
+      "mitre attack সম্পর্কে বলো",
+      "attack.mitre.org",
+      "সাইবার সিকিউরিটি ফ্রেমওয়ার্ক",
+      "থ্রেট ইন্টেলিজেন্স"
+    ],
     "responses_en": [
       "🛡️ <strong>MITRE ATT&CK®</strong> (Adversarial Tactics, Techniques, and Common Knowledge) is a globally accessible, curated knowledge base of cyber adversary behaviors based on real-world observations.<br><br>• <strong>Core Purpose:</strong> Used as a standard foundation for threat modeling, security architecture, SOC threat hunting, and defense testing.<br>• <strong>Matrices:</strong> Enterprise (Windows, Linux, macOS, Cloud, Identity), Mobile (Android, iOS), and ICS (Industrial Control Systems).<br>• <strong>Official Portal:</strong> <a href='https://attack.mitre.org/' target='_blank' style='color:#00f2fe;'>attack.mitre.org</a>"
     ],
@@ -107,8 +208,21 @@
     "id": "mem_mitre_tactics_list",
     "category": "tech",
     "title": "MITRE ATT&CK এর ১৪টি ট্যাকটিক্স (14 Enterprise Tactics)",
-    "keywords_en": ["mitre tactics", "14 tactics", "what are the tactics", "attack tactics", "tactics list", "enterprise tactics"],
-    "keywords_bn": ["mitre tactics কি কি", "১৪টি ট্যাকটিক্স", "ট্যাকটিক্সগুলো কি কি", "অ্যাটাকের ধাপ", "ট্যাকটিক্স লিস্ট"],
+    "keywords_en": [
+      "mitre tactics",
+      "14 tactics",
+      "what are the tactics",
+      "attack tactics",
+      "tactics list",
+      "enterprise tactics"
+    ],
+    "keywords_bn": [
+      "mitre tactics কি কি",
+      "১৪টি ট্যাকটিক্স",
+      "ট্যাকটিক্সগুলো কি কি",
+      "অ্যাটাকের ধাপ",
+      "ট্যাকটিক্স লিস্ট"
+    ],
     "responses_en": [
       "⚔️ <strong>The 14 Enterprise MITRE ATT&CK Tactics (Attack Lifecycle):</strong><br><br>1. <strong>Reconnaissance:</strong> Gathering target information<br>2. <strong>Resource Development:</strong> Building attack infrastructure & tools<br>3. <strong>Initial Access:</strong> Getting into your network (e.g. Phishing)<br>4. <strong>Execution:</strong> Running malicious code (PowerShell, Scripts)<br>5. <strong>Persistence:</strong> Maintaining access across reboots<br>6. <strong>Privilege Escalation:</strong> Gaining higher access (Admin/Root)<br>7. <strong>Defense Evasion:</strong> Avoiding detection & disabling Antivirus<br>8. <strong>Credential Access:</strong> Stealing passwords, hashes, tokens<br>9. <strong>Discovery:</strong> Exploring victim system & environment<br>10. <strong>Lateral Movement:</strong> Moving across connected network machines<br>11. <strong>Collection:</strong> Gathering sensitive files & data<br>12. <strong>Command & Control (C2):</strong> Remote communication with attacker server<br>13. <strong>Exfiltration:</strong> Stealing data out of the network<br>14. <strong>Impact:</strong> Disrupting, encrypting (Ransomware), or destroying systems."
     ],
@@ -120,8 +234,23 @@
     "id": "mem_mitre_techniques_top",
     "category": "tech",
     "title": "জনপ্রিয় টেকনিক ও থ্রেটস (Techniques: Phishing, Scripting, Ransomware)",
-    "keywords_en": ["mitre techniques", "phishing technique", "credential dumping", "privilege escalation", "command and scripting", "ransomware technique", "initial access technique"],
-    "keywords_bn": ["mitre techniques কি", "ফিশিং টেকনিক", "পাসওয়ার্ড চুরি টেকনিক", "র‍্যানসমওয়্যার টেকনিক", "হ্যাকিং টেকনিক", "টেকনিক উদাহরণ"],
+    "keywords_en": [
+      "mitre techniques",
+      "phishing technique",
+      "credential dumping",
+      "privilege escalation",
+      "command and scripting",
+      "ransomware technique",
+      "initial access technique"
+    ],
+    "keywords_bn": [
+      "mitre techniques কি",
+      "ফিশিং টেকনিক",
+      "পাসওয়ার্ড চুরি টেকনিক",
+      "র‍্যানসমওয়্যার টেকনিক",
+      "হ্যাকিং টেকনিক",
+      "টেকনিক উদাহরণ"
+    ],
     "responses_en": [
       "🔍 <strong>Key MITRE ATT&CK Techniques & Sub-Techniques:</strong><br><br>• <strong>T1566 (Phishing):</strong> Sending malicious email attachments or links to gain Initial Access.<br>• <strong>T1059 (Command & Scripting):</strong> Using PowerShell, Bash, Python, or VBScript to execute exploits.<br>• <strong>T1003 (OS Credential Dumping):</strong> Extracting plaintext passwords or NTLM hashes using tools like Mimikatz.<br>• <strong>T1078 (Valid Accounts):</strong> Using compromised employee credentials to blend in with legitimate users.<br>• <strong>T1486 (Data Encrypted for Impact):</strong> Ransomware encrypting company data to demand extortion payments."
     ],
@@ -133,8 +262,21 @@
     "id": "mem_mitre_defense_mitigation",
     "category": "tech",
     "title": "ডিফেন্স, মিটিগেশন ও থ্রেট হান্টিং (Cyber Defense & Mitigations)",
-    "keywords_en": ["mitre defense", "mitigations", "threat hunting", "soc detection", "how to prevent attacks with mitre", "cyber defense"],
-    "keywords_bn": ["mitre defense কি", "মিটিগেশন কিভাবে করে", "থ্রেট হান্টিং", "সাইবার প্রতিরোধ", "অ্যাটাক প্রতিরোধ"],
+    "keywords_en": [
+      "mitre defense",
+      "mitigations",
+      "threat hunting",
+      "soc detection",
+      "how to prevent attacks with mitre",
+      "cyber defense"
+    ],
+    "keywords_bn": [
+      "mitre defense কি",
+      "মিটিগেশন কিভাবে করে",
+      "থ্রেট হান্টিং",
+      "সাইবার প্রতিরোধ",
+      "অ্যাটাক প্রতিরোধ"
+    ],
     "responses_en": [
       "🛡️ <strong>Using MITRE ATT&CK for Cyber Defense & Threat Hunting:</strong><br><br>1. <strong>M1032 (Multi-Factor Authentication - MFA):</strong> Prevents Valid Accounts (T1078) and Credential Access.<br>2. <strong>M1026 (Privileged Account Management):</strong> Restricts admin rights to stop Privilege Escalation.<br>3. <strong>Detection Rules (SIGMA & SIEM):</strong> Writing detection rules based on technique IDs to catch adversaries early in the SOC lifecycle.<br>4. <strong>Purple Teaming & Red Teaming:</strong> Simulating real ATT&CK procedures to test defenses and train analysts."
     ],
@@ -146,8 +288,37 @@
     "id": "mem_tryhackme_overview",
     "category": "tech",
     "title": "TryHackMe ও ড্যাশবোর্ড পরিচিতি (TryHackMe Overview)",
-    "keywords_en": ["tryhackme", "tryhack me", "what is tryhackme", "what is tryhack me", "tryhackme dashboard", "thm", "tryhackme.com", "tryhackme overview", "about tryhackme", "tell me about tryhackme"],
-    "keywords_bn": ["tryhackme কি", "tryhack me কি", "tryhackme ki", "tryhack me ki", "ট্রাইহ্যাকমি কি", "tryhackme dashboard কি", "ট্রাইহ্যাকমি পরিচিতি", "tryhackme সম্পর্কে বলো", "tryhackme somporke bolo", "try hack me somporke bolo", "tryhackme somporkey idea daow", "tryhackme somporkey idea daow", "tryhackme somporke idea daow", "try hack me somporke idea daow", "tryhackme idea", "tryhackme কি এবং এর ড্যাশবোর্ডে কি কি দেখা যায়", "ড্যাশবোর্ডে কি কি দেখা যায়"],
+    "keywords_en": [
+      "tryhackme",
+      "tryhack me",
+      "what is tryhackme",
+      "what is tryhack me",
+      "tryhackme dashboard",
+      "thm",
+      "tryhackme.com",
+      "tryhackme overview",
+      "about tryhackme",
+      "tell me about tryhackme"
+    ],
+    "keywords_bn": [
+      "tryhackme কি",
+      "tryhack me কি",
+      "tryhackme ki",
+      "tryhack me ki",
+      "ট্রাইহ্যাকমি কি",
+      "tryhackme dashboard কি",
+      "ট্রাইহ্যাকমি পরিচিতি",
+      "tryhackme সম্পর্কে বলো",
+      "tryhackme somporke bolo",
+      "try hack me somporke bolo",
+      "tryhackme somporkey idea daow",
+      "tryhackme somporkey idea daow",
+      "tryhackme somporke idea daow",
+      "try hack me somporke idea daow",
+      "tryhackme idea",
+      "tryhackme কি এবং এর ড্যাশবোর্ডে কি কি দেখা যায়",
+      "ড্যাশবোর্ডে কি কি দেখা যায়"
+    ],
     "responses_en": [
       "🎯 <strong>TryHackMe (THM):</strong> A premier hands-on online platform for learning cybersecurity and ethical hacking through gamified, browser-based virtual labs.<br><br>• <strong>Dashboard Features:</strong> Shows daily learning streaks, active Learning Paths, completed rooms, total points, global rank, and recommended modules.<br>• <strong>Official Website:</strong> <a href='https://tryhackme.com' target='_blank' style='color:#00f2fe;'>tryhackme.com</a>"
     ],
@@ -159,8 +330,23 @@
     "id": "mem_tryhackme_learning_paths",
     "category": "tech",
     "title": "TryHackMe এর প্রধান লার্নিং পাথসমূহ (Learning Paths)",
-    "keywords_en": ["tryhackme learning paths", "thm learning path", "pre security", "jr penetration tester", "soc level 1", "cyber defense path", "what are tryhackme paths"],
-    "keywords_bn": ["tryhackme এর লার্নিং পাথ কি কি", "tryhackme এর প্রধান লার্নিং পাথগুলো কি কি", "ট্রাইহ্যাকমির কোর্স কি কি", "লার্নিং পাথসমূহ", "tryhackme কোর্স", "লার্নিং পাথ"],
+    "keywords_en": [
+      "tryhackme learning paths",
+      "thm learning path",
+      "pre security",
+      "jr penetration tester",
+      "soc level 1",
+      "cyber defense path",
+      "what are tryhackme paths"
+    ],
+    "keywords_bn": [
+      "tryhackme এর লার্নিং পাথ কি কি",
+      "tryhackme এর প্রধান লার্নিং পাথগুলো কি কি",
+      "ট্রাইহ্যাকমির কোর্স কি কি",
+      "লার্নিং পাথসমূহ",
+      "tryhackme কোর্স",
+      "লার্নিং পাথ"
+    ],
     "responses_en": [
       "🚀 <strong>Key TryHackMe Learning Paths:</strong><br><br>1. <strong>Pre-Security:</strong> Basics of Networking, Linux, Windows & Web Fundamentals.<br>2. <strong>Complete Beginner:</strong> Foundational offensive and defensive security concepts.<br>3. <strong>Jr Penetration Tester:</strong> Vulnerability scanning, Burp Suite, Metasploit, Privilege Escalation.<br>4. <strong>SOC Level 1:</strong> Incident response, Wireshark, Splunk, Snort, and SIEM monitoring.<br>5. <strong>Web Fundamentals:</strong> OWASP Top 10, SQL Injection, XSS, and Web Hacking.<br>6. <strong>Red Teaming:</strong> Advanced adversary emulation and enterprise defense bypassing."
     ],
@@ -172,8 +358,22 @@
     "id": "mem_tryhackme_attackbox_rooms",
     "category": "tech",
     "title": "TryHackMe রুম ও AttackBox এর কাজ (Rooms & AttackBox)",
-    "keywords_en": ["tryhackme attackbox", "thm rooms", "how does tryhackme work", "virtual machines", "openvpn thm", "how does attackbox work"],
-    "keywords_bn": ["tryhackme attackbox কি", "ট্রাইহ্যাকমি রুম কি", "tryhackme রুম এবং attackbox কিভাবে কাজ করে", "attackbox কিভাবে কাজ করে", "tryhackme কিভাবে কাজ করে", "attackbox"],
+    "keywords_en": [
+      "tryhackme attackbox",
+      "thm rooms",
+      "how does tryhackme work",
+      "virtual machines",
+      "openvpn thm",
+      "how does attackbox work"
+    ],
+    "keywords_bn": [
+      "tryhackme attackbox কি",
+      "ট্রাইহ্যাকমি রুম কি",
+      "tryhackme রুম এবং attackbox কিভাবে কাজ করে",
+      "attackbox কিভাবে কাজ করে",
+      "tryhackme কিভাবে কাজ করে",
+      "attackbox"
+    ],
     "responses_en": [
       "💻 <strong>TryHackMe Rooms & In-Browser AttackBox:</strong><br><br>• <strong>Walkthrough Rooms:</strong> Step-by-step interactive lessons explaining specific tools and vulnerabilities.<br>• <strong>Challenge Rooms (CTF):</strong> Real vulnerable machines where you must find hidden flags to submit.<br>• <strong>AttackBox:</strong> A cloud-based Kali Linux instance running right inside your browser without installing anything locally, or accessible via OpenVPN configuration."
     ],
@@ -185,8 +385,22 @@
     "id": "mem_tryhackme_streaks_badges",
     "category": "tech",
     "title": "TryHackMe স্ট্রিক, ব্যাজ ও র‍্যাঙ্কিং (Streaks & Badges)",
-    "keywords_en": ["tryhackme streaks", "thm badges", "tryhackme ranking", "how to level up on tryhackme", "tryhackme streak"],
-    "keywords_bn": ["tryhackme streak কি", "ট্রাইহ্যাকমি ব্যাজ কি", "tryhackme তে streak এবং ব্যাজ কি কাজে লাগে", "tryhackme ranking কিভাবে বাড়ে", "স্ট্রিক এবং ব্যাজ", "streak", "ব্যাজ"],
+    "keywords_en": [
+      "tryhackme streaks",
+      "thm badges",
+      "tryhackme ranking",
+      "how to level up on tryhackme",
+      "tryhackme streak"
+    ],
+    "keywords_bn": [
+      "tryhackme streak কি",
+      "ট্রাইহ্যাকমি ব্যাজ কি",
+      "tryhackme তে streak এবং ব্যাজ কি কাজে লাগে",
+      "tryhackme ranking কিভাবে বাড়ে",
+      "স্ট্রিক এবং ব্যাজ",
+      "streak",
+      "ব্যাজ"
+    ],
     "responses_en": [
       "🔥 <strong>TryHackMe Gamification: Streaks, Badges & Points:</strong><br><br>• <strong>Daily Streak:</strong> Answering at least one question every 24 hours maintains your streak score.<br>• <strong>Badges & Certificates:</strong> Awarded upon finishing Learning Paths or solving milestones (e.g., Cat Linux, Burp Specialist).<br>• <strong>Leaderboards:</strong> Earn points with each solved room to climb monthly and global leaderboards!"
     ],
@@ -253,8 +467,20 @@
     "id": "mem_tryhackme_pricing_subscription",
     "category": "tech",
     "title": "TryHackMe ফ্রি ও প্রিমিয়াম সাবস্ক্রিপশন (Pricing & VIP Subscription)",
-    "keywords_en": ["tryhackme pricing", "thm subscription", "is tryhackme free", "tryhackme vip cost", "free vs premium thm"],
-    "keywords_bn": ["tryhackme এর খরচ কেমন", "tryhackme কি ফ্রি", "tryhackme subscription", "tryhackme vip", "ফ্রি বনাম প্রিমিয়াম"],
+    "keywords_en": [
+      "tryhackme pricing",
+      "thm subscription",
+      "is tryhackme free",
+      "tryhackme vip cost",
+      "free vs premium thm"
+    ],
+    "keywords_bn": [
+      "tryhackme এর খরচ কেমন",
+      "tryhackme কি ফ্রি",
+      "tryhackme subscription",
+      "tryhackme vip",
+      "ফ্রি বনাম প্রিমিয়াম"
+    ],
     "responses_en": [
       "💳 <strong>TryHackMe Free vs. VIP Premium:</strong><br><br>• <strong>Free Tier:</strong> Access to hundreds of free walkthrough rooms, foundational modules, and limited in-browser AttackBox access.<br>• <strong>VIP / Premium ($14/month or $126/year):</strong> Unlimited AttackBox hours, faster dedicated VMs, access to all premium Learning Paths (e.g. SOC Level 1, Red Teaming), private networks, and King of the Hill games."
     ],
@@ -988,6 +1214,45 @@
     ],
     "responses_bn": [
       "💼 <strong>লিংকডইন (LinkedIn)-এ ক্যারিয়ার গ্রোথ ও প্রফেশনাল নেটওয়ার্কিং আইডিয়া:</strong><br><br>১. <strong>প্রফেশনাল হেডলাইন ও অ্যাবাউট সেকশন:</strong> কেবল ডেজিগনেশন না লিখে আপনার মূল স্কিল, টেক স্ট্যাক এবং সমস্যার সমাধান করার দক্ষতা লিখুন।<br>২. <strong>Build in Public (শেখার অভিজ্ঞতা শেয়ার):</strong> আপনি কী শিখছেন বা কী প্রজেক্ট বানাচ্ছেন তা নিয়মিত পোস্টের মাধ্যমে শেয়ার করুন। এটি রিক্রুটারদের নজর কাড়ে।<br>৩. <strong>ফিচার্ড সেকশনে পোর্টফোলিও যুক্তকরণ:</strong> আপনার সেরা প্রজেক্ট, গিটহাব লিঙ্ক ও সার্টিফিকেটগুলো ফিচার্ড সেকশনে পিন করে রাখুন।<br>৪. <strong>অ্যাক্টিভ নেটওয়ার্কিং:</strong> এইচআর এবং সিনিয়র ইঞ্জিনিয়ারদের পোস্টে গঠনমূলক মন্তব্য করুন এবং অর্থবহ কানেকশন রিকোয়েস্ট পাঠান।"
+    ]
+  },
+  {
+    "id": "mem_web_en_wikipedia_org_202609261449",
+    "category": "web_ai",
+    "title": "Artificial Intelligence (Web Ingested: en.wikipedia.org)",
+    "url": "https://en.wikipedia.org/wiki/Artificial_intelligence",
+    "ingested_at": "2026-09-26T14:49:40.400631",
+    "keywords_en": [
+      "artificial intelligence",
+      "what is artificial intelligence",
+      "about artificial intelligence",
+      "tell me about artificial intelligence",
+      "en",
+      "en overview",
+      "en website details",
+      "info on artificial intelligence",
+      "artificial",
+      "what is artificial",
+      "intelligence",
+      "what is intelligence"
+    ],
+    "keywords_bn": [
+      "Artificial Intelligence কি",
+      "Artificial Intelligence সম্পর্কে বলো",
+      "Artificial Intelligence সম্পর্কে বিস্তারিত",
+      "Artificial Intelligence কীভাবে কাজ করে",
+      "en ওয়েবসাইট কি",
+      "en সম্পর্কে তথ্য",
+      "artificial intelligence somporke bolo",
+      "artificial intelligence ki",
+      "artificial intelligence somporkey kiso idea daow",
+      "en somporke janaw"
+    ],
+    "responses_en": [
+      "🌐 <strong>Artificial Intelligence</strong> (Extracted from <a href='https://en.wikipedia.org/wiki/Artificial_intelligence' target='_blank' style='color:#00f2fe;'>en.wikipedia.org</a>):<br><br><strong>Artificial intelligence - Wikipedia</strong><br><br>Artificial intelligence - Wikipedia<br><br>Jump to content<br><br>Search<br><br>Search<br><br>Donate<br><br>Create account<br><br>Log in<br><br>Personal tools<br><br>Donate<br><br>Create account<br><br>Log in<br><br>Artificial intelligence<br><br>182 languages<br><br>Afrikaans Alemannisch አማርኛ Aragonés अंगिका العربية الدارجة مصرى অসমীয়া Asturianu Azərbaycanca تۆرکجه Башҡортса Boarisch Žemaitėška Bikol Central Беларуская (тарашкевіца) Беларуская Betawi Български भोजपुरी ပအိုဝ်ႏဘာႏသာႏ বাংলা བོད་ཡིག Brezhoneg Bosanski Буряад Català Нохчийн Cebuano کوردی Qırımtatarca Čeština Kaszëbsczi Чӑвашла Cymraeg Dansk Deutsch Zazaki Kadazandusun Ελληνικά Esperanto Español Eesti Euskara Estremeñu فارسی Suomi Võro Føroyskt Fɔ̀ngbè Français Nordfriisk Furlan Frysk Gaeilge 贛語 Kriyòl gwiyannen Gàidhlig Galego Avañe'ẽ गोंयची कोंकणी / Gõychi Konknni Gaelg Hausa עברית हिन्दी Fiji Hindi Hrvatski Kreyòl ayisyen Magyar Հայերեն Արեւմտահայերէն Interlingua Jaku Iban Bahasa Indonesia Interlingue Igbo Ilokano Ido Íslenska Medžuslovjansky Italiano 日本語 Patois La .lojban. Jawa ქართული Qaraqalpaqsha Taqbaylit Gĩkũyũ Қазақша ភាសាខ្មែរ ಕನ್ನಡ 한국어 کٲشُر Ripoarisch Kurdî Кыргызча Latina Lëtzebuergesch Limburgs Ligure Lombard ລາວ Lietuvių Latviešu Madhurâ Malagasy Minangkabau Македонски മലയാളം Монгол ဘာသာမန် मराठी Bahasa Melayu Malti မြန်မာဘာသာ Nedersaksies Plattdüütsch नेपाली नेपाल भाषा Nederlands Norsk nynorsk Norsk bokmål Sesotho sa Leboa Occitan ଓଡ଼ିଆ ਪੰਜਾਬੀ Picard Polski Piemontèis پنجابی پښتو Português Runa Simi Română Руски Русский Русиньскый संस्कृतम् Саха тыла Sicilianu Scots سنڌي Sängö Srpskohrvatski / српскохрватски සිංහල Simple English Slovenčina Slovenščina Shqip Српски / srpski Svenska Kiswahili ꠍꠤꠟꠐꠤ தமிழ் తెలుగు Тоҷикӣ ไทย Türkmençe Tagalog Toki pona Türkçe Татарча / tatarça Reo tahiti ئۇيغۇرچە / Uyghurche Українська اردو Oʻzbekcha / ўзбекча Vèneto Tiếng Việt Walon Winaray 吴语 მარგალური ייִדיש ⵜⴰⵎⴰⵣⵉⵖⵜ ⵜⴰⵏⴰⵡⴰⵢⵜ 文言 閩南語 / Bân-lâm-gí 粵語 中文 IsiZulu<br><br>Edit links<br><br>From Wikipedia, the free encyclopedia<br><br>Intelligence in machines<br><br>\"AI\" redirects here. For other uses, see AI (disambiguation) and Artificial intelligence (disambiguation) .<br><br>Part of a series on Artificial intelligence (AI)<br><br>Major goals<br><br>Artificial general intelligence<br><br>superintelligence<br><br>Intelligent agent<br><br>Recursive self-improvement<br><br>Planning<br><br>Computer vision<br><br>General game playing<br><br>Knowledge representation<br><br>Natural language processing<br><br>Robotics<br><br>AI safety<br><br>Approaches<br><br>Machine learning<br><br>Data mining<br><br>Symbolic<br><br>Deep learning<br><br>Bayesian networks<br><br>Evolutionary algorithms<br><br>Neuro-symbolic AI<br><br>Systems integration<br><br>Open-source<br><br>Open weights<br><br>AI data centers<br><br>Applications<br><br>Art<br><br>Music<br><br>Bioinformatics<br><br>Deepfake<br><br>Earth sciences<br><br>Finance<br><br>Generative AI<br><br>Audio<br><br>Images<br><br>Government<br><br>Healthcare<br><br>Industry<br><br>Software development<br><br>Translation<br><br>Military<br><br>Physics<br><br>Projects<br><br>Philosophy<br><br>AI alignment<br><br>Artificial consciousness<br><br>The bitter lesson<br><br>Chinese room<br><br>Friendly AI<br><br>Ethics<br><br>Existential risk<br><br>Turing test<br><br>Uncanny valley<br><br>Human–AI interaction<br><br>History<br><br>Timeline<br><br>Progress<br><br>AI winter<br><br>AI boom<br><br>AI build-out financing<br><br>AI bubble<br><br>Controversies<br><br>Deepfake pornography<br><br>Taylor Swift deepfake pornography controversy<br><br>Grok sexual deepfake scandal<br><br>Google Gemini image generation controversy<br><br>It's the Most Terrible Time of the Year<br><br>Navier–Stokes priority controversy<br><br>Pause Giant AI Experiments<br><br>Project Panama<br><br>Removal of Sam Altman from OpenAI<br><br>Statement on AI Risk"
+    ],
+    "responses_bn": [
+      "🌐 <strong>Artificial Intelligence</strong> সম্পর্কিত তথ্য (<a href='https://en.wikipedia.org/wiki/Artificial_intelligence' target='_blank' style='color:#00f2fe;'>en.wikipedia.org</a> থেকে সংগৃহীত):<br><br><strong>Artificial intelligence - Wikipedia</strong><br><br>Artificial intelligence - Wikipedia<br><br>Jump to content<br><br>Search<br><br>Search<br><br>Donate<br><br>Create account<br><br>Log in<br><br>Personal tools<br><br>Donate<br><br>Create account<br><br>Log in<br><br>Artificial intelligence<br><br>182 languages<br><br>Afrikaans Alemannisch አማርኛ Aragonés अंगिका العربية الدارجة مصرى অসমীয়া Asturianu Azərbaycanca تۆرکجه Башҡортса Boarisch Žemaitėška Bikol Central Беларуская (тарашкевіца) Беларуская Betawi Български भोजपुरी ပအိုဝ်ႏဘာႏသာႏ বাংলা བོད་ཡིག Brezhoneg Bosanski Буряад Català Нохчийн Cebuano کوردی Qırımtatarca Čeština Kaszëbsczi Чӑвашла Cymraeg Dansk Deutsch Zazaki Kadazandusun Ελληνικά Esperanto Español Eesti Euskara Estremeñu فارسی Suomi Võro Føroyskt Fɔ̀ngbè Français Nordfriisk Furlan Frysk Gaeilge 贛語 Kriyòl gwiyannen Gàidhlig Galego Avañe'ẽ गोंयची कोंकणी / Gõychi Konknni Gaelg Hausa עברית हिन्दी Fiji Hindi Hrvatski Kreyòl ayisyen Magyar Հայերեն Արեւմտահայերէն Interlingua Jaku Iban Bahasa Indonesia Interlingue Igbo Ilokano Ido Íslenska Medžuslovjansky Italiano 日本語 Patois La .lojban. Jawa ქართული Qaraqalpaqsha Taqbaylit Gĩkũyũ Қазақша ភាសាខ្មែរ ಕನ್ನಡ 한국어 کٲشُر Ripoarisch Kurdî Кыргызча Latina Lëtzebuergesch Limburgs Ligure Lombard ລາວ Lietuvių Latviešu Madhurâ Malagasy Minangkabau Македонски മലയാളം Монгол ဘာသာမန် मराठी Bahasa Melayu Malti မြန်မာဘာသာ Nedersaksies Plattdüütsch नेपाली नेपाल भाषा Nederlands Norsk nynorsk Norsk bokmål Sesotho sa Leboa Occitan ଓଡ଼ିଆ ਪੰਜਾਬੀ Picard Polski Piemontèis پنجابی پښتو Português Runa Simi Română Руски Русский Русиньскый संस्कृतम् Саха тыла Sicilianu Scots سنڌي Sängö Srpskohrvatski / српскохрватски සිංහල Simple English Slovenčina Slovenščina Shqip Српски / srpski Svenska Kiswahili ꠍꠤꠟꠐꠤ தமிழ் తెలుగు Тоҷикӣ ไทย Türkmençe Tagalog Toki pona Türkçe Татарча / tatarça Reo tahiti ئۇيغۇرچە / Uyghurche Українська اردو Oʻzbekcha / ўзбекча Vèneto Tiếng Việt Walon Winaray 吴语 მარგალური ייִדיש ⵜⴰⵎⴰⵣⵉⵖⵜ ⵜⴰⵏⴰⵡⴰⵢⵜ 文言 閩南語 / Bân-lâm-gí 粵語 中文 IsiZulu<br><br>Edit links<br><br>From Wikipedia, the free encyclopedia<br><br>Intelligence in machines<br><br>\"AI\" redirects here. For other uses, see AI (disambiguation) and Artificial intelligence (disambiguation) .<br><br>Part of a series on Artificial intelligence (AI)<br><br>Major goals<br><br>Artificial general intelligence<br><br>superintelligence<br><br>Intelligent agent<br><br>Recursive self-improvement<br><br>Planning<br><br>Computer vision<br><br>General game playing<br><br>Knowledge representation<br><br>Natural language processing<br><br>Robotics<br><br>AI safety<br><br>Approaches<br><br>Machine learning<br><br>Data mining<br><br>Symbolic<br><br>Deep learning<br><br>Bayesian networks<br><br>Evolutionary algorithms<br><br>Neuro-symbolic AI<br><br>Systems integration<br><br>Open-source<br><br>Open weights<br><br>AI data centers<br><br>Applications<br><br>Art<br><br>Music<br><br>Bioinformatics<br><br>Deepfake<br><br>Earth sciences<br><br>Finance<br><br>Generative AI<br><br>Audio<br><br>Images<br><br>Government<br><br>Healthcare<br><br>Industry<br><br>Software development<br><br>Translation<br><br>Military<br><br>Physics<br><br>Projects<br><br>Philosophy<br><br>AI alignment<br><br>Artificial consciousness<br><br>The bitter lesson<br><br>Chinese room<br><br>Friendly AI<br><br>Ethics<br><br>Existential risk<br><br>Turing test<br><br>Uncanny valley<br><br>Human–AI interaction<br><br>History<br><br>Timeline<br><br>Progress<br><br>AI winter<br><br>AI boom<br><br>AI build-out financing<br><br>AI bubble<br><br>Controversies<br><br>Deepfake pornography<br><br>Taylor Swift deepfake pornography controversy<br><br>Grok sexual deepfake scandal<br><br>Google Gemini image generation controversy<br><br>It's the Most Terrible Time of the Year<br><br>Navier–Stokes priority controversy<br><br>Pause Giant AI Experiments<br><br>Project Panama<br><br>Removal of Sam Altman from OpenAI<br><br>Statement on AI Risk"
     ]
   }
 ]

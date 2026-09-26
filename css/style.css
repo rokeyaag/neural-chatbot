@@ -1923,6 +1923,31 @@ h1, h2, h3, h4, h5, h6 {
   gap: 8px;
 }
 
+.chat-attach-plus-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(79, 172, 254, 0.25));
+  border: 1px solid rgba(0, 242, 254, 0.45);
+  color: var(--accent-cyan);
+  font-size: 0.95rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.chat-attach-plus-btn:hover {
+  background: linear-gradient(135deg, rgba(0, 242, 254, 0.35), rgba(79, 172, 254, 0.45));
+  color: #fff;
+  transform: scale(1.08) rotate(90deg);
+  box-shadow: 0 0 16px rgba(0, 242, 254, 0.6);
+  border-color: #00f2fe;
+}
+
 .voice-mic-btn {
   width: 36px;
   height: 36px;
