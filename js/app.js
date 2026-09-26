@@ -452,6 +452,41 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
 // Supports direct auto-launch & search for:
 // YouTube, Facebook, WhatsApp, Instagram, X (Twitter), LinkedIn, TikTok, GitHub, Telegram
 // ==========================================================================
+
+function isInformationalOrQuestionQuery(text) {
+  if (!text || typeof text !== 'string') return false;
+  const raw = text.trim();
+  if (raw.includes('?')) return true;
+
+  const lower = raw.toLowerCase();
+  
+  // Informational / conceptual / question keywords in English, Bengali, and Banglish (Phonetic)
+  const questionPatterns = [
+    // Banglish / Bengali Phonetic
+    /\b(?:somporke|somporkey|shomporke|shomporkey|bapere|bapare)\b/i,
+    /\b(?:idea|ideas|tip|tips|guide|tricks|strategy|plan|suggestions?|advice)\b/i,
+    /\b(?:ki|kivabe|ki bhabe|ki vabe|keno|kemon|kobe|kothay|kon|konta|kader)\b/i,
+    /\b(?:daow|dao|den|bolo|bolun|janan|janao|shekho|shikhao|bujhiye|bujhao)\b/i,
+    /\b(?:karon|benefits|suvidha|subidha|pros|cons|future|earn|income|monetiz\w*)\b/i,
+    /\b(?:details|detail|info|information|history|overview|algorithm|definition)\b/i,
+    /\b(?:korte hoy|kora jay|korte parbo|banabo|toiri|toiri kora)\b/i,
+    
+    // Bengali script
+    /(?:সম্পর্কে|বিষয়ে|ব্যাপারে|তথ্য|ধারণা|আইডিয়া|টিপস|পদ্ধতি|নিয়ম|কৌশল)/,
+    /(?:কী|কি|কেন|কিভাবে|কীভাবে|কেমন|কোথায়|কখন|কারা|কোনটি|কোনটা)/,
+    /(?:দাও|দিন|বলো|বলুন|জানান|জানাও|শেখাও|শিখাও|বোঝাও|বুঝিয়ে)/,
+    /(?:সুবিধা|অসুবিধা|আয়|ইনকাম|ভবিষ্যৎ|ইতিহাস|পরিচিতি|বিস্তারিত|ব্যাখ্যা)/,
+    
+    // English
+    /\b(?:what|how|why|when|where|who|which|whose|whom)\b/i,
+    /\b(?:tell me|explain|describe|give me|ideas? about|details about|info about|information about)\b/i,
+    /\b(?:how to|can you|help me understand|what is|how does|why is|difference between)\b/i
+  ];
+
+  return questionPatterns.some(pattern => pattern.test(lower) || pattern.test(raw));
+}
+window.isInformationalOrQuestionQuery = isInformationalOrQuestionQuery;
+
 const SOCIAL_PLATFORMS = [
   {
     id: 'youtube',
@@ -460,7 +495,7 @@ const SOCIAL_PLATFORMS = [
     icon: 'fa-brands fa-youtube',
     color: '#ff2a44',
     defaultUrl: 'https://www.youtube.com',
-    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|play|search|chalao|dekhao)\s*(?:on\s*)?(?:youtube|toutube|youtub|\byt\b)|(?:youtube|toutube|youtub)\s*(?:player|cinema|interface|video|open|chalao|dekhaw|dekhao|kholo|jao|chalu|play|stream)?|\byt\s+(?:video|player|stream)\b)|(?:ইউটিউবে?|গান\s*(?:চালাও|দেখাও|শোনাও|শুনবো)|ভিডিও\s*(?:চালাও|দেখাও))/i,
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|play|search|chalao|dekhao)\s*(?:on\s*)?(?:youtube|toutube|youtub|\byt\b)|(?:youtube|toutube|youtub)\s+(?:player|cinema|interface|video|open|chalao|dekhaw|dekhao|kholo|jao|chalu|play|stream)|\byt\s+(?:video|player|stream)\b|^(?:youtube|yt)$)|(?:ইউটিউব\s*(?:যাও|খোলো|ওপেন|চালাও|দেখাও|প্লে)|গান\s*(?:চালাও|দেখাও|শোনাও|শুনবো)|ভিডিও\s*(?:চালাও|দেখাও)|^(?:ইউটিউব|ইউটিউবে)$)/i,
     stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|play|search|find|stream|dekhao|dekhaw|kholo|jao|chalao|chalu)\s*|(?:on\s*youtube|in\s*youtube|from\s*youtube|youtube\s*e|youtube\s*te|youtube|toutube|youtub|\byt\b)\s*|(?:ইউটিউবে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|প্লে|করো|চালাও|দেখাও|শোনাও|শুনবো|ঢোকো)/gi,
     getSearchUrl: (q) => `https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,
     msg_bn: '🎬 <strong>সরাসরি YouTube ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে YouTube পেজ ওপেন হয়েছে। আপনি সেখান থেকে সব ভিডিও ও গান সম্পূর্ণ উন্মুক্তভাবে ব্রাউজ ও সার্চ করতে পারবেন! 🎵✨',
@@ -473,7 +508,7 @@ const SOCIAL_PLATFORMS = [
     icon: 'fa-brands fa-facebook',
     color: '#1877f2',
     defaultUrl: 'https://www.facebook.com',
-    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:facebook|\bfb\b)|(?:facebook)\s*(?:open|kholo|jao|chalu|login|feed|page|group|profile)?|\bfb\s*(?:page|login|feed|group)\b)|(?:ফেসবুকে?)/i,
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:facebook|\bfb\b)|(?:facebook)\s+(?:open|kholo|jao|chalu|login|feed|page|group|profile|dekhao)|\bfb\s+(?:page|login|feed|group|open|kholo)\b|^(?:facebook|fb)$)|(?:ফেসবুক\s*(?:যাও|খোলো|ওপেন|লগইন|দেখাও)|^(?:ফেসবুক|ফেসবুকে)$)/i,
     stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*facebook|in\s*facebook|from\s*facebook|facebook\s*e|facebook\s*te|facebook|\bfb\b)\s*|(?:ফেসবুকে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|ব্রাউজ|দেখাও|ঢোকো|করো)/gi,
     getSearchUrl: (q) => `https://www.facebook.com/search/top?q=${encodeURIComponent(q)}`,
     msg_bn: '🌐 <strong>সরাসরি Facebook ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে মেইন Facebook ওপেন হয়েছে। আপনি সেখান থেকে আপনার ফিড, গ্রুপ ও বন্ধুদের সাথে সহজে যুক্ত হতে পারবেন! ✨',
@@ -486,7 +521,7 @@ const SOCIAL_PLATFORMS = [
     icon: 'fa-brands fa-whatsapp',
     color: '#25d366',
     defaultUrl: 'https://web.whatsapp.com',
-    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|chat|message)\s*(?:on\s*)?(?:whatsapp|whats\s*app|\bwa\b)|(?:whatsapp|whats\s*app)\s*(?:web|open|kholo|jao|chalu|chat|msg)?|\bwa\s*(?:web|chat|msg)\b)|(?:হোয়াটসঅ্যাপে?|হোয়াটসঅ্যাপে?|হোয়াটসএপে?|হোয়াটস\s*অ্যাপে?)/i,
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|chat|message)\s*(?:on\s*)?(?:whatsapp|whats\s*app|\bwa\b)|(?:whatsapp|whats\s*app)\s+(?:web|open|kholo|jao|chalu|chat|msg)|\bwa\s+(?:web|chat|msg|open)\b|^(?:whatsapp|whats\s*app|wa)$)|(?:হোয়াটসঅ্যাপ\s*(?:যাও|খোলো|ওপেন|মেসেজ|চ্যাট)|^(?:হোয়াটসঅ্যাপ|হোয়াটসঅ্যাপ|হোয়াটসএপ|হোয়াটস\s*অ্যাপ)$)/i,
     stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|chat|message|kholo|jao|chalu)\s*|(?:on\s*whatsapp|in\s*whatsapp|whatsapp|whats\s*app|\bwa\b)\s*|(?:হোয়াটসঅ্যাপে?|হোয়াটসঅ্যাপে?|হোয়াটসএপে?|হোয়াটস\s*অ্যাপে?)\s*|(?:যাও|চলো|খোলো|ওপেন|করো|দেখাও|ঢোকো)/gi,
     getSearchUrl: () => `https://web.whatsapp.com`,
     msg_bn: '💬 <strong>সরাসরি WhatsApp Web ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে WhatsApp Web ওপেন হয়েছে। আপনি সেখান থেকে সরাসরি চ্যাট ও মেসেজ করতে পারবেন! ✨',
@@ -499,7 +534,7 @@ const SOCIAL_PLATFORMS = [
     icon: 'fa-brands fa-instagram',
     color: '#e1306c',
     defaultUrl: 'https://www.instagram.com',
-    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:instagram|insta|\big\b)|(?:instagram|insta)\s*(?:open|kholo|jao|chalu|reels|profile|explore)?|\big\s*(?:reels|profile|feed)\b)|(?:ইনস্টাগ্রামে?|ইন্সটাগ্রামে?|ইনস্টাতে?|ইন্সটাতে?)/i,
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:instagram|insta|\big\b)|(?:instagram|insta)\s+(?:open|kholo|jao|chalu|reels|profile|explore|dekhao)|\big\s+(?:reels|profile|feed|open|kholo)\b|^(?:instagram|insta)$)|(?:ইনস্টাগ্রাম\s*(?:যাও|খোলো|ওপেন|রিলস|দেখাও)|^(?:ইনস্টাগ্রাম|ইন্সটাগ্রাম|ইনস্টা|ইন্সটা)$)/i,
     stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*instagram|in\s*instagram|instagram|insta|\big\b)\s*|(?:ইনস্টাগ্রামে?|ইন্সটাগ্রামে?|ইনস্টাতে?|ইন্সটাতে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|দেখাও|ঢোকো|করো)/gi,
     getSearchUrl: (q) => `https://www.instagram.com/explore/tags/${encodeURIComponent(q.replace(/\s+/g, ''))}/`,
     msg_bn: '📸 <strong>সরাসরি Instagram ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে Instagram ওপেন হয়েছে। আপনি সেখান থেকে ফটো, রিলস ও স্টোরিজ ব্রাউজ করতে পারবেন! ✨',
@@ -512,7 +547,7 @@ const SOCIAL_PLATFORMS = [
     icon: 'fa-brands fa-x-twitter',
     color: '#1da1f2',
     defaultUrl: 'https://x.com',
-    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:twitter|x\.com|\btweet\b)|(?:twitter|x\.com)\s*(?:open|kholo|jao|chalu|feed|trends)?)|(?:টুইটারে?|টুইটে?)/i,
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:twitter|x\.com|\btweet\b)|(?:twitter|x\.com)\s+(?:open|kholo|jao|chalu|feed|trends)|\b(?:twitter|x\.com)\b|^(?:twitter|tweet|x)$)|(?:টুইটার\s*(?:যাও|খোলো|ওপেন|দেখাও)|^(?:টুইটার|টুইট)$)/i,
     stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*twitter|in\s*twitter|twitter|x\.com|\btweet\b)\s*|(?:টুইটারে?|টুইটে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|দেখাও|ঢোকো|করো)/gi,
     getSearchUrl: (q) => `https://x.com/search?q=${encodeURIComponent(q)}`,
     msg_bn: '🐦 <strong>সরাসরি X (Twitter) ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে X (Twitter) ওপেন হয়েছে। আপনি সেখান থেকে লেটেস্ট ট্রেন্ডস, নিউজ ও টুইট দেখতে পারবেন! ✨',
@@ -525,7 +560,7 @@ const SOCIAL_PLATFORMS = [
     icon: 'fa-brands fa-linkedin',
     color: '#0a66c2',
     defaultUrl: 'https://www.linkedin.com',
-    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:linkedin|linked\s*in)|(?:linkedin|linked\s*in)\s*(?:open|kholo|jao|chalu|jobs|network|feed)?)|(?:লিঙ্কডইনে?|লিংকডইনে?)/i,
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:linkedin|linked\s*in)|(?:linkedin|linked\s*in)\s+(?:open|kholo|jao|chalu|jobs|network|feed|dekhao)|\b(?:linkedin|linked\s*in)\b|^(?:linkedin|linked\s*in)$)|(?:লিংকডইন\s*(?:যাও|খোলো|ওপেন|দেখাও)|লিঙ্কডইন\s*(?:যাও|খোলো|ওপেন|দেখাও)|^(?:লিংকডইন|লিঙ্কডইন)$)/i,
     stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*linkedin|in\s*linkedin|linkedin|linked\s*in)\s*|(?:লিঙ্কডইনে?|লিংকডইনে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|দেখাও|ঢোকো|করো)/gi,
     getSearchUrl: (q) => `https://www.linkedin.com/search/results/all/?keywords=${encodeURIComponent(q)}`,
     msg_bn: '💼 <strong>সরাসরি LinkedIn ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে LinkedIn ওপেন হয়েছে। আপনি সেখান থেকে প্রফেশনাল নেটওয়ার্ক, ক্যারিয়ার ও জবস ব্রাউজ করতে পারবেন! ✨',
@@ -538,7 +573,7 @@ const SOCIAL_PLATFORMS = [
     icon: 'fa-brands fa-tiktok',
     color: '#fe2c55',
     defaultUrl: 'https://www.tiktok.com',
-    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:tiktok|tik\s*tok)|(?:tiktok|tik\s*tok)\s*(?:open|kholo|jao|chalu|video|feed)?)|(?:টিকটকে?)/i,
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:tiktok|tik\s*tok)|(?:tiktok|tik\s*tok)\s+(?:open|kholo|jao|chalu|video|feed|dekhao)|^(?:tiktok|tik\s*tok)$)|(?:টিকটক\s*(?:যাও|খোলো|ওপেন|ভিডিও|চালাও|দেখাও)|^(?:টিকটক)$)/i,
     stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*tiktok|in\s*tiktok|tiktok|tik\s*tok)\s*|(?:টিকটকে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|দেখাও|ঢোকো|করো|চালাও)/gi,
     getSearchUrl: (q) => `https://www.tiktok.com/search?q=${encodeURIComponent(q)}`,
     msg_bn: '🎵 <strong>সরাসরি TikTok ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে TikTok ওপেন হয়েছে। আপনি সেখান থেকে ট্রেন্ডিং শর্ট ভিডিও ব্রাউজ করতে পারবেন! ✨',
@@ -551,7 +586,7 @@ const SOCIAL_PLATFORMS = [
     icon: 'fa-brands fa-github',
     color: '#a371f7',
     defaultUrl: 'https://github.com',
-    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:github|git\s*hub)|(?:github|git\s*hub)\s*(?:open|kholo|jao|chalu|repo|code)?)|(?:গিটহাবে?)/i,
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:github|git\s*hub)|(?:github|git\s*hub)\s+(?:open|kholo|jao|chalu|repo|code|dekhao)|^(?:github|git\s*hub)$)|(?:গিটহাব\s*(?:যাও|খোলো|ওপেন|দেখাও)|^(?:গিটহাব)$)/i,
     stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*github|in\s*github|github|git\s*hub)\s*|(?:গিটহাবে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|দেখাও|ঢোকো|করো)/gi,
     getSearchUrl: (q) => `https://github.com/search?q=${encodeURIComponent(q)}`,
     msg_bn: '💻 <strong>সরাসরি GitHub ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে GitHub ওপেন হয়েছে। আপনি সেখান থেকে ওপেন-সোর্স কোড ও রিপোজিটরি ব্রাউজ করতে পারবেন! ✨',
@@ -564,7 +599,7 @@ const SOCIAL_PLATFORMS = [
     icon: 'fa-brands fa-telegram',
     color: '#229ed9',
     defaultUrl: 'https://web.telegram.org',
-    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:telegram|\btg\b)|(?:telegram)\s*(?:open|kholo|jao|chalu|web|channel)?|\btg\s*(?:web|channel|chat)\b)|(?:টেলিগ্রামে?)/i,
+    regex: /(?:(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse)\s*(?:on\s*)?(?:telegram|\btg\b)|(?:telegram)\s+(?:open|kholo|jao|chalu|web|channel|dekhao)|\btg\s+(?:web|channel|chat|open)\b|^(?:telegram|tg)$)|(?:টেলিগ্রাম\s*(?:যাও|খোলো|ওপেন|দেখাও)|^(?:টেলিগ্রাম)$)/i,
     stripRegex: /(?:go\s*to|goto|open|show|switch\s*to|launch|start|visit|browse|search|find|kholo|jao|chalu)\s*|(?:on\s*telegram|in\s*telegram|telegram|\btg\b)\s*|(?:টেলিগ্রামে?)\s*|(?:যাও|চলো|খোলো|ওপেন|সার্চ|দেখাও|ঢোকো|করো)/gi,
     getSearchUrl: () => `https://web.telegram.org`,
     msg_bn: '✈️ <strong>সরাসরি Telegram Web ওপেন করা হচ্ছে!</strong><br>ব্রাউজারে নতুন ট্যাবে Telegram Web ওপেন হয়েছে। আপনি সেখান থেকে চ্যানেল ও মেসেজে যুক্ত হতে পারবেন! ✨',
@@ -914,6 +949,11 @@ function detectWebsiteNavigation(userText) {
 
   const clean = raw.toLowerCase().replace(/[?!,;:()]/g, ' ').replace(/\s+/g, ' ').trim();
 
+  // If this is an informational query, question, or advice request, do not intercept with site navigation
+  if (typeof isInformationalOrQuestionQuery === 'function' && isInformationalOrQuestionQuery(raw)) {
+    return null;
+  }
+
   // Pre-clean noise prefixes like "open my website", "open website", "visit the website", "i want to go to", etc.
   const strippedClean = clean
     .replace(/^(?:open\s+(?:my\s+|the\s+)?(?:website|web|site)?|visit\s+(?:the\s+)?(?:website|web|site)?|go\s*to\s+(?:the\s+)?(?:website|web|site)?|goto\s+(?:the\s+)?(?:website|web|site)?|i\s*want\s*to\s*go\s*(?:to)?\s*(?:the\s*)?(?:website|web|site)?|browse\s+(?:the\s+)?(?:website|web|site)?)\s+/i, '')
@@ -1019,6 +1059,9 @@ window.formatWebsiteLaunchResponse = formatWebsiteLaunchResponse;
 
 function detectSocialPlatform(userText) {
   if (!userText || typeof userText !== 'string') return null;
+  if (typeof isInformationalOrQuestionQuery === 'function' && isInformationalOrQuestionQuery(userText)) {
+    return null;
+  }
   const clean = userText.toLowerCase().replace(/[?!.,;:()]/g, ' ').trim();
   for (const plat of SOCIAL_PLATFORMS) {
     if (plat.regex.test(clean)) {
