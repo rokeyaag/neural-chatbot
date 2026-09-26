@@ -1190,6 +1190,43 @@
     ]
   },
   {
+    "id": "mem_bangladesh_facts",
+    "category": "general",
+    "title": "বাংলাদেশ পরিচিতি, আয়তন ও জনসংখ্যা (Bangladesh Profile & Facts)",
+    "keywords_en": [
+      "bangladesh population",
+      "population of bangladesh",
+      "bangladesh area",
+      "area of bangladesh",
+      "capital of bangladesh",
+      "about bangladesh",
+      "bangladesh facts",
+      "bangladesh somporke bolo",
+      "jonosonkhya koto",
+      "ayoton koto"
+    ],
+    "keywords_bn": [
+      "বাংলাদেশের জনসংখ্যা কত",
+      "জনসংখ্যা কত",
+      "বাংলাদেশের জনসংখ্যা",
+      "বাংলাদেশের আয়তন কত",
+      "বাংলাদেশের আয়তন কত",
+      "বাংলাদেশের আয়তন",
+      "বাংলাদেশের রাজধানী কি",
+      "বাংলাদেশ সম্পর্কে বলো",
+      "বাংলাদেশ কি",
+      "jonosonkhya koto",
+      "bangladesh population",
+      "ayoton koto"
+    ],
+    "responses_en": [
+      "🇧🇩 <strong>Key Facts About Bangladesh:</strong><br><br>• <strong>Population:</strong> Approximately <strong>170+ Million (১৭ কোটি+)</strong>.<br>• <strong>Area:</strong> <strong>147,570 sq km (56,977 sq miles)</strong>.<br>• <strong>Capital:</strong> Dhaka.<br>• <strong>Official Language:</strong> Bengali (বাংলা).<br>• <strong>Currency:</strong> Bangladeshi Taka (BDT - ৳).<br>• <strong>Key Attractions:</strong> Home to the Sundarbans (world's largest mangrove forest) and Cox's Bazar (world's longest natural sea beach)."
+    ],
+    "responses_bn": [
+      "🇧🇩 <strong>বাংলাদেশ সম্পর্কিত গুরুত্বপূর্ণ তথ্য ও পরিসংখ্যান:</strong><br><br>• <strong>জনসংখ্যা:</strong> প্রায় <strong>১৭ কোটি (১৭০ মিলিয়ন+ মানুষ)</strong>।<br>• <strong>আয়তন:</strong> <strong>১,৪৭,৫৭০ বর্গকিলোমিটার</strong> (বা ৫৬,৯৭৭ বর্গমাইল)।<br>• <strong>রাজধানী:</strong> ঢাকা।<br>• <strong>রাষ্ট্রভাষা:</strong> বাংলা।<br>• <strong>জাতীয় মুদ্রা:</strong> টাকা (BDT - ৳)।<br>• <strong>আন্তর্জাতিক নদী:</strong> ৫৭টি।<br>• <strong>বিশেষত্ব:</strong> পৃথিবীর বৃহত্তম ম্যানগ্রোভ বন 'সুন্দরবন' এবং দীর্ঘতম অবিচ্ছিন্ন সমুদ্র সৈকত 'কক্সবাজার' বাংলাদেশে অবস্থিত।"
+    ]
+  },
+  {
     "id": "mem_facebook_create_page",
     "category": "social",
     "title": "ফেসবুক পেজ তৈরি করার নিয়ম (How to Create a Facebook Page)",

@@ -5926,35 +5926,90 @@ function initVoiceAndChatEngine() {
   window.resolveBotResponse = resolveBotResponse;
 
   async function queryFreeAiAgent(prompt, isBengali, ragContext = '') {
+    const cleanPrompt = prompt.trim();
+    const sysPrompt = isBengali
+      ? "You are NeuralBot, an intelligent and helpful AI assistant created by Lutfor Rahman. Answer the user's question accurately, concisely, and naturally in Bengali. Use clear bullet points and bold headers if explaining steps. Do not use markdown code block wrappers. Output clean HTML with <strong> and <br>."
+      : "You are NeuralBot, an intelligent and helpful AI assistant created by Lutfor Rahman. Answer the user's question accurately, concisely, and clearly in English. Use bullet points and bold headers if explaining steps. Output clean HTML with <strong> and <br>.";
+
+    const formatAiText = (raw) => {
+      if (!raw || typeof raw !== 'string') return '';
+      return raw.trim()
+        .replace(/```html/gi, '')
+        .replace(/```/g, '')
+        .replace(/\r\n|\r/g, '\n')
+        .replace(/\n{3,}/g, '\n\n')
+        .replace(/\n\n/g, '<br><br>')
+        .replace(/\n/g, '<br>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    };
+
+    // Tier 1: Pollinations POST JSON API
     try {
-      const sysPrompt = isBengali
-        ? "You are NeuralBot, an intelligent and helpful AI assistant created by Lutfor Rahman. Answer the user's question accurately, concisely, and naturally in Bengali. Use clear bullet points and bold headers if explaining steps. Do not use markdown code block wrappers. Output clean HTML with <strong> and <br>."
-        : "You are NeuralBot, an intelligent and helpful AI assistant created by Lutfor Rahman. Answer the user's question accurately, concisely, and clearly in English. Use bullet points and bold headers if explaining steps. Output clean HTML with <strong> and <br>.";
-
-      const queryUrl = `https://text.pollinations.ai/${encodeURIComponent(prompt)}?model=openai&system=${encodeURIComponent(sysPrompt)}`;
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 9000);
+      const timeoutId = setTimeout(() => controller.abort(), 11000);
+      const postBody = JSON.stringify({
+        messages: [
+          { role: 'system', content: sysPrompt },
+          ...(ragContext ? [{ role: 'system', content: `Background Knowledge:\n${ragContext}` }] : []),
+          { role: 'user', content: cleanPrompt }
+        ],
+        model: 'openai',
+        jsonMode: false
+      });
 
-      const res = await fetch(queryUrl, { signal: controller.signal });
+      const res = await fetch('https://text.pollinations.ai/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: postBody,
+        signal: controller.signal
+      });
       clearTimeout(timeoutId);
 
       if (res.ok) {
         const text = await res.text();
-        if (text && text.trim().length > 10 && !text.includes('<!DOCTYPE') && !text.includes('<html')) {
-          let clean = text.trim()
-            .replace(/```html/gi, '')
-            .replace(/```/g, '')
-            .replace(/\r\n|\r/g, '\n')
-            .replace(/\n{3,}/g, '\n\n')
-            .replace(/\n\n/g, '<br><br>')
-            .replace(/\n/g, '<br>')
-            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-          return clean;
+        if (text && text.trim().length > 8 && !text.includes('<!DOCTYPE') && !text.includes('<html')) {
+          return formatAiText(text);
         }
       }
     } catch (err) {
-      console.log('[Free AI Agent Fallback]', err);
+      console.log('[Free AI Agent Tier 1]', err);
     }
+
+    // Tier 2: Pollinations GET URL API
+    try {
+      const controller2 = new AbortController();
+      const timeoutId2 = setTimeout(() => controller2.abort(), 9000);
+      const queryUrl = `https://text.pollinations.ai/${encodeURIComponent(cleanPrompt)}?model=openai&system=${encodeURIComponent(sysPrompt)}`;
+      const res2 = await fetch(queryUrl, { signal: controller2.signal });
+      clearTimeout(timeoutId2);
+
+      if (res2.ok) {
+        const text2 = await res2.text();
+        if (text2 && text2.trim().length > 8 && !text2.includes('<!DOCTYPE') && !text2.includes('<html')) {
+          return formatAiText(text2);
+        }
+      }
+    } catch (err2) {
+      console.log('[Free AI Agent Tier 2]', err2);
+    }
+
+    // Tier 3: Wikipedia Summary API Fallback for general knowledge / entities
+    try {
+      const entityMatch = cleanPrompt.replace(/^(?:বলো|বলুন|কী|কি|সম্পর্কে|জানাও|জানান|কে|কোথায়|কত|কখন|what is|who is|tell me about|how many)\s+/i, '').replace(/[?!,;.]/g, '').trim();
+      if (entityMatch && entityMatch.length >= 2) {
+        const wikiLang = isBengali ? 'bn' : 'en';
+        const wikiRes = await fetch(`https://${wikiLang}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(entityMatch)}`);
+        if (wikiRes.ok) {
+          const wikiData = await wikiRes.json();
+          if (wikiData && wikiData.extract) {
+            return `📖 <strong>${escapeHtml(wikiData.title)}:</strong><br><br>${escapeHtml(wikiData.extract)}`;
+          }
+        }
+      }
+    } catch (err3) {
+      console.log('[Free AI Agent Tier 3 Wiki]', err3);
+    }
+
     return null;
   }
   window.queryFreeAiAgent = queryFreeAiAgent;
