@@ -5622,9 +5622,10 @@ function initVoiceAndChatEngine() {
         const isBnKw = (item.keywords_bn || []).includes(kw) || /[\u0980-\u09FF]/.test(kw);
         let kwScore = 0;
 
-        // Exact match
+        // 1. Exact match
         if (searchTargetText === cleanKw) {
-          kwScore = ((isBengali && isBnKw) || (!isBengali && !isBnKw)) ? 160 : 100;
+          kwScore = ((isBengali && isBnKw) || (!isBengali && !isBnKw)) ? 160 : 120;
+        } else if (hasWordOrPhrase(searchTargetText, cleanKw)) {
           // Substring / Phrase match with word boundaries
           // If keyword is a generic single entity name (e.g. "tryhackme", "ostad", "facebook"), don't let it overpower multi-word queries
           const kwWords = cleanKw.split(' ').filter(Boolean);
@@ -5632,10 +5633,10 @@ function initVoiceAndChatEngine() {
           if (kwWords.length === 1 && GENERIC_SINGLE_ENTITIES.includes(cleanKw) && queryTokens.length > 1) {
             kwScore = 15;
           } else {
-            kwScore = (cleanKw.length * 3.5) + ((isBengali && isBnKw) ? 45 : 25);
+            kwScore = (cleanKw.length * 4) + ((isBengali && isBnKw) ? 50 : 30);
           }
-        } else if (hasWordOrPhrase(cleanKw, searchTargetText) && searchTargetText.length >= 3) {
-          kwScore = (searchTargetText.length * 2.5) + 15;
+        } else if (hasWordOrPhrase(cleanKw, searchTargetText) && searchTargetText.length >= 4) {
+          kwScore = (searchTargetText.length * 3) + 20;
         } else {
           // Token overlap matching with strict Stopword Guard and Synonyms
           const kwTokens = cleanKw.split(' ').filter(t => t.length > 0);
@@ -5651,9 +5652,10 @@ function initVoiceAndChatEngine() {
             }
           }
 
-          // Crucial: only award overlap score if at least ONE non-stopword substantive token matched!
-          if (substantiveMatches > 0) {
-            const overlap = (tokenMatches / kwTokens.length) * ((isBengali && isBnKw) ? 50 : 30);
+          // Crucial: Only award overlap score if at least 50% of tokens match AND at least 2 substantive matches (or 1 for short 2-word kws)!
+          const matchRatio = tokenMatches / kwTokens.length;
+          if (substantiveMatches >= 2 || (kwTokens.length <= 2 && substantiveMatches >= 1 && matchRatio >= 0.5)) {
+            const overlap = matchRatio * ((isBengali && isBnKw) ? 45 : 30);
             kwScore = Math.max(kwScore, overlap);
           }
         }
@@ -5707,8 +5709,8 @@ function initVoiceAndChatEngine() {
     const currentProfile = NeuralDialogueMemory.getProfile();
 
     // Unified Intelligent Selection:
-    // Compares bestMatch (curated/saved memory) vs topWebChunk (scraped RAG chunk)
-    const hasCuratedMatch = bestMatch && highestScore >= 12;
+    // Requires a strong confidence score (>= 48) to consider curated memory a match
+    const hasCuratedMatch = bestMatch && highestScore >= 48;
     const hasSubtopicIntentQuery = queryTokens.some(t => SUBTOPIC_INTENT_TOKENS.has(t)) ||
                                   expandedTokens.some(t => SUBTOPIC_INTENT_TOKENS.has(t));
     const hasWebMatch = topWebChunk && (
@@ -5746,7 +5748,7 @@ function initVoiceAndChatEngine() {
     // Secondary fallback to any partially matching web chunk
     if (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.searchWebChunks === 'function') {
       const fallbackChunks = window.NeuralKnowledgeStore.searchWebChunks(searchTargetText, 1, activeTopic);
-      if (fallbackChunks.length > 0 && fallbackChunks[0].score >= 18) {
+      if (fallbackChunks.length > 0 && fallbackChunks[0].score >= 25) {
         const chk = fallbackChunks[0];
         if (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.setLastActiveTopic === 'function') {
           window.NeuralKnowledgeStore.setLastActiveTopic({
@@ -5759,7 +5761,7 @@ function initVoiceAndChatEngine() {
       }
     }
 
-    // Intelligent context-aware Fallback strictly in matching language
+    // Context-aware Fallback in matching language
     if (isBengali) {
       const bnFallbacks = [
         "আপনার প্রশ্নটি আমি বুঝতে পেরেছি। আপনি যেকোনো ওয়েবসাইট লিঙ্ক দিলে আমি তা পড়ে স্বয়ংক্রিয়ভাবে উত্তর দিতে পারি! তাছাড়া ক্রিয়েটর লুৎফর রহমান, এআই বা প্রজেক্ট সম্পর্কিত প্রশ্নও করতে পারেন! 😊",
