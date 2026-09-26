@@ -5625,11 +5625,11 @@ function initVoiceAndChatEngine() {
         // Exact match
         if (searchTargetText === cleanKw) {
           kwScore = ((isBengali && isBnKw) || (!isBengali && !isBnKw)) ? 160 : 100;
-        } else if (hasWordOrPhrase(searchTargetText, cleanKw)) {
           // Substring / Phrase match with word boundaries
-          // If keyword is a generic single entity name (e.g. "tryhackme", "ostad"), don't let it overpower multi-word queries
+          // If keyword is a generic single entity name (e.g. "tryhackme", "ostad", "facebook"), don't let it overpower multi-word queries
           const kwWords = cleanKw.split(' ').filter(Boolean);
-          if (kwWords.length === 1 && ['tryhackme', 'thm', 'tryhack', 'ostad', 'mitre'].includes(cleanKw) && queryTokens.length > 2) {
+          const GENERIC_SINGLE_ENTITIES = ['tryhackme', 'thm', 'tryhack', 'ostad', 'mitre', 'facebook', 'ফেসবুক', 'youtube', 'ইউটিউব', 'linkedin', 'লিংকডইন', 'github', 'গিটহাব', 'tiktok', 'টিকটক'];
+          if (kwWords.length === 1 && GENERIC_SINGLE_ENTITIES.includes(cleanKw) && queryTokens.length > 1) {
             kwScore = 15;
           } else {
             kwScore = (cleanKw.length * 3.5) + ((isBengali && isBnKw) ? 45 : 25);
