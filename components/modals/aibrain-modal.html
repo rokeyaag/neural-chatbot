@@ -1,0 +1,65 @@
+  <!-- ================= AI BRAIN & GEMINI SETTINGS MODAL ================= -->
+  <div class="user-auth-modal" id="aiBrainSettingsModal" style="display: none;">
+    <div class="user-auth-modal-backdrop" id="aiBrainModalBackdrop" onclick="closeAiBrainModal();"></div>
+    <div class="user-auth-modal-card" style="max-width: 540px;">
+      <div class="user-auth-header">
+        <div class="user-auth-title-wrap">
+          <div class="user-auth-icon-badge" style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(0, 242, 254, 0.25)); border-color: rgba(168, 85, 247, 0.5);"><i class="fa-solid fa-wand-magic-sparkles" style="color: #c084fc;"></i></div>
+          <div>
+            <h3 class="user-auth-title">Hybrid AI Brain &amp; Gemini Key</h3>
+            <p class="user-auth-subtitle">রিয়েল এআই (Gemini LLM) + অফলাইন স্মার্ট আরএজি ইঞ্জিন</p>
+          </div>
+        </div>
+        <button class="user-auth-close" id="aiBrainCloseBtn" onclick="closeAiBrainModal();" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="user-auth-body">
+        <div class="user-auth-current-card">
+          <div class="user-auth-current-header">
+            <span class="user-auth-status-tag" id="aiEngineStatusTag" style="background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.4); color: #d8b4fe;">⚡ Smart Hybrid Engine Active</span>
+            <span class="hud-mono-tag"><i class="fa-solid fa-microchip"></i> GEMINI 1.5 FLASH + RAG</span>
+          </div>
+          <h4 id="aiEngineDisplayName" class="gradient-text">Google Gemini + In-Browser RAG</h4>
+          <p id="aiEngineDisplayInfo" style="font-size: 0.84rem; color: #cbd5e1; line-height: 1.5; margin-top: 6px;">
+            যেকোনো ওয়েবসাইট আপলোড করলে এআই পুরো বিষয়বস্তু বিশ্লেষণ করে যেকোনো প্রশ্নের ১০০% সঠিক উত্তর দেবে। এপিআই কি না থাকলেও লোকাল স্মার্ট আরএজি কাজ করবে!
+          </p>
+        </div>
+
+        <form id="aiBrainSettingsForm" onsubmit="event.preventDefault(); saveAiBrainConfig();">
+          <div class="user-auth-input-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label for="geminiApiKeyInput" style="margin-bottom: 0;"><i class="fa-solid fa-key" style="color: #c084fc;"></i> Google Gemini API Key:</label>
+              <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" style="font-size: 0.78rem; color: #00f2fe; text-decoration: underline; font-weight: 600;">
+                Get Free API Key <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i>
+              </a>
+            </div>
+            <input type="password" id="geminiApiKeyInput" placeholder="AQ... or AIzaSy... (Paste Gemini Key here)" autocomplete="off" />
+            <small style="display: block; font-size: 0.75rem; color: #94a3b8; margin-top: 5px;">
+              💡 সম্পূর্ণ ফ্রি! <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: #38bdf8;">Google AI Studio</a> থেকে ১ ক্লিকে ফ্রি Key নেওয়া যায়।
+            </small>
+          </div>
+
+          <div class="user-auth-input-group" style="background: rgba(255,255,200,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 12px 14px; border-radius: 12px;">
+            <label style="display: flex; align-items: center; justify-content: space-between; cursor: pointer; margin-bottom: 0;">
+              <span style="font-size: 0.88rem; font-weight: 600; color: #f1f5f9;">
+                <i class="fa-solid fa-bolt" style="color: #00f5a0; margin-right: 6px;"></i> Enable Generative AI (LLM)
+              </span>
+              <input type="checkbox" id="enableGeminiToggle" checked style="width: 18px; height: 18px; accent-color: #a855f7; cursor: pointer;" />
+            </label>
+            <p style="font-size: 0.76rem; color: #94a3b8; margin-top: 6px; margin-bottom: 0;">
+              অন থাকলে গুগল জেমিনাই ওয়েবসাইট ও মেমোরি থেকে নিখুঁত বিশ্লেষণমূলক উত্তর জেনারেট করবে।
+            </p>
+          </div>
+
+          <div class="user-auth-actions" style="margin-top: 18px;">
+            <button type="button" class="btn btn-primary" id="saveAiBrainBtn" onclick="saveAiBrainConfig();" style="background: linear-gradient(135deg, #a855f7, #00f2fe); border: none;">
+              <i class="fa-solid fa-floppy-disk"></i> Save AI Settings
+            </button>
+            <button type="button" class="btn btn-secondary" id="testAiBrainBtn" onclick="testGeminiConnection();">
+              <i class="fa-solid fa-vial"></i> Test Connection
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

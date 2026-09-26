@@ -1,0 +1,164 @@
+  <!-- ================= NEURAL MP3 & YOUTUBE MUSIC STUDIO MODAL ================= -->
+  <div class="music-modal-backdrop" id="musicModalBackdrop">
+    <div class="music-modal-card" id="musicModalCard">
+      
+      <!-- Modal Header -->
+      <div class="music-modal-header">
+        <div class="music-header-title">
+          <div class="music-icon-glow">
+            <i class="fa-solid fa-music"></i>
+          </div>
+          <div>
+            <h3>Neural Music &amp; YouTube Studio</h3>
+            <p>High-Fidelity MP3 Audio, Hindi Hits, Bengali Melodies &amp; YouTube Streaming</p>
+          </div>
+        </div>
+        <button class="music-modal-close" id="musicModalCloseBtn" aria-label="Close Music Studio">&times;</button>
+      </div>
+
+      <!-- Studio Navigation Mode Tabs -->
+      <div class="studio-mode-tabs">
+        <button class="studio-tab-btn active" id="tabLocalMp3Btn" data-target="local">
+          <i class="fa-solid fa-compact-disc"></i> <span>MP3 &amp; Local Audio</span>
+        </button>
+        <button class="studio-tab-btn" id="tabYoutubeStreamBtn" data-target="youtube">
+          <i class="fa-brands fa-youtube gradient-red-text"></i> <span>YouTube &amp; Hindi Hits</span>
+          <span class="live-pulse-dot"></span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="music-modal-body">
+        
+        <!-- SECTION 1: Local MP3 & Synthesizer Player View -->
+        <div class="studio-view" id="localMp3View" style="display: flex; flex-direction: column; gap: 16px;">
+          <!-- Current Track Showcase Hero Card -->
+          <div class="current-track-card">
+            <div class="track-artwork">
+              <i class="fa-solid fa-compact-disc spin-disc" id="modalDiscIcon"></i>
+              <div class="artwork-glow"></div>
+            </div>
+            <div class="track-details">
+              <span class="track-badge"><i class="fa-solid fa-waveform-lines"></i> NOW PLAYING</span>
+              <h4 class="track-title" id="modalTrackTitle">Neural Cyber Melody — Track 01</h4>
+              <p class="track-artist" id="modalTrackArtist">Neural AI Synthesizer &bull; audio/song.mp3</p>
+              
+              <!-- EQ Spectrum Visualizer -->
+              <div class="modal-eq-bars" id="modalEqBars">
+                <span class="m-eq-bar"></span>
+                <span class="m-eq-bar"></span>
+                <span class="m-eq-bar"></span>
+                <span class="m-eq-bar"></span>
+                <span class="m-eq-bar"></span>
+                <span class="m-eq-bar"></span>
+                <span class="m-eq-bar"></span>
+                <span class="m-eq-bar"></span>
+                <span class="m-eq-bar"></span>
+                <span class="m-eq-bar"></span>
+                <span class="m-eq-bar"></span>
+                <span class="m-eq-bar"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Timeline -->
+          <div class="music-timeline-container">
+            <span class="time-label" id="modalTimeCurrent">0:00</span>
+            <input type="range" class="music-progress-bar" id="modalProgressBar" min="0" max="100" value="0" step="0.1">
+            <span class="time-label" id="modalTimeDuration">0:00</span>
+          </div>
+
+          <!-- Main Playback Controls -->
+          <div class="music-controls-row">
+            <button class="m-ctrl-btn" id="modalPrevTrackBtn" title="Previous Track"><i class="fa-solid fa-backward-step"></i></button>
+            <button class="m-ctrl-btn m-play-btn" id="modalMainPlayBtn" title="Play / Pause"><i class="fa-solid fa-play" id="modalPlayIcon"></i></button>
+            <button class="m-ctrl-btn" id="modalNextTrackBtn" title="Next Track"><i class="fa-solid fa-forward-step"></i></button>
+            
+            <div class="m-volume-wrapper">
+              <button class="m-vol-btn" id="modalMuteBtn" title="Mute/Unmute"><i class="fa-solid fa-volume-high" id="modalVolIcon"></i></button>
+              <input type="range" class="music-volume-slider" id="modalVolumeSlider" min="0" max="1" step="0.05" value="0.85">
+            </div>
+          </div>
+
+          <!-- Custom User MP3 File Upload Area -->
+          <div class="custom-mp3-uploader">
+            <div class="uploader-header">
+              <h4><i class="fa-solid fa-cloud-arrow-up gradient-text"></i> Load Custom MP3 / Song</h4>
+              <span class="uploader-hint">Drop your favorite `.mp3` song here to play anytime!</span>
+            </div>
+            <div class="file-drop-area" id="mp3DropZone">
+              <i class="fa-solid fa-file-audio file-icon"></i>
+              <p>Click to browse or drag &amp; drop an <strong>.mp3 / .wav</strong> song from your PC</p>
+              <input type="file" id="localMp3FileInput" accept="audio/mp3,audio/wav,audio/mpeg,audio/ogg" style="display: none;">
+              <button type="button" class="btn btn-secondary btn-sm" id="browseMp3Btn"><i class="fa-solid fa-folder-open"></i> Browse MP3</button>
+            </div>
+          </div>
+
+          <!-- Preset Track Playlist -->
+          <div class="music-playlist-section">
+            <h4><i class="fa-solid fa-list-music gradient-text"></i> Available Tracks</h4>
+            <div class="playlist-list" id="modalPlaylist">
+              <!-- Dynamically populated in app.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 2: YouTube Live Streamer & Hindi Song Player View -->
+        <div class="studio-view" id="youtubeStreamView" style="display: none; flex-direction: column; gap: 16px;">
+          
+          <!-- YouTube Input Box -->
+          <div class="youtube-search-card">
+            <div class="uploader-header">
+              <h4><i class="fa-brands fa-youtube gradient-red-text"></i> Stream Any YouTube or Hindi Song</h4>
+              <span class="uploader-hint">Paste a YouTube video link or search any Hindi, Bengali, or English song!</span>
+            </div>
+            <div class="yt-input-group">
+              <div class="yt-input-wrap">
+                <i class="fa-brands fa-youtube yt-input-icon"></i>
+                <input type="text" id="ytSongInput" class="yt-search-input" placeholder="Paste YouTube link (e.g. https://youtu.be/...) or type song name...">
+              </div>
+              <button type="button" class="btn btn-primary btn-sm yt-play-btn" id="ytPlaySubmitBtn">
+                <i class="fa-solid fa-play"></i> <span>Play Now</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Hindi & Trending Song Preset Chips -->
+          <div class="yt-presets-section">
+            <h5><i class="fa-solid fa-fire gradient-text"></i> Popular Hindi &amp; Global Melodies</h5>
+            <div class="yt-preset-chips">
+              <button class="yt-chip" data-yt-id="2Vv-BfVoq4g" data-yt-title="Tum Hi Ho — Arijit Singh (Hindi Romance)"><i class="fa-solid fa-music"></i> Tum Hi Ho</button>
+              <button class="yt-chip" data-yt-id="BddP6PYo2gs" data-yt-title="Kesariya — Brahmāstra (Hindi Hit)"><i class="fa-solid fa-music"></i> Kesariya</button>
+              <button class="yt-chip" data-yt-id="gvyUuxdRdR4" data-yt-title="Raataan Lambiyan — Shershaah"><i class="fa-solid fa-music"></i> Raataan Lambiyan</button>
+              <button class="yt-chip" data-yt-id="5Eqb_-j3FDA" data-yt-title="Pasoori — Ali Sethi x Shae Gill"><i class="fa-solid fa-music"></i> Pasoori</button>
+              <button class="yt-chip" data-yt-id="kJQP7kiw5Fk" data-yt-title="Despacito — Luis Fonsi"><i class="fa-solid fa-music"></i> Despacito</button>
+              <button class="yt-chip" data-yt-id="jfKfPfyJRdk" data-yt-title="Lo-Fi Hip Hop Chill Beats (Live Stream)"><i class="fa-solid fa-headphones"></i> Lo-Fi Chill Beats</button>
+            </div>
+          </div>
+
+          <!-- YouTube Responsive Player Display Frame -->
+          <div class="yt-player-frame-card">
+            <div class="yt-frame-header">
+              <div class="yt-now-info">
+                <span class="hud-mono-tag"><i class="fa-brands fa-youtube"></i> YOUTUBE PLAYER</span>
+                <strong id="ytPlayingTitle">Tum Hi Ho — Arijit Singh</strong>
+              </div>
+              <span class="badge-tag"><span class="pulse-dot"></span> LIVE AUDIO</span>
+            </div>
+            <div class="yt-iframe-wrapper" id="ytIframeWrapper">
+              <iframe id="ytMainIframe" src="https://www.youtube-nocookie.com/embed/2Vv-BfVoq4g?enablejsapi=1" title="YouTube Music Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="music-modal-footer">
+        <span class="hud-mono-val"><i class="fa-solid fa-sliders"></i> MP3 &bull; WAV &bull; YouTube Multi-Source Audio Active</span>
+        <button class="btn btn-secondary btn-sm" id="closeMusicModalFooterBtn">Close Studio</button>
+      </div>
+
+    </div>
+  </div>

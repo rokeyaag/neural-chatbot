@@ -1,0 +1,254 @@
+  <!-- ================= TOP HERO SECTION: VIDEO + VOICE/TEXT CHAT ================= -->
+  <section class="hero-top-section" id="hero">
+    <div class="container">
+      
+      <!-- Top Unified Header Banner: Left Logo | Center Title & Subtitle | Right Live Status Badge -->
+      <div class="hero-header-banner">
+        <!-- Left Side: Brand Logo -->
+        <div class="hero-header-left">
+          <a href="#hero" class="logo-wrapper">
+            <div class="logo-icon">
+              <img src="./images/logo.png" alt="NeuralBot Logo" class="brand-logo-img" loading="eager">
+            </div>
+            <div class="logo-text">
+              <span class="logo-title">Neural<span class="gradient-text">Bot</span></span>
+              <span class="logo-subtitle">Voice &amp; Neural Intelligence</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- Center: Main Title & Subtitle -->
+        <div class="hero-header-center">
+          <h1 class="hero-main-title">
+            Talk, Type &amp; Experience <span class="gradient-text">Neural Bot</span>
+          </h1>
+          <p class="hero-subtitle">
+            Next-Generation Neural AI Assistant with Real-Time Voice &amp; Text Intelligence.
+          </p>
+        </div>
+
+        <!-- Right Side: User Login Auth, Knowledge Base & AI Brain Settings -->
+        <div class="hero-header-right">
+          <button class="stage-action-btn ai-brain-header-btn" id="openAiSettingsBtn" onclick="openAiBrainModal();" style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 16px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.35), rgba(0, 242, 254, 0.2)); border: 1.5px solid #c084fc; border-radius: 99px; color: #f5f3ff; font-size: 0.86rem; font-weight: 700; cursor: pointer; box-shadow: 0 0 16px rgba(168, 85, 247, 0.4); transition: all 0.25s ease;" title="Configure Real AI Brain (Google Gemini & RAG)">
+            <i class="fa-solid fa-wand-magic-sparkles" style="color: #ffd700;"></i>
+            <span id="aiBrainBtnLabel">AI Brain</span>
+          </button>
+          <button class="stage-action-btn" id="openKnowledgeModalBtn" style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px; background: linear-gradient(135deg, rgba(0, 242, 254, 0.18), rgba(79, 172, 254, 0.12)); border: 1px solid rgba(0, 242, 254, 0.45); border-radius: 99px; color: #00f2fe; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease;" title="Open Knowledge Base & Memory Store">
+            <i class="fa-solid fa-brain" style="color: #00f2fe;"></i>
+            <span>Knowledge Base</span>
+          </button>
+          <button class="user-auth-btn" id="userAuthHeaderBtn" onclick="openUserAuthModal();" title="Site User Login / Profile" aria-label="User Login and Profile">
+            <span class="user-auth-avatar-dot" id="userAuthAvatarDot"><i class="fa-solid fa-user"></i></span>
+            <span class="user-auth-name-text" id="userAuthHeaderName">Guest (Login)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Dual Grid: Left = Video Player | Right = Voice & Text Interactive Box -->
+      <div class="hero-primary-grid">
+        
+        <!-- TOP: Full-Face Interactive Neural Talking Avatar & Video Stage Card -->
+        <div class="hero-video-card neural-stage-card" id="neuralStageCard">
+          <div class="video-card-header stage-header">
+            <!-- Mode Switcher Tabs -->
+            <div class="stage-tabs">
+              <button class="stage-tab-btn" id="tabVideoBtn" data-target="video" title="Switch to Demo Walkthrough Video">
+                <i class="fa-solid fa-circle-play"></i>
+                <span>Demo Video</span>
+              </button>
+              <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="stage-tab-btn stage-main-yt-btn" id="tabMainYoutubeBtn" title="Open Official Main YouTube (youtube.com) to search and browse all videos freely">
+                <i class="fa-brands fa-youtube" style="color: #ff2a44;"></i>
+                <span>YouTube <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; margin-left: 2px;"></i></span>
+              </a>
+              <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" class="stage-tab-btn stage-main-fb-btn" id="tabMainFacebookBtn" title="Open Official Main Facebook (facebook.com) to connect and browse feeds freely">
+                <i class="fa-brands fa-facebook" style="color: #1877f2;"></i>
+                <span>Facebook <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; margin-left: 2px;"></i></span>
+              </a>
+              <a href="https://web.whatsapp.com" target="_blank" rel="noopener noreferrer" class="stage-tab-btn stage-main-wa-btn" id="tabMainWhatsappBtn" title="Open Official WhatsApp Web to chat and message freely">
+                <i class="fa-brands fa-whatsapp" style="color: #25d366;"></i>
+                <span>WhatsApp <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; margin-left: 2px;"></i></span>
+              </a>
+              <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" class="stage-tab-btn stage-main-ig-btn" id="tabMainInstagramBtn" title="Open Official Instagram to browse photos, reels and stories">
+                <i class="fa-brands fa-instagram" style="color: #e1306c;"></i>
+                <span>Instagram <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; margin-left: 2px;"></i></span>
+              </a>
+              <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" class="stage-tab-btn stage-main-in-btn" id="tabMainLinkedinBtn" title="Open Official LinkedIn for professional network and career">
+                <i class="fa-brands fa-linkedin" style="color: #0a66c2;"></i>
+                <span>LinkedIn <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; margin-left: 2px;"></i></span>
+              </a>
+              <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="stage-tab-btn stage-main-x-btn" id="tabMainXBtn" title="Open Official X (Twitter) for latest trends, news and tweets">
+                <i class="fa-brands fa-x-twitter" style="color: #1da1f2;"></i>
+                <span>X / Twitter <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; margin-left: 2px;"></i></span>
+              </a>
+              <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="stage-tab-btn stage-main-gh-btn" id="tabMainGithubBtn" title="Open Official GitHub for coding, repositories and developers">
+                <i class="fa-brands fa-github" style="color: #a371f7;"></i>
+                <span>GitHub <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; margin-left: 2px;"></i></span>
+              </a>
+              <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" class="stage-tab-btn stage-main-tt-btn" id="tabMainTiktokBtn" title="Open Official TikTok to discover viral videos and music">
+                <i class="fa-brands fa-tiktok" style="color: #00f2fe;"></i>
+                <span>TikTok <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; margin-left: 2px;"></i></span>
+              </a>
+              <a href="https://web.telegram.org" target="_blank" rel="noopener noreferrer" class="stage-tab-btn stage-main-tg-btn" id="tabMainTelegramBtn" title="Open Official Telegram Web for channels and messaging">
+                <i class="fa-brands fa-telegram" style="color: #229ed9;"></i>
+                <span>Telegram <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; margin-left: 2px;"></i></span>
+              </a>
+            </div>
+          </div>
+          
+          <!-- VIEW 1: Interactive Neural Talking Avatar Stage (Full Face View) -->
+          <div class="avatar-stage-container" id="avatarStageView" style="display: flex;">
+            <div class="avatar-visual-box" id="avatarVisualBox">
+              <!-- 60 FPS HTML5 Canvas Neural Lip Warp & Face Engine -->
+              <div class="avatar-canvas-wrapper" id="avatarCanvasWrapper">
+                <canvas id="avatarCanvas" width="1024" height="1024"></canvas>
+              </div>
+
+              <!-- HUD Cyber Overlay Badges -->
+              <div class="avatar-hud-top-left">
+                <span class="hud-mono-tag"><i class="fa-solid fa-microchip"></i> TENSOR CORE</span>
+                <span class="hud-mono-val" id="avatarConfidenceTag">CONF: 99.4%</span>
+              </div>
+
+              <!-- Real-Time Voice Audio EQ Spectrum Bars -->
+              <div class="avatar-audio-eq" id="avatarAudioEq">
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+              </div>
+
+              <!-- Hidden Subtitles Span for Background Processing -->
+              <span id="avatarSubtitlesText" style="display: none;"></span>
+            </div>
+          </div>
+
+          <!-- VIEW 2: Project Video Player Container -->
+          <div class="video-frame-container" id="videoContainer" style="display: none;">
+            <video id="heroMainVideo" preload="auto" playsinline loop controls>
+              <source src="ami_ekta_Neural_Chat_Boot_Bana.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            
+            <!-- Sleek Unmute / Audio Toggle Badge -->
+            <button class="video-unmute-badge" id="videoUnmuteBadge" title="Click to Unmute / Mute Video Sound">
+              <i class="fa-solid fa-volume-xmark"></i> <span>Unmute Sound</span>
+            </button>
+
+            <!-- Custom Sleek Play Button Overlay -->
+            <div class="video-play-overlay" id="videoPlayOverlay">
+              <button class="custom-play-btn" id="customPlayBtn" aria-label="Play Demo Video">
+                <i class="fa-solid fa-play"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Voice & Text Interactive AI Chat Box (Right-Side Corner Chatbot) -->
+        <div class="hero-chat-container" id="heroChatContainer">
+          <div class="chat-simulator-card voice-chat-card" id="heroChatCard">
+
+            <!-- Chat Card Header: Title & Action Controls -->
+            <div class="chat-card-header">
+              <div class="chat-header-info">
+                <span class="chat-header-icon"><i class="fa-solid fa-robot"></i></span>
+                <span class="chat-header-title">Neural Assistant</span>
+                <span class="chat-status-pill">
+                  <span class="status-indicator-dot"></span>
+                  <span>Live AI</span>
+                </span>
+              </div>
+              <div class="chat-header-tools" style="display: flex; align-items: center; gap: 6px;">
+                <button type="button" class="chat-tool-btn" id="chatAiBrainBtn" onclick="openAiBrainModal();" title="AI Brain & Gemini Key Settings (গুগল জেমিনাই এআই কী)" aria-label="AI Brain Settings" style="color: #c084fc; border-color: rgba(168,85,247,0.55); background: rgba(168,85,247,0.15); display: inline-flex; align-items: center; gap: 4px; padding: 4px 9px; width: auto; border-radius: 99px;">
+                  <i class="fa-solid fa-wand-magic-sparkles" style="color: #ffd700;"></i>
+                  <span style="font-size: 0.72rem; font-weight: 700; color: #f3e8ff;">AI Brain</span>
+                </button>
+                <button type="button" class="chat-tool-btn" onclick="if(typeof openKnowledgeStoreModal === 'function') openKnowledgeStoreModal();" title="Open Knowledge Base / Memory Store" aria-label="Open Knowledge Base" style="color: #00f2fe; border-color: rgba(0,242,254,0.3);">
+                  <i class="fa-solid fa-brain"></i>
+                </button>
+                <button type="button" class="chat-tool-btn" id="heroClearChatBtn" title="Clear Conversation" aria-label="Clear Conversation">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Chat Message Thread (Expands upwards as messages flow) -->
+            <div class="chat-body" id="heroChatBody">
+              <div class="chat-message bot">
+                <div class="chat-bubble">
+                  Welcome! 👋 I am <strong>NeuralBot</strong>. You can type your question in the box or click the <strong>Microphone</strong> to talk in English or Bengali. How can I assist you today?
+                </div>
+              </div>
+            </div>
+
+            <!-- Animated Voice Equalizer Bar (Visible when recording) -->
+            <div class="voice-wave-indicator" id="voiceWaveBar" style="display: none;">
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="voice-wave-text">Listening to your voice... Speak now</span>
+            </div>
+
+            <!-- Chat Quick Prompt Chips & Input Form (Docked at Bottom Right) -->
+            <div class="chat-input-area">
+              <div class="quick-prompts">
+                <button class="quick-chip" id="openAiBrainChip" data-action="open-ai-brain" style="border-color: rgba(168, 85, 247, 0.7); background: rgba(168, 85, 247, 0.2); color: #f3e8ff; font-weight: 700;">
+                  <i class="fa-solid fa-wand-magic-sparkles" style="color: #ffd700;"></i> AI Brain (Gemini Key) ⚡
+                </button>
+                <button class="quick-chip" data-prompt="YouTube ওপেন করো">YouTube 🎬</button>
+                <button class="quick-chip" data-prompt="How are you today?">How are you? 😊</button>
+                <button class="quick-chip" data-prompt="কেমন আছো তুমি?">কেমন আছো? 🇧🇩</button>
+                <button class="quick-chip" data-prompt="আমার সম্পর্কে কি জানো?">About Me 🧠</button>
+                <button class="quick-chip" data-prompt="সংরক্ষিত প্রশ্ন ও উত্তর দেখাও">Learned Q&A 💬</button>
+                <button class="quick-chip" data-prompt="আজকের কাজের লক্ষ্য কি?">Daily Work 📝</button>
+                <button class="quick-chip" data-prompt="তোমার সব GitHub প্রজেক্টের লিস্ট দাও">GitHub Projects 🚀</button>
+                <button class="quick-chip portfolio-chip" data-prompt="তোমার পোর্টফোলিও ও সব প্রজেক্টের লাইভ লিংক দেখাও" style="border-color: #00f2fe; color: #00f2fe;"><i class="fa-solid fa-briefcase"></i> Portfolio Showcase 💼</button>
+                <button class="quick-chip" data-prompt="একটি সুন্দর হিন্দি গান শোনাও">Hindi Song 🇮🇳</button>
+                <button class="quick-chip" data-prompt="Can you sing a song?">Sing a song 🎵</button>
+                <button class="quick-chip" data-prompt="Tell me a joke">Tell a joke 😄</button>
+                <button class="quick-chip" id="openPdfChipHero" data-action="open-pdf" style="border-color: rgba(255, 77, 79, 0.6); background: rgba(255, 77, 79, 0.15); color: #ff7875; font-weight: 600;"><i class="fa-solid fa-file-pdf"></i> Upload Book PDF 📚</button>
+                <button class="quick-chip open-kb-chip" id="openKbChipHero" data-action="open-kb">Knowledge Base 🧠</button>
+                <button class="quick-chip" id="openWebIngestChipHero" data-action="open-web-ingest" style="border-color: rgba(0, 242, 254, 0.5); color: #00f2fe;"><i class="fa-solid fa-globe"></i> Ingest URL 🌐</button>
+              </div>
+
+              <!-- Main Input Box with Send Button & Mic Button -->
+              <div class="chat-form" id="heroChatForm">
+                <button type="button" class="voice-mic-btn" id="voiceMicBtn" title="Click to Speak (Voice Record)">
+                  <i class="fa-solid fa-microphone"></i>
+                </button>
+                <button type="button" class="chat-lang-pill" id="chatVoiceLangBtn" title="Switch Voice Language (বাংলা / English)">
+                  <span id="chatVoiceLangLabel">বাংলা</span>
+                </button>
+                
+                <input type="text" class="chat-input" id="heroChatInput" placeholder="Type or click Mic to speak (বাংলা / English)..." autocomplete="off">
+                
+                <span id="voiceStatusText" style="display: none;">Ready &bull; Mic Active</span>
+
+                <button type="button" class="chat-send-btn" id="heroSendBtn" title="Send Message">
+                  <i class="fa-solid fa-paper-plane"></i>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Scroll Down Indicator -->
+      <div class="scroll-down-wrapper">
+        <a href="#features" class="scroll-down-link">
+          <span>Scroll to explore more</span>
+          <i class="fa-solid fa-chevron-down"></i>
+        </a>
+      </div>
+
+    </div>
+  </section>

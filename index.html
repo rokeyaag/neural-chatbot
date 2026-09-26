@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Neural Chat Bot — Voice & Text AI Intelligence</title>
-  <meta name="description" content="Next-Generation Neural AI Assistant with real-time Voice & Text interaction and Deep Learning showcase by Lutfor Rahman.">
+  <title>Neural Chat Bot — Voice &amp; Text AI Intelligence</title>
+  <meta name="description" content="Next-Generation Neural AI Assistant with real-time Voice &amp; Text interaction and Deep Learning showcase by Lutfor Rahman.">
   <meta name="keywords" content="Neural Chatbot, Voice AI, Speech to Text, Bengali AI, PyTorch, Lutfor Rahman">
   
   <!-- Open Graph / Meta -->
-  <meta property="og:title" content="Neural Chat Bot — Voice & Text AI">
+  <meta property="og:title" content="Neural Chat Bot — Voice &amp; Text AI">
   <meta property="og:description" content="Talk to Neural AI with voice and text, watch the demo video, and explore deep learning capabilities.">
   <meta property="og:type" content="website">
 
@@ -24,8 +24,8 @@
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- Custom Stylesheet (v33.0 with Cache-Bust) -->
-  <link rel="stylesheet" href="css/style.css?v=33.0">
+  <!-- Custom Stylesheet (v41.0 with Cache-Bust) -->
+  <link rel="stylesheet" href="css/style.css?v=41.0">
 </head>
 <body>
 
@@ -35,7 +35,8 @@
   <div class="ambient-glow ambient-glow-2"></div>
   <div class="ambient-glow ambient-glow-3"></div>
 
-  <!-- ================= TOP HERO SECTION: VIDEO + VOICE/TEXT CHAT ================= -->
+  <!-- Sections (Modular Components) -->
+    <!-- ================= TOP HERO SECTION: VIDEO + VOICE/TEXT CHAT ================= -->
   <section class="hero-top-section" id="hero">
     <div class="container">
       
@@ -64,7 +65,7 @@
           </p>
         </div>
 
-        <!-- Right Side: User Login Auth, Knowledge Base & Live Neural AI Badge -->
+        <!-- Right Side: User Login Auth, Knowledge Base & AI Brain Settings -->
         <div class="hero-header-right">
           <button class="stage-action-btn ai-brain-header-btn" id="openAiSettingsBtn" onclick="openAiBrainModal();" style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 16px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.35), rgba(0, 242, 254, 0.2)); border: 1.5px solid #c084fc; border-radius: 99px; color: #f5f3ff; font-size: 0.86rem; font-weight: 700; cursor: pointer; box-shadow: 0 0 16px rgba(168, 85, 247, 0.4); transition: all 0.25s ease;" title="Configure Real AI Brain (Google Gemini & RAG)">
             <i class="fa-solid fa-wand-magic-sparkles" style="color: #ffd700;"></i>
@@ -78,10 +79,6 @@
             <span class="user-auth-avatar-dot" id="userAuthAvatarDot"><i class="fa-solid fa-user"></i></span>
             <span class="user-auth-name-text" id="userAuthHeaderName">Guest (Login)</span>
           </button>
-          <div class="badge-tag">
-            <span class="pulse-dot"></span>
-            <span>LIVE NEURAL AI &bull; VOICE &amp; TEXT</span>
-          </div>
         </div>
       </div>
 
@@ -113,45 +110,26 @@
                 <i class="fa-brands fa-instagram" style="color: #e1306c;"></i>
                 <span>Instagram <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; margin-left: 2px;"></i></span>
               </a>
-              <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="stage-tab-btn stage-main-x-btn" id="tabMainXBtn" title="Open Official X (Twitter) for latest trends, news and tweets">
-                <i class="fa-brands fa-x-twitter" style="color: #1da1f2;"></i>
-                <span>X / Twitter <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; margin-left: 2px;"></i></span>
-              </a>
               <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" class="stage-tab-btn stage-main-in-btn" id="tabMainLinkedinBtn" title="Open Official LinkedIn for professional network and career">
                 <i class="fa-brands fa-linkedin" style="color: #0a66c2;"></i>
                 <span>LinkedIn <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; margin-left: 2px;"></i></span>
               </a>
-              <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" class="stage-tab-btn stage-main-tt-btn" id="tabMainTiktokBtn" title="Open Official TikTok to discover viral videos and music">
-                <i class="fa-brands fa-tiktok" style="color: #00f2fe;"></i>
-                <span>TikTok <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; margin-left: 2px;"></i></span>
+              <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="stage-tab-btn stage-main-x-btn" id="tabMainXBtn" title="Open Official X (Twitter) for latest trends, news and tweets">
+                <i class="fa-brands fa-x-twitter" style="color: #1da1f2;"></i>
+                <span>X / Twitter <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; margin-left: 2px;"></i></span>
               </a>
               <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="stage-tab-btn stage-main-gh-btn" id="tabMainGithubBtn" title="Open Official GitHub for coding, repositories and developers">
                 <i class="fa-brands fa-github" style="color: #a371f7;"></i>
                 <span>GitHub <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; margin-left: 2px;"></i></span>
               </a>
+              <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" class="stage-tab-btn stage-main-tt-btn" id="tabMainTiktokBtn" title="Open Official TikTok to discover viral videos and music">
+                <i class="fa-brands fa-tiktok" style="color: #00f2fe;"></i>
+                <span>TikTok <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; margin-left: 2px;"></i></span>
+              </a>
               <a href="https://web.telegram.org" target="_blank" rel="noopener noreferrer" class="stage-tab-btn stage-main-tg-btn" id="tabMainTelegramBtn" title="Open Official Telegram Web for channels and messaging">
                 <i class="fa-brands fa-telegram" style="color: #229ed9;"></i>
                 <span>Telegram <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; margin-left: 2px;"></i></span>
               </a>
-            </div>
-            
-            <!-- Dynamic Avatar Status & Header Action Controls -->
-            <div class="stage-header-actions">
-              <button class="stage-action-btn" id="stageAiBrainBtn" onclick="openAiBrainModal();" style="display: inline-flex; align-items: center; gap: 6px; color: #d8b4fe; border-color: rgba(168, 85, 247, 0.45); background: rgba(168, 85, 247, 0.15);" title="Configure Real AI Brain (Google Gemini & RAG)">
-                <i class="fa-solid fa-wand-magic-sparkles" style="color: #c084fc;"></i> <span class="hide-on-mobile">AI Brain</span>
-              </button>
-              <button class="lang-switch-btn stage-action-btn" id="voiceLangToggleBtn" title="Switch Voice Language (English / বাংলা)">
-                <i class="fa-solid fa-language"></i> <span id="voiceLangLabel">EN</span>
-              </button>
-              <button class="speaker-switch-btn stage-action-btn-icon" id="speakerToggleBtn" title="Mute/Unmute Bot Voice">
-                <i class="fa-solid fa-volume-high"></i>
-              </button>
-              <button id="avatarRepeatBtn" class="stage-action-btn" style="display: inline-flex;" title="Re-speak last answer">
-                <i class="fa-solid fa-rotate-right"></i> <span class="hide-on-mobile">Replay Voice</span>
-              </button>
-              <button id="videoReplayBtn" class="stage-action-btn" style="display: none;" title="Replay Video">
-                <i class="fa-solid fa-rotate-left"></i> <span class="hide-on-mobile">Replay Video</span>
-              </button>
             </div>
           </div>
           
@@ -273,6 +251,7 @@
                 <button class="quick-chip" data-prompt="একটি সুন্দর হিন্দি গান শোনাও">Hindi Song 🇮🇳</button>
                 <button class="quick-chip" data-prompt="Can you sing a song?">Sing a song 🎵</button>
                 <button class="quick-chip" data-prompt="Tell me a joke">Tell a joke 😄</button>
+                <button class="quick-chip" id="openPdfChipHero" data-action="open-pdf" style="border-color: rgba(255, 77, 79, 0.6); background: rgba(255, 77, 79, 0.15); color: #ff7875; font-weight: 600;"><i class="fa-solid fa-file-pdf"></i> Upload Book PDF 📚</button>
                 <button class="quick-chip open-kb-chip" id="openKbChipHero" data-action="open-kb">Knowledge Base 🧠</button>
                 <button class="quick-chip" id="openWebIngestChipHero" data-action="open-web-ingest" style="border-color: rgba(0, 242, 254, 0.5); color: #00f2fe;"><i class="fa-solid fa-globe"></i> Ingest URL 🌐</button>
               </div>
@@ -312,7 +291,7 @@
     </div>
   </section>
 
-  <!-- ================= SECTION 2: BENTO FEATURES ================= -->
+    <!-- ================= SECTION 2: BENTO FEATURES ================= -->
   <section class="section" id="features">
     <div class="container">
       <div class="section-header">
@@ -409,7 +388,7 @@
     </div>
   </section>
 
-  <!-- ================= SECTION 3: PROJECT GALLERY ================= -->
+    <!-- ================= SECTION 3: PROJECT GALLERY ================= -->
   <section class="section" id="gallery">
     <div class="container">
       <div class="section-header">
@@ -507,7 +486,7 @@
     </div>
   </section>
 
-  <!-- ================= SECTION 4: LIVE PLAYGROUND CONSOLE ================= -->
+    <!-- ================= SECTION 4: LIVE PLAYGROUND CONSOLE ================= -->
   <section class="section" id="playground">
     <div class="container">
       <div class="section-header">
@@ -571,7 +550,7 @@
     </div>
   </section>
 
-  <!-- ================= SECTION 5: TECH STACK BADGES ================= -->
+    <!-- ================= SECTION 5: TECH STACK BADGES ================= -->
   <section class="section" style="padding-top: 30px; padding-bottom: 50px;">
     <div class="container">
       <div class="section-header" style="margin-bottom: 36px;">
@@ -616,7 +595,7 @@
     </div>
   </section>
 
-  <!-- ================= SECTION: FEATURED PORTFOLIO & ECOSYSTEM ================= -->
+    <!-- ================= SECTION: FEATURED PORTFOLIO & ECOSYSTEM ================= -->
   <section class="section" id="portfolio">
     <div class="container">
       <div class="section-header">
@@ -628,8 +607,7 @@
       </div>
 
       <div class="portfolio-projects-grid">
-        
-        <!-- Project 1: Neural Chat Bot (Talking Avatar & Voice AI) -->
+                <!-- Project: Neural Chat Bot -->
         <div class="portfolio-project-card featured-flagship-card">
           <div>
             <div class="portfolio-card-top">
@@ -640,7 +618,7 @@
             </div>
             <h3 class="portfolio-project-title">Neural Chat Bot</h3>
             <p class="portfolio-project-desc">
-              Real-time talking avatar neural assistant with voice lip-sync, PyTorch deep learning NLP comprehension, speech synthesis &amp; multilingual Bengali/English interaction.
+              Real-time talking avatar neural assistant with voice lip-sync, PyTorch deep learning NLP comprehension, speech synthesis & multilingual Bengali/English interaction.
             </p>
             <div class="portfolio-tech-tags">
               <span class="portfolio-tech-tag">PyTorch NLP</span>
@@ -659,7 +637,7 @@
           </div>
         </div>
 
-        <!-- Project 2: EduGenius AI -->
+        <!-- Project: EduGenius AI -->
         <div class="portfolio-project-card">
           <div>
             <div class="portfolio-card-top">
@@ -689,7 +667,7 @@
           </div>
         </div>
 
-        <!-- Project 2: Grand Aurelia Enterprise Platform -->
+        <!-- Project: Grand Aurelia -->
         <div class="portfolio-project-card">
           <div>
             <div class="portfolio-card-top">
@@ -719,7 +697,7 @@
           </div>
         </div>
 
-        <!-- Project 3: IMX Daily Expense App -->
+        <!-- Project: IMX Daily Expense App -->
         <div class="portfolio-project-card">
           <div>
             <div class="portfolio-card-top">
@@ -749,7 +727,7 @@
           </div>
         </div>
 
-        <!-- Project 4: SocialPulse Hub -->
+        <!-- Project: SocialPulse Hub -->
         <div class="portfolio-project-card">
           <div>
             <div class="portfolio-card-top">
@@ -779,7 +757,7 @@
           </div>
         </div>
 
-        <!-- Project 5: SecureLock Windows Vault -->
+        <!-- Project: SecureLock Vault -->
         <div class="portfolio-project-card">
           <div>
             <div class="portfolio-card-top">
@@ -809,7 +787,7 @@
           </div>
         </div>
 
-        <!-- Project 6: School Management AI System -->
+        <!-- Project: School Management AI -->
         <div class="portfolio-project-card">
           <div>
             <div class="portfolio-card-top">
@@ -839,7 +817,7 @@
           </div>
         </div>
 
-        <!-- Project 7: Banking Desktop Application -->
+        <!-- Project: Banking Desktop App -->
         <div class="portfolio-project-card">
           <div>
             <div class="portfolio-card-top">
@@ -869,7 +847,7 @@
           </div>
         </div>
 
-        <!-- Project 8: Lutfor Rahman Official Portfolio -->
+        <!-- Project: Lutfor Portfolio -->
         <div class="portfolio-project-card">
           <div>
             <div class="portfolio-card-top">
@@ -898,12 +876,11 @@
             </a>
           </div>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- ================= SECTION 6: ABOUT DEVELOPER ================= -->
+    <!-- ================= SECTION 6: ABOUT DEVELOPER ================= -->
   <section class="section" id="about">
     <div class="container">
       <div class="about-card">
@@ -935,7 +912,7 @@
     </div>
   </section>
 
-  <!-- ================= FOOTER ================= -->
+    <!-- ================= FOOTER ================= -->
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
@@ -986,7 +963,9 @@
     </div>
   </footer>
 
-  <!-- ================= KNOWLEDGE STORE MODAL (EXPLORER & MANAGER) ================= -->
+
+  <!-- Modals & Dynamic Overlays -->
+    <!-- ================= KNOWLEDGE STORE MODAL (EXPLORER & MANAGER) ================= -->
   <div class="knowledge-modal" id="knowledgeModal">
     <div class="knowledge-modal-backdrop" id="knowledgeModalBackdrop"></div>
     <div class="knowledge-modal-dialog">
@@ -1003,6 +982,9 @@
           </div>
         </div>
         <div style="display: flex; align-items: center; gap: 10px;">
+          <button id="toggleUploadPdfBtnHeader" class="btn btn-primary btn-sm" onclick="openPdfUploadPanel();" style="background: linear-gradient(135deg, rgba(255, 77, 79, 0.3), rgba(239, 68, 68, 0.2)); border: 1px solid #ff4d4f; color: #fff; font-weight: 700; box-shadow: 0 0 15px rgba(255, 77, 79, 0.35); border-radius: 99px; padding: 6px 15px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" title="Upload Subject Book PDF & Vectorize">
+            <i class="fa-solid fa-file-pdf" style="color: #ff4d4f;"></i> <span>Upload Book PDF 📚</span>
+          </button>
           <button id="toggleIngestWebBtnHeader" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, rgba(0,242,254,0.25), rgba(79,172,254,0.35)); border: 1px solid #00f2fe; color: #fff; font-weight: 700; box-shadow: 0 0 15px rgba(0,242,254,0.35); border-radius: 99px; padding: 6px 15px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" title="Ingest Knowledge from any Website URL">
             <i class="fa-solid fa-globe" style="color: #00f2fe;"></i> <span>Ingest Web URL 🌐</span>
           </button>
@@ -1019,6 +1001,7 @@
         </div>
         <div class="knowledge-category-tabs" id="knowledgeCategoryTabs">
           <button class="kb-tab-btn active" data-cat="all">All (<span id="kbCountAll">0</span>)</button>
+          <button class="kb-tab-btn" data-cat="pdf" style="border: 1px solid #ff4d4f; color: #ff7875; font-weight: 600; background: rgba(255, 77, 79, 0.1);"><i class="fa-solid fa-file-pdf" style="color: #ff4d4f;"></i> PDF Books (<span id="kbCountPdf">0</span>)</button>
           <button class="kb-tab-btn" data-cat="web" style="border: 1px solid #00f2fe; color: #00f2fe; font-weight: 600; background: rgba(0, 242, 254, 0.1);"><i class="fa-solid fa-globe" style="color: #00f2fe;"></i> Web Ingested (<span id="kbCountWeb">0</span>)</button>
           <button class="kb-tab-btn" data-cat="file_memory" style="border-color: rgba(0, 242, 254, 0.4);"><i class="fa-solid fa-file-code" style="color: #00f2fe;"></i> File Memory (<span id="kbCountFile">0</span>)</button>
           <button class="kb-tab-btn" data-cat="github"><i class="fa-brands fa-github"></i> GitHub Repos (<span id="kbCountGithub">0</span>)</button>
@@ -1041,6 +1024,9 @@
             <span id="knowledgeListStatus">Loading neural knowledge matrix...</span>
           </div>
           <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <button id="toggleUploadPdfBtn" class="btn btn-primary btn-sm" onclick="openPdfUploadPanel();" style="background: linear-gradient(135deg, rgba(255, 77, 79, 0.25), rgba(239, 68, 68, 0.2)); border: 1px solid #ff4d4f; color: #ff7875; font-weight: 700; box-shadow: 0 0 12px rgba(255,77,79,0.25);" title="Upload & Chunk Subject Book PDF">
+              <i class="fa-solid fa-file-pdf"></i> Upload PDF Book 📚
+            </button>
             <button id="toggleIngestWebBtn" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, rgba(0, 242, 254, 0.25), rgba(79, 172, 254, 0.2)); border: 1px solid #00f2fe; color: #00f2fe; font-weight: 700; box-shadow: 0 0 12px rgba(0,242,254,0.25);" title="Fetch and ingest knowledge from any website URL">
               <i class="fa-solid fa-globe"></i> Ingest Web URL 🌐
             </button>
@@ -1054,6 +1040,43 @@
               <i class="fa-solid fa-circle-plus"></i> Store New Knowledge
             </button>
           </div>
+        </div>
+
+        <!-- Upload Subject Book PDF Knowledge Panel (Collapsible) -->
+        <div class="add-knowledge-panel" id="uploadPdfPanel" style="display: none; border-color: rgba(255, 77, 79, 0.45); background: rgba(255, 77, 79, 0.03); margin-bottom: 16px;">
+          <div class="add-panel-header">
+            <h4><i class="fa-solid fa-book-bookmark gradient-text" style="color: #ff7875;"></i> Upload Subject Book PDF (Smart Chunking &amp; RAG Vector Index)</h4>
+            <span class="badge-tag" style="padding: 2px 8px; font-size: 0.7rem; background: rgba(255, 77, 79, 0.2); color: #ff7875; border-color: rgba(255, 77, 79, 0.4);">FULL-BOOK RAG &bull; INDEXEDDB</span>
+          </div>
+          <form id="uploadPdfForm" class="add-knowledge-form" onsubmit="event.preventDefault(); handlePdfUploadSubmit();">
+            <div class="form-group">
+              <label for="pdfFileInput"><i class="fa-solid fa-file-pdf" style="color: #ff4d4f;"></i> Select PDF Book / Research Paper / Notes (.pdf)</label>
+              <input type="file" id="pdfFileInput" class="kb-form-input" accept="application/pdf,.pdf" required style="padding: 8px 12px; cursor: pointer;">
+              <small class="form-hint">ব্রাউজারেই PDF.js দিয়ে প্রতি পাতা থেকে টেক্সট পড়ে স্বয়ংক্রিয়ভাবে Semantic Chunking ও মেমোরিতে ইনডেক্স করা হবে।</small>
+            </div>
+            <div class="form-group">
+              <label for="pdfCustomBookTitle"><i class="fa-solid fa-heading"></i> Book / Subject Title (Optional)</label>
+              <input type="text" id="pdfCustomBookTitle" class="kb-form-input" placeholder="e.g. Computer Networks / পদার্থবিজ্ঞান ১ম পত্র / Operating Systems">
+            </div>
+
+            <!-- Real-time extraction progress bar -->
+            <div id="pdfProgressWrapper" style="display: none; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,77,79,0.3); border-radius: 8px; padding: 12px; margin-top: 5px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: #cbd5e1; margin-bottom: 6px;">
+                <span id="pdfProgressStatusText"><i class="fa-solid fa-gear fa-spin"></i> Reading pages &amp; smart chunking...</span>
+                <span id="pdfProgressPercent">0%</span>
+              </div>
+              <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                <div id="pdfProgressBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #ff4d4f, #00f2fe); transition: width 0.2s ease;"></div>
+              </div>
+            </div>
+
+            <div class="form-actions" style="margin-top: 10px;">
+              <button type="submit" class="btn btn-primary btn-sm" id="submitPdfUploadBtn" style="background: linear-gradient(135deg, #ff4d4f, #f5222d); border: none;">
+                <i class="fa-solid fa-cloud-arrow-up"></i> Extract, Chunk &amp; Memorize Book 📚
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="closePdfUploadPanel();">Cancel</button>
+            </div>
+          </form>
         </div>
 
         <!-- Ingest Web URL Knowledge Panel (Collapsible) -->
@@ -1141,10 +1164,11 @@
     </div>
   </div>
 
+
   <!-- Toast Notification Container -->
   <div class="kb-toast-container" id="kbToastContainer"></div>
 
-  <!-- ================= NEURAL MP3 & YOUTUBE MUSIC STUDIO MODAL ================= -->
+    <!-- ================= NEURAL MP3 & YOUTUBE MUSIC STUDIO MODAL ================= -->
   <div class="music-modal-backdrop" id="musicModalBackdrop">
     <div class="music-modal-card" id="musicModalCard">
       
@@ -1309,8 +1333,7 @@
     </div>
   </div>
 
-
-  <!-- ================= USER LOGIN & PROFILE MODAL ================= -->
+    <!-- ================= USER LOGIN & PROFILE MODAL ================= -->
   <div class="user-auth-modal" id="userAuthModal">
     <div class="user-auth-modal-backdrop" id="userAuthModalBackdrop" onclick="closeUserAuthModal();"></div>
     <div class="user-auth-modal-card">
@@ -1359,7 +1382,7 @@
     </div>
   </div>
 
-  <!-- ================= AI BRAIN & GEMINI SETTINGS MODAL ================= -->
+    <!-- ================= AI BRAIN & GEMINI SETTINGS MODAL ================= -->
   <div class="user-auth-modal" id="aiBrainSettingsModal" style="display: none;">
     <div class="user-auth-modal-backdrop" id="aiBrainModalBackdrop" onclick="closeAiBrainModal();"></div>
     <div class="user-auth-modal-card" style="max-width: 540px;">
@@ -1400,7 +1423,7 @@
             </small>
           </div>
 
-          <div class="user-auth-input-group" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 12px 14px; border-radius: 12px;">
+          <div class="user-auth-input-group" style="background: rgba(255,255,200,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 12px 14px; border-radius: 12px;">
             <label style="display: flex; align-items: center; justify-content: space-between; cursor: pointer; margin-bottom: 0;">
               <span style="font-size: 0.88rem; font-weight: 600; color: #f1f5f9;">
                 <i class="fa-solid fa-bolt" style="color: #00f5a0; margin-right: 6px;"></i> Enable Generative AI (LLM)
@@ -1425,7 +1448,7 @@
     </div>
   </div>
 
-  <!-- ================= LIGHTBOX MODAL ================= -->
+    <!-- ================= LIGHTBOX MODAL ================= -->
   <div class="lightbox-modal" id="lightboxModal">
     <button class="lightbox-close" id="lightboxClose" aria-label="Close modal">&times;</button>
     <button class="lightbox-nav prev" id="lightboxPrev" aria-label="Previous image"><i class="fa-solid fa-chevron-left"></i></button>
@@ -1436,7 +1459,12 @@
     <button class="lightbox-nav next" id="lightboxNext" aria-label="Next image"><i class="fa-solid fa-chevron-right"></i></button>
   </div>
 
-  <!-- Javascript -->
-  <script src="js/app.js?v=39.0"></script>
+
+  <!-- PDF.js Engine & In-Browser PDF RAG -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="js/pdf-rag.js?v=1.0"></script>
+
+  <!-- Main Application Javascript -->
+  <script src="js/app.js?v=40.0"></script>
 </body>
 </html>

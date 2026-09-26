@@ -1,0 +1,113 @@
+[
+  {
+    "id": "neural-chatbot",
+    "title": "Neural Chat Bot",
+    "category": "Flagship &bull; Neural Voice AI",
+    "categoryStyle": "border-color: rgba(0, 242, 254, 0.4); color: #00f2fe;",
+    "icon": "fa-solid fa-brain",
+    "iconStyle": "background: rgba(0, 242, 254, 0.15); color: #00f2fe;",
+    "isFeatured": true,
+    "description": "Real-time talking avatar neural assistant with voice lip-sync, PyTorch deep learning NLP comprehension, speech synthesis & multilingual Bengali/English interaction.",
+    "tags": ["PyTorch NLP", "Voice AI", "Talking Avatar", "Vercel"],
+    "liveUrl": "#hero",
+    "liveText": "Live Experience",
+    "liveIcon": "fa-solid fa-circle-play",
+    "githubUrl": "https://github.com/rokeyaag/neural-chatbot"
+  },
+  {
+    "id": "edugenius-ai",
+    "title": "EduGenius AI",
+    "category": "EdTech &bull; AI Assistant",
+    "icon": "fa-solid fa-graduation-cap",
+    "description": "Intelligent interactive learning assistant platform featuring automated quizzes, student feedback algorithms, and deep learning syllabus comprehension.",
+    "tags": ["Python", "FastAPI", "Deep NLP", "Vercel"],
+    "liveUrl": "https://edugenius-ai-omega.vercel.app",
+    "liveText": "Live Demo",
+    "liveIcon": "fa-solid fa-arrow-up-right-from-square",
+    "githubUrl": "https://github.com/rokeyaag/edugenius-ai"
+  },
+  {
+    "id": "grand-aurelia",
+    "title": "Grand Aurelia",
+    "category": "Enterprise &bull; Hospitality",
+    "icon": "fa-solid fa-hotel",
+    "description": "5-Star Luxury Hotel Management Suite, Waiter POS, Real-Time Kitchen Display System (KDS), Online Delivery Tracker, and 24/7 AI Concierge.",
+    "tags": ["Full-Stack JS", "POS System", "Glassmorphism", "Cloud ERP"],
+    "liveUrl": "https://grand-aurelia-five.vercel.app",
+    "liveText": "Live Demo",
+    "liveIcon": "fa-solid fa-arrow-up-right-from-square",
+    "githubUrl": "https://github.com/rokeyaag/grand-aurelia"
+  },
+  {
+    "id": "imx-daily-expense",
+    "title": "IMX Daily Expense App",
+    "category": "FinTech &bull; Analytics",
+    "icon": "fa-solid fa-wallet",
+    "description": "Comprehensive personal and business financial accounting suite with real-time expense calculations, monthly budget forecasts, and data visualization.",
+    "tags": ["Python Backend", "REST API", "Chart.js", "Finance"],
+    "liveUrl": "https://imx-daily-expense-app.vercel.app",
+    "liveText": "Live Demo",
+    "liveIcon": "fa-solid fa-arrow-up-right-from-square",
+    "githubUrl": "https://github.com/rokeyaag/IMXDailyExpenseApp"
+  },
+  {
+    "id": "socialpulse-hub",
+    "title": "SocialPulse Hub",
+    "category": "SaaS &bull; Social Automation",
+    "icon": "fa-solid fa-share-nodes",
+    "description": "Multi-Platform Auto-Posting SaaS (Facebook & LinkedIn), APScheduler Background Engine, and AI Photo Studio with instant background removal.",
+    "tags": ["Python SaaS", "APScheduler", "AI Vision", "Meta API"],
+    "liveUrl": "https://lutfor-portfolio.vercel.app/socialpulse.html",
+    "liveText": "Live Demo",
+    "liveIcon": "fa-solid fa-arrow-up-right-from-square",
+    "githubUrl": "https://github.com/rokeyaag/social-automation-hub"
+  },
+  {
+    "id": "securelock-vault",
+    "title": "SecureLock Vault",
+    "category": "Cybersecurity &bull; Desktop",
+    "icon": "fa-solid fa-shield-halved",
+    "description": "Military-grade AES-256 Windows Folder Locker with envelope encryption, rapid system-tray quick lock, and email OTP verification recovery.",
+    "tags": ["AES-256 GCM", "Python Tkinter", "Cryptography", "Windows Security"],
+    "liveUrl": "https://rokeyaag.github.io/SecureLock/",
+    "liveText": "Live Demo",
+    "liveIcon": "fa-solid fa-arrow-up-right-from-square",
+    "githubUrl": "https://github.com/rokeyaag/SecureLock"
+  },
+  {
+    "id": "school-management-ai",
+    "title": "School Management AI",
+    "category": "Academic ERP &bull; Database",
+    "icon": "fa-solid fa-school",
+    "description": "Institutional ERP automating student enrollment, real-time attendance, grade-point calculations, exam scheduling, and teacher management.",
+    "tags": ["Python", "Database Architecture", "ERP System", "Vercel"],
+    "liveUrl": "https://school-management-ai-system.vercel.app",
+    "liveText": "Live Demo",
+    "liveIcon": "fa-solid fa-arrow-up-right-from-square",
+    "githubUrl": "https://github.com/rokeyaag/school-management-ai-system"
+  },
+  {
+    "id": "banking-desktop-app",
+    "title": "Banking Desktop App",
+    "category": "FinTech &bull; Desktop GUI",
+    "icon": "fa-solid fa-landmark",
+    "description": "Desktop banking platform for account management, encrypted deposit/withdrawal logs, interest calculations, and customer transaction statements.",
+    "tags": ["Python 3", "Desktop GUI", "SQLite", "FinTech"],
+    "liveUrl": "https://rokeyaag.github.io/banking-desktop/",
+    "liveText": "Live Demo",
+    "liveIcon": "fa-solid fa-arrow-up-right-from-square",
+    "githubUrl": "https://github.com/rokeyaag/banking-desktop"
+  },
+  {
+    "id": "lutfor-portfolio",
+    "title": "Lutfor Portfolio",
+    "category": "Flagship &bull; Web Portfolio",
+    "icon": "fa-solid fa-briefcase",
+    "description": "Official engineering portfolio featuring interactive web apps, deep learning research, resume download, and live project deployments.",
+    "tags": ["Modern Web", "Glassmorphism", "UI/UX", "Vercel"],
+    "liveUrl": "https://lutfor-portfolio.vercel.app",
+    "liveText": "Live Demo",
+    "liveIcon": "fa-solid fa-arrow-up-right-from-square",
+    "githubUrl": "https://github.com/rokeyaag/lutfor-portfolio"
+  }
+]

@@ -1,0 +1,63 @@
+  <!-- ================= SECTION 4: LIVE PLAYGROUND CONSOLE ================= -->
+  <section class="section" id="playground">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Interactive Neural Console</span>
+        <h2 class="section-title">Developer Testing Console</h2>
+        <p class="section-desc">
+          Test customized prompts, check neural confidence metrics, and inspect code response generation.
+        </p>
+      </div>
+
+      <div class="chat-simulator-card" style="max-width: 880px; margin: 0 auto;">
+        <div class="chat-header">
+          <div class="chat-header-info">
+            <div class="chat-avatar" style="background: linear-gradient(135deg, #00f5a0, #00f2fe);">
+              <i class="fa-solid fa-terminal" style="color: #060913;"></i>
+            </div>
+            <div class="chat-user-details">
+              <h4>NeuralBot Developer Console v3.5</h4>
+              <span><i class="fa-solid fa-circle-check"></i> Connected &bull; Latency 28ms</span>
+            </div>
+          </div>
+          <div class="chat-controls">
+            <button id="clearChatBtn" style="background: transparent; border: 1px solid var(--glass-border); color: var(--text-muted); padding: 4px 12px; border-radius: 6px; font-size: 0.75rem; cursor: pointer;">
+              <i class="fa-solid fa-rotate-right"></i> Reset Console
+            </button>
+          </div>
+        </div>
+
+        <div class="chat-body" id="playgroundChatBody" style="height: 340px;">
+          <div class="chat-message bot">
+            <div class="chat-bubble">
+              👋 <strong>Neural AI Engine Online.</strong><br>
+              আপনি যে কোনো কিছু জানতে চাইতে পারেন। যেমন:<br>
+              - "এই চ্যাটবট কিভাবে কাজ করে?"<br>
+              - "Tell me about Lutfor Rahman"<br>
+              - "What technologies are used in this project?"<br>
+              - "Write a Python snippet for neural training"
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-input-area">
+          <div class="quick-prompts">
+            <button class="quick-chip playground-chip" data-prompt="আপনি কেমন আছেন?">আপনি কেমন আছেন?</button>
+            <button class="quick-chip playground-chip" data-prompt="Can you sing a melody for me?">Sing Song 🎶</button>
+            <button class="quick-chip playground-chip" data-prompt="Python PyTorch training code example">PyTorch Code</button>
+            <button class="quick-chip playground-chip" data-prompt="Developer Lutfor Rahman সম্পর্কে বলো">About Developer</button>
+            <button class="quick-chip playground-chip" data-prompt="Bengali NLP processing capabilities">Bengali NLP</button>
+            <button class="quick-chip playground-chip" data-action="open-kb" id="openKbChipPlayground">Browse Knowledge 📂</button>
+          </div>
+
+          <div class="chat-form" id="playgroundForm">
+            <input type="text" class="chat-input" id="playgroundInput" placeholder="Enter developer prompt..." autocomplete="off">
+            <button type="button" class="chat-send-btn" id="playgroundSendBtn">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>

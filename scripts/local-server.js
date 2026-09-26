@@ -2,6 +2,14 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
+const { build } = require('./build');
+
+try {
+  build();
+} catch (err) {
+  console.warn('[Server] Initial build failed:', err.message);
+}
+
 const PORT = process.env.PORT || 5500;
 const MIME_TYPES = {
   '.html': 'text/html; charset=UTF-8',
@@ -35,8 +43,12 @@ const server = http.createServer((req, res) => {
   }
 
   let reqPath = decodeURIComponent(req.url.split('?')[0]);
-  if (reqPath === '/' || reqPath === '') {
+  if (reqPath === '/' || reqPath === '' || reqPath === '/index.html') {
     reqPath = '/index.html';
+    // Auto-recompile components on page load in dev mode
+    try {
+      build();
+    } catch (e) {}
   }
 
   const rootDir = path.resolve(__dirname, '..');

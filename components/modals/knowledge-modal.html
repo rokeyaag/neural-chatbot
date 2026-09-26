@@ -1,0 +1,198 @@
+  <!-- ================= KNOWLEDGE STORE MODAL (EXPLORER & MANAGER) ================= -->
+  <div class="knowledge-modal" id="knowledgeModal">
+    <div class="knowledge-modal-backdrop" id="knowledgeModalBackdrop"></div>
+    <div class="knowledge-modal-dialog">
+      
+      <!-- Modal Header -->
+      <div class="knowledge-modal-header">
+        <div class="knowledge-modal-title">
+          <div class="title-icon">
+            <i class="fa-solid fa-brain-circuit"></i>
+          </div>
+          <div>
+            <h3>Neural Knowledge Store &amp; Dynamic Memory</h3>
+            <p>Bilingual Intent Matrix, Kusol Binimoy (কুশল), Unique Answers &amp; Live Custom Memory</p>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button id="toggleUploadPdfBtnHeader" class="btn btn-primary btn-sm" onclick="openPdfUploadPanel();" style="background: linear-gradient(135deg, rgba(255, 77, 79, 0.3), rgba(239, 68, 68, 0.2)); border: 1px solid #ff4d4f; color: #fff; font-weight: 700; box-shadow: 0 0 15px rgba(255, 77, 79, 0.35); border-radius: 99px; padding: 6px 15px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" title="Upload Subject Book PDF & Vectorize">
+            <i class="fa-solid fa-file-pdf" style="color: #ff4d4f;"></i> <span>Upload Book PDF 📚</span>
+          </button>
+          <button id="toggleIngestWebBtnHeader" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, rgba(0,242,254,0.25), rgba(79,172,254,0.35)); border: 1px solid #00f2fe; color: #fff; font-weight: 700; box-shadow: 0 0 15px rgba(0,242,254,0.35); border-radius: 99px; padding: 6px 15px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" title="Ingest Knowledge from any Website URL">
+            <i class="fa-solid fa-globe" style="color: #00f2fe;"></i> <span>Ingest Web URL 🌐</span>
+          </button>
+          <button class="knowledge-modal-close" id="knowledgeModalClose" aria-label="Close Knowledge Store">&times;</button>
+        </div>
+      </div>
+
+      <!-- Modal Search & Filter Toolbar -->
+      <div class="knowledge-modal-toolbar">
+        <div class="knowledge-search-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="knowledgeSearchInput" class="knowledge-search-input" placeholder="Search patterns, keywords, or answers (e.g. 'how are you', 'sing', 'pytorch', 'কেমন আছো')...">
+          <button id="knowledgeSearchClear" class="search-clear-btn" style="display: none;" title="Clear search"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="knowledge-category-tabs" id="knowledgeCategoryTabs">
+          <button class="kb-tab-btn active" data-cat="all">All (<span id="kbCountAll">0</span>)</button>
+          <button class="kb-tab-btn" data-cat="pdf" style="border: 1px solid #ff4d4f; color: #ff7875; font-weight: 600; background: rgba(255, 77, 79, 0.1);"><i class="fa-solid fa-file-pdf" style="color: #ff4d4f;"></i> PDF Books (<span id="kbCountPdf">0</span>)</button>
+          <button class="kb-tab-btn" data-cat="web" style="border: 1px solid #00f2fe; color: #00f2fe; font-weight: 600; background: rgba(0, 242, 254, 0.1);"><i class="fa-solid fa-globe" style="color: #00f2fe;"></i> Web Ingested (<span id="kbCountWeb">0</span>)</button>
+          <button class="kb-tab-btn" data-cat="file_memory" style="border-color: rgba(0, 242, 254, 0.4);"><i class="fa-solid fa-file-code" style="color: #00f2fe;"></i> File Memory (<span id="kbCountFile">0</span>)</button>
+          <button class="kb-tab-btn" data-cat="github"><i class="fa-brands fa-github"></i> GitHub Repos (<span id="kbCountGithub">0</span>)</button>
+          <button class="kb-tab-btn" data-cat="kusol"><i class="fa-solid fa-hand-holding-heart"></i> Kusol Binimoy</button>
+          <button class="kb-tab-btn" data-cat="greetings"><i class="fa-solid fa-hand-wave"></i> Greetings</button>
+          <button class="kb-tab-btn" data-cat="creator"><i class="fa-solid fa-user-gear"></i> Creator &amp; Dev</button>
+          <button class="kb-tab-btn" data-cat="tech"><i class="fa-solid fa-network-wired"></i> PyTorch &amp; Tech</button>
+          <button class="kb-tab-btn" data-cat="entertainment"><i class="fa-solid fa-music"></i> Songs &amp; Jokes</button>
+          <button class="kb-tab-btn" data-cat="ai"><i class="fa-solid fa-microchip"></i> General AI</button>
+          <button class="kb-tab-btn" data-cat="custom"><i class="fa-solid fa-floppy-disk"></i> Custom Saved (<span id="kbCountCustom">0</span>)</button>
+          <button class="kb-tab-btn" data-cat="qa_memory"><i class="fa-solid fa-comments"></i> Learned Q&amp;A (<span id="kbCountQa">0</span>)</button>
+        </div>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="knowledge-modal-body">
+        <div class="knowledge-list-topbar">
+          <div class="kb-status-label">
+            <span class="status-indicator-dot"></span>
+            <span id="knowledgeListStatus">Loading neural knowledge matrix...</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <button id="toggleUploadPdfBtn" class="btn btn-primary btn-sm" onclick="openPdfUploadPanel();" style="background: linear-gradient(135deg, rgba(255, 77, 79, 0.25), rgba(239, 68, 68, 0.2)); border: 1px solid #ff4d4f; color: #ff7875; font-weight: 700; box-shadow: 0 0 12px rgba(255,77,79,0.25);" title="Upload & Chunk Subject Book PDF">
+              <i class="fa-solid fa-file-pdf"></i> Upload PDF Book 📚
+            </button>
+            <button id="toggleIngestWebBtn" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, rgba(0, 242, 254, 0.25), rgba(79, 172, 254, 0.2)); border: 1px solid #00f2fe; color: #00f2fe; font-weight: 700; box-shadow: 0 0 12px rgba(0,242,254,0.25);" title="Fetch and ingest knowledge from any website URL">
+              <i class="fa-solid fa-globe"></i> Ingest Web URL 🌐
+            </button>
+            <button id="syncFileMemoryBtn" class="btn btn-secondary btn-sm" title="Reload memory from data/memory.json">
+              <i class="fa-solid fa-rotate" style="color: #00f2fe;"></i> Reload memory.json
+            </button>
+            <button id="syncGithubKbBtn" class="btn btn-secondary btn-sm" title="Sync live repositories from GitHub">
+              <i class="fa-solid fa-arrows-rotate"></i> Sync GitHub
+            </button>
+            <button id="toggleAddKnowledgeBtn" class="btn btn-primary btn-sm add-kb-btn">
+              <i class="fa-solid fa-circle-plus"></i> Store New Knowledge
+            </button>
+          </div>
+        </div>
+
+        <!-- Upload Subject Book PDF Knowledge Panel (Collapsible) -->
+        <div class="add-knowledge-panel" id="uploadPdfPanel" style="display: none; border-color: rgba(255, 77, 79, 0.45); background: rgba(255, 77, 79, 0.03); margin-bottom: 16px;">
+          <div class="add-panel-header">
+            <h4><i class="fa-solid fa-book-bookmark gradient-text" style="color: #ff7875;"></i> Upload Subject Book PDF (Smart Chunking &amp; RAG Vector Index)</h4>
+            <span class="badge-tag" style="padding: 2px 8px; font-size: 0.7rem; background: rgba(255, 77, 79, 0.2); color: #ff7875; border-color: rgba(255, 77, 79, 0.4);">FULL-BOOK RAG &bull; INDEXEDDB</span>
+          </div>
+          <form id="uploadPdfForm" class="add-knowledge-form" onsubmit="event.preventDefault(); handlePdfUploadSubmit();">
+            <div class="form-group">
+              <label for="pdfFileInput"><i class="fa-solid fa-file-pdf" style="color: #ff4d4f;"></i> Select PDF Book / Research Paper / Notes (.pdf)</label>
+              <input type="file" id="pdfFileInput" class="kb-form-input" accept="application/pdf,.pdf" required style="padding: 8px 12px; cursor: pointer;">
+              <small class="form-hint">ব্রাউজারেই PDF.js দিয়ে প্রতি পাতা থেকে টেক্সট পড়ে স্বয়ংক্রিয়ভাবে Semantic Chunking ও মেমোরিতে ইনডেক্স করা হবে।</small>
+            </div>
+            <div class="form-group">
+              <label for="pdfCustomBookTitle"><i class="fa-solid fa-heading"></i> Book / Subject Title (Optional)</label>
+              <input type="text" id="pdfCustomBookTitle" class="kb-form-input" placeholder="e.g. Computer Networks / পদার্থবিজ্ঞান ১ম পত্র / Operating Systems">
+            </div>
+
+            <!-- Real-time extraction progress bar -->
+            <div id="pdfProgressWrapper" style="display: none; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,77,79,0.3); border-radius: 8px; padding: 12px; margin-top: 5px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: #cbd5e1; margin-bottom: 6px;">
+                <span id="pdfProgressStatusText"><i class="fa-solid fa-gear fa-spin"></i> Reading pages &amp; smart chunking...</span>
+                <span id="pdfProgressPercent">0%</span>
+              </div>
+              <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                <div id="pdfProgressBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #ff4d4f, #00f2fe); transition: width 0.2s ease;"></div>
+              </div>
+            </div>
+
+            <div class="form-actions" style="margin-top: 10px;">
+              <button type="submit" class="btn btn-primary btn-sm" id="submitPdfUploadBtn" style="background: linear-gradient(135deg, #ff4d4f, #f5222d); border: none;">
+                <i class="fa-solid fa-cloud-arrow-up"></i> Extract, Chunk &amp; Memorize Book 📚
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="closePdfUploadPanel();">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Ingest Web URL Knowledge Panel (Collapsible) -->
+        <div class="add-knowledge-panel" id="ingestWebPanel" style="display: none; border-color: rgba(0, 242, 254, 0.4); background: rgba(0, 242, 254, 0.03); margin-bottom: 16px;">
+          <div class="add-panel-header">
+            <h4><i class="fa-solid fa-globe gradient-text"></i> Ingest Knowledge from Any Website URL</h4>
+            <span class="badge-tag" style="padding: 2px 8px; font-size: 0.7rem; background: rgba(0, 242, 254, 0.2); color: #00f2fe;">AUTO-READ &amp; MEMORIZE</span>
+          </div>
+          <form id="ingestWebForm" class="add-knowledge-form">
+            <div class="form-group">
+              <label for="webIngestUrl"><i class="fa-solid fa-link" style="color: #00f2fe;"></i> Website URL (Article, Wikipedia, Documentation, Tech Blog, etc.)</label>
+              <input type="url" id="webIngestUrl" class="kb-form-input" placeholder="https://en.wikipedia.org/wiki/Artificial_intelligence" required>
+              <small class="form-hint">NeuralBot will extract content, key concepts, generate keywords, and store it into memory.</small>
+            </div>
+            <div class="form-group">
+              <label for="webIngestCustomTitle"><i class="fa-solid fa-heading"></i> Custom Topic Title (Optional)</label>
+              <input type="text" id="webIngestCustomTitle" class="kb-form-input" placeholder="Leave blank to auto-detect title from webpage">
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-sm" id="submitWebIngestBtn"><i class="fa-solid fa-cloud-arrow-down"></i> Read &amp; Store Web Knowledge</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="cancelIngestWebBtn">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Add Custom Knowledge Panel (Collapsible) -->
+        <div class="add-knowledge-panel" id="addKnowledgePanel" style="display: none;">
+          <div class="add-panel-header">
+            <h4><i class="fa-solid fa-folder-plus gradient-text"></i> Add Custom Knowledge &amp; Unique Responses</h4>
+            <span class="badge-tag" style="padding: 2px 8px; font-size: 0.7rem;">PERSISTENT MEMORY</span>
+          </div>
+          <form id="addKnowledgeForm" class="add-knowledge-form">
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="newKbCategory">Knowledge Category</label>
+                <select id="newKbCategory" class="kb-form-select" required>
+                  <option value="custom" selected>Custom User Memory</option>
+                  <option value="kusol">Kusol Binimoy &amp; Greetings</option>
+                  <option value="creator">Creator &amp; Identity</option>
+                  <option value="tech">PyTorch &amp; Architecture</option>
+                  <option value="entertainment">Fun &amp; Entertainment</option>
+                  <option value="ai">General AI Knowledge</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="newKbTitle">Intent / Topic Title</label>
+                <input type="text" id="newKbTitle" class="kb-form-input" placeholder="e.g. Favorite Language / Company Info" required>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="newKbKeywords">Trigger Keywords / Phrases (Comma separated)</label>
+              <input type="text" id="newKbKeywords" class="kb-form-input" placeholder="e.g. what is your favorite language, which language do you prefer, priyo bhasha" required>
+              <small class="form-hint">Both English and Bengali keywords can be included.</small>
+            </div>
+
+            <div class="form-group">
+              <label for="newKbResponses">Dynamic Responses (One per line for unique answer variation)</label>
+              <textarea id="newKbResponses" class="kb-form-textarea" rows="3" placeholder="Variation 1: Python and PyTorch are my favorites for deep learning!&#10;Variation 2: I love Python for tensor math and JavaScript for rich interactive UI!" required></textarea>
+              <small class="form-hint">Tip: Enter 2 or more lines. The chatbot will randomly select one to give unique, dynamic answers!</small>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-floppy-disk"></i> Store to Knowledge Base</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="cancelAddKnowledgeBtn">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Knowledge Cards Grid -->
+        <div class="knowledge-cards-grid" id="knowledgeCardsGrid">
+          <!-- Dynamically populated by app.js -->
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="knowledge-modal-footer">
+        <div class="kb-footer-meta">
+          <span class="hud-mono-tag"><i class="fa-solid fa-bolt"></i> REAL-TIME INFERENCE</span>
+          <span class="hud-mono-val">Accuracy: 99.8% &bull; Multi-Variation Enabled</span>
+        </div>
+        <button class="btn btn-secondary btn-sm" id="knowledgeModalCloseBtn">Close Explorer</button>
+      </div>
+
+    </div>
+  </div>

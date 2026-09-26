@@ -2266,9 +2266,10 @@ function initVoiceAndChatEngine() {
 
   // --- QUERY NORMALIZER & COMMON STOPWORDS LIST (PREVENTS FALSE POSITIVE TRIGGERING) ---
   const COMMON_STOPWORDS = new Set([
-    'ki', 'কী', 'কিবা', 'কিরে', 'kire', 'me', 'am', 'is', 'are', 'a', 'an', 'the',
+    'ki', 'কি', 'কী', 'কিবা', 'কিরে', 'kire', 'me', 'am', 'is', 'are', 'a', 'an', 'the',
     'er', 'te', 'ta', 'to', 'in', 'on', 'of', 'and', 'or', 'for', 'about',
     'বলো', 'জানাও', 'সম্পর্কে', 'হলো', 'হচ্ছে', 'দাও', 'করো', 'করুন', 'বলোতো',
+    'এই', 'সেই', 'একটি', 'বা', 'এবং', 'ও', 'থেকে', 'প্রধানত', 'বিষয়', 'আলোচনা', 'করা', 'হয়েছে',
     'what', 'which', 'who', 'how', 'when', 'where', 'why'
   ]);
 
@@ -5779,20 +5780,80 @@ function initVoiceAndChatEngine() {
     if (window.NeuralKnowledgeStore && typeof window.NeuralKnowledgeStore.searchWebChunks === 'function') {
       const topChunks = window.NeuralKnowledgeStore.searchWebChunks(cleanText, 4);
       if (topChunks && topChunks.length > 0) {
-        webContext = topChunks.map(c => `[Source Page: ${c.pageTitle} | Section: ${c.heading} | URL: ${c.sourceUrl}]\n${c.text}`).join('\n\n');
+        webContext = topChunks.map(c => `[Web Source: ${c.pageTitle} | Section: ${c.heading} | URL: ${c.sourceUrl}]\n${c.text}`).join('\n\n');
       }
     }
+
+    // 3.4 Check if query is asking for summary / overview of the uploaded PDF book
+    const isBookOverviewQuery = /(?:বই|বইটিতে|বইয়ে|book|pdf).*(?:আলোচনা|বিষয়|কি কি|সারসংক্ষেপ|সারাংশ|summary|about|overview|সূচিপত্র)/i.test(rawText) ||
+      /(?:এই বইটিতে|বইটিতে কি আছে|বইয়ের মূল বিষয়|what is this book about)/i.test(rawText);
+
+    if (isBookOverviewQuery && window.NeuralPdfStore && typeof window.NeuralPdfStore.getBookOverview === 'function') {
+      try {
+        const overview = await window.NeuralPdfStore.getBookOverview();
+        if (overview && overview.book) {
+          const { book, samplePoints, earlyText } = overview;
+          const bookSummaryContext = `[Book Title: ${book.title} | Total Pages: ${book.totalPages} | Chunks: ${book.totalChunks}]\n` +
+            `Table of contents & key headings:\n` +
+            samplePoints.map(p => `• Page ${p.page}: ${p.heading} - ${p.snippet}`).join('\n') +
+            `\n\nIntroductory Text:\n${earlyText.substring(0, 1500)}`;
+
+          if (NeuralAIEngine.getApiKey() && NeuralAIEngine.isEnabled()) {
+            try {
+              const geminiSummary = await NeuralAIEngine.queryGemini(rawText, bookSummaryContext);
+              if (geminiSummary && geminiSummary.trim().length > 15) {
+                return `📚 <strong>[বই: ${escapeHtml(book.title)} — মূল বিষয়বস্তু ও সারাংশ]</strong><br><br>${geminiSummary}`;
+              }
+            } catch(e) {}
+          }
+
+          // Local offline RAG book overview
+          const pointsList = samplePoints.map(p => `• <strong>${escapeHtml(p.heading)}</strong> (পৃষ্ঠা ${p.page}): ${escapeHtml(p.snippet)}...`).join('<br><br>');
+          return `📚 <strong>"${escapeHtml(book.title)}"</strong> বইটির মূল বিষয়বস্তু ও সারসংক্ষেপ:<br><br>` +
+                 `বইটিতে মোট <strong>${book.totalPages}টি পৃষ্ঠা</strong> রয়েছে। সূচিপত্র ও বিভিন্ন অধ্যায় অনুযায়ী প্রধান আলোচ্য বিষয়গুলো নিচে তুলে ধরা হলো:<br><br>` +
+                 `${pointsList}<br><br>` +
+                 `💡 <em>আপনি বইটির যেকোনো নির্দিষ্ট বিষয় বা পৃষ্ঠার তথ্য জানতে সরাসরি প্রশ্ন করতে পারেন!</em>`;
+        }
+      } catch (err) {
+        console.warn('[Book Overview RAG Error]', err);
+      }
+    }
+
+    // 3.5 Collect PDF Book Knowledge Chunks (Deep In-Browser PDF RAG)
+    let pdfContext = '';
+    let topPdfChunk = null;
+    if (window.NeuralPdfStore && typeof window.NeuralPdfStore.searchPdfChunks === 'function') {
+      try {
+        const topPdfChunks = await window.NeuralPdfStore.searchPdfChunks(cleanText, 4);
+        if (topPdfChunks && topPdfChunks.length > 0) {
+          topPdfChunk = topPdfChunks[0];
+          pdfContext = topPdfChunks.map(c => `[Book: ${c.bookTitle} | Page ${c.pageNumber} | Topic: ${c.heading}]\n${c.text}`).join('\n\n');
+        }
+      } catch (err) {
+        console.warn('[PDF RAG Search Error]', err);
+      }
+    }
+
+    const combinedRAGContext = [webContext, pdfContext].filter(Boolean).join('\n\n');
 
     // 4. Try Generative AI Brain (Gemini 1.5 Flash) if key is active!
     if (NeuralAIEngine.getApiKey() && NeuralAIEngine.isEnabled()) {
       try {
-        const geminiReply = await NeuralAIEngine.queryGemini(rawText, webContext);
+        const geminiReply = await NeuralAIEngine.queryGemini(rawText, combinedRAGContext);
         if (geminiReply && geminiReply.trim().length > 10) {
           return geminiReply;
         }
       } catch (err) {
         console.warn('[AI Brain] Gemini failed, seamlessly falling back to local Smart RAG:', err);
       }
+    }
+
+    // 4.5. High-confidence Local PDF Citation Fallback
+    if (topPdfChunk && topPdfChunk.score >= 40) {
+      const prefix = isBengali
+        ? `📖 <strong>বইয়ের রেফারেন্স:</strong> <em>"${escapeHtml(topPdfChunk.bookTitle)}"</em> (পৃষ্ঠা নং ${topPdfChunk.pageNumber})<br>📌 <strong>টপিক / অধ্যায়:</strong> ${escapeHtml(topPdfChunk.heading)}`
+        : `📖 <strong>Book Reference:</strong> <em>"${escapeHtml(topPdfChunk.bookTitle)}"</em> (Page ${topPdfChunk.pageNumber})<br>📌 <strong>Topic / Chapter:</strong> ${escapeHtml(topPdfChunk.heading)}`;
+      return `${prefix}<br><br>${escapeHtml(topPdfChunk.text)}`;
     }
 
     // 5. Seamless Fallback: In-Browser Smart RAG & Pre-Trained Knowledge Base
@@ -6687,6 +6748,15 @@ function initVoiceAndChatEngine() {
         }
         return;
       }
+      if (action === 'open-pdf') {
+        if (typeof window.openKnowledgeStoreModal === 'function') {
+          window.openKnowledgeStoreModal();
+          if (typeof window.openPdfUploadPanel === 'function') {
+            window.openPdfUploadPanel();
+          }
+        }
+        return;
+      }
       const prompt = chip.getAttribute('data-prompt');
       if (prompt) handleHeroSend(prompt);
     });
@@ -6996,7 +7066,14 @@ function initKnowledgeStoreModal() {
       if (activeCategory === 'web' && ingestWebPanel) {
         ingestWebPanel.style.display = 'block';
         if (addPanel) addPanel.style.display = 'none';
+        const pdfPanel = document.getElementById('uploadPdfPanel');
+        if (pdfPanel) pdfPanel.style.display = 'none';
         setTimeout(() => document.getElementById('webIngestUrl')?.focus(), 100);
+      } else if (activeCategory === 'pdf') {
+        const pdfPanel = document.getElementById('uploadPdfPanel');
+        if (pdfPanel) pdfPanel.style.display = 'block';
+        if (addPanel) addPanel.style.display = 'none';
+        if (ingestWebPanel) ingestWebPanel.style.display = 'none';
       }
       renderKnowledgeGrid();
     });
@@ -7172,6 +7249,75 @@ function initKnowledgeStoreModal() {
     });
   }
 
+  // Handle PDF Book Upload & In-Browser Chunking & RAG
+  window.handlePdfUploadSubmit = async function () {
+    const fileInput = document.getElementById('pdfFileInput');
+    const titleInput = document.getElementById('pdfCustomBookTitle');
+    const submitBtn = document.getElementById('submitPdfUploadBtn');
+    const progressWrapper = document.getElementById('pdfProgressWrapper');
+    const progressText = document.getElementById('pdfProgressStatusText');
+    const progressBar = document.getElementById('pdfProgressBar');
+    const progressPercent = document.getElementById('pdfProgressPercent');
+
+    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+      showToast('Please select a valid .pdf file to upload.', true);
+      return;
+    }
+
+    const file = fileInput.files[0];
+    const customTitle = titleInput ? titleInput.value.trim() : '';
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing & Chunking PDF...';
+    }
+    if (progressWrapper) progressWrapper.style.display = 'block';
+
+    try {
+      if (!window.NeuralPdfStore || typeof window.NeuralPdfStore.ingestPdfFile !== 'function') {
+        throw new Error('PDF RAG Vector Engine is not ready. Please refresh the page.');
+      }
+
+      const res = await window.NeuralPdfStore.ingestPdfFile(file, customTitle, (p) => {
+        if (progressBar) progressBar.style.width = `${p.percent}%`;
+        if (progressPercent) progressPercent.textContent = `${p.percent}%`;
+        if (progressText) {
+          if (p.stage === 'reading') {
+            progressText.innerHTML = `<i class="fa-solid fa-book-open fa-spin"></i> Reading page ${p.current} of ${p.total} (${p.percent}%) &bull; ${p.chunksCount || 0} chunks extracted...`;
+          } else if (p.stage === 'saving') {
+            progressText.innerHTML = `<i class="fa-solid fa-database fa-spin"></i> Saving ${p.current} of ${p.total} chunks into IndexedDB (${p.percent}%)...`;
+          } else if (p.stage === 'complete') {
+            progressText.innerHTML = `<i class="fa-solid fa-circle-check"></i> Complete! Indexed ${p.total} chunks.`;
+          }
+        }
+      });
+
+      showToast(`Book "${res.bookTitle}" (${res.totalPages} pages, ${res.totalChunks} chunks) memorized! 📚✨`);
+
+      const form = document.getElementById('uploadPdfForm');
+      if (form) form.reset();
+
+      setTimeout(() => {
+        const panel = document.getElementById('uploadPdfPanel');
+        if (panel) panel.style.display = 'none';
+        if (progressWrapper) progressWrapper.style.display = 'none';
+        activeCategory = 'pdf';
+        categoryTabs.forEach(t => {
+          t.classList.toggle('active', t.getAttribute('data-cat') === 'pdf');
+        });
+        renderKnowledgeGrid();
+      }, 1000);
+    } catch (err) {
+      console.error('[PDF Ingest Error]', err);
+      showToast(err.message || 'Failed to extract text from PDF.', true);
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Extract, Chunk & Memorize Book 📚';
+      }
+    }
+  };
+
   if (syncFileMemoryBtn) {
     syncFileMemoryBtn.addEventListener('click', async () => {
       syncFileMemoryBtn.disabled = true;
@@ -7247,6 +7393,21 @@ function initKnowledgeStoreModal() {
     if (countGithub) countGithub.textContent = String(githubCount);
     if (countQa) countQa.textContent = String(qaCount);
     if (countFile) countFile.textContent = String(fileCount);
+
+    const countPdf = document.getElementById('kbCountPdf');
+    if (window.NeuralPdfStore && typeof window.NeuralPdfStore.getPdfBooks === 'function') {
+      window.NeuralPdfStore.getPdfBooks().then(books => {
+        if (countPdf) countPdf.textContent = String(books.length);
+      }).catch(() => {});
+    }
+
+    if (activeCategory === 'pdf') {
+      if (window.NeuralPdfStore && typeof window.NeuralPdfStore.renderPdfBookCards === 'function') {
+        window.NeuralPdfStore.renderPdfBookCards(cardsGrid);
+        if (listStatus) listStatus.textContent = 'Showing full-book PDF Vector Stores (IndexedDB)';
+        return;
+      }
+    }
 
     let filtered = allItems;
     if (activeCategory === 'file_memory') {
